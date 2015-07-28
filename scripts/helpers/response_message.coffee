@@ -23,6 +23,15 @@ class ResponseMessage
         message += "`#{bounty.name}` #{bounty.size} coins  (unassigned)\n"
     message
 
+  listCurrencies: (currencies)->
+    return 'No currency was created so far' if bountys.length is 0
+    message = "Currencies:\n"
+
+    for currency in currencies
+        message += "`#{currency.name}` #{currency.unites} coins"
+
+    message
+
   adminRequired: -> "Sorry, only admins can perform this operation"
 
   memberAddedToBounty: (member, bounty)->
