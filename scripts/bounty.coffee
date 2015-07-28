@@ -23,7 +23,7 @@
 #   fractastical, mihai
 
 Config          = require './models/config'
-Bounty            = require './models/bounty'
+Bounty          = require './models/bounty'
 ResponseMessage = require './helpers/response_message'
 UserNormalizer  = require './helpers/user_normalizer'
 
@@ -66,9 +66,9 @@ module.exports = (robot) ->
     if Config.isAdmin(msg.message.user.name)
       if bounty = Bounty.get bountyName
         bounty.destroy()
-        message = ResponseMessage.bountyDeleted(bounty)
+        message = ResponseMessage.bountyDeleted bounty
       else
-        message = ResponseMessage.bountyNotFound(bountyName)
+        message = ResponseMessage.bountyNotFound bountyName
       msg.send message
     else
       msg.reply ResponseMessage.adminRequired()
@@ -79,7 +79,7 @@ module.exports = (robot) ->
   ##
   robot.respond /list bounties ?.*/i, (msg) ->
     bounties = Bounty.all()
-    msg.send ResponseMessage.listBountys(bounties)
+    msg.send ResponseMessage.listBountys bounties
 
   ##
   ## hubot <bounty_name> bounty add (me|<user>) - add me or <user> to bounty
@@ -165,11 +165,11 @@ module.exports = (robot) ->
   robot.respond /(\S*)? bounty (clear|empty)$/i, (msg) ->
     if Config.isAdmin(msg.message.user.name)
       bountyName = msg.match[1]
-      if bounty = Bounty.getOrDefault(bountyName)
+      if bounty = Bounty.getOrDefault bountyName
         bounty.clear()
-        message = ResponseMessage.bountyCleared(bounty)
+        message = ResponseMessage.bountyCleared bounty
       else
-        message = ResponseMessage.bountyNotFound(bountyName)
+        message = ResponseMessage.bountyNotFound bountyName
       msg.send message
     else
       msg.reply ResponseMessage.adminRequired()
@@ -181,9 +181,9 @@ module.exports = (robot) ->
     bounties = {}
     for index, bounty of robot.brain.data.bounties
       if bounty instanceof Array
-        bounties[index] = new Bounty(index, bounty)
+        bounties[index] = new Bounty index, bounty
       else
         bounties[index] = bounty
 
     robot.brain.data.bounties = bounties
-    msg.send ResponseMessage.listBountys(Bounty.all())
+    msg.send ResponseMessage.listBountys Bounty.all()
