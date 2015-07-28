@@ -4,6 +4,15 @@
   "private": true,
   "author": "Joel Dietz <jdietz+github@gmail.com>",
   "description": "I give cryptoeqiuty bounties",
+  "scripts": {
+    "test": "mocha --recursive --compilers coffee:coffee-script/register"
+  },
+  "devDependencies": {
+    "chai": "^3.2.0",
+    "coffee-script": "^1.9.3",
+    "hubot-test-helper": "0.0.6",
+    "mocha": "^2.2.5"
+  },
   "dependencies": {
     "hubot": "^2.13.2",
     "hubot-diagnostics": "0.0.1",
