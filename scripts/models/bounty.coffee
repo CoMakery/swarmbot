@@ -13,7 +13,7 @@ class Bounty
     bountys = []
     for key, bountyData of @store()
       continue if key is @defaultName()
-      bountys.push new Bounty(bountyData.name, bountyData.members)
+      bountys.push new Bounty(bountyData.name, bountyData.size, bountyData.members)
     bountys
 
   @getDefault: (members = [])->
