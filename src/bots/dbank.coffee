@@ -12,8 +12,8 @@
 # Author:
 #   fractastical
 
-Config          = require './models/config'
-DBank            = require './models/dbank'
+Config          = require '../models/config'
+DBank            = require '../models/dbank'
 ResponseMessage = require './helpers/response_message'
 UserNormalizer  = require './helpers/user_normalizer'
 

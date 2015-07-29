@@ -2,7 +2,7 @@ chai = require 'chai'
 chai.should()
 
 Helper = require 'hubot-test-helper'
-helper = new Helper '../scripts'
+helper = new Helper '../src/bots'
 
 describe 'create bounty', ->
   beforeEach ->

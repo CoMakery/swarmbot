@@ -12,8 +12,8 @@
 # Author:
 #   fractastical
 
-Config          = require './models/config'
-Currency            = require './models/currency'
+Config          = require '../models/config'
+Currency            = require '../models/currency'
 ResponseMessage = require './helpers/response_message'
 UserNormalizer  = require './helpers/user_normalizer'
 

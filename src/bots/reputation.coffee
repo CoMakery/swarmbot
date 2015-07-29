@@ -9,8 +9,8 @@
 #   hubot list currencies - list all existing currencies
 #   hubot send X bank <bank_name> to <recipient> - send bank
 
-Config          = require './models/config'
-Reputation      = require './models/reputation'
+Config          = require '../models/config'
+Reputation      = require '../models/reputation'
 ResponseMessage = require './helpers/response_message'
 UserNormalizer  = require './helpers/user_normalizer'
 

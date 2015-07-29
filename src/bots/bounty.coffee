@@ -22,8 +22,8 @@
 # Author:
 #   fractastical, mihai
 
-Config          = require './models/config'
-Bounty          = require './models/bounty'
+Config          = require '../models/config'
+Bounty          = require '../models/bounty'
 ResponseMessage = require './helpers/response_message'
 UserNormalizer  = require './helpers/user_normalizer'
 

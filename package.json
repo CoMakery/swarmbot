@@ -5,6 +5,7 @@
   "author": "Joel Dietz <jdietz+github@gmail.com>",
   "description": "I give cryptoeqiuty bounties",
   "scripts": {
+    "start": "bin/hubot --adapter slack --require src/bots",
     "test": "mocha --recursive --compilers coffee:coffee-script/register"
   },
   "devDependencies": {
