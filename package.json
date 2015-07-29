@@ -27,7 +27,8 @@
     "hubot-rules": "^0.1.1",
     "hubot-scripts": "^2.16.1",
     "hubot-shipit": "^0.2.0",
-    "hubot-slack": "^3.3.0"
+    "hubot-slack": "^3.3.0",
+    "neo4j": "^1.1.1"
   },
   "engines": {
     "node": "0.10.x"
