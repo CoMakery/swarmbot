@@ -10,23 +10,23 @@
 
 module.exports = (robot) ->
 
-  robot.hear /marmot/i, (res) ->
-    res.send "Did I hear marmot? Time to get my shotgun."
-
-  robot.respond /open the (.*) doors/i, (res) ->
-    doorType = res.match[1]
-    if doorType is "double"
-      res.reply "Unlocked is the horizon."
-    else
-      res.reply "Opening #{doorType} doors"
+  # robot.hear /marmot/i, (res) ->
+  #   res.send "Did I hear marmot? Time to get my shotgun."
   #
-  # robot.hear /I like pie/i, (res) ->
-  #   res.emote "makes a freshly baked pie"
+  # robot.respond /open the (.*) doors/i, (res) ->
+  #   doorType = res.match[1]
+  #   if doorType is "double"
+  #     res.reply "Unlocked is the horizon."
+  #   else
+  #     res.reply "Opening #{doorType} doors"
+  # #
+  # # robot.hear /I like pie/i, (res) ->
+  # #   res.emote "makes a freshly baked pie"
+  # #
+  # lulz = ['lol', 'rofl', 'lmao']
   #
-  lulz = ['lol', 'rofl', 'lmao']
-
-  robot.respond /lulz/i, (res) ->
-    res.send res.random lulz
+  # robot.respond /lulz/i, (res) ->
+  #   res.send res.random lulz
   #
   # robot.topic (res) ->
   #   res.send "#{res.message.text}? That's a Paddlin'"
@@ -89,18 +89,18 @@ module.exports = (robot) ->
   #   if res?
   #     res.reply "DOES NOT COMPUTE"
   #
-  robot.respond /bounty/i, (res) ->
-    # Get number of sodas had (coerced to a number).
-    bountySize = robot.brain.get('totalBounty') * 1 or 0
-
-    if bountySize > 4
-      res.reply "Mega bounty"
-
-    else
-      res.reply 'Increasing bounty!'
-
-      robot.brain.set 'totalBounty', bountySize+1
-
-  robot.respond /reset bounty/i, (res) ->
-    robot.brain.set 'totalBounty', 0
-    res.reply 'back to zero'
+  # robot.respond /bounty/i, (res) ->
+  #   # Get number of sodas had (coerced to a number).
+  #   bountySize = robot.brain.get('totalBounty') * 1 or 0
+  #
+  #   if bountySize > 4
+  #     res.reply "Mega bounty"
+  #
+  #   else
+  #     res.reply 'Increasing bounty!'
+  #
+  #     robot.brain.set 'totalBounty', bountySize+1
+  #
+  # robot.respond /reset bounty/i, (res) ->
+  #   robot.brain.set 'totalBounty', 0
+  #   res.reply 'back to zero'
