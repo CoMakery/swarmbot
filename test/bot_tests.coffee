@@ -11,6 +11,17 @@ describe 'create bounty', ->
   afterEach ->
     @room.destroy()
 
+  context 'Reputation', ->
+    beforeEach ->
+      # @room.user.say 'alice', '@hubot rate Esmerelda 88% on awesomeness'
+
+    it 'should allow users to add and query reputation for other users', ->
+      @room.user.say 'alice', '@hubot rate Esmerelda 88% on awesomeness'
+      @room.user.say 'alice', '@hubot show reputation of Esmerelda'
+      @room.messages[-1..-1].should.deep.equal [
+        ['hubot', 'Esmerelda has ratings:\n88% awesomeness (from @alice)']
+      ]
+
   context 'user can create a bounty', ->
     beforeEach ->
       @room.user.say 'alice', '@hubot create save-the-world bounty 100 coins'

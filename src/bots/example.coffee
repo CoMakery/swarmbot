@@ -8,7 +8,7 @@
 #
 #   These are from the scripting documentation: https://github.com/github/hubot/blob/master/docs/scripting.md
 
-# module.exports = (robot) ->
+module.exports = (robot) ->
 
   # robot.hear /marmot/i, (res) ->
   #   res.send "Did I hear marmot? Time to get my shotgun."

@@ -1,26 +1,24 @@
-# Description:
-#   Reputation hubot commands
-#
-# Dependencies:
-#   None
-#
-# Commands:
-#   hubot create <currecy_name> bank X coins - create bank called <bounty_name> with X coins
-#   hubot list currencies - list all existing currencies
-#   hubot send X bank <bank_name> to <recipient> - send bank
+Claim           = require '../models/claim'
+Identity        = require '../models/identity'
 
-Config          = require '../models/config'
-Reputation      = require '../models/reputation'
-ResponseMessage = require './helpers/response_message'
-UserNormalizer  = require './helpers/user_normalizer'
-
-module.exports = (robot) ->
-  Reputation.robot = robot
+ReputationBotCommands = (robot) ->
 
   ##
   ##   hubot show reputation of <person> -
   ##
-  robot.respond /show reputation of (.*)/i, (msg) ->
+  robot.respond /show reputation of (.+)/i, (msg) ->
+    name = msg.match[1]
+    identity = Identity.get name
+    msg.send identity.reputation()
 
-    person = msg.match[1]
-    msg.send Reputation.get person
+  ##
+  ##   hubot show reputation of <person> -
+  ##
+  robot.respond /rate (.+) ([\d.]+)% on (.+)/i, (msg) ->
+    msg.match.shift()
+    [target, value, content] = msg.match
+    source = 'TODO get the slack username?'
+    Claim.create { source, target, value, content }
+    msg.send "Rated."
+
+module.exports = ReputationBotCommands
