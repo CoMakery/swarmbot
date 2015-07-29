@@ -11,11 +11,11 @@ describe 'create bounty', ->
   afterEach ->
     @room.destroy()
 
-  context 'user says hi to hubot', ->
+  context 'user can create a bounty', ->
     beforeEach ->
       @room.user.say 'alice', '@hubot create save-the-world bounty 100 coins'
 
-    it 'should reply to user', ->
+    it 'should let the user know that the bounty has been created', ->
       @room.messages.should.deep.equal [
         ['alice', '@hubot create save-the-world bounty 100 coins']
         ['hubot', '`save-the-world` bounty created with 100 coins']
