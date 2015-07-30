@@ -31,8 +31,8 @@ module.exports = (robot) ->
   robot.brain.data.bounties or= {}
   Bounty.robot = robot
 
-  unless Config.adminList()
-    robot.logger.warning 'HUBOT_TEAM_ADMIN environment variable not set'
+  # unless Config.adminList()
+  #   robot.logger.warning 'HUBOT_TEAM_ADMIN environment variable not set'
 
 
   ##

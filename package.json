@@ -5,7 +5,8 @@
   "author": "Joel Dietz <jdietz+github@gmail.com>",
   "description": "I give cryptoeqiuty bounties",
   "scripts": {
-    "start": "bin/hubot --adapter slack --require src/bots",
+    "dev":   "bin/hubot --name dbank --require src/bots",
+    "start": "bin/hubot --name dbank --require src/bots --adapter slack",
     "test": "mocha --recursive --compilers coffee:coffee-script/register"
   },
   "devDependencies": {
@@ -15,6 +16,7 @@
     "mocha": "^2.2.5"
   },
   "dependencies": {
+    "dotenv": "^1.2.0",
     "hubot": "^2.13.2",
     "hubot-diagnostics": "0.0.1",
     "hubot-google-images": "^0.1.5",
@@ -28,7 +30,7 @@
     "hubot-scripts": "^2.16.1",
     "hubot-shipit": "^0.2.0",
     "hubot-slack": "^3.3.0",
-    "neo4j": "^1.1.1"
+    "neo4j": "2.0.0-RC2"
   },
   "engines": {
     "node": "0.10.x"
