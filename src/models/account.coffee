@@ -44,7 +44,7 @@ class Account
 
   @updateAccountBalance: (name, change)->
     return false if @exists name
-    oldBalance = @store()[name].balance
+    oldBalance = (@store()[name] || {}).balance
     @store()[name] =
       name: name
       balance: oldBalance + change
