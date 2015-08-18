@@ -1,0 +1,37 @@
+{
+  "name": "bounty-bot",
+  "version": "0.0.0",
+  "private": true,
+  "authors": [
+    "Joel Dietz <joel.dietz@citizencode.io>",
+    "Harlan T Wood <harlan@citizencode.io>",
+    "Noah Thorp <noah@citizencode.io>",
+    "Duke Dorje <duke@citizencode.io>"
+  ],
+  "description": "Bot for bounties",
+  "scripts": {
+    "dev": "bin/hubot",
+    "start": "bin/hubot --adapter slack",
+    "test": "mocha"
+  },
+  "devDependencies": {
+    "chai": "^3.2.0",
+    "coffee-script": "^1.9.3",
+    "hubot-test-helper": "0.0.6",
+    "mocha": "^2.2.5"
+  },
+  "dependencies": {
+    "hubot": "^2.13.2",
+    "hubot-help": "^0.1.1",
+    "hubot-heroku-keepalive": "0.0.4",
+    "hubot-redis-brain": "0.0.3",
+    "hubot-scripts": "^2.16.1",
+    "hubot-slack": "^3.3.0",
+    "hubot-suggest": "citizencode/hubot-suggest#v0.0.3",
+    "lodash": "^3.10.0"
+  },
+  "engines": {
+    "node": "^0.10",
+    "npm": "2.x"
+  }
+}

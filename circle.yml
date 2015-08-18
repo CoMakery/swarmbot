@@ -1,0 +1,5 @@
+deployment:
+  autodeploy:
+    branch: master
+    heroku:
+      appname: bounty-bot
