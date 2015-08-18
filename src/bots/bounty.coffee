@@ -36,7 +36,7 @@ UserNormalizer  = require './helpers/user_normalizer'
 
 module.exports = (robot) ->
   robot.brain.data.bounties or= {}
-  Bounty.robot = robot
+  Bounty.robot = Account.robot = robot
 
   # unless Config.adminList()
   #   robot.logger.warning 'HUBOT_TEAM_ADMIN environment variable not set'
