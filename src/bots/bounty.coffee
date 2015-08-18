@@ -98,7 +98,7 @@ module.exports = (robot) ->
   ##
   ## hubot <bounty_name> bounty add (me|<user>) - add me or <user> to bounty
   ##
-  robot.respond /(\S*)? bounty add (\S*) ?.*/i, (msg) ->
+  robot.respond /(\S+) bounty add (\S+)$/i, (msg) ->
     bountyName = msg.match[1]
     bounty = Bounty.getOrDefault(bountyName)
     return msg.send ResponseMessage.bountyNotFound(bountyName) unless bounty
