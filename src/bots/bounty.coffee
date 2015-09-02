@@ -12,6 +12,7 @@
 #   hubot list bounties - list all existing bounties
 #   hubot award <bounty_name> bounty to <username>  - award an existing bounty
 #   hubot (<bounty_name>) bounty add me - add me to the bounty
+#   hubot get balance - get your current balance
 
 #
 # Author:
