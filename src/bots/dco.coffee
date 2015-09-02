@@ -17,6 +17,7 @@
 #   hubot open for membership for $XYZ - allow users to join membership in your DCO for a set price in USD
 #   hubot open for membership for xyzBTC - allow users to join membership in your DCO) for a set price in BTC
 #   hubot join <dco_name> - join a DCO, usually by agreeing to the statement of intent and paying a membership fee
+#   hubot rate <dco_name> - Tells you how much the DCOs assets are trading at on any given day.
 #
 # Author:
 #   fractastical
@@ -29,7 +30,7 @@ UserNormalizer  = require './helpers/user_normalizer'
 
 module.exports = (robot) ->
   robot.brain.data.bounties or= {}
-  Bounty.robot = Account.robot = robot
+  Asset.robot = Bounty.robot = Account.robot = robot
 
   # unless Config.adminList()
   #   robot.logger.warning 'HUBOT_TEAM_ADMIN environment variable not set'
