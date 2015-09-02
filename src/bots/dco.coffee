@@ -1,36 +1,27 @@
 # Description:
-#   Create a bounty
+#   Create a DCO (from Slack or any Hubut supported channel!)
 #
 # Dependencies:
 #   None
 #
-# Configuration:
-#   HUBOT_TEAM_ADMIN - A comma separate list of user names
-#
 # Commands:
-#   hubot create <bounty_name> bounty X coins - create bounty called <bounty_name> with X coins
-#   hubot list bounties - list all existing bounties
-#   hubot award <bounty_name> bounty to <username>  - award an existing bounty
-#   hubot (<bounty_name>) bounty add me - add me to the bounty
-#   hubot get balance - get your current balance
-
+#   hubot list dcos - list all existing DCOs (limit 10)
+#   hubot list dcos XYZ - list all existing DCOs that match XYZ
+#   hubot select <dco_name> (you must be the creator)
+#   hubot create <dco_name> dco
+#   hubot set statement of intent <statement_of_intent>
+#   hubot issue X of asset - issue X of associated asset. You will need to pay Bitcoins to this address.
+#   hubot send asset to <user_name>
+#   hubot create constitution (creates a fork of the Citizen Code constitution)
+#   hubot file dco (dynamically creates an LLC)
+#   hubot open for membership for $XYZ - allow users to join membership in your DCO for a set price in USD
+#   hubot open for membership for xyzBTC - allow users to join membership in your DCO) for a set price in BTC
+#   hubot join <dco_name> - join a DCO, usually by agreeing to the statement of intent and paying a membership fee
 #
 # Author:
-#   fractastical, mihai
-
-# Not displayed in help
-##   hubot (<bounty_name>) bounty add (me|<user>) - add me or <user> to bounty
-##   hubot (<bounty_name>) bounty add (me|<user>) - add me or <user> to bounty
-##   hubot (<bounty_name>) bounty remove (me|<user>) - remove me or <user> from bounty
-##   hubot (<bounty_name>) bounty (empty|clear) - clear bounty list
-##   hubot (delete|remove) <bounty_name> bounty - delete bounty called <bounty_name>
-##   hubot (<bounty_name>) bounty -1 - remove me from the bounty
-##   hubot (<bounty_name>) bounty count - list the current size of the bounty
-##   hubot (<bounty_name>) bounty (list|show) - list the people in the bounty
-
+#   fractastical
 
 Config          = require '../models/config'
-Bounty          = require '../models/bounty'
 Account          = require '../models/account'
 Asset          = require '../models/asset'
 ResponseMessage = require './helpers/response_message'
@@ -42,7 +33,6 @@ module.exports = (robot) ->
 
   # unless Config.adminList()
   #   robot.logger.warning 'HUBOT_TEAM_ADMIN environment variable not set'
-
 
   ##
   ## hubot create <bounty_name> bounty - create bounty called <bounty_name>
