@@ -22,6 +22,7 @@
   },
   "dependencies": {
     "colu": "^0.7.2",
+    "colu-access": "^0.2.5",
     "hubot": "^2.16.0",
     "hubot-firebase-brain": "^1.0.1",
     "hubot-help": "^0.1.1",
