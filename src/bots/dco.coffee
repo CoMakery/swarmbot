@@ -27,7 +27,12 @@ Account          = require '../models/account'
 Asset          = require '../models/asset'
 ResponseMessage = require './helpers/response_message'
 UserNormalizer  = require './helpers/user_normalizer'
+Colu = require('colu')
 
+settings =
+  network: 'testnet'
+  privateSeed: 'abcd4986fdac1b3a710892ef6eaa708d619d67100d0514ab996582966f927982'
+colu = new Colu(settings)
 
 module.exports = (robot) ->
   robot.brain.data.bounties or= {}
@@ -41,16 +46,11 @@ module.exports = (robot) ->
   ##
   robot.respond /issue (\S*) of asset?.*/i, (msg) ->
 
-        Colu = require('colu')
-        settings =
-          network: 'testnet'
-          privateSeed: 'abcd4986fdac1b3a710892ef6eaa708d619d67100d0514ab996582966f927982'
-        colu = new Colu(settings)
         asset =
           amount: msg.match[1]
           metadata:
             'assetName': 'Super DCO'
-            'issuer': 'Jimbotron'
+            'issuer': msg.message.user.name
             'description': 'Super DCO membership'
         colu.on 'connect', ->
           colu.issueAsset asset, (err, body) ->
