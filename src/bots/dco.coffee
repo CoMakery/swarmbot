@@ -28,6 +28,7 @@ Asset          = require '../models/asset'
 ResponseMessage = require './helpers/response_message'
 UserNormalizer  = require './helpers/user_normalizer'
 
+
 module.exports = (robot) ->
   robot.brain.data.bounties or= {}
   Asset.robot = Bounty.robot = Account.robot = robot
@@ -38,159 +39,28 @@ module.exports = (robot) ->
   ##
   ## hubot create <bounty_name> bounty - create bounty called <bounty_name>
   ##
-  robot.respond /create (\S*) bounty (\S*) coins?.*/i, (msg) ->
+  robot.respond /issue asset?.*/i, (msg) ->
 
-    bountyName = msg.match[1]
-    bountySize = msg.match[2]
-    if bounty = Bounty.get bountyName
-      message = ResponseMessage.bountyAlreadyExists bounty
-    else
-      bounty = Bounty.create bountyName, bountySize
-      message = ResponseMessage.bountyCreated bounty
-    msg.send message
-
-  ##
-  ## hubot create <bounty_name> bounty - create bounty called <bounty_name>
-  ##
-  robot.respond /award (\S*) bounty to (\S*).*/i, (msg) ->
-
-    bountyName = msg.match[1]
-    awardee = msg.match[2]
-    message = "Awarding bounty to " + msg.match[2]
-
-    bountySize = Bounty.getBountySize(bountyName)
-    activeUser = UserNormalizer.normalize(msg.message.user.name)
-    Account.updateAccountBalance(activeUser, -bountySize)
-    Account.updateAccountBalance(awardee, bountySize)
-
-    msg.send message
-
-  ##
-  ## hubot (delete|remove) <bounty_name> bounty - delete bounty called <bounty_name>
-  ##
-  robot.respond /(delete|remove) (\S*) bounty ?.*/i, (msg) ->
-    bountyName = msg.match[2]
-    if Config.isAdmin(msg.message.user.name)
-      if bounty = Bounty.get bountyName
-        bounty.destroy()
-        message = ResponseMessage.bountyDeleted bounty
-      else
-        message = ResponseMessage.bountyNotFound bountyName
-      msg.send message
-    else
-      msg.reply ResponseMessage.adminRequired()
+        Colu = require('colu')
+        settings =
+          network: 'testnet'
+          privateSeed: 'abcd4986fdac1b3a710892ef6eaa708d619d67100d0514ab996582966f927982'
+        colu = new Colu(settings)
+        asset =
+          amount: 500
+          metadata:
+            'assetName': 'Chicago: The Musical'
+            'issuer': 'AMBASSADOR THEATRE, 219 West 49th Street, New York, NY 10019'
+            'description': 'Tickets to the show on 1/1/2016 at 8 PM'
+        colu.on 'connect', ->
+          colu.issueAsset asset, (err, body) ->
+            if err
+              return console.error(err)
+            console.log 'Body: ', body
+            return
+          return
+        colu.init()
 
 
-  ##
-  ## hubot list bounties - list all existing bounties
-  ##
-  robot.respond /list bounties ?.*/i, (msg) ->
-    bounties = Bounty.all()
-    msg.send ResponseMessage.listBountys bounties
-
-  ##
-  ## hubot <bounty_name> bounty add (me|<user>) - add me or <user> to bounty
-  ##
-  robot.respond /(\S+) bounty add (\S+)$/i, (msg) ->
-    bountyName = msg.match[1]
-    bounty = Bounty.getOrDefault(bountyName)
-    return msg.send ResponseMessage.bountyNotFound(bountyName) unless bounty
-    user = UserNormalizer.normalize(msg.message.user.name, msg.match[2])
-    isMemberAdded = bounty.addMember user
-    if isMemberAdded
-      message = ResponseMessage.memberAddedToBounty(user, bounty)
-    else
-      message = ResponseMessage.memberAlreadyAddedToBounty(user, bounty)
-    msg.send message
-
-  ##
-  ## hubot <bounty_name> bounty +1 - add me to the bounty
-  ##
-  robot.respond /(\S*)? bounty add me?.*/i, (msg) ->
-    bountyName = msg.match[1]
-    bounty = Bounty.getOrDefault(bountyName)
-    return msg.send ResponseMessage.bountyNotFound(bountyName) unless bounty
-    user = UserNormalizer.normalize(msg.message.user.name)
-    isMemberAdded = bounty.addMember user
-    if isMemberAdded
-      message = ResponseMessage.memberAddedToBounty(user, bounty)
-    else
-      message = ResponseMessage.memberAlreadyAddedToBounty(user, bounty)
-    msg.send message
-
-  ##
-  ## hubot <bounty_name> bounty remove (me|<user>) - remove me or <user> from bounty
-  ##
-  robot.respond /(\S*)? bounty remove (\S*) ?.*/i, (msg) ->
-    bountyName = msg.match[1]
-    bounty = Bounty.getOrDefault(bountyName)
-    return msg.send ResponseMessage.bountyNotFound(bountyName) unless bounty
-    user = UserNormalizer.normalize(msg.message.user.name, msg.match[2])
-    isMemberRemoved = bounty.removeMember user
-    if isMemberRemoved
-      message = ResponseMessage.memberRemovedFromBounty(user, bounty)
-    else
-      message = ResponseMessage.memberAlreadyOutOfBounty(user, bounty)
-    msg.send message
-
-  ##
-  ## hubot <bounty_name> bounty -1 - remove me from the bounty
-  ##
-  robot.respond /(\S*)? bounty -1/i, (msg) ->
-    bountyName = msg.match[1]
-    bounty = Bounty.getOrDefault(bountyName)
-    return msg.send ResponseMessage.bountyNotFound(bountyName) unless bounty
-    user = UserNormalizer.normalize(msg.message.user.name)
-    isMemberRemoved = bounty.removeMember user
-    if isMemberRemoved
-      message = ResponseMessage.memberRemovedFromBounty(user, bounty)
-    else
-      message = ResponseMessage.memberAlreadyOutOfBounty(user, bounty)
-    msg.send message
-
-  ##
-  ## hubot <bounty_name> bounty count - list the current size of the bounty
-  ##
-  robot.respond /(\S*)? bounty count$/i, (msg) ->
-    bountyName = msg.match[1]
-    bounty = Bounty.getOrDefault(bountyName)
-    message = if bounty then ResponseMessage.bountyCount(bounty) else ResponseMessage.bountyNotFound(bountyName)
-    msg.send message
-
-  ##
-  ## hubot <bounty_name> bounty (list|show) - list the people in the bounty
-  ##
-  robot.respond /(\S*)? bounty (list|show)$/i, (msg) ->
-    bountyName = msg.match[1]
-    bounty = Bounty.getOrDefault(bountyName)
-    message = if bounty then ResponseMessage.listBounty(bounty) else ResponseMessage.bountyNotFound(bountyName)
-    msg.send message
-
-  ##
-  ## hubot <bounty_name> bounty (empty|clear) - clear bounty list
-  ##
-  robot.respond /(\S*)? bounty (clear|empty)$/i, (msg) ->
-    if Config.isAdmin(msg.message.user.name)
-      bountyName = msg.match[1]
-      if bounty = Bounty.getOrDefault bountyName
-        bounty.clear()
-        message = ResponseMessage.bountyCleared bounty
-      else
-        message = ResponseMessage.bountyNotFound bountyName
-      msg.send message
-    else
-      msg.reply ResponseMessage.adminRequired()
-
-  ##
-  ## hubot upgrade bounties - upgrade bounty for the new structure
-  ##
-  robot.respond /upgrade bounties$/i, (msg) ->
-    bounties = {}
-    for index, bounty of robot.brain.data.bounties
-      if bounty instanceof Array
-        bounties[index] = new Bounty index, bounty
-      else
-        bounties[index] = bounty
-
-    robot.brain.data.bounties = bounties
+    $robot.brain.data.bounties = bounties
     msg.send ResponseMessage.listBountys Bounty.all()
