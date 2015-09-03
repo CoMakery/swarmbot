@@ -10,7 +10,7 @@
 #   hubot select <dco_name> (you must be the creator)
 #   hubot create <dco_name> dco
 #   hubot set statement of intent <statement_of_intent>
-#   hubot issue X of asset - issue X of associated asset. You will need to pay Bitcoins to this address.
+#   hubot issue X of asset - issue X of associated asset.
 #   hubot send asset to <user_name>
 #   hubot create constitution (creates a fork of the Citizen Code constitution)
 #   hubot file dco (dynamically creates an LLC)
@@ -31,15 +31,15 @@ UserNormalizer  = require './helpers/user_normalizer'
 
 module.exports = (robot) ->
   robot.brain.data.bounties or= {}
-  Asset.robot = Bounty.robot = Account.robot = robot
+  Asset.robot = Account.robot = robot
 
   # unless Config.adminList()
   #   robot.logger.warning 'HUBOT_TEAM_ADMIN environment variable not set'
 
   ##
-  ## hubot create <bounty_name> bounty - create bounty called <bounty_name>
+  ##   hubot issue X of asset - issue X of associated asset.
   ##
-  robot.respond /issue asset?.*/i, (msg) ->
+  robot.respond /issue (\S*) of asset?.*/i, (msg) ->
 
         Colu = require('colu')
         settings =
@@ -47,20 +47,20 @@ module.exports = (robot) ->
           privateSeed: 'abcd4986fdac1b3a710892ef6eaa708d619d67100d0514ab996582966f927982'
         colu = new Colu(settings)
         asset =
-          amount: 500
+          amount: msg.match[1]
           metadata:
-            'assetName': 'Chicago: The Musical'
-            'issuer': 'AMBASSADOR THEATRE, 219 West 49th Street, New York, NY 10019'
-            'description': 'Tickets to the show on 1/1/2016 at 8 PM'
+            'assetName': 'Super DCO'
+            'issuer': 'Jimbotron'
+            'description': 'Super DCO membership'
         colu.on 'connect', ->
           colu.issueAsset asset, (err, body) ->
             if err
+              msg.send "error in asset creation"
               return console.error(err)
             console.log 'Body: ', body
+            msg.send body
+            msg.send "asset created"
+
             return
           return
         colu.init()
-
-
-    $robot.brain.data.bounties = bounties
-    msg.send ResponseMessage.listBountys Bounty.all()
