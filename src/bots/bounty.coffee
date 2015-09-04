@@ -37,7 +37,7 @@ ResponseMessage = require './helpers/response_message'
 UserNormalizer  = require './helpers/user_normalizer'
 
 module.exports = (robot) ->
-  robot.DCO.data.bounties or= {}
+  robot.brain.data.bounties or= {}
   Bounty.robot = Account.robot = robot
 
   # unless Config.adminList()
@@ -195,11 +195,11 @@ module.exports = (robot) ->
   ##
   robot.respond /upgrade bounties$/i, (msg) ->
     bounties = {}
-    for index, bounty of robot.DCO.data.bounties
+    for index, bounty of robot.brain.data.bounties
       if bounty instanceof Array
         bounties[index] = new Bounty index, bounty
       else
         bounties[index] = bounty
 
-    robot.DCO.data.bounties = bounties
+    robot.brain.data.bounties = bounties
     msg.send ResponseMessage.listBountys Bounty.all()
