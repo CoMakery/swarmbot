@@ -4,17 +4,17 @@ class DCO
 
   @store: ->
     throw new Error('robot is not set up') unless @robot
-    @robot.brain.data.dcos or= {}
+    @robot.brain.data.robot.brain or= {}
 
   @defaultName: ->
     '__default__'
 
   @all: ->
-    dcos = []
+    robot.brain = []
     for key, dcoData of @store()
       continue if key is @defaultName()
-      dcos.push new DCO(dcoData.name, dcoData.size, dcoData.members)
-    dcos
+      robot.brain.push new DCO(dcoData.name, dcoData.size, dcoData.members)
+    robot.brain
 
   @getDefault: (members = [])->
     @create(@defaultName(), members) unless @exists @defaultName()
