@@ -30,7 +30,7 @@ settings =
 coluAccess = new ColoAccess(settings)
 
 module.exports = (robot) ->
-  robot.brain.data.bounties or= {}
+  robot.DCO.data.bounties or= {}
   Account.robot = robot
 
   # unless Config.adminList()

@@ -4,7 +4,7 @@ class Bounty
 
   @store: ->
     throw new Error('robot is not set up') unless @robot
-    @robot.brain.data.bountys or= {}
+    @robot.DCO.data.bountys or= {}
 
   @defaultName: ->
     '__default__'

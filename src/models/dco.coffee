@@ -1,20 +1,20 @@
-class Account
+class DCO
 
   @robot = null
 
   @store: ->
     throw new Error('robot is not set up') unless @robot
-    @robot.DCO.data.accounts or= {}
+    @robot.brain.data.dcos or= {}
 
   @defaultName: ->
     '__default__'
 
   @all: ->
-    accounts = []
-    for key, accountData of @store()
+    dcos = []
+    for key, dcoData of @store()
       continue if key is @defaultName()
-      accounts.push new Account(accountData.name, accountData.size, accountData.members)
-    accounts
+      dcos.push new DCO(dcoData.name, dcoData.size, dcoData.members)
+    dcos
 
   @getDefault: (members = [])->
     @create(@defaultName(), members) unless @exists @defaultName()
@@ -25,11 +25,11 @@ class Account
 
   @get: (name)->
     return null unless @exists name
-    accountData = @store()[name]
-    new Account(accountData.name, "0", accountData.members)
+    dcoData = @store()[name]
+    new DCO(dcoData.name, "0", dcoData.members)
 
-  @getOrDefault: (accountName)->
-    if accountName then @get(accountName) else @getDefault()
+  @getOrDefault: (dcoName)->
+    if dcoName then @get(dcoName) else @getDefault()
 
   @exists: (name)->
     name of @store()
@@ -40,9 +40,9 @@ class Account
       name: name
       size: size
       balance: balance
-    new Account(name, size, members)
+    new DCO(name, size, members)
 
-  @updateAccountBalance: (name, change)->
+  @updateDCOBalance: (name, change)->
     return false if @exists name
     oldBalance = (@store()[name] || {}).balance
     @store()[name] =
@@ -51,7 +51,7 @@ class Account
     true
 
   constructor: (name, size, @members = [])->
-    @name = name or Account.defaultName()
+    @name = name or DCO.defaultName()
     @size = size or "0"
 
   addMember: (member)->
@@ -69,19 +69,19 @@ class Account
     @members.length
 
   clear: ->
-    Account.store()[@name].members = []
+    DCO.store()[@name].members = []
     @members = []
 
   destroy: ->
-    delete Account.store()[@name]
+    delete DCO.store()[@name]
 
   isDefault: ->
-    @name is Account.defaultName()
+    @name is DCO.defaultName()
 
   label: ->
     if @isDefault()
-      'account'
+      'dco'
     else
-      "`#{@name}` account"
+      "`#{@name}` dco"
 
-module.exports = Account
+module.exports = DCO

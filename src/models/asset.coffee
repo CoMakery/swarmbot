@@ -4,7 +4,7 @@ class Asset
 
   @store: ->
     throw new Error('robot is not set up') unless @robot
-    @robot.brain.data.assets or= {}
+    @robot.DCO.data.assets or= {}
 
   @defaultName: ->
     '__default__'

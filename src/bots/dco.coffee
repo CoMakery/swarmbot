@@ -38,7 +38,7 @@ settings =
 colu = new Colu(settings)
 
 module.exports = (robot) ->
-  robot.brain.data.bounties or= {}
+  robot.DCO.data.bounties or= {}
   Asset.robot = Account.robot = robot
 
   # unless Config.adminList()

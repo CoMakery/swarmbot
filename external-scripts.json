@@ -1,6 +1,6 @@
 [
   "hubot-help",
   "hubot-heroku-keepalive",
-  "hubot-redis-brain",
+  "hubot-firebase-DCO",
   "hubot-suggest"
 ]
