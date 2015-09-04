@@ -134,6 +134,13 @@ module.exports = (robot) ->
 
     ## hubot join dco
     ##
+    robot.respond /create dco/i, (msg) ->
+
+      msg.send "The statement of intent is: "
+      msg.send "Do you agree with the DCO statement of intent?"
+
+    ## hubot join dco
+    ##
     robot.respond /join dco/i, (msg) ->
 
       msg.send "The statement of intent is: "
