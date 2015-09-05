@@ -47,7 +47,7 @@ module.exports = (robot) ->
   #   robot.logger.warning 'HUBOT_TEAM_ADMIN environment variable not set'
 
   ##
-  ##   hubot issue X of asset - issue X of associated asset.
+  ##   hubot list dcos - list all existing DCOs (limit 10)
   ##
   robot.respond /list dcos?.*/i, (msg) ->
 
@@ -57,6 +57,19 @@ module.exports = (robot) ->
         msg.send snapshot.key()
         return
 
+  ##
+#   hubot join <dco_name> dco - join a DCO, usually by agreeing to the statement of intent and paying a membership fee
+  robot.respond /join (\S*) dco?.*/i, (msg) ->
+
+
+      dcoRef = myFirebaseRef.child('projects')
+      projectName = msg.match[1]
+
+      dcoRef.child(projectName + '/project_statement').on 'value', (snapshot) ->
+          msg.send 'Do you agree with this statement of intent?'
+          msg.send snapshot.val()
+          msg.send 'Yes/no?'
+          return
 
       # myFirebaseRef.child('projects/2050_Music_Collective_1431029372/project_name').on 'value', (snapshot) ->
       #   msg.send snapshot.val()
