@@ -4,7 +4,7 @@ class DCO
 
   @store: ->
     throw new Error('robot is not set up') unless @robot
-    robot.brainbrain.data.robot.brain or= {}
+    robot.brain.data.robot.brain or= {}
 
   @defaultName: ->
     '__default__'

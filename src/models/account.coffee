@@ -4,7 +4,7 @@ class Account
 
   @store: ->
     throw new Error('robot is not set up') unless @robot
-    @robot.DCO.data.accounts or= {}
+    robot.brain.data.accounts or= {}
 
   @defaultName: ->
     '__default__'
