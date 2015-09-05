@@ -25,7 +25,6 @@
     "colu-access": "^0.2.5",
     "firebase": "^2.2.9",
     "hubot": "^2.16.0",
-    "hubot-firebase-DCO": "^1.0.1",
     "hubot-help": "^0.1.1",
     "hubot-heroku-keepalive": "0.0.4",
     "hubot-redis-DCO": "0.0.3",

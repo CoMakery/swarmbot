@@ -53,10 +53,10 @@ class Asset
   constructor: (name, size, @members = [])->
     @name = name or Asset.defaultName()
     @size = size or "0"
-    assets = robot.brain.get 'assets'
-    var messageListRef = new Firebase('https://samplechat.firebaseio-demo.com/message_list');
-    assets[name] = { size, @members }
-    robot.brain.set 'assets', assets
+    # assets = robot.brain.get 'assets'
+    # var messageListRef = new Firebase('https://samplechat.firebaseio-demo.com/message_list');
+    # assets[name] = { size, @members }
+    # robot.brain.set 'assets', assets
 
 
 

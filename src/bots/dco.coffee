@@ -5,9 +5,9 @@
 #   None
 #
 # Commands:
-#   hubot list robot.brain - list all existing DCOs (limit 10)
-#   hubot list robot.brain XYZ - list all existing DCOs that match XYZ
-#   hubot how many robot.brain - how many DCOs are there?
+#   hubot list dcos - list all existing DCOs (limit 10)
+#   hubot list dco XYZ - list all existing DCOs that match XYZ
+#   hubot how many dcos - how many DCOs are there?
 #   hubot select <dco_name> (you must be the creator)
 #   hubot create <dco_name> dco
 #   hubot set statement of intent <statement_of_intent>
@@ -29,6 +29,8 @@ Asset          = require '../models/asset'
 ResponseMessage = require './helpers/response_message'
 UserNormalizer  = require './helpers/user_normalizer'
 Colu = require('colu')
+Firebase = require('firebase')
+myFirebaseRef = new Firebase('https://dazzle-staging.firebaseio.com/')
 
 privateSeed = 'abcd4986fdac1b3a710892ef6eaa708d619d67100d0514ab996582966f927982'
 
@@ -43,6 +45,48 @@ module.exports = (robot) ->
 
   # unless Config.adminList()
   #   robot.logger.warning 'HUBOT_TEAM_ADMIN environment variable not set'
+
+  ##
+  ##   hubot issue X of asset - issue X of associated asset.
+  ##
+  robot.respond /list dcos?.*/i, (msg) ->
+      msg.send "yo"
+
+      # myFirebaseRef.set
+      #   title: 'Hello World!'
+      #   author: 'Firebase'
+      #   location:
+      #     city: 'San Francisco'
+      #     state: 'California'
+      #     zip: 94103
+
+      dcoRef = myFirebaseRef.child('projects')
+      # dcoRef.set
+      #   alanisawesome:
+      #     date_of_birth: 'June 23, 1912'
+      #     full_name: 'Alan Turing'
+      #   gracehop:
+      #     date_of_birth: 'December 9, 1906'
+      #     full_name: 'Grace Hopper'
+
+
+      dcoRef.orderByKey().on 'child_added', (snapshot) ->
+        msg.send snapshot.key()
+        return
+
+
+      # myFirebaseRef.child('projects/2050_Music_Collective_1431029372/project_name').on 'value', (snapshot) ->
+      #   msg.send snapshot.val()
+      #   # Alerts "San Francisco"
+      #   return
+
+
+      #
+      # myFirebaseRef.child('projects').on 'value', (snapshot) ->
+      #
+      #   console.log snapshot.val()
+
+
 
   ##
   ##   hubot issue X of asset - issue X of associated asset.
@@ -132,17 +176,10 @@ module.exports = (robot) ->
       return
     colu.init()
 
-    ## hubot join dco
-    ##
-    robot.respond /list dcos/i, (msg) ->
-      myFirebaseRef.child("admins/admin").on("value", function(snapshot) {
-        console.log(snapshot.val());  // Alerts "San Francisco"
-        msg.send "The statement of intent is: "
-      });
 
     ## hubot join dco
     ##
-    robot.respond /join dco/i, (msg) ->
+    robot.respond /join dco?.*/i, (msg) ->
 
       msg.send "The statement of intent is: "
       msg.send "Do you agree with the DCO statement of intent?"
