@@ -50,25 +50,8 @@ module.exports = (robot) ->
   ##   hubot issue X of asset - issue X of associated asset.
   ##
   robot.respond /list dcos?.*/i, (msg) ->
-      msg.send "yo"
-
-      # myFirebaseRef.set
-      #   title: 'Hello World!'
-      #   author: 'Firebase'
-      #   location:
-      #     city: 'San Francisco'
-      #     state: 'California'
-      #     zip: 94103
 
       dcoRef = myFirebaseRef.child('projects')
-      # dcoRef.set
-      #   alanisawesome:
-      #     date_of_birth: 'June 23, 1912'
-      #     full_name: 'Alan Turing'
-      #   gracehop:
-      #     date_of_birth: 'December 9, 1906'
-      #     full_name: 'Grace Hopper'
-
 
       dcoRef.orderByKey().on 'child_added', (snapshot) ->
         msg.send snapshot.key()
