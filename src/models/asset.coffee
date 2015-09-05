@@ -4,7 +4,7 @@ class Asset
 
   @store: ->
     throw new Error('robot is not set up') unless @robot
-    @robot.DCO.data.assets or= {}
+    robot.brain.get 'assets'
 
   @defaultName: ->
     '__default__'
@@ -53,6 +53,12 @@ class Asset
   constructor: (name, size, @members = [])->
     @name = name or Asset.defaultName()
     @size = size or "0"
+    assets = robot.brain.get 'assets'
+    var messageListRef = new Firebase('https://samplechat.firebaseio-demo.com/message_list');
+    assets[name] = { size, @members }
+    robot.brain.set 'assets', assets
+
+
 
   addMember: (member)->
     return false if member in @members

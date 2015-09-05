@@ -5,9 +5,9 @@
 #   None
 #
 # Commands:
-#   hubot list dcos - list all existing DCOs (limit 10)
-#   hubot list dcos XYZ - list all existing DCOs that match XYZ
-#   hubot how many dcos - how many DCOs are there?
+#   hubot list robot.brain - list all existing DCOs (limit 10)
+#   hubot list robot.brain XYZ - list all existing DCOs that match XYZ
+#   hubot how many robot.brain - how many DCOs are there?
 #   hubot select <dco_name> (you must be the creator)
 #   hubot create <dco_name> dco
 #   hubot set statement of intent <statement_of_intent>
@@ -38,7 +38,7 @@ settings =
 colu = new Colu(settings)
 
 module.exports = (robot) ->
-  robot.DCO.data.bounties or= {}
+  # robot.brain.data.bounties or= {}
   Asset.robot = Account.robot = robot
 
   # unless Config.adminList()
@@ -136,8 +136,7 @@ module.exports = (robot) ->
     ##
     robot.respond /create dco/i, (msg) ->
 
-      msg.send "The statement of intent is: "
-      msg.send "Do you agree with the DCO statement of intent?"
+
 
     ## hubot join dco
     ##
