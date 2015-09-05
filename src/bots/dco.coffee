@@ -134,9 +134,11 @@ module.exports = (robot) ->
 
     ## hubot join dco
     ##
-    robot.respond /create dco/i, (msg) ->
-
-
+    robot.respond /list dcos/i, (msg) ->
+      myFirebaseRef.child("admins/admin").on("value", function(snapshot) {
+        console.log(snapshot.val());  // Alerts "San Francisco"
+        msg.send "The statement of intent is: "
+      });
 
     ## hubot join dco
     ##
