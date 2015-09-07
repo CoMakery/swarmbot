@@ -1,6 +1,8 @@
 TODO:
 
-- test firebase integration YAY - still check env
+- test firebase integration YAY
 - dco lookup YAY
-- dco creation 
-- dco join
+- dco creation  
+- dco join YAY
+- add number of members
+- dco distribute
