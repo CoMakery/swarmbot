@@ -82,6 +82,11 @@ module.exports = (robot) ->
         if err
           msg.send "error in asset creation"
           return console.error(err)
+        dcoRef = robot.swarmbot.firebase.child('projects')
+        console.log 'AssetId: ', body.assetId
+        msg.send 'AssetId: ', body.assetId
+
+        dcoRef.child(dcoKey).update coluAssetId: body.assetId
         console.log 'Body: ', body
         msg.send body
         msg.send "asset created"

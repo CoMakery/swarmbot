@@ -1,5 +1,5 @@
 # Commands:
-# 
+#
 
 Firebase = require 'firebase'
 Colu = require('colu')
@@ -9,7 +9,7 @@ InitBot = (robot) ->
   throw new Error if robot.swarmbot?
   robot.swarmbot = {}
 
-  robot.swarmbot.firebase = new Firebase 'https://dazzle-staging.firebaseio-demo.com/'  # Swarm prduction.  Really.
+  robot.swarmbot.firebase = new Firebase process.env.FIREBASE_URL  # Swarm prduction.  Really.
   robot.swarmbot.whose = (message) -> "@#{message.message.user.name}"
 
   # Colu:
