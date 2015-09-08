@@ -5,6 +5,7 @@ Helper = require 'hubot-test-helper'
 helper = new Helper '../src/bots'
 
 process.env.EXPRESS_PORT = 8901
+process.env.FIREBASE_URL = 'https://dazzle-staging.firebaseio-demo.com/'
 
 describe 'create bounty', ->
   beforeEach ->
@@ -15,11 +16,11 @@ describe 'create bounty', ->
 
   context 'user can create an asset for an existing dco', ->
     beforeEach ->
-      @room.user.say 'alice', '@hubot create 2000 of asset for save-the-world dco'
+      @room.user.say 'alice', '@hubot create 2000 of asset for save-the-world'
 
     it 'should let the user know that the asset has been created', ->
       @room.messages.should.deep.equal [
-        ['alice', '@hubot create 2000 of asset for save-the-world dco']
+        ['alice', '@hubot create 2000 of asset for save-the-world']
         ['hubot', 'asset created']
       ]
 

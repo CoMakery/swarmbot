@@ -89,8 +89,8 @@ module.exports = (robot) ->
         dcoRef.child(dcoKey).update coluAssetId: body.assetId
         console.log 'Body: ', body
         msg.send body
-        msg.send "asset created"
 
         return
       return
     colu.init()
+    msg.send "asset created"
