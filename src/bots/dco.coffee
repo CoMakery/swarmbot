@@ -67,12 +67,16 @@ module.exports = (robot) ->
 
   robot.respond /create (\d+) of asset for (.+)$/i, (msg) ->
     {colu} = robot.swarmbot
+
+    msg.match.shift()
+    [amount, dcoKey] = msg.match
+
     asset =
-      amount: msg.match[1]
+      amount: amount
       metadata:
-        'assetName': 'Super DCO'
-        'issuer': msg.message.user.name
-        'description': 'Super DCO membership'
+        'assetName': dcoKey
+        'issuer': robot.swarmbot.whose msg
+        # 'description': 'Super DCO membership'
     colu.on 'connect', ->
       colu.issueAsset asset, (err, body) ->
         if err
