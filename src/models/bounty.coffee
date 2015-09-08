@@ -4,8 +4,7 @@ class Bounty
 
   @store: ->
     throw new Error('robot is not set up') unless @robot
-    console.log robot.brain.data
-    robot.brain.data.bountys or= {}
+    @robot.brain.data.bountys or= {}
 
   @defaultName: ->
     '__default__'

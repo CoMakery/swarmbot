@@ -17,7 +17,7 @@
   "devDependencies": {
     "chai": "^3.2.0",
     "coffee-script": "^1.9.3",
-    "hubot-test-helper": "0.0.6",
+    "hubot-test-helper": "^0.0.7",
     "mocha": "^2.2.5"
   },
   "dependencies": {
