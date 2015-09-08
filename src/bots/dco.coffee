@@ -65,8 +65,7 @@ module.exports = (robot) ->
       #
       #   console.log snapshot.val()
 
-
-  robot.respond /issue (\S*) of asset?.*/i, (msg) ->
+  robot.respond /create (\d+) of asset for (.+)$/i, (msg) ->
     {colu} = robot.swarmbot
     asset =
       amount: msg.match[1]
