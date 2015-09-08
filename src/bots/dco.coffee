@@ -28,21 +28,15 @@
 
 {log, p, pjson} = require 'lightsaber'
 Config          = require '../models/config'
-Account          = require '../models/account'
-Asset          = require '../models/asset'
 ResponseMessage = require './helpers/response_message'
 UserNormalizer  = require './helpers/user_normalizer'
 
 module.exports = (robot) ->
   # robot.brain.data.bounties or= {}
-  Asset.robot = Account.robot = robot
 
   # unless Config.adminList()
   #   robot.logger.warning 'HUBOT_TEAM_ADMIN environment variable not set'
 
-  ##
-  ##   hubot list dcos - list all existing DCOs (limit 10)
-  ##
   robot.respond /list dcos$/i, (msg) ->
 
       dcoRef = robot.swarmbot.firebase.child('projects')
@@ -52,8 +46,6 @@ module.exports = (robot) ->
         .on 'child_added', (snapshot) ->
           msg.send snapshot.key()
 
-  ##
-  #   hubot join <dco_name> dco - join a DCO, usually by agreeing to the statement of intent and paying a membership fee
   robot.respond /join (\S*) dco?.*/i, (msg) ->
     dcoRef = robot.swarmbot.firebase.child('projects')
     projectName = msg.match[1]
@@ -73,9 +65,7 @@ module.exports = (robot) ->
       #
       #   console.log snapshot.val()
 
-  ##
-  ##   hubot issue X of asset - issue X of associated asset.
-  ##
+
   robot.respond /issue (\S*) of asset?.*/i, (msg) ->
     {colu} = robot.swarmbot
     asset =
