@@ -5,13 +5,16 @@
 #   None
 #
 # Commands:
-#   hubot list dcos - list all existing DCOs (limit 10)
-#   hubot list dco XYZ - list all existing DCOs that match XYZ
+#   hubot list dcos
+#   hubot list dco <dco pattern>
+#   hubot create <number> of asset for <dco name> dco
+
+
+# Not displayed in help
 #   hubot how many dcos - how many DCOs are there?
 #   hubot select <dco_name> (you must be the creator)
 #   hubot create <dco_name> dco
 #   hubot set statement of intent <statement_of_intent>
-#   hubot issue X of asset - issue X of associated asset.
 #   hubot send asset to <user_name>
 #   hubot create constitution (creates a fork of the Citizen Code constitution)
 #   hubot file dco (dynamically creates an LLC)
@@ -90,63 +93,6 @@ module.exports = (robot) ->
         msg.send body
         msg.send "asset created"
 
-        return
-      return
-    colu.init()
-
-  robot.respond /send (\S*) of asset?.*/i, (msg) ->
-    {colu} = robot.swarmbot
-    amount = msg.match[1]
-
-    assetId = 'LEuQv9iXrfXAvV8T7BG4ykJeErtF1b28YUjz4'
-    fromAddress = 'mypgXJgAAvTZQMZcvMsFA7Q5SYo1Mtyj2a'
-    phoneNumber = '+1234567890'
-    colu.on 'connect', ->
-      toAddress = colu.hdwallet.getAddress()
-      args =
-        from: fromAddress
-        to: [
-          {
-            address: toAddress
-            assetId: assetId
-            amount: amount
-          }
-          {
-            phoneNumber: phoneNumber
-            assetId: assetId
-            amount: amount
-          }
-        ]
-        metadata:
-          'assetName': 'Mission Impossible 16'
-          'issuer': 'Fox Theater'
-          'description': 'Movie ticket to see the New Tom Cruise flick again'
-          'userData': 'meta': [
-            {
-              key: 'Item ID'
-              value: 2
-              type: 'Number'
-            }
-            {
-              key: 'Item Name'
-              value: 'Item Name'
-              type: 'String'
-            }
-            {
-              key: 'Company'
-              value: 'My Company'
-              type: 'String'
-            }
-            {
-              key: 'Address'
-              value: 'San Francisco, CA'
-              type: 'String'
-            }
-          ]
-      colu.sendAsset args, (err, body) ->
-        if err
-          return console.error(err)
-        console.log 'Body: ', body
         return
       return
     colu.init()
