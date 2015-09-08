@@ -29,16 +29,6 @@ Account          = require '../models/account'
 Asset          = require '../models/asset'
 ResponseMessage = require './helpers/response_message'
 UserNormalizer  = require './helpers/user_normalizer'
-Colu = require('colu')
-Firebase = require('firebase')
-myFirebaseRef = new Firebase('https://dazzle-staging.firebaseio.com/')
-
-privateSeed = 'abcd4986fdac1b3a710892ef6eaa708d619d67100d0514ab996582966f927982'
-
-settings =
-  network: 'testnet'
-  privateSeed: privateSeed
-colu = new Colu(settings)
 
 module.exports = (robot) ->
   # robot.brain.data.bounties or= {}
@@ -52,7 +42,7 @@ module.exports = (robot) ->
   ##
   robot.respond /list dcos$/i, (msg) ->
 
-      dcoRef = myFirebaseRef.child('projects')
+      dcoRef = robot.swarmbot.firebase.child('projects')
       MAX_MESSAGES_FOR_SLACK = 10
       dcoRef.orderByKey()
         .limitToFirst(MAX_MESSAGES_FOR_SLACK)
@@ -62,68 +52,55 @@ module.exports = (robot) ->
   ##
   #   hubot join <dco_name> dco - join a DCO, usually by agreeing to the statement of intent and paying a membership fee
   robot.respond /join (\S*) dco?.*/i, (msg) ->
+    dcoRef = robot.swarmbot.firebase.child('projects')
+    projectName = msg.match[1]
 
-
-      dcoRef = myFirebaseRef.child('projects')
-      projectName = msg.match[1]
-
-      dcoRef.child(projectName + '/project_statement').on 'value', (snapshot) ->
-          msg.send 'Do you agree with this statement of intent?'
-          msg.send snapshot.val()
-          msg.send 'Yes/no?'
-          return
+    dcoRef.child(projectName + '/project_statement').on 'value', (snapshot) ->
+      msg.send 'Do you agree with this statement of intent?'
+      msg.send snapshot.val()
+      msg.send 'Yes/no?'
 
       # myFirebaseRef.child('projects/2050_Music_Collective_1431029372/project_name').on 'value', (snapshot) ->
       #   msg.send snapshot.val()
       #   # Alerts "San Francisco"
       #   return
 
-
       #
       # myFirebaseRef.child('projects').on 'value', (snapshot) ->
       #
       #   console.log snapshot.val()
 
-
-
   ##
   ##   hubot issue X of asset - issue X of associated asset.
   ##
   robot.respond /issue (\S*) of asset?.*/i, (msg) ->
+    {colu} = robot.swarmbot
+    asset =
+      amount: msg.match[1]
+      metadata:
+        'assetName': 'Super DCO'
+        'issuer': msg.message.user.name
+        'description': 'Super DCO membership'
+    colu.on 'connect', ->
+      colu.issueAsset asset, (err, body) ->
+        if err
+          msg.send "error in asset creation"
+          return console.error(err)
+        console.log 'Body: ', body
+        msg.send body
+        msg.send "asset created"
 
-        asset =
-          amount: msg.match[1]
-          metadata:
-            'assetName': 'Super DCO'
-            'issuer': msg.message.user.name
-            'description': 'Super DCO membership'
-        colu.on 'connect', ->
-          colu.issueAsset asset, (err, body) ->
-            if err
-              msg.send "error in asset creation"
-              return console.error(err)
-            console.log 'Body: ', body
-            msg.send body
-            msg.send "asset created"
+        return
+      return
+    colu.init()
 
-            return
-          return
-        colu.init()
-
-  ##
-  ##   hubot issue X of asset - issue X of associated asset.
-  ##
   robot.respond /send (\S*) of asset?.*/i, (msg) ->
-
+    {colu} = robot.swarmbot
     amount = msg.match[1]
 
     assetId = 'LEuQv9iXrfXAvV8T7BG4ykJeErtF1b28YUjz4'
     fromAddress = 'mypgXJgAAvTZQMZcvMsFA7Q5SYo1Mtyj2a'
     phoneNumber = '+1234567890'
-    settings =
-      network: 'testnet'
-      privateSeed: privateSeed
-    colu = new Colu(settings)
     colu.on 'connect', ->
       toAddress = colu.hdwallet.getAddress()
       args =
@@ -173,11 +150,3 @@ module.exports = (robot) ->
         return
       return
     colu.init()
-
-
-    ## hubot join dco
-    ##
-    robot.respond /join dco?.*/i, (msg) ->
-
-      msg.send "The statement of intent is: "
-      msg.send "Do you agree with the DCO statement of intent?"

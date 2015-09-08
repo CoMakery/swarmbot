@@ -6,3 +6,10 @@ TODO:
 - dco join YAY
 - add number of members
 - dco distribute
+
+Flow:
+- create DCO
+  - (a new currency is created for the DCO)
+- create a bounty within dco
+- (user does good work)
+- bounty admin sends tokens to user (later community or smart contract)
