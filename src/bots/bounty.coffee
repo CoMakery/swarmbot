@@ -101,7 +101,7 @@ module.exports = (robot) ->
 
     msg.match.shift()
     [bountyName, amount, dcoKey] = msg.match
-    dcoRef.child(dcoKey).update( bountyName: bountyName, amount: amount)
+    dcoRef.child(dcoKey).update(bountyName, { name: bountyName, amount: amount })
 
     msg.send "bounty created"
 
