@@ -21,6 +21,8 @@
 ##   hubot (<bounty_name>) bounty count - list the current size of the bounty
 ##   hubot (<bounty_name>) bounty (list|show) - list the people in the bounty
 
+{log, p, pjson} = require 'lightsaber'
+
 # Config          = require '../models/config'
 Bounty          = require '../models/bounty'
 # Account          = require '../models/account'
@@ -31,18 +33,66 @@ ResponseMessage = require './helpers/response_message'
 module.exports = (robot) ->
   # robot.brain.data.bounties or= {}
   Bounty.robot = robot
+  {whose} = robot.swarmbot
 
   robot.respond /award (.+) bounty to (.+)$/i, (msg) ->
     {colu} = robot.swarmbot
     [all, bountyName, awardee] = msg.match
-    activeUser = robot.whose msg
+    activeUser = whose msg
 
-    # robot.swarmbot.firebase
-    robot.swarmbot.colu
+    amount = 100 # TODO look up from firebase
 
-    # bountySize = Bounty.getBountySize bountyName
-    # Account.updateAccountBalance(activeUser, -bountySize)
-    # Account.updateAccountBalance(awardee, bountySize)
+    assetId = 'LEuQv9iXrfXAvV8T7BG4ykJeErtF1b28YUjz4'
+    fromAddress = 'mypgXJgAAvTZQMZcvMsFA7Q5SYo1Mtyj2a'
+    phoneNumber = '+1234567890'
+    colu.on 'connect', ->
+      toAddress = colu.hdwallet.getAddress()
+      args =
+        from: fromAddress
+        to: [
+          {
+            address: toAddress
+            assetId: assetId
+            amount: amount
+          }
+          {
+            phoneNumber: phoneNumber
+            assetId: assetId
+            amount: amount
+          }
+        ]
+        metadata:
+          'assetName': 'Mission Impossible 16'
+          'issuer': 'Fox Theater'
+          'description': 'Movie ticket to see the New Tom Cruise flick again'
+          'userData': 'meta': [
+            {
+              key: 'Item ID'
+              value: 2
+              type: 'Number'
+            }
+            {
+              key: 'Item Name'
+              value: 'Item Name'
+              type: 'String'
+            }
+            {
+              key: 'Company'
+              value: 'My Company'
+              type: 'String'
+            }
+            {
+              key: 'Address'
+              value: 'San Francisco, CA'
+              type: 'String'
+            }
+          ]
+      colu.sendAsset args, (err, body) ->
+        if err
+          return console.error "Error: #{err}"
+        console.log 'Body: ', body
+
+    colu.init()
 
     message = "Awarded bounty to #{awardee}"
     msg.send message
