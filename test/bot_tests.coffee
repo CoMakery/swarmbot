@@ -4,6 +4,8 @@ chai.should()
 Helper = require 'hubot-test-helper'
 helper = new Helper '../src/bots'
 
+process.env.EXPRESS_PORT = 8901
+
 describe 'create bounty', ->
   beforeEach ->
     @room = helper.createRoom()
