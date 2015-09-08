@@ -23,6 +23,7 @@
 # Author:
 #   fractastical
 
+{log, p, pjson} = require 'lightsaber'
 Config          = require '../models/config'
 Account          = require '../models/account'
 Asset          = require '../models/asset'
@@ -49,16 +50,17 @@ module.exports = (robot) ->
   ##
   ##   hubot list dcos - list all existing DCOs (limit 10)
   ##
-  robot.respond /list dcos?.*/i, (msg) ->
+  robot.respond /list dcos$/i, (msg) ->
 
       dcoRef = myFirebaseRef.child('projects')
-
-      dcoRef.orderByKey().on 'child_added', (snapshot) ->
-        msg.send snapshot.key()
-        return
+      MAX_MESSAGES_FOR_SLACK = 10
+      dcoRef.orderByKey()
+        .limitToFirst(MAX_MESSAGES_FOR_SLACK)
+        .on 'child_added', (snapshot) ->
+          msg.send snapshot.key()
 
   ##
-#   hubot join <dco_name> dco - join a DCO, usually by agreeing to the statement of intent and paying a membership fee
+  #   hubot join <dco_name> dco - join a DCO, usually by agreeing to the statement of intent and paying a membership fee
   robot.respond /join (\S*) dco?.*/i, (msg) ->
 
 

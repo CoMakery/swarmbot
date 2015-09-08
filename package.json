@@ -31,6 +31,7 @@
     "hubot-scripts": "^2.16.1",
     "hubot-slack": "^3.3.0",
     "hubot-suggest": "citizencode/hubot-suggest#v0.0.3",
+    "lightsaber": "^0.4.1",
     "lodash": "^3.10.0"
   },
   "engines": {
