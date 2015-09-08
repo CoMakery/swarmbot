@@ -97,15 +97,13 @@ module.exports = (robot) ->
     message = "Awarded bounty to #{awardee}"
     msg.send message
 
-  robot.respond /create (\S*) bounty (\S*) coins?.*/i, (msg) ->
-    bountyName = msg.match[1]
-    bountySize = msg.match[2]
-    if bounty = Bounty.get bountyName
-      message = ResponseMessage.bountyAlreadyExists bounty
-    else
-      bounty = Bounty.create bountyName, bountySize
-      message = ResponseMessage.bountyCreated bounty
-    msg.send message
+  robot.respond /create (\S*) bounty of (\d+) for (\S*)$/i, (msg) ->
+
+    msg.match.shift()
+    [bountyName, amount, dcoKey] = msg.match
+    dcoRef.child(dcoKey).update( bountyName: bountyName, amount: amount)
+
+    msg.send "bounty created"
 
   # robot.respond /create (\S*) bounty (\S*) coins?.*/i, (msg) ->
   #   bountyName = msg.match[1]

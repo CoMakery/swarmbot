@@ -24,7 +24,17 @@ describe 'create bounty', ->
         ['hubot', 'asset created']
       ]
 
-  # context 'user can create a bounty in the context of a dco ', ->
+  context 'user can create a bounty in the context of a dco ', ->
+    beforeEach ->
+      @room.user.say 'alice', '@hubot create a plant-a-tree bounty of 30 for save-the-world'
+
+    it 'should let the user know that the bounty has been created', ->
+      @room.messages.should.deep.equal [
+        ['alice', '@hubot create a plant-a-tree bounty of 30 for save-the-world']
+        ['hubot', 'bounty created']
+      ]
+
+
   #
   # context 'dco admin can award bounty to user', ->
 
