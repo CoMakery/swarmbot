@@ -12,17 +12,18 @@
 #   hubot get balance - get your current balance
 
 # Not displayed in help
-##   hubot (<bounty_name>) bounty add (me|<user>) - add me or <user> to bounty
-##   hubot (<bounty_name>) bounty add (me|<user>) - add me or <user> to bounty
-##   hubot (<bounty_name>) bounty remove (me|<user>) - remove me or <user> from bounty
-##   hubot (<bounty_name>) bounty (empty|clear) - clear bounty list
-##   hubot (delete|remove) <bounty_name> bounty - delete bounty called <bounty_name>
-##   hubot (<bounty_name>) bounty -1 - remove me from the bounty
-##   hubot (<bounty_name>) bounty count - list the current size of the bounty
-##   hubot (<bounty_name>) bounty (list|show) - list the people in the bounty
+#   hubot (<bounty_name>) bounty add (me|<user>) - add me or <user> to bounty
+#   hubot (<bounty_name>) bounty add (me|<user>) - add me or <user> to bounty
+#   hubot (<bounty_name>) bounty remove (me|<user>) - remove me or <user> from bounty
+#   hubot (<bounty_name>) bounty (empty|clear) - clear bounty list
+#   hubot (delete|remove) <bounty_name> bounty - delete bounty called <bounty_name>
+#   hubot (<bounty_name>) bounty -1 - remove me from the bounty
+#   hubot (<bounty_name>) bounty count - list the current size of the bounty
+#   hubot (<bounty_name>) bounty (list|show) - list the people in the bounty
 
 {log, p, pjson} = require 'lightsaber'
 
+swarmbot = require '../models/swarmbot'
 # Config          = require '../models/config'
 Bounty          = require '../models/bounty'
 # Account          = require '../models/account'
@@ -33,12 +34,11 @@ ResponseMessage = require './helpers/response_message'
 module.exports = (robot) ->
   # robot.brain.data.bounties or= {}
   Bounty.robot = robot
-  {whose} = robot.swarmbot
 
   robot.respond /award (.+) bounty to (.+)$/i, (msg) ->
-    {colu} = robot.swarmbot
+    {colu} = swarmbot
     [all, bountyName, awardee] = msg.match
-    activeUser = whose msg
+    activeUser = robot.whose msg
 
     amount = 100 # TODO look up from firebase
 
@@ -97,11 +97,12 @@ module.exports = (robot) ->
     message = "Awarded bounty to #{awardee}"
     msg.send message
 
-  robot.respond /create (\S*) bounty of (\d+) for (\S*)$/i, (msg) ->
+  robot.respond /create (.+) bounty of (\d+) for (.+)$/i, (msg) ->
 
+    dcos = swarmbot.firebase.child('projects')
     msg.match.shift()
     [bountyName, amount, dcoKey] = msg.match
-    dcoRef.child(dcoKey).update(bountyName, { name: bountyName, amount: amount })
+    dcos.child(dcoKey).update bountyName, name: bountyName, amount: amount
 
     msg.send "bounty created"
 

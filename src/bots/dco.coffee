@@ -27,6 +27,7 @@
 #   fractastical
 
 {log, p, pjson} = require 'lightsaber'
+swarmbot        = require '../models/swarmbot'
 Config          = require '../models/config'
 ResponseMessage = require './helpers/response_message'
 UserNormalizer  = require './helpers/user_normalizer'
@@ -39,18 +40,18 @@ module.exports = (robot) ->
 
   robot.respond /list dcos$/i, (msg) ->
 
-      dcoRef = robot.swarmbot.firebase.child('projects')
+      dcos = swarmbot.firebase.child('projects')
       MAX_MESSAGES_FOR_SLACK = 10
-      dcoRef.orderByKey()
+      dcos.orderByKey()
         .limitToFirst(MAX_MESSAGES_FOR_SLACK)
         .on 'child_added', (snapshot) ->
           msg.send snapshot.key()
 
   robot.respond /join (\S*) dco?.*/i, (msg) ->
-    dcoRef = robot.swarmbot.firebase.child('projects')
+    dcos = swarmbot.firebase.child('projects')
     projectName = msg.match[1]
 
-    dcoRef.child(projectName + '/project_statement').on 'value', (snapshot) ->
+    dcos.child(projectName + '/project_statement').on 'value', (snapshot) ->
       msg.send 'Do you agree with this statement of intent?'
       msg.send snapshot.val()
       msg.send 'Yes/no?'
@@ -66,7 +67,7 @@ module.exports = (robot) ->
       #   console.log snapshot.val()
 
   robot.respond /create (\d+) of asset for (.+)$/i, (msg) ->
-    {colu} = robot.swarmbot
+    {colu, firebase} = swarmbot
 
     msg.match.shift()
     [amount, dcoKey] = msg.match
@@ -75,18 +76,18 @@ module.exports = (robot) ->
       amount: amount
       metadata:
         'assetName': dcoKey
-        'issuer': robot.swarmbot.whose msg
+        'issuer': robot.whose msg
         # 'description': 'Super DCO membership'
     colu.on 'connect', ->
       colu.issueAsset asset, (err, body) ->
         if err
           msg.send "error in asset creation"
           return console.error(err)
-        dcoRef = robot.swarmbot.firebase.child('projects')
+        dcos = swarmbot.firebase.child('projects')
         console.log 'AssetId: ', body.assetId
         msg.send 'AssetId: ', body.assetId
 
-        dcoRef.child(dcoKey).update coluAssetId: body.assetId
+        dcos.child(dcoKey).update coluAssetId: body.assetId
         console.log 'Body: ', body
         msg.send body
 

@@ -10,7 +10,7 @@
   ],
   "description": "Bot for bounties",
   "scripts": {
-    "dev": "bin/hubot",
+    "dev": "HUBOT_HEROKU_KEEPALIVE_URL=http://g.co/ bin/hubot",
     "start": "bin/hubot --adapter slack",
     "test": "mocha"
   },
@@ -33,9 +33,5 @@
     "hubot-suggest": "citizencode/hubot-suggest#v0.0.3",
     "lightsaber": "^0.4.1",
     "lodash": "^3.10.0"
-  },
-  "engines": {
-    "node": "^0.10",
-    "npm": "2.x"
   }
 }

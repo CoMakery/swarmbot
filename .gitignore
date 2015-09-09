@@ -1,5 +1,6 @@
-npm-debug.log
 /.env
+/.env.*
 /.hubot_history
 /node_modules/
 /tmp/
+npm-debug.log
