@@ -18,7 +18,8 @@
     "chai": "^3.2.0",
     "coffee-script": "^1.9.3",
     "hubot-test-helper": "^0.0.7",
-    "mocha": "^2.2.5"
+    "mocha": "^2.2.5",
+    "sinon": "^1.16.1"
   },
   "dependencies": {
     "colu": "^0.7.2",

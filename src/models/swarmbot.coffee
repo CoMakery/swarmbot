@@ -5,9 +5,11 @@ Colu = require 'colu'
 
 class Swarmbot
 
-  configure: ->
-    @firebase = new Firebase process.env.FIREBASE_URL
-    @colu = new Colu
+  firebase: ->
+    @_firebase ?= new Firebase process.env.FIREBASE_URL
+
+  colu: ->
+    @_colu ?= new Colu
       network: process.env.COLU_NETWORK
       privateSeed: process.env.COLU_PRIVATE_SEED
 

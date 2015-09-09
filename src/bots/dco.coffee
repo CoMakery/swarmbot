@@ -40,7 +40,7 @@ module.exports = (robot) ->
 
   robot.respond /list dcos$/i, (msg) ->
 
-      dcos = swarmbot.firebase.child('projects')
+      dcos = swarmbot.firebase().child('projects')
       MAX_MESSAGES_FOR_SLACK = 10
       dcos.orderByKey()
         .limitToFirst(MAX_MESSAGES_FOR_SLACK)
@@ -48,7 +48,7 @@ module.exports = (robot) ->
           msg.send snapshot.key()
 
   robot.respond /join (\S*) dco?.*/i, (msg) ->
-    dcos = swarmbot.firebase.child('projects')
+    dcos = swarmbot.firebase().child('projects')
     projectName = msg.match[1]
 
     dcos.child(projectName + '/project_statement').on 'value', (snapshot) ->
@@ -67,10 +67,9 @@ module.exports = (robot) ->
       #   console.log snapshot.val()
 
   robot.respond /create (\d+) of asset for (.+)$/i, (msg) ->
-    {colu, firebase} = swarmbot
-
+    colu = swarmbot.colu()
     msg.match.shift()
-    [amount, dcoKey] = msg.match
+    [amount, dcoKey] = msg.match    
 
     asset =
       amount: amount
@@ -83,7 +82,7 @@ module.exports = (robot) ->
         if err
           msg.send "error in asset creation"
           return console.error(err)
-        dcos = swarmbot.firebase.child('projects')
+        dcos = swarmbot.firebase().child('projects')
         console.log 'AssetId: ', body.assetId
         msg.send 'AssetId: ', body.assetId
 

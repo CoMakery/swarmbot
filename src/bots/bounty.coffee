@@ -36,7 +36,6 @@ module.exports = (robot) ->
   Bounty.robot = robot
 
   robot.respond /award (.+) bounty to (.+)$/i, (msg) ->
-    {colu} = swarmbot
     [all, bountyName, awardee] = msg.match
     activeUser = robot.whose msg
 
@@ -45,7 +44,7 @@ module.exports = (robot) ->
     assetId = 'LEuQv9iXrfXAvV8T7BG4ykJeErtF1b28YUjz4'
     fromAddress = 'mypgXJgAAvTZQMZcvMsFA7Q5SYo1Mtyj2a'
     phoneNumber = '+1234567890'
-    colu.on 'connect', ->
+    swarmbot.colu().on 'connect', ->
       toAddress = colu.hdwallet.getAddress()
       args =
         from: fromAddress
@@ -99,7 +98,7 @@ module.exports = (robot) ->
 
   robot.respond /create (.+) bounty of (\d+) for (.+)$/i, (msg) ->
 
-    dcos = swarmbot.firebase.child('projects')
+    dcos = swarmbot.firebase().child('projects')
     msg.match.shift()
     [bountyName, amount, dcoKey] = msg.match
     dcos.child(dcoKey).update bountyName, name: bountyName, amount: amount
