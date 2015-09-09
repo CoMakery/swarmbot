@@ -40,9 +40,11 @@ module.exports = (robot) ->
     [all, bountyName, awardee] = msg.match
     activeUser = robot.whose msg
 
-    amount = 100 # TODO look up from firebase
+    dcoRef = swarmbot.firebase().child('projects/#{dcoKey}')
+    bounty = dcoRef.child('bounties/#{bountyName}')
+    amount = bounty.amount
+    assetId = dcoRef.coluAssetId
 
-    assetId = 'LEuQv9iXrfXAvV8T7BG4ykJeErtF1b28YUjz4'
     fromAddress = 'mypgXJgAAvTZQMZcvMsFA7Q5SYo1Mtyj2a'
     phoneNumber = '+1234567890'
     swarmbot.colu().on 'connect', ->
