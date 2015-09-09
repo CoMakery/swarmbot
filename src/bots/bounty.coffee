@@ -24,11 +24,12 @@
 {log, p, pjson} = require 'lightsaber'
 
 swarmbot = require '../models/swarmbot'
+Bounty = require '../models/bounty'
+DCO = require '../models/dco'
 # Config          = require '../models/config'
-Bounty          = require '../models/bounty'
 # Account          = require '../models/account'
 # Asset          = require '../models/asset'
-ResponseMessage = require './helpers/response_message'
+# ResponseMessage = require './helpers/response_message'
 # UserNormalizer  = require './helpers/user_normalizer'
 
 module.exports = (robot) ->
@@ -99,14 +100,9 @@ module.exports = (robot) ->
   robot.respond /create (.+) bounty of (\d+) for (.+)$/i, (msg) ->
     msg.match.shift()
     [bountyName, amount, dcoKey] = msg.match
-    activeUser = robot.whose msg
-    dcos = swarmbot.firebase().child('projects')
-    bounty = dcos.child("#{dcoKey}/bounties/#{bountyName}")
-    bounty.set {name: bountyName, amount: amount}, (error) ->
-      if error
-        msg.send "error creating bounty :("
-      else
-        msg.send "bounty created"
+
+    DCO.createDcoBounty dcoKey, bountyName, amount, (message) ->
+      msg.send message
 
 
   # robot.respond /create (\S*) bounty (\S*) coins?.*/i, (msg) ->

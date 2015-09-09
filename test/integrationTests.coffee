@@ -31,15 +31,17 @@ describe 'swarmbot', ->
       ]
       # check that the asset exists -- in fb/colu
 
-  context 'user can create a bounty in the context of a dco', ->
-    it 'should let the user know that the bounty has been created', ->
+  context 'user can create a bounty in the context of a dco', (done) ->
+    xit 'should let the user know that the bounty has been created', ->
       @room.user.say 'alice', '@hubot create plant-a-tree bounty of 30 for save-the-world'
-      setTimeout ->
-        @room.messages.should.deep.equal [
-          ['alice', '@hubot create plant-a-tree bounty of 30 for save-the-world']
-          ['hubot', 'bounty created']
-        ],
-        500
+      # setTimeout =>
+      #   p 888
+      @room.messages.should.deep.equal [
+        ['alice', '@hubot create plant-a-tree bounty of 30 for save-the-world']
+        ['hubot', 'bounty created!!!!']
+      ]
+      #   done()
+      # , 1
 
   # context 'user can create a bounty', ->
   #   it 'should let the user know that the bounty has been created', ->
