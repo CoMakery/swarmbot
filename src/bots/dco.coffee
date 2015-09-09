@@ -7,6 +7,7 @@
 # Commands:
 #   hubot list dcos
 #   hubot list dco <dco pattern>
+#   hubot join <dco_name> - join a DCO, usually by agreeing to the statement of intent and paying a membership fee
 #   hubot create <number> of asset for <dco name> dco
 
 
@@ -20,7 +21,6 @@
 #   hubot file dco (dynamically creates an LLC)
 #   hubot open for membership for $XYZ - allow users to join membership in your DCO for a set price in USD
 #   hubot open for membership for xyzBTC - allow users to join membership in your DCO) for a set price in BTC
-#   hubot join <dco_name> - join a DCO, usually by agreeing to the statement of intent and paying a membership fee
 #   hubot rate <dco_name> - Tells you how much the DCOs assets are trading at on any given day.
 #
 # Author:
@@ -56,6 +56,10 @@ module.exports = (robot) ->
       msg.send snapshot.val()
       msg.send 'Yes/no?'
 
+# Not sure, this may work in slack, not sure about
+  # robot.respond /register?.*/i, (msg) ->
+  #   robot.reply 'some msg'?
+
       # myFirebaseRef.child('projects/2050_Music_Collective_1431029372/project_name').on 'value', (snapshot) ->
       #   msg.send snapshot.val()
       #   # Alerts "San Francisco"
@@ -69,7 +73,7 @@ module.exports = (robot) ->
   robot.respond /create (\d+) of asset for (.+)$/i, (msg) ->
     colu = swarmbot.colu()
     msg.match.shift()
-    [amount, dcoKey] = msg.match    
+    [amount, dcoKey] = msg.match
 
     asset =
       amount: amount
