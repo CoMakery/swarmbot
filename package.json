@@ -10,7 +10,7 @@
   ],
   "description": "Bot for bounties",
   "scripts": {
-    "dev": "HUBOT_HEROKU_KEEPALIVE_URL=http://g.co/ bin/hubot",
+    "dev": "HUBOT_HEROKU_KEEPALIVE_URL=http://x.com/ bin/hubot",
     "start": "bin/hubot --adapter slack",
     "test": "mocha"
   },

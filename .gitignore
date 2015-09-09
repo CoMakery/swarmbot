@@ -2,5 +2,6 @@
 /.env.*
 /.hubot_history
 /node_modules/
+/qr.jpg
 /tmp/
 npm-debug.log

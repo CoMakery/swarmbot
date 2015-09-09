@@ -103,8 +103,8 @@ module.exports = (robot) ->
     msg.match.shift()
     [bountyName, amount, dcoKey] = msg.match
 
-    DCO.createDcoBounty dcoKey, bountyName, amount, (message) ->
-      msg.send message
+    DCO.createBountyFor {dcoKey, bountyName, amount}, (error, message) ->
+      msg.send error or message
 
 
   # robot.respond /create (\S*) bounty (\S*) coins?.*/i, (msg) ->

@@ -5,21 +5,21 @@ class DCO
 
   constructor: ({@dcoRef}) ->
 
-  @createDcoBounty: (dcoKey, bountyName, amount, cb) ->
+  @createBountyFor: ({dcoKey, bountyName, amount}, cb) ->
     dco = DCO.find dcoKey
-    dco.createBounty bountyName, amount, cb
+    dco.createBounty {bountyName, amount}, cb
 
   @find: (dcoKey) ->
     dcos = swarmbot.firebase().child('projects')
     new DCO dcoRef: dcos.child(dcoKey)
 
-  createBounty: (bountyName, amount, cb) ->
+  createBounty: ({bountyName, amount}, cb) ->
     bounty = @dcoRef.child "bounties/#{bountyName}"
     bounty.set {name: bountyName, amount: amount}, (error) ->
       if error
         cb "error creating bounty :("
       else
-        cb "bounty created"
+        cb null, "bounty created"
         # bounty = dcos.child("#{dcoKey}/bounties/#{bountyName}")
         # p 444, bounty.get()
 

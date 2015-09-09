@@ -1,9 +1,12 @@
+{log, p, pjson} = require 'lightsaber'
 chai = require 'chai'
 chai.should()
 sinon = require 'sinon'
 # nock = require 'nock'
 Helper = require 'hubot-test-helper'
+
 swarmbot = require '../src/models/swarmbot'
+DCO = require '../src/models/dco'
 
 sinon.stub(swarmbot, 'colu').returns
   on: ->
@@ -22,7 +25,7 @@ describe 'swarmbot', ->
   beforeEach -> @room = helper.createRoom()
   afterEach -> @room.destroy()
 
-  context 'DCO assets', ->
+  context 'DCO asset', ->
     it 'user can create an asset for an existing dco', ->
       @room.user.say 'alice', '@hubot create 2000 of asset for save-the-world'
       @room.messages.should.deep.equal [
@@ -31,17 +34,15 @@ describe 'swarmbot', ->
       ]
       # check that the asset exists -- in fb/colu
 
-  context 'user can create a bounty in the context of a dco', (done) ->
-    xit 'should let the user know that the bounty has been created', ->
-      @room.user.say 'alice', '@hubot create plant-a-tree bounty of 30 for save-the-world'
-      # setTimeout =>
-      #   p 888
-      @room.messages.should.deep.equal [
-        ['alice', '@hubot create plant-a-tree bounty of 30 for save-the-world']
-        ['hubot', 'bounty created!!!!']
-      ]
-      #   done()
-      # , 1
+  context 'DCO bounty', ->
+    it 'a DCO can create a bounty', (done) ->
+      bounty =
+        dcoKey: 'save-the-world'
+        bountyName: 'plant a tree'
+        amount: 999
+      DCO.createBountyFor bounty, (error, message) ->
+        message.should.equal 'bounty created'
+        done()
 
   # context 'user can create a bounty', ->
   #   it 'should let the user know that the bounty has been created', ->
