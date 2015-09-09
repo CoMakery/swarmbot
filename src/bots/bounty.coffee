@@ -97,13 +97,17 @@ module.exports = (robot) ->
     msg.send message
 
   robot.respond /create (.+) bounty of (\d+) for (.+)$/i, (msg) ->
-
-    dcos = swarmbot.firebase().child('projects')
     msg.match.shift()
     [bountyName, amount, dcoKey] = msg.match
-    dcos.child(dcoKey).update bountyName, name: bountyName, amount: amount
+    activeUser = robot.whose msg
+    dcos = swarmbot.firebase().child('projects')
+    bounty = dcos.child("#{dcoKey}/bounties/#{bountyName}")
+    bounty.set {name: bountyName, amount: amount}, (error) ->
+      if error
+        msg.send "error creating bounty :("
+      else
+        msg.send "bounty created"
 
-    msg.send "bounty created"
 
   # robot.respond /create (\S*) bounty (\S*) coins?.*/i, (msg) ->
   #   bountyName = msg.match[1]
