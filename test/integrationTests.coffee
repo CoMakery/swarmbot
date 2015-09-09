@@ -36,20 +36,19 @@ describe 'swarmbot', ->
 
   context 'DCO bounty', ->
     it 'a DCO can create a bounty', (done) ->
-      bounty =
-        dcoKey: 'save-the-world'
-        bountyName: 'plant a tree'
-        amount: 999
-      DCO.createBountyFor bounty, (error, message) ->
+      amount = Math.round Math.random() * Math.pow 10, 16
+      bountyName = 'plant a tree'
+      dcoKey = 'save-the-world'
+      bountyParams = {
+        dcoKey
+        bountyName
+        amount
+      }
+      DCO.createBountyFor bountyParams, (error, message) ->
         message.should.equal 'bounty created'
-        done()
-
-  # context 'user can create a bounty', ->
-  #   it 'should let the user know that the bounty has been created', ->
-  #     @room.user.say 'alice', '@hubot create save-the-world bounty 100 coins'
-  #     @room.messages.should.deep.equal [
-  #       ['alice', '@hubot create save-the-world bounty 100 coins']
-  #       ['hubot', '`save-the-world` bounty created with 100 coins']
-  #     ]
+        dco = DCO.find dcoKey
+        dco.getBounty({bountyName}).get 'amount', (value) ->
+          value.should.equal amount
+          done()
 
   # context 'dco admin can award bounty to user', ->

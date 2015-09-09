@@ -1,5 +1,6 @@
 {log, p, pjson} = require 'lightsaber'
 swarmbot = require '../models/swarmbot'
+Bounty = require '../models/bounty'
 
 class DCO
 
@@ -20,8 +21,10 @@ class DCO
         cb "error creating bounty :("
       else
         cb null, "bounty created"
-        # bounty = dcos.child("#{dcoKey}/bounties/#{bountyName}")
-        # p 444, bounty.get()
+
+  getBounty: ({bountyName}) ->
+    bountyRef = @dcoRef.child "bounties/#{bountyName}"
+    new Bounty {bountyRef}
 
   # @robot = null
   #
