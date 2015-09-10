@@ -15,4 +15,5 @@ class Swarmbot
       network: process.env.COLU_NETWORK
       privateSeed: process.env.COLU_PRIVATE_SEED
 
+
 module.exports = new Swarmbot

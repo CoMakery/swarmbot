@@ -29,7 +29,12 @@ class DCO
     toAddress = 'mypgXJgAAvTZQMZcvMsFA7Q5SYo1Mtyj2b'
     #for asset LEP4Zu6sdg1rU9T6oXCWDFyWYGVftZRphfjps
     fromAddress = 'mtC2DpYP3gVZSgbnrmLcEbFt46955oz3hy'
+
     @dcoRef.child("coluAssetId").on 'value', (snapshot) ->
+
+        # assetId = snapshot.val().coluAssetId
+        # coluAssetAddress = snapshot.val().coluAssetAddress
+
         assetId = snapshot.val()
         p "asset id", assetId
         amountRef.on 'value', (snapshot) ->
@@ -40,14 +45,14 @@ class DCO
           colu.on 'connect', ->
             #colu.hdwallet.getAddress()
             p 11
-            toAddress = 'mypgXJgAAvTZQMZcvMsFA7Q5SYo1Mtyj2a'
+            toAddress = 'n1Kf9tSxasybAcckMNzanzut36vKK1xJ9c'
             p args =
               from: [ fromAddress ]
               to: [
                 {
                   address: toAddress
                   assetId: assetId
-                  amount: amount
+                  amount: 22
                 }
                 ]
             colu.sendAsset args, (err, body) ->
@@ -56,9 +61,10 @@ class DCO
                 p "err:", err
                 return console.error "Error: #{err}"
               console.log 'Body: ', body
-              cb null, "bounty successfully awarded"
-
+              # cb null, "bounty successfully awarded"
+          # if colu.needToDiscover
           colu.init()
+
 
   getBounty: ({bountyName}) ->
     bountyRef = @dcoRef.child "bounties/#{bountyName}"
