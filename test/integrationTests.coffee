@@ -11,6 +11,7 @@ DCO = require '../src/models/dco'
 sinon.stub(swarmbot, 'colu').returns
   on: ->
   init: ->
+  sendAsset: ->
 
 # sinon.stub(swarmbot, 'firebase')
 
