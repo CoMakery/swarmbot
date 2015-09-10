@@ -26,21 +26,17 @@ class DCO
 
     p "bounty name", bountyName
     amountRef = @dcoRef.child "bounties/#{bountyName}/amount"
-    #TODO: we should test if this is a valid address
-
 
     @dcoRef.on 'value', (snapshot) ->
 
         assetId = snapshot.val().coluAssetId
         fromAddress = snapshot.val().coluAssetAddress
         toAddress = awardeeAddress
-        p "awardee", awardeeAddress
-
-        # assetId = snapshot.val()
-        p "asset id", assetId
+        # p "awardee", awardeeAddress
+        # p "asset id", assetId
         amountRef.on 'value', (snapshot) ->
           amount = snapshot.val()
-          p "bounty amount", amount
+          # p "bounty amount", amount
           colu = swarmbot.colu()
           # colu.on 'connect', ->
             #colu.hdwallet.getAddress()
