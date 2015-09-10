@@ -10,6 +10,7 @@
   ],
   "description": "Bot for bounties",
   "scripts": {
+    "colu": "colu",
     "dev": "HUBOT_HEROKU_KEEPALIVE_URL=http://x.com/ bin/hubot",
     "start": "bin/hubot --adapter slack",
     "test": "mocha"
@@ -22,7 +23,7 @@
     "sinon": "^1.16.1"
   },
   "dependencies": {
-    "colu": "Colu-platform/colu-nodejs",
+    "colu": "^0.6.4",
     "colu-access": "^0.2.5",
     "firebase": "^2.2.9",
     "hubot": "^2.16.0",
