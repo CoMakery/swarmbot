@@ -32,6 +32,7 @@ class DCO
 
     @dcoRef.child("coluAssetId").on 'value', (snapshot) ->
 
+
         # assetId = snapshot.val().coluAssetId
         # coluAssetAddress = snapshot.val().coluAssetAddress
 
@@ -42,28 +43,28 @@ class DCO
           p "bounty amount", amount
           colu = swarmbot.colu()
           p "001"
-          colu.on 'connect', ->
+          # colu.on 'connect', ->
             #colu.hdwallet.getAddress()
-            p 11
-            toAddress = 'n1Kf9tSxasybAcckMNzanzut36vKK1xJ9c'
-            p args =
-              from: [ fromAddress ]
-              to: [
-                {
-                  address: toAddress
-                  assetId: assetId
-                  amount: 22
-                }
-                ]
-            colu.sendAsset args, (err, body) ->
-              p "we made it", body
-              if err
-                p "err:", err
-                return console.error "Error: #{err}"
-              console.log 'Body: ', body
+          p 11
+          toAddress = 'n1Kf9tSxasybAcckMNzanzut36vKK1xJ9c'
+          p args =
+            from: [ fromAddress ]
+            to: [
+              {
+                address: toAddress
+                assetId: assetId
+                amount: 22
+              }
+              ]
+          colu.sendAsset args, (err, body) ->
+            p "we made it", body
+            if err
+              p "err:", err
+              return console.error "Error: #{err}"
+            console.log 'Body: ', body
               # cb null, "bounty successfully awarded"
           # if colu.needToDiscover
-          colu.init()
+          # colu.init()
 
 
   getBounty: ({bountyName}) ->

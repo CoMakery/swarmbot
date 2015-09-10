@@ -38,7 +38,7 @@ module.exports = (robot) ->
   # unless Config.adminList()
   #   robot.logger.warning 'HUBOT_TEAM_ADMIN environment variable not set'
 
-  # swarmbot.colu().init()
+  swarmbot.colu().init()
 
   robot.respond /list dcos$/i, (msg) ->
 
