@@ -37,7 +37,7 @@ class DCO
           #colu.hdwallet.getAddress()
           toAddress = toAddress
           args =
-            from: fromAddress
+            from: [ fromAddress ]
             to: [
               {
                 address: toAddress

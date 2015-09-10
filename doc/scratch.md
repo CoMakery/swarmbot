@@ -7,6 +7,7 @@ TODO:
 
 
 Flow:
+
 - create DCO
   - (a new currency is created for the DCO)
      - query DCO metadata and pass to Colu YAY

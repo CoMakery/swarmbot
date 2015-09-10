@@ -41,6 +41,11 @@ module.exports = (robot) ->
     activeUser = robot.whose msg
 
     dco = DCO.find 'save-the-world'
+    #
+    # usersRef = swarmbot.firebase.child('users')
+    # usersRef.orderByChild("slack_username").equalTo(awardee), (snapshot) ->
+    #   p "awardee", snapshot.val()
+
     dco.awardBounty bountyName, awardee
     message = "Awarded bounty to #{awardee}"
     msg.send message
@@ -51,7 +56,7 @@ module.exports = (robot) ->
 
     DCO.createBountyFor {dcoKey, bountyName, amount}, (error, message) ->
       msg.send error or message
-      
+
 
 
 
