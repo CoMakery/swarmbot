@@ -9,11 +9,11 @@ TODO:
 Flow:
 
 - create DCO
-  - (a new currency is created for the DCO)
+  - (a new currency is created for the DCO) YAY
      - query DCO metadata and pass to Colu YAY
      - store returned assetId YAY
 
 - create a bounty within dco YAY
-- (user creates account)
-- (user does good work)
-- admin awards bounty to user
+- (user creates account) YAY
+- (user does good work) YAY
+- admin awards bounty to user YAY
