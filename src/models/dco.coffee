@@ -23,37 +23,83 @@ class DCO
         cb null, "bounty created"
 
   awardBounty: ({bountyName, awardee}, cb) ->
+
     bounty = @dcoRef.child "bounties/#{bountyName}"
-    #colu magic
-
-    assetId = @dcoRef.coluAssetId
     toAddress = 'mypgXJgAAvTZQMZcvMsFA7Q5SYo1Mtyj2b'
-    fromAddress = 'mypgXJgAAvTZQMZcvMsFA7Q5SYo1Mtyj2a'
-    colu = swarmbot.colu()
-    colu.on 'connect', ->
+    #for asset LEP4Zu6sdg1rU9T6oXCWDFyWYGVftZRphfjps
+    fromAddress = 'mg9Yu6KNL6JBim5QgsmH5QbW78Wx9YgDcF'
+    @dcoRef.child("coluAssetId").on 'value', (snapshot) ->
+        assetId = snapshot.val()
+        p "asset id", assetId
+        p "bounty amount"
+        colu = swarmbot.colu()
+        colu.on 'connect', ->
+          #colu.hdwallet.getAddress()
+          toAddress = toAddress
+          args =
+            from: fromAddress
+            to: [
+              {
+                address: toAddress
+                assetId: assetId
+                amount: bounty.amount
+              }
+              ]
+          colu.sendAsset args, (err, body) ->
+            p "we made it", body
+            if err
+              return console.error "Error: #{err}"
+            console.log 'Body: ', body
 
-      toAddress = colu.hdwallet.getAddress()
-      args =
-        from: fromAddress
-        to: [
-          {
-            address: toAddress
-            assetId: assetId
-            amount: bounty.amount
-          }
-          ]
-      colu.sendAsset args, (err, body) ->
-        p "we made it", body
-        if err
-          return console.error "Error: #{err}"
-        console.log 'Body: ', body
-
-    colu.init()
-    cb null, "bounty awarded"
+        colu.init()
+    # cb null, "bounty awarded"
 
   getBounty: ({bountyName}) ->
     bountyRef = @dcoRef.child "bounties/#{bountyName}"
     new Bounty {bountyRef}
+
+
+  # pledge: ({email, name}) ->
+  #
+	# 	# Store new pledge data
+	# 	ref = $firebase(new Firebase(firebaseUrl+'/pledges/'))
+	# 	ref.$push(pledgeData)
+  #
+	# 	# Create new user
+	# 	.then (storedPledgeData)->
+	# 		passphrase = User.generatePassphrase(6)
+	# 		encodedPassphrase = User.encodePassword passphrase
+	# 		userData =
+	# 			first_name: pledgeData.firstName
+	# 			last_name: pledgeData.lastName
+	# 			email: pledgeData.email
+	# 			organization: pledgeData.organization
+	# 			temporaryPassword: encodedPassphrase
+	# 			signupRequired: true
+	# 		User.create pledgeData.email, passphrase, userData
+	# 		.then (userData)->
+	# 			# Send user email with one-time password
+	# 			userCreatedNotification(passphrase)
+	# 			# Once user is created send email notification with pledge data to User
+	# 			pledgeToUserNotification()
+	# 			# Once user is created send email notification with pledge data to Admin
+	# 			pledgeToAdminNotification(storedPledgeData)
+	# 			# Send Swarm dividend to user
+	# 			User.getSwarmDividend(userData.uid)
+	# 			# Resolve or reject user create promise
+	# 			createUserDefer.resolve()
+	# 		.then null, (reason)->
+	# 			if reason.code == 'EMAIL_TAKEN'
+	# 				pledgeToUserNotification()
+	# 				pledgeToAdminNotification(storedPledgeData)
+	# 				User.getUidByEmail(pledgeData.email)
+	# 				.then (uid)->
+	# 					User.getSwarmDividend(uid)
+	# 					notifyUserCreatedDefer.resolve()
+	# 				createUserDefer.resolve()
+	# 			else
+	# 				createUserDefer.reject reason
+
 
   # @robot = null
   #

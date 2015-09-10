@@ -40,62 +40,8 @@ module.exports = (robot) ->
     [all, bountyName, awardee] = msg.match
     activeUser = robot.whose msg
 
-    dcoRef = swarmbot.firebase().child('projects/#{dcoKey}')
-    bounty = dcoRef.child('bounties/#{bountyName}')
-    amount = bounty.amount
-    assetId = dcoRef.coluAssetId
-
-    fromAddress = 'mypgXJgAAvTZQMZcvMsFA7Q5SYo1Mtyj2a'
-    phoneNumber = '+1234567890'
-    swarmbot.colu().on 'connect', ->
-      toAddress = colu.hdwallet.getAddress()
-      args =
-        from: fromAddress
-        to: [
-          {
-            address: toAddress
-            assetId: assetId
-            amount: amount
-          }
-          {
-            phoneNumber: phoneNumber
-            assetId: assetId
-            amount: amount
-          }
-        ]
-        metadata:
-          'assetName': 'Mission Impossible 16'
-          'issuer': 'Fox Theater'
-          'description': 'Movie ticket to see the New Tom Cruise flick again'
-          'userData': 'meta': [
-            {
-              key: 'Item ID'
-              value: 2
-              type: 'Number'
-            }
-            {
-              key: 'Item Name'
-              value: 'Item Name'
-              type: 'String'
-            }
-            {
-              key: 'Company'
-              value: 'My Company'
-              type: 'String'
-            }
-            {
-              key: 'Address'
-              value: 'San Francisco, CA'
-              type: 'String'
-            }
-          ]
-      colu.sendAsset args, (err, body) ->
-        if err
-          return console.error "Error: #{err}"
-        console.log 'Body: ', body
-
-    colu.init()
-
+    dco = DCO.find 'save-the-world'
+    dco.awardBounty bountyName, awardee
     message = "Awarded bounty to #{awardee}"
     msg.send message
 
@@ -105,6 +51,8 @@ module.exports = (robot) ->
 
     DCO.createBountyFor {dcoKey, bountyName, amount}, (error, message) ->
       msg.send error or message
+      
+
 
 
   # robot.respond /create (\S*) bounty (\S*) coins?.*/i, (msg) ->
