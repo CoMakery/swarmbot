@@ -14,5 +14,6 @@ Flow:
 
 - create a bounty within dco YAY
 - (user creates account) YAY
+    - gets email that allows her to get passphrase / pdf (friendly method) 
 - (user does good work) YAY
 - admin awards bounty to user YAY
