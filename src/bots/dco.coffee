@@ -8,7 +8,7 @@
 #   hubot list dcos
 #   hubot list dco <dco pattern>
 #   hubot join <dco_name> - join a DCO, usually by agreeing to the statement of intent and paying a membership fee
-#   hubot create <number> of asset for <dco name> 
+#   hubot create <number> of asset for <dco name>
 
 
 # Not displayed in help
@@ -31,6 +31,7 @@ swarmbot        = require '../models/swarmbot'
 Config          = require '../models/config'
 ResponseMessage = require './helpers/response_message'
 UserNormalizer  = require './helpers/user_normalizer'
+DCO = require '../models/dco'
 
 module.exports = (robot) ->
   # robot.brain.data.bounties or= {}
@@ -70,31 +71,10 @@ module.exports = (robot) ->
       #   console.log snapshot.val()
 
   robot.respond /create (\d+) of asset for (.+)$/i, (msg) ->
-    colu = swarmbot.colu()
     msg.match.shift()
     [amount, dcoKey] = msg.match
 
-    asset =
-      amount: amount
-      metadata:
-        'assetName': dcoKey
-        'issuer': robot.whose msg
-        # 'description': 'Super DCO membership'
-    # colu.on 'connect', ->
-    colu.issueAsset asset, (err, body) ->
-      if err
-        msg.send "error in asset creation"
-        return console.error(err)
-      dcos = swarmbot.firebase().child('projects')
-      console.log 'AssetId: ', body.assetId
-      msg.send 'AssetId: ', body.assetId
-
-      dcos.child(dcoKey).update { coluAssetId: body.assetId, coluAssetAddress: body.issueAddress }
-
-      console.log 'Body: ', body
-      msg.send body
-
-      return
-      # return
-    # colu.init()
+    issuer = robot.whose msg
+    dco = DCO.find dcoKey
+    dco.issueAsset { dcoKey, amount, issuer }
     msg.send "asset created"

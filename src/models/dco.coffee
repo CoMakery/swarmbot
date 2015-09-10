@@ -22,6 +22,30 @@ class DCO
       else
         cb null, "bounty created"
 
+  issueAsset: ({dcoKey, amount, issuer}, cb) ->
+
+
+    colu = swarmbot.colu()
+    asset =
+      amount: amount
+      metadata:
+        'assetName': dcoKey
+        'issuer': issuer
+        # 'description': 'Super DCO membership'
+    # colu.on 'connect', ->
+    colu.issueAsset asset, (err, body) ->
+      if err
+        p "error in asset creation"
+        return console.error(err)
+      dcos = swarmbot.firebase().child('projects')
+      console.log 'AssetId: ', body.assetId
+
+      dcos.child(dcoKey).update { coluAssetId: body.assetId, coluAssetAddress: body.issueAddress }
+
+      console.log 'Body: ', body
+
+      return
+
   awardBounty: ({bountyName, awardeeAddress}, cb) ->
 
     p "bounty name", bountyName
