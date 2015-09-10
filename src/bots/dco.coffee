@@ -6,15 +6,15 @@
 #
 # Commands:
 #   hubot list dcos
-#   hubot how many dcos? 
-#   hubot join <dco_name> - join a DCO, usually by agreeing to the statement of intent and paying a membership fee
+#   hubot how many dcos?
+#   hubot create <dco_name>
+#   hubot join <dco_name>
 #   hubot create <number> of asset for <dco name>
 
-
 # Not displayed in help
+#   hubot tag <dco_name> <tag>
 #   hubot list dco <dco pattern>
 #   hubot select <dco_name> (you must be the creator)
-#   hubot create <dco_name> dco
 #   hubot set statement of intent <statement_of_intent>
 #   hubot send asset to <user_name>
 #   hubot create constitution (creates a fork of the Citizen Code constitution)
@@ -61,9 +61,22 @@ module.exports = (robot) ->
 
 
 
+
   robot.respond /how many dcos?$/i, (msg) ->
           swarmbot.firebase().child('counters/projects/dco').on 'value', (snapshot) ->
               msg.send snapshot.val()
+
+  robot.respond /create (.+)$/i, (msg) ->
+    msg.match.shift()
+    [dcoKey] = msg.match
+    rando = Math.floor(Math.random()*90000) + 10000
+
+    owner = robot.whose msg
+    dco = DCO.find dcoKey
+
+    swarmbot.firebase().child('projects/' + dcoKey).update({project_name : dcoKey, owner : owner})
+    dco.issueAsset { dcoKey, amount: 100000000, owner }
+    msg.send "asset created"
 
   robot.respond /create (\d+) of asset for (.+)$/i, (msg) ->
     msg.match.shift()
