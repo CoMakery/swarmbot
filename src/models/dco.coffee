@@ -26,9 +26,9 @@ class DCO
 
     p "bounty name", bountyName
     amountRef = @dcoRef.child "bounties/#{bountyName}/amount"
-    toAddress = 'mypgXJgAAvTZQMZcvMsFA7Q5SYo1Mtyj2b'
-    #for asset LEP4Zu6sdg1rU9T6oXCWDFyWYGVftZRphfjps
-    # fromAddress = 'mtC2DpYP3gVZSgbnrmLcEbFt46955oz3hy'
+    #TODO: we should test if this is a valid address
+
+    toAddress = awardee
 
     @dcoRef.on 'value', (snapshot) ->
 

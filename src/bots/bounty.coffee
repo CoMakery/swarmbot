@@ -44,12 +44,23 @@ module.exports = (robot) ->
 
     dco = DCO.find 'save-the-world'
     #
-    # usersRef = swarmbot.firebase.child('users')
-    # usersRef.orderByChild("slack_username").equalTo(awardee), (snapshot) ->
     #   p "awardee", snapshot.val()
 
-    dco.awardBounty {bountyName, awardee}
+    usersRef = swarmbot.firebase().child('users')
+
+        # dcos.child(projectName + '/project_statement').on 'value', (snapshot) ->
+        #   msg.send 'Do you agree with this statement of intent?'
+        #   msg.send snapshot.val()
+
+    usersRef.orderByChild("slack_username").equalTo(awardee).limitToFirst(1).on 'value', (snapshot) ->
+        if(snapshot.val().btc_address)
+          dco.awardBounty {bountyName, snapshot.val().btc_address}
+        else
+          msg.send "user not yet registered"
+
     message = "Awarded bounty to #{awardee}"
+
+
     msg.send message
 
   robot.respond /create (.+) bounty of (\d+) for (.+)$/i, (msg) ->
