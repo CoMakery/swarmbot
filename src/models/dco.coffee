@@ -22,6 +22,35 @@ class DCO
       else
         cb null, "bounty created"
 
+  awardBounty: ({bountyName, awardee}, cb) ->
+    bounty = @dcoRef.child "bounties/#{bountyName}"
+    #colu magic
+
+    assetId = @dcoRef.coluAssetId
+    toAddress = 'mypgXJgAAvTZQMZcvMsFA7Q5SYo1Mtyj2b'
+    fromAddress = 'mypgXJgAAvTZQMZcvMsFA7Q5SYo1Mtyj2a'
+    colu = swarmbot.colu()
+    colu.on 'connect', ->
+
+      toAddress = colu.hdwallet.getAddress()
+      args =
+        from: fromAddress
+        to: [
+          {
+            address: toAddress
+            assetId: assetId
+            amount: bounty.amount
+          }
+          ]
+      colu.sendAsset args, (err, body) ->
+        p "we made it", body
+        if err
+          return console.error "Error: #{err}"
+        console.log 'Body: ', body
+
+    colu.init()
+    cb null, "bounty awarded"
+
   getBounty: ({bountyName}) ->
     bountyRef = @dcoRef.child "bounties/#{bountyName}"
     new Bounty {bountyRef}
