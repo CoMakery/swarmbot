@@ -8,7 +8,6 @@
 #   hubot create <bounty_name> bounty X coins - create bounty called <bounty_name> with X coins
 #   hubot list bounties - list all existing bounties
 #   hubot award <bounty_name> bounty to <username>  - award an existing bounty
-#   hubot register <btc_address>
 
 
 # Not displayed in help
@@ -93,13 +92,6 @@ module.exports = (robot) ->
     DCO.createBountyFor {dcoKey, bountyName, amount}, (error, message) ->
       msg.send error or message
 
-  robot.respond /register (.+)$/i, (msg) ->
-    msg.match.shift()
-    [btcAddress] = msg.match
-    activeUser = robot.whose msg
-    usersRef = swarmbot.firebase().child('users')
-    usersRef.push( slack_username: activeUser, btc_address: btcAddress )
-    msg.send "User registered"
 
 
   # robot.respond /create (\S*) bounty (\S*) coins?.*/i, (msg) ->
