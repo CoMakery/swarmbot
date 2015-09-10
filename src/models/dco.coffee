@@ -28,15 +28,14 @@ class DCO
     amountRef = @dcoRef.child "bounties/#{bountyName}/amount"
     toAddress = 'mypgXJgAAvTZQMZcvMsFA7Q5SYo1Mtyj2b'
     #for asset LEP4Zu6sdg1rU9T6oXCWDFyWYGVftZRphfjps
-    fromAddress = 'mtC2DpYP3gVZSgbnrmLcEbFt46955oz3hy'
+    # fromAddress = 'mtC2DpYP3gVZSgbnrmLcEbFt46955oz3hy'
 
-    @dcoRef.child("coluAssetId").on 'value', (snapshot) ->
+    @dcoRef.on 'value', (snapshot) ->
 
+        assetId = snapshot.val().coluAssetId
+        fromAddress = snapshot.val().coluAssetAddress
 
-        # assetId = snapshot.val().coluAssetId
-        # coluAssetAddress = snapshot.val().coluAssetAddress
-
-        assetId = snapshot.val()
+        # assetId = snapshot.val()
         p "asset id", assetId
         amountRef.on 'value', (snapshot) ->
           amount = snapshot.val()
