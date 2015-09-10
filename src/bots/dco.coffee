@@ -57,11 +57,32 @@ module.exports = (robot) ->
   robot.respond /join (\S*) dco?.*/i, (msg) ->
     dcos = swarmbot.firebase().child('projects')
     projectName = msg.match[1]
+    dcoJoinStatus = {stage: 1}
+    robot.brain.set "dcoJoinStatus", dcoJoinStatus
+    p "djs", dcoJoinStatus
 
     dcos.child(projectName + '/project_statement').on 'value', (snapshot) ->
       msg.send 'Do you agree with this statement of intent?'
       msg.send snapshot.val()
-      msg.send 'Yes/no?'
+      msg.send 'Yes/No?'
+
+
+  robot.hear /(\w+)/i, (msg) ->
+    dcoJoinStatus = robot.brain.get("dcoJoinStatus") or null
+    p "dcoJoin", dcoJoinStatus
+    if dcoJoinStatus != null
+      console.log "stage: #{dcoJoinStatus.stage}"
+      answer = msg.match[1]
+      switch dcoJoinStatus.stage
+        when 1
+          if answer == "Yes" || answer == "Y"
+            msg.reply "Great, you've joined the DCO"
+          else if answer == "No" || answer == "N"
+            msg.reply "Too bad, maybe next time"
+
+          dcoJoinStatus = {stage: 0}
+          robot.brain.set "dcoJoinStatus", dcoJoinStatus
+
 
   robot.respond /how many dcos?$/i, (msg) ->
           swarmbot.firebase().child('counters/projects/dco').on 'value', (snapshot) ->
