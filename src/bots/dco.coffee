@@ -8,7 +8,7 @@
 #   hubot list dcos
 #   hubot list dco <dco pattern>
 #   hubot join <dco_name> - join a DCO, usually by agreeing to the statement of intent and paying a membership fee
-#   hubot create <number> of asset for <dco name> dco
+#   hubot create <number> of asset for <dco name> 
 
 
 # Not displayed in help
