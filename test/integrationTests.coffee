@@ -12,6 +12,7 @@ sinon.stub(swarmbot, 'colu').returns
   on: ->
   init: ->
   sendAsset: ->
+  issueAsset: ->
 
 # sinon.stub(swarmbot, 'firebase')
 
