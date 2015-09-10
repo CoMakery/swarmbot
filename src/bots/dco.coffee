@@ -58,9 +58,6 @@ module.exports = (robot) ->
       msg.send snapshot.val()
       msg.send 'Yes/no?'
 
- # Not sure, this may work in slack, not sure about
- #  robot.respond /register?.*/i, (msg) ->
- #    robot.reply 'some msg'?
 
       # myFirebaseRef.child('projects/2050_Music_Collective_1431029372/project_name').on 'value', (snapshot) ->
       #   msg.send snapshot.val()
