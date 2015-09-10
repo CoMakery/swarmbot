@@ -9,6 +9,10 @@
 #   hubot how many dcos?
 #   hubot create <dco_name>
 #   hubot join <dco_name>
+#   hubot tag <dco_name> <tag>
+#   hubot info <dco_name>
+
+# Available but not displayed in help
 #   hubot create <number> of asset for <dco name>
 
 # Not displayed in help
@@ -59,9 +63,6 @@ module.exports = (robot) ->
       msg.send snapshot.val()
       msg.send 'Yes/no?'
 
-
-
-
   robot.respond /how many dcos?$/i, (msg) ->
           swarmbot.firebase().child('counters/projects/dco').on 'value', (snapshot) ->
               msg.send snapshot.val()
@@ -70,10 +71,8 @@ module.exports = (robot) ->
     msg.match.shift()
     [dcoKey] = msg.match
     rando = Math.floor(Math.random()*90000) + 10000
-
     owner = robot.whose msg
     dco = DCO.find dcoKey
-
     swarmbot.firebase().child('projects/' + dcoKey).update({project_name : dcoKey, owner : owner})
     dco.issueAsset { dcoKey, amount: 100000000, owner }
     msg.send "asset created"
@@ -81,8 +80,17 @@ module.exports = (robot) ->
   robot.respond /create (\d+) of asset for (.+)$/i, (msg) ->
     msg.match.shift()
     [amount, dcoKey] = msg.match
-
     issuer = robot.whose msg
     dco = DCO.find dcoKey
     dco.issueAsset { dcoKey, amount, issuer }
     msg.send "asset created"
+
+  robot.respond /tag (.+) = (.+)$/i, (msg) ->
+    msg.match.shift()
+    [dcoKey, tag] = msg.match
+    # write tag to trust exchange
+
+  robot.respond /info (.+) $/i, (msg) ->
+    msg.match.shift()
+    [dcoKey] = msg.match
+    # pulls tag and other relevant info from trust exchange / dbrain
