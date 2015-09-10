@@ -46,7 +46,7 @@ class DCO
               {
                 address: toAddress
                 assetId: assetId
-                amount: 22
+                amount: amount
               }
               ]
           colu.sendAsset args, (err, body) ->
