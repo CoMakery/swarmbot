@@ -28,6 +28,8 @@
 swarmbot = require '../models/swarmbot'
 Bounty = require '../models/bounty'
 DCO = require '../models/dco'
+{ values } = require 'lodash'
+
 # Config          = require '../models/config'
 # Account          = require '../models/account'
 # Asset          = require '../models/asset'
@@ -53,15 +55,20 @@ module.exports = (robot) ->
         #   msg.send snapshot.val()
 
     usersRef.orderByChild("slack_username").equalTo(awardee).limitToFirst(1).on 'value', (snapshot) ->
-        if(snapshot.val().btc_address)
-          dco.awardBounty {bountyName, snapshot.val().btc_address}
+        v = snapshot.val()
+        vals = values v
+        p "vals", vals[0]
+        awardeeAddress = vals[0].btc_address
+        p "address", awardeeAddress
+
+        # p "awardee", awardeeAddress values btc_address
+        if(awardeeAddress)
+          dco.awardBounty {bountyName, awardeeAddress}
+          message = "Awarded bounty to #{awardee}"
+          msg.send message
         else
-          msg.send "user not yet registered"
+          msg.send "User not yet registered"
 
-    message = "Awarded bounty to #{awardee}"
-
-
-    msg.send message
 
   robot.respond /create (.+) bounty of (\d+) for (.+)$/i, (msg) ->
     msg.match.shift()

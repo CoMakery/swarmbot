@@ -53,7 +53,7 @@ describe 'swarmbot', ->
           done()
 
   context 'dco admin can award bounty to user', ->
-    @timeout 60000
+    @timeout 80000
 
     it 'an admin can award a bounty', (done) ->
       bountyName = 'plant a tree'
