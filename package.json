@@ -22,7 +22,7 @@
     "sinon": "^1.16.1"
   },
   "dependencies": {
-    "colu": "^0.7.2",
+    "colu": "Colu-platform/colu-nodejs",
     "colu-access": "^0.2.5",
     "firebase": "^2.2.9",
     "hubot": "^2.16.0",

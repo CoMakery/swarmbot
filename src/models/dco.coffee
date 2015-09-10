@@ -24,35 +24,41 @@ class DCO
 
   awardBounty: ({bountyName, awardee}, cb) ->
 
-    bounty = @dcoRef.child "bounties/#{bountyName}"
+    p "bounty name", bountyName
+    amountRef = @dcoRef.child "bounties/#{bountyName}/amount"
     toAddress = 'mypgXJgAAvTZQMZcvMsFA7Q5SYo1Mtyj2b'
     #for asset LEP4Zu6sdg1rU9T6oXCWDFyWYGVftZRphfjps
-    fromAddress = 'mg9Yu6KNL6JBim5QgsmH5QbW78Wx9YgDcF'
+    fromAddress = 'mtC2DpYP3gVZSgbnrmLcEbFt46955oz3hy'
     @dcoRef.child("coluAssetId").on 'value', (snapshot) ->
         assetId = snapshot.val()
         p "asset id", assetId
-        p "bounty amount"
-        colu = swarmbot.colu()
-        colu.on 'connect', ->
-          #colu.hdwallet.getAddress()
-          toAddress = toAddress
-          args =
-            from: [ fromAddress ]
-            to: [
-              {
-                address: toAddress
-                assetId: assetId
-                amount: bounty.amount
-              }
-              ]
-          colu.sendAsset args, (err, body) ->
-            p "we made it", body
-            if err
-              return console.error "Error: #{err}"
-            console.log 'Body: ', body
+        amountRef.on 'value', (snapshot) ->
+          amount = snapshot.val()
+          p "bounty amount", amount
+          colu = swarmbot.colu()
+          p "001"
+          colu.on 'connect', ->
+            #colu.hdwallet.getAddress()
+            p 11
+            toAddress = 'mypgXJgAAvTZQMZcvMsFA7Q5SYo1Mtyj2a'
+            p args =
+              from: [ fromAddress ]
+              to: [
+                {
+                  address: toAddress
+                  assetId: assetId
+                  amount: amount
+                }
+                ]
+            colu.sendAsset args, (err, body) ->
+              p "we made it", body
+              if err
+                p "err:", err
+                return console.error "Error: #{err}"
+              console.log 'Body: ', body
+              cb null, "bounty successfully awarded"
 
-        colu.init()
-    # cb null, "bounty awarded"
+          colu.init()
 
   getBounty: ({bountyName}) ->
     bountyRef = @dcoRef.child "bounties/#{bountyName}"

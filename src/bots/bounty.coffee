@@ -46,7 +46,7 @@ module.exports = (robot) ->
     # usersRef.orderByChild("slack_username").equalTo(awardee), (snapshot) ->
     #   p "awardee", snapshot.val()
 
-    dco.awardBounty bountyName, awardee
+    dco.awardBounty {bountyName, awardee}
     message = "Awarded bounty to #{awardee}"
     msg.send message
 
