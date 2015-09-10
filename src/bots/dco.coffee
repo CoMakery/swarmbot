@@ -80,21 +80,21 @@ module.exports = (robot) ->
         'assetName': dcoKey
         'issuer': robot.whose msg
         # 'description': 'Super DCO membership'
-    colu.on 'connect', ->
-      colu.issueAsset asset, (err, body) ->
-        if err
-          msg.send "error in asset creation"
-          return console.error(err)
-        dcos = swarmbot.firebase().child('projects')
-        console.log 'AssetId: ', body.assetId
-        msg.send 'AssetId: ', body.assetId
+    # colu.on 'connect', ->
+    colu.issueAsset asset, (err, body) ->
+      if err
+        msg.send "error in asset creation"
+        return console.error(err)
+      dcos = swarmbot.firebase().child('projects')
+      console.log 'AssetId: ', body.assetId
+      msg.send 'AssetId: ', body.assetId
 
-        dcos.child(dcoKey).update { coluAssetId: body.assetId, coluAssetAddress: body.issueAddress }
+      dcos.child(dcoKey).update { coluAssetId: body.assetId, coluAssetAddress: body.issueAddress }
 
-        console.log 'Body: ', body
-        msg.send body
+      console.log 'Body: ', body
+      msg.send body
 
-        return
       return
-    colu.init()
+      # return
+    # colu.init()
     msg.send "asset created"

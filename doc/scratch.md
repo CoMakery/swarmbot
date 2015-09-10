@@ -5,7 +5,6 @@ TODO:
 - dco creation  
 - dco join YAY
 
-
 Flow:
 
 - create DCO
