@@ -63,27 +63,27 @@ module.exports = (robot) ->
           msg.send "User not yet registered"
 
 
-  robot.respond /award (.+) bounty to (.+)$/i, (msg) ->
-    [all, bountyName, awardee] = msg.match
-    activeUser = robot.whose msg
-
-    dco = DCO.find 'save-the-world'
-
-    usersRef = swarmbot.firebase().child('users')
-    usersRef.orderByChild("slack_username").equalTo(awardee).limitToFirst(1).on 'value', (snapshot) ->
-        v = snapshot.val()
-        vals = values v
-        p "vals", vals[0]
-        awardeeAddress = vals[0].btc_address
-        p "address", awardeeAddress
-
-        # p "awardee", awardeeAddress values btc_address
-        if(awardeeAddress)
-          dco.awardBounty {bountyName, awardeeAddress}
-          message = "Awarded bounty to #{awardee}"
-          msg.send message
-        else
-          msg.send "User not yet registered"
+  # robot.respond /award (.+) bounty to (.+)$/i, (msg) ->
+  #   [all, bountyName, awardee] = msg.match
+  #   activeUser = robot.whose msg
+  #
+  #   dco = DCO.find 'save-the-world'
+  #
+  #   usersRef = swarmbot.firebase().child('users')
+  #   usersRef.orderByChild("slack_username").equalTo(awardee).on 'value', (snapshot) ->
+  #       v = snapshot.val()
+  #       vals = values v
+  #       p "vals", vals[0]
+  #       awardeeAddress = vals[0].btc_address
+  #       p "address", awardeeAddress
+  #
+  #       # p "awardee", awardeeAddress values btc_address
+  #       if(awardeeAddress)
+  #         dco.awardBounty {bountyName, awardeeAddress}
+  #         message = "Awarded bounty to #{awardee}"
+  #         msg.send message
+  #       else
+  #         msg.send "User not yet registered"
 
 
   robot.respond /create (.+) bounty of (\d+) for (.+)$/i, (msg) ->
