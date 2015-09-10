@@ -97,6 +97,9 @@ module.exports = (robot) ->
           swarmbot.firebase().child('counters/projects/dco').on 'value', (snapshot) ->
               msg.send snapshot.val()
 
+  robot.respond /what what?$/i, (msg) ->
+              msg.send ":swarm:"
+
   robot.respond /create (.+)$/i, (msg) ->
     msg.match.shift()
     [dcoKey] = msg.match
