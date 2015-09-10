@@ -59,7 +59,6 @@ module.exports = (robot) ->
     projectName = msg.match[1]
     dcoJoinStatus = {stage: 1}
     robot.brain.set "dcoJoinStatus", dcoJoinStatus
-    p "djs", dcoJoinStatus
 
     dcos.child(projectName + '/project_statement').on 'value', (snapshot) ->
       msg.send 'Do you agree with this statement of intent?'
@@ -69,7 +68,7 @@ module.exports = (robot) ->
 
   robot.hear /(\w+)/i, (msg) ->
     dcoJoinStatus = robot.brain.get("dcoJoinStatus") or null
-    p "dcoJoin", dcoJoinStatus
+    dcoCreateStatus = robot.brain.get("dcoCreateStatus") or null
     if dcoJoinStatus != null
       console.log "stage: #{dcoJoinStatus.stage}"
       answer = msg.match[1]
@@ -83,6 +82,16 @@ module.exports = (robot) ->
           dcoJoinStatus = {stage: 0}
           robot.brain.set "dcoJoinStatus", dcoJoinStatus
 
+    if dcoCreateStatus != null
+      console.log "stage: #{dcoJoinStatus.stage}"
+      answer = msg.match[1]
+      switch dcoCreateStatus.stage
+        when 1
+          # if startswith "We"
+            # write statement of intent to Firebase
+            # then reset dcoCreateStatus
+          # dcoCreateStatus = {stage: 0}
+          # robot.brain.set "dcoCreateStatus", dcoCreateStatus
 
   robot.respond /how many dcos?$/i, (msg) ->
           swarmbot.firebase().child('counters/projects/dco').on 'value', (snapshot) ->
@@ -96,7 +105,9 @@ module.exports = (robot) ->
     dco = DCO.find dcoKey
     swarmbot.firebase().child('projects/' + dcoKey).update({project_name : dcoKey, owner : owner})
     dco.issueAsset { dcoKey, amount: 100000000, owner }
-    msg.send "asset created"
+    dcoCreateStatus = {stage: 1, dcoKey: dcoKey}
+    robot.brain.set "dcoCreateStatus", dcoCreateStatus
+    msg.send "DCO created. Please provide a statement of intent starting with 'We'"
 
   robot.respond /create (\d+) of asset for (.+)$/i, (msg) ->
     msg.match.shift()
