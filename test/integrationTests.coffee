@@ -27,6 +27,18 @@ describe 'swarmbot', ->
   beforeEach -> @room = helper.createRoom()
   afterEach -> @room.destroy()
 
+  context 'Identity', ->
+    it 'user can register a bitcoin address', (done) ->
+      slackUsername = 'slack_username'
+      btc_address = '12afeafeaefeaee'
+      #
+      # User.registerUser bountyParams, (error, message) ->
+      #   message.should.equal 'user address registered'
+      #   dco = User.find dcoKey
+      #   dco.getBounty({bountyName}).get 'amount', (value) ->
+      #     value.should.equal amount
+      done()
+
   context 'DCO asset', ->
     it 'user can create an asset for an existing dco', ->
       @room.user.say 'alice', '@hubot create 2000 of asset for save-the-world'
