@@ -6,13 +6,13 @@
 #
 # Commands:
 #   hubot list dcos
-#   hubot list dco <dco pattern>
+#   hubot how many dcos? 
 #   hubot join <dco_name> - join a DCO, usually by agreeing to the statement of intent and paying a membership fee
 #   hubot create <number> of asset for <dco name>
 
 
 # Not displayed in help
-#   hubot how many dcos - how many DCOs are there?
+#   hubot list dco <dco pattern>
 #   hubot select <dco_name> (you must be the creator)
 #   hubot create <dco_name> dco
 #   hubot set statement of intent <statement_of_intent>
@@ -60,15 +60,10 @@ module.exports = (robot) ->
       msg.send 'Yes/no?'
 
 
-      # myFirebaseRef.child('projects/2050_Music_Collective_1431029372/project_name').on 'value', (snapshot) ->
-      #   msg.send snapshot.val()
-      #   # Alerts "San Francisco"
-      #   return
 
-      #
-      # myFirebaseRef.child('projects').on 'value', (snapshot) ->
-      #
-      #   console.log snapshot.val()
+  robot.respond /how many dcos?$/i, (msg) ->
+          swarmbot.firebase().child('counters/projects/dco').on 'value', (snapshot) ->
+              msg.send snapshot.val()
 
   robot.respond /create (\d+) of asset for (.+)$/i, (msg) ->
     msg.match.shift()
