@@ -15,10 +15,10 @@ module.exports = (robot) ->
   # unless Config.adminList()
   #   robot.logger.warning 'HUBOT_TEAM_ADMIN environment variable not set'
 
-  robot.respond /what what\?$/i, (msg) ->
+  robot.respond /what what$/i, (msg) ->
               msg.send ":swarm:"
 
-  robot.respond /x marks the what\?$/i, (msg) ->
+  robot.respond /x marks the what$/i, (msg) ->
               msg.send "https://www.youtube.com/watch?v=SFY-Kg1OqAk"
 
   robot.respond /tag (.+) = (.+)$/i, (msg) ->
