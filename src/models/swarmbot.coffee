@@ -11,10 +11,13 @@ class Swarmbot
     @_firebase ?= new Firebase process.env.FIREBASE_URL
 
   colu: ->
-    @_colu ?= new Colu
+    return @_colu if @_colu?
+    coluParams =
       network: process.env.COLU_NETWORK
       privateSeed: process.env.COLU_PRIVATE_SEED
       apiKey: process.env.COLU_MAINNET_APIKEY
-
+    if process.env.REDIS_HOST
+      coluParams.redisHost = process.env.REDIS_HOST
+    @_colu = new Colu coluParams
 
 module.exports = new Swarmbot
