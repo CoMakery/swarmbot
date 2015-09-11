@@ -12,16 +12,12 @@
 {log, p, pjson} = require 'lightsaber'
 
 module.exports = (robot) ->
-  # robot.brain.data.bounties or= {}
-
-  # unless Config.adminList()
-  #   robot.logger.warning 'HUBOT_TEAM_ADMIN environment variable not set'
 
   robot.respond /what what$/i, (msg) ->
-              msg.send ":swarm:"
+    msg.send ":swarm:"
 
   robot.respond /x marks the what$/i, (msg) ->
-              msg.send "https://www.youtube.com/watch?v=SFY-Kg1OqAk"
+    msg.send "https://www.youtube.com/watch?v=SFY-Kg1OqAk"
 
   robot.respond /tag (.+) = (.+)$/i, (msg) ->
     msg.match.shift()
