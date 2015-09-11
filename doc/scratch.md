@@ -1,16 +1,16 @@
 Phase II TODO:
 
 - Suck in live Swarm DCO data
+- Deploy to beta channels
 - Permissions (don't allow people to overwrite data)
    - member  
    - admin  
    - superadmin
-- Deploy to beta channels
-- refactor User / Identity to fat model [ in progress]
+- figure out how to find active Slack channel
+- refactor User / Identity to fat model [ in progress ]
 - Allow Trust Exchange voting / endorsing
-- (user creates account) YAY
-    - gets email that allows her to get passphrase / pdf (friendly method)
-
+- (user creates account) YAY  
+    - gets email that allows her to get passphrase / pdf (friendly method) [ in progress, pending Swarm input ]
 
 DONE:
 
