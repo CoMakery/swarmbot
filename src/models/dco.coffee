@@ -25,7 +25,6 @@ class DCO
 
   issueAsset: ({dcoKey, amount, issuer}, cb) ->
 
-
     colu = swarmbot.colu()
     asset =
       amount: amount

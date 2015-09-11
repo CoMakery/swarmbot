@@ -8,6 +8,7 @@
 
 swarmbot = require '../models/swarmbot'
 Bounty = require '../models/bounty'
+User = require '../models/user'
 DCO = require '../models/dco'
 { values } = require 'lodash'
 
@@ -21,6 +22,8 @@ module.exports = (robot) ->
     msg.match.shift()
     [btcAddress] = msg.match
     activeUser = robot.whose msg
+    user = User.find activeUser
+    # user.register "btc_address", btcAddress
     usersRef = swarmbot.firebase().child('users/' + activeUser)
     usersRef.update( slack_username: activeUser, btc_address: btcAddress )
     msg.send "User registered"

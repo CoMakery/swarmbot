@@ -8,7 +8,13 @@ class User
 
   @find: (userKey) ->
     users = swarmbot.firebase().child('users')
-    new Users userRef: users.child(userKey)
+    new User userRef: users.child(userKey)
 
+  register: (myKey, value) ->
+    p "key", myKey
+    p "v", value
+    newHash= ""
+    newHash[myKey] = value
+    @userRef.update newHash
 
 module.exports = User
