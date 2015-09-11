@@ -1,11 +1,11 @@
 # Description:
 #   Informational and help related commands
-#
+
 # Commands:
 #   hubot what what
 #   hubot x marks the what
-#
-# Not yet:
+
+# Not implemented yet:
 #   hubot tag <community name> <tag>
 #   hubot info <community name>
 
