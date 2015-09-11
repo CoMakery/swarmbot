@@ -18,6 +18,8 @@ class Swarmbot
       apiKey: process.env.COLU_MAINNET_APIKEY
     if process.env.REDIS_HOST
       coluParams.redisHost = process.env.REDIS_HOST
+    if process.env.REDIS_PORT
+      coluParams.redisPort = process.env.REDIS_PORT
     @_colu = new Colu coluParams
 
 module.exports = new Swarmbot
