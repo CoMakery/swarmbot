@@ -1,14 +1,16 @@
 # Description:
-#   Create a DCO (from Slack or any Hubut supported channel!)
+#   Create a community
 #
 # Commands:
 #   hubot list communities
-#   hubot how many communities?
 #   hubot create community <community name>
 #   hubot join community <community name>
 
 # Available but not displayed in help
 #   hubot create <number> of asset for <community name>
+
+# Not working
+#   hubot how many communities?
 
 # Not displayed in help
 #   hubot tag <dco_name> <tag>
