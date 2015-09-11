@@ -1,6 +1,6 @@
 # Description:
 #   Create a DCO (from Slack or any Hubut supported channel!)
-#
+
 # Commands:
 #   hubot list communities
 #   hubot how many communities?
@@ -34,13 +34,12 @@ DCO = require '../models/dco'
 module.exports = (robot) ->
 
   robot.respond /list communities$/i, (msg) ->
-
-      communities = swarmbot.firebase().child('projects')
-      MAX_MESSAGES_FOR_SLACK = 10
-      communities.orderByKey()
-        .limitToFirst(MAX_MESSAGES_FOR_SLACK)
-        .on 'child_added', (snapshot) ->
-          msg.send snapshot.key()
+    communities = swarmbot.firebase().child('projects')
+    MAX_MESSAGES_FOR_SLACK = 10
+    communities.orderByKey()
+      .limitToFirst(MAX_MESSAGES_FOR_SLACK)
+      .on 'child_added', (snapshot) ->
+        msg.send snapshot.key()
 
   robot.respond /join community (\S*)$/i, (msg) ->
     communities = swarmbot.firebase().child('projects')
@@ -81,9 +80,9 @@ module.exports = (robot) ->
           # dcoCreateStatus = {stage: 0}
           # robot.brain.set "dcoCreateStatus", dcoCreateStatus
 
-  robot.respond /how many communities?$/i, (msg) ->
-          swarmbot.firebase().child('counters/projects/dco').on 'value', (snapshot) ->
-              msg.send snapshot.val()
+  robot.respond /how many communities\?$/i, (msg) ->
+    swarmbot.firebase().child('counters/projects/dco').on 'value', (snapshot) ->
+      msg.send snapshot.val()
 
   robot.respond /create community (.+)$/i, (msg) ->
     msg.match.shift()

@@ -1,9 +1,6 @@
 # Description:
 #   Create a bounty
-#
-# Configuration:
-#   HUBOT_TEAM_ADMIN - A comma separate list of user names
-#
+
 # Commands:
 #   hubot create <bounty_name> bounty <number> coins
 #   hubot list bounties
