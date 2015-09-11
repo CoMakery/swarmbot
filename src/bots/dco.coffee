@@ -93,7 +93,7 @@ module.exports = (robot) ->
     dco.issueAsset { dcoKey, amount: 100000000, owner }
     dcoCreateStatus = {stage: 1, dcoKey: dcoKey}
     robot.brain.set "dcoCreateStatus", dcoCreateStatus
-    msg.send "DCO created. Please provide a statement of intent starting with 'We'"
+    msg.send "Community created. Please provide a statement of intent starting with 'We'"
 
   robot.respond /create (\d+) of asset for (.+)$/i, (msg) ->
     msg.match.shift()
