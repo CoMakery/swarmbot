@@ -46,13 +46,14 @@ module.exports = (robot) ->
   robot.respond /join community (\S*)$/i, (msg) ->
     communities = swarmbot.firebase().child('projects')
     projectName = msg.match[1]
-    dcoJoinStatus = {stage: 1}
-    robot.brain.set "dcoJoinStatus", dcoJoinStatus
 
     communities.child(projectName + '/project_statement').on 'value', (snapshot) ->
       msg.send 'Do you agree with this statement of intent?'
       msg.send snapshot.val()
       msg.send 'Yes/No?'
+
+  dcoJoinStatus = {stage: 1}
+  robot.brain.set "dcoJoinStatus", dcoJoinStatus
 
 
   robot.hear /(\w+)/i, (msg) ->
@@ -68,11 +69,11 @@ module.exports = (robot) ->
           else if answer == "No" || answer == "N"
             msg.reply "Too bad, maybe next time"
 
-          dcoJoinStatus = {stage: 0}
-          robot.brain.set "dcoJoinStatus", dcoJoinStatus
+          # dcoJoinStatus = {stage: 0}
+          # robot.brain.set "dcoJoinStatus", dcoJoinStatus
 
     if dcoCreateStatus != null
-      console.log "stage: #{dcoJoinStatus.stage}"
+      console.log "stage2: #{dcoJoinStatus.stage}"
     #   answer = msg.match[1]
     #   switch dcoCreateStatus.stage
     #     when 1
