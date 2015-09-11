@@ -1,6 +1,6 @@
 # Description:
 #   Create a DCO (from Slack or any Hubut supported channel!)
-
+#
 # Commands:
 #   hubot list communities
 #   hubot how many communities?

@@ -1,6 +1,6 @@
 # Description:
 #   Create a bounty
-
+#
 # Commands:
 #   hubot create <bounty_name> bounty <number> coins
 #   hubot list bounties

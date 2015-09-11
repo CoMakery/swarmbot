@@ -1,6 +1,6 @@
 # Description:
 #   User / account managemnet
-
+#
 # Commands:
 #   hubot register <btc_address>
 

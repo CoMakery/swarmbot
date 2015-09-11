@@ -1,6 +1,6 @@
 # Description:
 #   Because I want to govern myself
-
+#
 # Commands:
 #   hubot list proposals
 #   hubot propose <proposal>
