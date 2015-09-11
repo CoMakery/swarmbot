@@ -35,10 +35,22 @@ DCO = require '../models/dco'
 
 module.exports = (robot) ->
 
+
+
   robot.respond /list communities$/i, (msg) ->
     communities = swarmbot.firebase().child('projects')
     MAX_MESSAGES_FOR_SLACK = 10
     communities.orderByKey()
+      .limitToFirst(MAX_MESSAGES_FOR_SLACK)
+      .on 'child_added', (snapshot) ->
+        msg.send snapshot.key()
+
+  robot.respond /find community (\S*)$/i, (msg) ->
+    communities = swarmbot.firebase().child('projects')
+    dcoKey = msg.match[1]
+    MAX_MESSAGES_FOR_SLACK = 10
+    communities.orderByKey()
+      .startAt(dcoKey).endAt(dcoKey + "~")
       .limitToFirst(MAX_MESSAGES_FOR_SLACK)
       .on 'child_added', (snapshot) ->
         msg.send snapshot.key()
