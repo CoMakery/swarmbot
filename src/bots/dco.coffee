@@ -45,15 +45,15 @@ module.exports = (robot) ->
 
   robot.respond /join community (\S*)$/i, (msg) ->
     communities = swarmbot.firebase().child('projects')
-    projectName = msg.match[1]
+    dcoKey = msg.match[1]
 
-    communities.child(projectName + '/project_statement').on 'value', (snapshot) ->
+    communities.child(dcoKey + '/project_statement').on 'value', (snapshot) ->
       msg.send 'Do you agree with this statement of intent?'
       msg.send snapshot.val()
       msg.send 'Yes/No?'
 
-  dcoJoinStatus = {stage: 1}
-  robot.brain.set "dcoJoinStatus", dcoJoinStatus
+    dcoJoinStatus = {stage: 1, dcoKey: dcoKey}
+    robot.brain.set "dcoJoinStatus", dcoJoinStatus
 
 
   robot.hear /(\w+)/i, (msg) ->
@@ -66,6 +66,9 @@ module.exports = (robot) ->
         when 1
           if answer == "Yes" || answer == "Y"
             msg.reply "Great, you've joined the DCO"
+            dco = DCO.find dcoJoinStatus.dcoKey
+            user = robot.whose msg
+            dco.sendAsset { amount: 1, sendeeUsername: user }
           else if answer == "No" || answer == "N"
             msg.reply "Too bad, maybe next time"
 

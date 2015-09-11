@@ -1,6 +1,7 @@
 {log, p, pjson} = require 'lightsaber'
 swarmbot = require '../models/swarmbot'
 Bounty = require '../models/bounty'
+{ values } = require 'lodash'
 
 class DCO
 
@@ -91,24 +92,25 @@ class DCO
   sendAsset: ({amount, sendeeUsername}, cb) ->
 
     usersRef = swarmbot.firebase().child('users')
-    usersRef.orderByChild("slack_username").equalTo(awardee).on 'value', (snapshot) ->
+    p "username", sendeeUsername
+    usersRef.orderByChild("slack_username").equalTo(sendeeUsername).on 'value', (snapshot) ->
       v = snapshot.val()
       vals = values v
       p "vals", vals
-      sendeeAddress = vals[0].btc_address
-      p "address", sendeeAddress
-      sendAssetToAddress(amount, sendeeAddress)
+      if(vals[0].btc_address)
+        sendeeAddress = vals[0].btc_address
+        p "address", sendeeAddress
+        sendAssetToAddress(amount, sendeeAddress)
+      else
+        cb "user must register before receiving assets"
 
   sendAssetToAddress: ({amount, sendeeAddress}, cb) ->
 
-    amountRef = @dcoRef.child "bounties/#{bountyName}/amount"
-    # sendAssetToAddress
-    
     @dcoRef.on 'value', (snapshot) ->
 
         assetId = snapshot.val().coluAssetId
         fromAddress = snapshot.val().coluAssetAddress
-        toAddress = awardeeAddress
+        toAddress = sendeeAddress
         # p "awardee", awardeeAddress
         # p "asset id", assetId
         amountRef.on 'value', (snapshot) ->
