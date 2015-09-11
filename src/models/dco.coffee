@@ -48,7 +48,7 @@ class DCO
 
   awardBounty: ({bountyName, awardeeAddress}, cb) ->
 
-    p "bounty name", bountyName
+    # p "bounty name", bountyName
     amountRef = @dcoRef.child "bounties/#{bountyName}/amount"
 
     @dcoRef.on 'value', (snapshot) ->

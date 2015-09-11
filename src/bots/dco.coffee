@@ -84,9 +84,9 @@ module.exports = (robot) ->
 
     if dcoCreateStatus != null
       console.log "stage: #{dcoJoinStatus.stage}"
-      answer = msg.match[1]
-      switch dcoCreateStatus.stage
-        when 1
+    #   answer = msg.match[1]
+    #   switch dcoCreateStatus.stage
+    #     when 1
           # if startswith "We"
             # write statement of intent to Firebase
             # then reset dcoCreateStatus
@@ -96,7 +96,7 @@ module.exports = (robot) ->
   robot.respond /how many dcos?$/i, (msg) ->
           swarmbot.firebase().child('counters/projects/dco').on 'value', (snapshot) ->
               msg.send snapshot.val()
-              
+
   robot.respond /create (.+)$/i, (msg) ->
     msg.match.shift()
     [dcoKey] = msg.match

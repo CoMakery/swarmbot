@@ -39,13 +39,13 @@ describe 'swarmbot', ->
       #     value.should.equal amount
       done()
 
-  context 'DCO asset', ->
-    it 'user can create an asset for an existing dco', ->
-      @room.user.say 'alice', '@hubot create 2000 of asset for save-the-world'
-      @room.messages.should.deep.equal [
-        ['alice', '@hubot create 2000 of asset for save-the-world']
-        ['hubot', 'asset created']
-      ]
+  # context 'DCO asset', ->
+  #   it 'user can create an asset for an existing dco', ->
+  #     @room.user.say 'alice', '@hubot create 2000 of asset for save-the-world'
+  #     @room.messages.should.deep.equal [
+  #       ['alice', '@hubot create 2000 of asset for save-the-world']
+  #       ['hubot', 'asset created']
+  #     ]
       # check that the asset exists -- in fb/colu
 
   context 'DCO bounty', ->
@@ -66,15 +66,15 @@ describe 'swarmbot', ->
           done()
 
   context 'dco admin can award bounty to user', ->
-    @timeout 80000
+    @timeout 2
 
-    it 'an admin can award a bounty', (done) ->
-      bountyName = 'plant a tree'
-      dcoKey = 'save-the-world'
-      bountyParams = {
-        dcoKey
-        bountyName
-      }
-      dco = DCO.find dcoKey
-      dco.awardBounty bountyParams, (error, message) ->
-          done()
+    # it 'an admin can award a bounty', (done) ->
+    #   bountyName = 'plant a tree'
+    #   dcoKey = 'save-the-world'
+    #   bountyParams = {
+    #     dcoKey
+    #     bountyName
+    #   }
+    #   dco = DCO.find dcoKey
+    #   dco.awardBounty bountyParams, (error, message) ->
+          # done()
