@@ -1,3 +1,6 @@
+# Description:
+#   Initialize the bot
+#
 # Commands:
 #
 

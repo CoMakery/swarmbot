@@ -1,17 +1,11 @@
 # Description:
 #   Informational and help related commands
 #
-# Dependencies:
-#   None
-#
 # Commands:
 #   hubot what what
 #   hubot x marks the what
 #   hubot tag <dco_name> <tag>
 #   hubot info <dco_name>
-
-# Author:
-#   fractastical
 
 {log, p, pjson} = require 'lightsaber'
 
@@ -21,10 +15,10 @@ module.exports = (robot) ->
   # unless Config.adminList()
   #   robot.logger.warning 'HUBOT_TEAM_ADMIN environment variable not set'
 
-  robot.respond /what what?$/i, (msg) ->
+  robot.respond /what what\?$/i, (msg) ->
               msg.send ":swarm:"
 
-  robot.respond /x marks the spot where?$/i, (msg) ->
+  robot.respond /x marks the what\?$/i, (msg) ->
               msg.send "https://www.youtube.com/watch?v=SFY-Kg1OqAk"
 
   robot.respond /tag (.+) = (.+)$/i, (msg) ->

@@ -1,16 +1,8 @@
 # Description:
 #   User / account managemnet
 #
-# Dependencies:
-#   None
-##
 # Commands:
 #   hubot register <btc_address>
-
-#
-# Author:
-#   fractastical
-
 
 swarmbot = require '../models/swarmbot'
 Bounty = require '../models/bounty'

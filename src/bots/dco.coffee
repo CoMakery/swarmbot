@@ -1,9 +1,6 @@
 # Description:
 #   Create a DCO (from Slack or any Hubut supported channel!)
 #
-# Dependencies:
-#   None
-#
 # Commands:
 #   hubot list dcos
 #   hubot how many dcos?
