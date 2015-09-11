@@ -10,7 +10,8 @@
   ],
   "description": "Bot for bounties",
   "scripts": {
-    "dev": "HUBOT_HEROKU_KEEPALIVE_URL=http://x.com/ bin/hubot",
+    "colu": "colu",
+    "dev": "bin/hubot",
     "start": "bin/hubot --adapter slack",
     "test": "mocha"
   },
@@ -22,7 +23,7 @@
     "sinon": "^1.16.1"
   },
   "dependencies": {
-    "colu": "Colu-platform/colu-nodejs",
+    "colu": "^0.6.4",
     "colu-access": "^0.2.5",
     "firebase": "^2.2.9",
     "hubot": "^2.16.0",
@@ -34,5 +35,12 @@
     "hubot-suggest": "citizencode/hubot-suggest#v0.0.3",
     "lightsaber": "^0.4.1",
     "lodash": "^3.10.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:citizencode/swarmbot.git"
+  },
+  "bugs": {
+    "url": "https://github.com/citizencode/swarmbot/issues"
   }
 }

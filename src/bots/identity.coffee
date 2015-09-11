@@ -1,16 +1,8 @@
 # Description:
 #   User / account managemnet
 #
-# Dependencies:
-#   None
-##
 # Commands:
 #   hubot register <btc_address>
-
-#
-# Author:
-#   fractastical
-
 
 swarmbot = require '../models/swarmbot'
 Bounty = require '../models/bounty'
@@ -18,9 +10,6 @@ DCO = require '../models/dco'
 { values } = require 'lodash'
 
 module.exports = (robot) ->
-
-  # unless Config.adminList()
-  #   robot.logger.warning 'HUBOT_TEAM_ADMIN environment variable not set'
 
  # Not sure, this may work in slack, not sure about
  #  robot.respond /register?.*/i, (msg) ->

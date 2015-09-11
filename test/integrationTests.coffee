@@ -2,7 +2,6 @@
 chai = require 'chai'
 chai.should()
 sinon = require 'sinon'
-# nock = require 'nock'
 Helper = require 'hubot-test-helper'
 
 swarmbot = require '../src/models/swarmbot'
@@ -13,8 +12,6 @@ sinon.stub(swarmbot, 'colu').returns
   init: ->
   sendAsset: ->
   issueAsset: ->
-
-# sinon.stub(swarmbot, 'firebase')
 
 # call this only after stubbing:
 helper = new Helper '../src/bots'

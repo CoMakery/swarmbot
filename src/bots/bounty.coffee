@@ -5,9 +5,9 @@
 #   HUBOT_TEAM_ADMIN - A comma separate list of user names
 #
 # Commands:
-#   hubot create <bounty_name> bounty X coins - create bounty called <bounty_name> with X coins
-#   hubot list bounties - list all existing bounties
-#   hubot award <bounty_name> bounty to <username>  - award an existing bounty
+#   hubot create <bounty_name> bounty <number> coins
+#   hubot list bounties
+#   hubot award <bounty_name> bounty to <username>
 
 # Not displayed in help
 #   hubot (<bounty_name>) bounty add me - add me to the bounty
@@ -28,16 +28,7 @@ Bounty = require '../models/bounty'
 DCO = require '../models/dco'
 { values } = require 'lodash'
 
-# Config          = require '../models/config'
-# Account          = require '../models/account'
-# Asset          = require '../models/asset'
-# ResponseMessage = require './helpers/response_message'
-# UserNormalizer  = require './helpers/user_normalizer'
-
 module.exports = (robot) ->
-  # robot.brain.data.bounties or= {}
-  Bounty.robot = robot
-
   robot.respond /award (.+) bounty to (.+) in (.+)$/i, (msg) ->
     [all, bountyName, awardee, dcoKey] = msg.match
     activeUser = robot.whose msg
