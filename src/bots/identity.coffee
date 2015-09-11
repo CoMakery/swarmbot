@@ -4,6 +4,7 @@
 # Commands:
 #   hubot register btc <btc_address>
 #   hubot register email <email>
+#   hubot register community <preferred community>
 
 swarmbot = require '../models/swarmbot'
 Bounty = require '../models/bounty'
@@ -31,5 +32,14 @@ module.exports = (robot) ->
     activeUser = robot.whose msg
     usersRef = swarmbot.firebase().child('users')
     usersRef.push( slack_username: activeUser, emailAddress: emailAddress )
-    #TODO: would be nice to send out an outbound email notification
+    #TODO: would  be nice to send out an outbound email notification that then allows them to setup a BTC wallet
     msg.send "User registered"
+
+  # The following is a way of setting a preferred DCO
+  robot.respond /register community (.+)$/i, (msg) ->
+    msg.match.shift()
+    [community] = msg.match
+    activeUser = robot.whose msg
+    usersRef = swarmbot.firebase().child('users')
+    usersRef.push( slack_username: activeUser, community: community )
+    msg.send "Preferred community set"
