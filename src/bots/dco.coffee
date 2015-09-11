@@ -9,8 +9,6 @@
 #   hubot how many dcos?
 #   hubot create <dco_name>
 #   hubot join <dco_name>
-#   hubot tag <dco_name> <tag>
-#   hubot info <dco_name>
 
 # Available but not displayed in help
 #   hubot create <number> of asset for <dco name>
@@ -116,13 +114,3 @@ module.exports = (robot) ->
     dco = DCO.find dcoKey
     dco.issueAsset { dcoKey, amount, issuer }
     msg.send "asset created"
-
-  robot.respond /tag (.+) = (.+)$/i, (msg) ->
-    msg.match.shift()
-    [dcoKey, tag] = msg.match
-    # write tag to trust exchange
-
-  robot.respond /info (.+) $/i, (msg) ->
-    msg.match.shift()
-    [dcoKey] = msg.match
-    # pulls tag and other relevant info from trust exchange / dbrain
