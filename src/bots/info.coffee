@@ -4,8 +4,10 @@
 # Commands:
 #   hubot what what
 #   hubot x marks the what
-#   hubot tag <dco_name> <tag>
-#   hubot info <dco_name>
+#
+# Not yet:
+#   hubot tag <community name> <tag>
+#   hubot info <community name>
 
 {log, p, pjson} = require 'lightsaber'
 

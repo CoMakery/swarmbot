@@ -12,6 +12,7 @@ class Swarmbot
 
   colu: ->
     return @_colu if @_colu?
+
     coluParams =
       network: process.env.COLU_NETWORK
       privateSeed: process.env.COLU_PRIVATE_SEED
@@ -20,6 +21,9 @@ class Swarmbot
       coluParams.redisHost = process.env.REDIS_HOST
     if process.env.REDIS_PORT
       coluParams.redisPort = process.env.REDIS_PORT
+
     @_colu = new Colu coluParams
+    @_colu.init()
+    @_colu
 
 module.exports = new Swarmbot
