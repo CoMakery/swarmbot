@@ -1,0 +1,26 @@
+# Description:
+#   Informational and help related commands
+#
+# Dependencies:
+#   None
+#
+# Commands:
+#   hubot what what
+#   hubot x marks the what
+
+# Author:
+#   fractastical
+
+{log, p, pjson} = require 'lightsaber'
+
+module.exports = (robot) ->
+  # robot.brain.data.bounties or= {}
+
+  # unless Config.adminList()
+  #   robot.logger.warning 'HUBOT_TEAM_ADMIN environment variable not set'
+
+  robot.respond /what what?$/i, (msg) ->
+              msg.send ":swarm:"
+
+  robot.respond /x marks the spot where?$/i, (msg) ->
+              msg.send "https://www.youtube.com/watch?v=SFY-Kg1OqAk"
