@@ -4,7 +4,7 @@
 # Commands:
 #   hubot list communities
 #   hubot how many communities?
-#   hubot create community <community name name>
+#   hubot create community <community name>
 #   hubot join community <community name>
 
 # Available but not displayed in help
