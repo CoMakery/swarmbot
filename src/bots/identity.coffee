@@ -21,17 +21,16 @@ module.exports = (robot) ->
     msg.match.shift()
     [btcAddress] = msg.match
     activeUser = robot.whose msg
-    usersRef = swarmbot.firebase().child('users')
-    #TODO: not sure this should be a push
-    usersRef.push( slack_username: activeUser, btc_address: btcAddress )
+    usersRef = swarmbot.firebase().child('users/' + activeUser)
+    usersRef.update( slack_username: activeUser, btc_address: btcAddress )
     msg.send "User registered"
 
   robot.respond /register email (.+)$/i, (msg) ->
     msg.match.shift()
     [emailAddress] = msg.match
     activeUser = robot.whose msg
-    usersRef = swarmbot.firebase().child('users')
-    usersRef.push( slack_username: activeUser, emailAddress: emailAddress )
+    usersRef = swarmbot.firebase().child('users/' + activeUser)
+    usersRef.update( slack_username: activeUser, email_address: emailAddress )
     #TODO: would  be nice to send out an outbound email notification that then allows them to setup a BTC wallet
     msg.send "User registered"
 
@@ -40,6 +39,6 @@ module.exports = (robot) ->
     msg.match.shift()
     [community] = msg.match
     activeUser = robot.whose msg
-    usersRef = swarmbot.firebase().child('users')
-    usersRef.push( slack_username: activeUser, community: community )
+    usersRef = swarmbot.firebase().child('users/' + activeUser)
+    usersRef.update( slack_username: activeUser, preferred_community: community )
     msg.send "Preferred community set"

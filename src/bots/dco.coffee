@@ -68,11 +68,11 @@ module.exports = (robot) ->
             msg.reply "Great, you've joined the DCO"
             dco = DCO.find dcoJoinStatus.dcoKey
             user = robot.whose msg
-            dco.sendAsset { amount: 1, sendeeUsername: user }
+            # dco.sendAsset { amount: 1, sendeeUsername: user }
             # Set to default/preferred community if none exists
             user = swarmbot.firebase().child('users/' + user)
-            user.update({ preferredCommunity : dcoKey })
-            
+            user.update({ preferred_community : dcoJoinStatus.dcoKey, slack_sername : user})
+
           else if answer == "No" || answer == "N"
             msg.reply "Too bad, maybe next time"
 
