@@ -8,6 +8,8 @@ Phase II TODO:
 - Deploy to beta channels
 - refactor User / Identity to fat model [ in progress]
 - Allow Trust Exchange voting / endorsing
+- (user creates account) YAY
+    - gets email that allows her to get passphrase / pdf (friendly method)
 
 
 DONE:
@@ -18,14 +20,11 @@ DONE:
 - dco lookup YAY
 - dco creation  
 - dco join YAY
-
 - create DCO YAY
   - (a new currency is created for the DCO) YAY
      - query DCO metadata and pass to Colu YAY
      - store returned assetId YAY
 
 - create a bounty within dco YAY
-- (user creates account) YAY
-    - gets email that allows her to get passphrase / pdf (friendly method)
 - (user does good work) YAY
 - admin awards bounty to user YAY

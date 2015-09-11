@@ -34,7 +34,11 @@ module.exports = (robot) ->
     activeUser = robot.whose msg
     usersRef = swarmbot.firebase().child('users/' + activeUser)
     usersRef.update( slack_username: activeUser, email_address: emailAddress )
+
     #TODO: would  be nice to send out an outbound email notification that then allows them to setup a BTC wallet
+    # something like the Mandril usage we have in the Swarm API
+    # https://swarm-rome.herokuapp.com/messages/send-template
+
     msg.send "User registered"
 
   # The following is a way of setting a preferred DCO
