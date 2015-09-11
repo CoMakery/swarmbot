@@ -11,9 +11,6 @@ DCO = require '../models/dco'
 
 module.exports = (robot) ->
 
-  # unless Config.adminList()
-  #   robot.logger.warning 'HUBOT_TEAM_ADMIN environment variable not set'
-
  # Not sure, this may work in slack, not sure about
  #  robot.respond /register?.*/i, (msg) ->
  #    robot.reply 'some msg'?

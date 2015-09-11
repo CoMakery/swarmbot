@@ -9,10 +9,6 @@
 swarmbot        = require '../models/swarmbot'
 
 module.exports = (robot) ->
-  # robot.brain.data.bounties or= {}
-
-  # unless Config.adminList()
-  #   robot.logger.warning 'HUBOT_TEAM_ADMIN environment variable not set'
 
   robot.respond /list proposals$/i, (msg) ->
 

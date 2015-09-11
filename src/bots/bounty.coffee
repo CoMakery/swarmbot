@@ -28,16 +28,7 @@ Bounty = require '../models/bounty'
 DCO = require '../models/dco'
 { values } = require 'lodash'
 
-# Config          = require '../models/config'
-# Account          = require '../models/account'
-# Asset          = require '../models/asset'
-# ResponseMessage = require './helpers/response_message'
-# UserNormalizer  = require './helpers/user_normalizer'
-
 module.exports = (robot) ->
-  # robot.brain.data.bounties or= {}
-  Bounty.robot = robot
-
   robot.respond /award (.+) bounty to (.+) in (.+)$/i, (msg) ->
     [all, bountyName, awardee, dcoKey] = msg.match
     activeUser = robot.whose msg
