@@ -1,9 +1,13 @@
 
 Phase II TODO:
 
+
 - Set default DCO (for a channel)  
 - Suck in live Swarm DCO data
 - Permissions (don't allow people to overwrite data)
+   - member  
+   - admin  
+   - superadmin
 - Deploy to beta channels
 - Allow Trust Exchange voting / endorsing
 
