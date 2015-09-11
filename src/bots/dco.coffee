@@ -67,7 +67,7 @@ module.exports = (robot) ->
     dcoJoinStatus = {stage: 1, dcoKey: dcoKey}
     robot.brain.set "dcoJoinStatus", dcoJoinStatus
 
-  robot.hear /(\S*)/i, (msg) ->
+  robot.hear /(.+)/i, (msg) ->
     dcoJoinStatus = robot.brain.get("dcoJoinStatus") or null
     dcoCreateStatus = robot.brain.get("dcoCreateStatus") or null
 
@@ -92,19 +92,16 @@ module.exports = (robot) ->
           # robot.brain.set "dcoJoinStatus", dcoJoinStatus
 
     if dcoCreateStatus != null
-      statement = msg.match[0]
-      answer = msg.match[1]
-      p "answer", answer
-      p "statement", statement
 
+      answer = msg.match[1]
       firstTwoLetters = answer.substring(0,2)
       switch dcoCreateStatus.stage
         when 1
           if firstTwoLetters == "We"
             swarmbot.firebase().child('projects/' + dcoCreateStatus.dcoKey).update({project_statement : answer})
-
-          dcoCreateStatus = {stage: 0}
-          robot.brain.set "dcoCreateStatus", dcoCreateStatus
+            dcoCreateStatus = {stage: 0}
+            robot.brain.set "dcoCreateStatus", dcoCreateStatus
+            msg.send "Statement of intent set"
 
   robot.respond /how many communities\?$/i, (msg) ->
     swarmbot.firebase().child('counters/projects/dco').on 'value', (snapshot) ->
