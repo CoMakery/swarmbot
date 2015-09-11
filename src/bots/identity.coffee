@@ -23,9 +23,7 @@ module.exports = (robot) ->
     [btcAddress] = msg.match
     activeUser = robot.whose msg
     user = User.find activeUser
-    # user.register "btc_address", btcAddress
-    usersRef = swarmbot.firebase().child('users/' + activeUser)
-    usersRef.update( slack_username: activeUser, btc_address: btcAddress )
+    user.register "btc_address", btcAddress
     msg.send "User registered"
 
   robot.respond /register email (.+)$/i, (msg) ->

@@ -13,7 +13,7 @@ class User
   register: (myKey, value) ->
     p "key", myKey
     p "v", value
-    newHash= ""
+    newHash= {}
     newHash[myKey] = value
     @userRef.update newHash
 
