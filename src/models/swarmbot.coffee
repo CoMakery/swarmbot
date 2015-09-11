@@ -1,7 +1,5 @@
 { json, log, p, pjson } = require 'lightsaber'
 
-# Promise = require 'bluebird'
-# Firebase = Promise.promisifyAll require 'firebase'
 Firebase = require 'firebase'
 Colu = require 'colu'
 
