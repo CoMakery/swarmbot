@@ -100,7 +100,8 @@ class DCO
       if(vals[0].btc_address)
         sendeeAddress = vals[0].btc_address
         p "address", sendeeAddress
-        sendAssetToAddress(amount, sendeeAddress)
+        # Doesn't work, awaiting feedback from @harlan
+        # @sendAssetToAddress amount, sendeeAddress
       else
         cb "user must register before receiving assets"
 
