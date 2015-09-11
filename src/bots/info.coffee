@@ -13,9 +13,6 @@
 
 module.exports = (robot) ->
 
-  robot.respond /what what$/i, (msg) ->
-    msg.send ":swarm:"
-
   robot.respond /x marks the what$/i, (msg) ->
     msg.send "https://www.youtube.com/watch?v=SFY-Kg1OqAk"
 
