@@ -1,23 +1,23 @@
 Phase II TODO:
 
-- Set default DCO (for a channel)  
 - Suck in live Swarm DCO data
 - Permissions (don't allow people to overwrite data)
    - member  
    - admin  
    - superadmin
 - Deploy to beta channels
+- refactor User / Identity to fat model [ in progress]
 - Allow Trust Exchange voting / endorsing
 
 
-TODO:
+DONE:
 
+- find community YAY
+- Set default DCO (for a channel)   YAY
 - test firebase integration YAY
 - dco lookup YAY
 - dco creation  
 - dco join YAY
-
-Flow:
 
 - create DCO YAY
   - (a new currency is created for the DCO) YAY
