@@ -3,6 +3,7 @@
 #
 # Commands:
 #   hubot create <bounty name> bounty of <number of coins> for <community>
+#   hubot rate bounty <bounty name> <value>% on <description>
 #   hubot award <bounty name> bounty to <username> in <community>
 
 # Not implemented yet:
@@ -26,6 +27,7 @@ swarmbot = require '../models/swarmbot'
 Bounty = require '../models/bounty'
 DCO = require '../models/dco'
 { values } = require 'lodash'
+{ Claim } = require 'trust-exchange'
 
 module.exports = (robot) ->
   robot.respond /award (.+) bounty to (.+) in (.+)$/i, (msg) ->
@@ -80,6 +82,18 @@ module.exports = (robot) ->
 
     DCO.createBountyFor {dcoKey, bountyName, amount}, (error, message) ->
       msg.send error or message
+
+  robot.respond /rate bounty (.+) ([\d.]+)% (?:at |on )(.+?)$/i, (msg) ->
+    msg.match.shift()
+    [target, value, content] = msg.match
+    value *= 0.01  # convert to percentage
+
+    source = robot.whose msg
+    Claim.put { source, target, value, content }
+      .then (messages) ->
+        replies = for message in messages
+          "Rating saved to #{message}"
+        msg.send replies.join "\n"
 
 
 
