@@ -3,8 +3,10 @@
 #
 # Commands:
 #   hubot create <bounty_name> bounty <number> coins
-#   hubot list bounties
 #   hubot award <bounty_name> bounty to <username>
+
+# Not implemented yet:
+#   hubot list bounties
 
 # Not displayed in help
 #   hubot (<bounty_name>) bounty add me - add me to the bounty
