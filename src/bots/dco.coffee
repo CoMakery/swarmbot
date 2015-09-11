@@ -61,19 +61,19 @@ module.exports = (robot) ->
     dcoCreateStatus = robot.brain.get("dcoCreateStatus") or null
     if dcoJoinStatus != null
       console.log "stage: #{dcoJoinStatus.stage}"
-      answer = msg.match[1]
+      answer = msg.match[1].toLowerCase()
       switch dcoJoinStatus.stage
         when 1
-          if answer == "Yes" || answer == "Y"
+          if answer == "yes" || answer == "y"
             msg.reply "Great, you've joined the DCO"
             dco = DCO.find dcoJoinStatus.dcoKey
             user = robot.whose msg
             dco.sendAsset { amount: 1, sendeeUsername: user }
-            # Set to default/preferred community 
-            user = swarmbot.firebase().child('users/' + user)
-            user.update({ preferred_community : dcoJoinStatus.dcoKey, slack_username : user})
+            # Set to default/preferred community
+            userRef = swarmbot.firebase().child('users/' + user)
+            userRef.update({ preferred_community : dcoJoinStatus.dcoKey })
 
-          else if answer == "No" || answer == "N"
+          else if answer == "no" || answer == "n"
             msg.reply "Too bad, maybe next time"
 
           # dcoJoinStatus = {stage: 0}
