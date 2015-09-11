@@ -2,7 +2,6 @@
 #   Informational and help related commands
 #
 # Commands:
-#   hubot what what
 #   hubot x marks the what
 
 # Not implemented yet:

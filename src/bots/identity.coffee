@@ -4,7 +4,7 @@
 # Commands:
 #   hubot register btc <btc_address>
 #   hubot register email <email>
-#   hubot register community <preferred community>
+#   hubot set community <preferred community>
 
 swarmbot = require '../models/swarmbot'
 Bounty = require '../models/bounty'
@@ -38,7 +38,7 @@ module.exports = (robot) ->
     msg.send "User registered"
 
   # The following is a way of setting a preferred DCO
-  robot.respond /register community (.+)$/i, (msg) ->
+  robot.respond /set community (.+)$/i, (msg) ->
     msg.match.shift()
     [community] = msg.match
     activeUser = robot.whose msg
