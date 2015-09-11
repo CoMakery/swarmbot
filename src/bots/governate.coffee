@@ -35,6 +35,8 @@ module.exports = (robot) ->
         .on 'child_added', (snapshot) ->
           msg.send snapshot.val().name + " | votes: 0"
 
+      #TODO: awesome trust-exchange stuff could go here, showing votes/endorsements for a specific proposal
+
   robot.respond /propose (.+)$/i, (msg) ->
 
     msg.match.shift()
