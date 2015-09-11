@@ -30,20 +30,20 @@ module.exports = (robot) ->
     msg.match.shift()
     [emailAddress] = msg.match
     activeUser = robot.whose msg
-    usersRef = swarmbot.firebase().child('users/' + activeUser)
-    usersRef.update( slack_username: activeUser, email_address: emailAddress )
+    user = User.find activeUser
+    user.register "email_address", emailAddress
 
     #TODO: would  be nice to send out an outbound email notification that then allows them to setup a BTC wallet
     # something like the Mandril usage we have in the Swarm API
     # https://swarm-rome.herokuapp.com/messages/send-template
 
-    msg.send "User registered"
+    msg.send "Email registered"
 
   # The following is a way of setting a preferred DCO
   robot.respond /set community (.+)$/i, (msg) ->
     msg.match.shift()
     [community] = msg.match
     activeUser = robot.whose msg
-    usersRef = swarmbot.firebase().child('users/' + activeUser)
-    usersRef.update( slack_username: activeUser, preferred_community: community )
+    user = User.find activeUser
+    user.register "preferred_community", community
     msg.send "Preferred community set"
