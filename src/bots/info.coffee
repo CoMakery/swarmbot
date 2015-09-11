@@ -15,6 +15,9 @@ module.exports = (robot) ->
   robot.respond /x marks the what$/i, (msg) ->
     msg.send "https://www.youtube.com/watch?v=SFY-Kg1OqAk"
 
+  robot.respond /hello$/i, (msg) ->
+    msg.send "hello my friend"
+
   robot.respond /tag (.+) = (.+)$/i, (msg) ->
     msg.match.shift()
     [dcoKey, tag] = msg.match
