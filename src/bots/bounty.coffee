@@ -2,8 +2,8 @@
 #   Create a bounty
 #
 # Commands:
-#   hubot create <bounty_name> bounty <number> coins
-#   hubot award <bounty_name> bounty to <username>
+#   hubot create <bounty name> bounty of <number of coins> for <community>
+#   hubot award <bounty name> bounty to <username>
 
 # Not implemented yet:
 #   hubot list bounties
