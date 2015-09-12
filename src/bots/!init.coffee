@@ -1,5 +1,3 @@
-{ json, log, p, pjson } = require 'lightsaber'
-
 # Description:
 #   Initialize the bot.
 #   Note: this file name starts with a special character in order to load first;
@@ -8,7 +6,7 @@
 # Commands:
 #
 
-{ type, json, log, p, pjson } = require 'lightsaber'
+{ json, log, p, pjson } = require 'lightsaber'
 trustExchange = require('trust-exchange').instance
 swarmbot = require '../models/swarmbot'
 
@@ -22,6 +20,6 @@ InitBot = (robot) ->
 
   robot.respond /what data\?$/i, (msg) ->
     p msg
-    msg.send pjson msg.user
+    msg.send 'check the logs'
 
 module.exports = InitBot
