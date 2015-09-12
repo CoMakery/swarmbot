@@ -3,6 +3,7 @@
 #
 # Commands:
 #   hubot create <bounty name> bounty of <number of coins> for <community>
+#   hubot rate bounty <bounty name> <value>%
 #   hubot award <bounty name> bounty to <username> in <community>
 
 # Not implemented yet:
@@ -26,6 +27,7 @@ swarmbot = require '../models/swarmbot'
 Bounty = require '../models/bounty'
 DCO = require '../models/dco'
 { values } = require 'lodash'
+{ Claim } = require 'trust-exchange'
 
 module.exports = (robot) ->
   robot.respond /award (.+) bounty to (.+) in (.+)$/i, (msg) ->
@@ -50,7 +52,6 @@ module.exports = (robot) ->
       else
         msg.send "User not yet registered"
 
-
   # robot.respond /award (.+) bounty to (.+)$/i, (msg) ->
   #   [all, bountyName, awardee] = msg.match
   #   activeUser = robot.whose msg
@@ -73,13 +74,27 @@ module.exports = (robot) ->
   #       else
   #         msg.send "User not yet registered"
 
-
   robot.respond /create (.+) bounty of (\d+) for (.+)$/i, (msg) ->
     msg.match.shift()
     [bountyName, amount, dcoKey] = msg.match
 
     DCO.createBountyFor {dcoKey, bountyName, amount}, (error, message) ->
       msg.send error or message
+
+  robot.respond /rate (.+) bounty (.+) ([\d.]+)%$/i, (msg) ->
+    msg.match.shift()
+    [community, bounty, rating] = msg.match
+    user = robot.whose msg
+    Claim.put {
+      source: user
+      target: bounty
+      value: rating * 0.01  # convert to percentage
+      hints: firebase: "projects/#{community}/bounties/#{bounty}/ratings"
+    }
+      .then (messages) ->
+        replies = for message in messages
+          "Rating saved to #{message}"
+        msg.send replies.join "\n"
 
 
 

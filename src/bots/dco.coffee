@@ -35,8 +35,6 @@ DCO = require '../models/dco'
 
 module.exports = (robot) ->
 
-
-
   robot.respond /list communities$/i, (msg) ->
     communities = swarmbot.firebase().child('projects')
     MAX_MESSAGES_FOR_SLACK = 10
