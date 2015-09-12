@@ -1,3 +1,5 @@
+{ json, log, p, pjson } = require 'lightsaber'
+
 # Description:
 #   Initialize the bot
 #
