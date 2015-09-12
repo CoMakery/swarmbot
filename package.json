@@ -35,7 +35,7 @@
     "hubot-suggest": "citizencode/hubot-suggest#v0.0.3",
     "lightsaber": "^0.4.1",
     "lodash": "^3.10.0",
-    "trust-exchange": "citizencode/trust-exchange"
+    "trust-exchange": "citizencode/trust-exchange#v0.0.5"
   },
   "repository": {
     "type": "git",
