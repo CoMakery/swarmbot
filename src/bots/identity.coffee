@@ -18,6 +18,20 @@ module.exports = (robot) ->
  #  robot.respond /register?.*/i, (msg) ->
  #    robot.reply 'some msg'?
 
+  robot.respond /register slack$/i, (msg) ->
+
+      activeUser = robot.whose msg
+      user = User.find activeUser
+      slackId = msg.message.user.id
+      realName = msg.message.user.real_name
+      emailAddress = msg.message.user.email_address
+      if realName
+            user.register "real_name", realName
+      if emailAddress
+            user.register "email_address", emailAddress
+      if slackId
+            user.register "slack_id", slackId
+
   robot.respond /register btc (.+)$/i, (msg) ->
     msg.match.shift()
     [btcAddress] = msg.match

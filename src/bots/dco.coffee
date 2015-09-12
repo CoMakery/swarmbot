@@ -94,10 +94,10 @@ module.exports = (robot) ->
     if dcoCreateStatus != null
 
       answer = msg.match[1]
-      firstTwoLetters = answer.substring(0,2)
+      firstTwoLetters = answer.substring(0,2).toLowerCase()
       switch dcoCreateStatus.stage
         when 1
-          if firstTwoLetters == "We"
+          if firstTwoLetters == "we"
             swarmbot.firebase().child('projects/' + dcoCreateStatus.dcoKey).update({project_statement : answer})
             dcoCreateStatus = {stage: 0}
             robot.brain.set "dcoCreateStatus", dcoCreateStatus
@@ -106,6 +106,10 @@ module.exports = (robot) ->
   robot.respond /how many communities\?$/i, (msg) ->
     swarmbot.firebase().child('counters/projects/dco').on 'value', (snapshot) ->
       msg.send snapshot.val()
+
+  robot.respond /what data\?$/i, (msg) ->
+        prettyMessage = pjson msg
+        msg.send " yo" + prettyMessage
 
   robot.respond /create community (.+)$/i, (msg) ->
     msg.match.shift()
