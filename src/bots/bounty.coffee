@@ -3,7 +3,7 @@
 #
 # Commands:
 #   hubot create <bounty name> bounty of <number of coins> for <community>
-#   hubot rate bounty <bounty name> <value>% on <description>
+#   hubot rate bounty <bounty name> <value>%
 #   hubot award <bounty name> bounty to <username> in <community>
 
 # Not implemented yet:
@@ -52,7 +52,6 @@ module.exports = (robot) ->
       else
         msg.send "User not yet registered"
 
-
   # robot.respond /award (.+) bounty to (.+)$/i, (msg) ->
   #   [all, bountyName, awardee] = msg.match
   #   activeUser = robot.whose msg
@@ -75,7 +74,6 @@ module.exports = (robot) ->
   #       else
   #         msg.send "User not yet registered"
 
-
   robot.respond /create (.+) bounty of (\d+) for (.+)$/i, (msg) ->
     msg.match.shift()
     [bountyName, amount, dcoKey] = msg.match
@@ -83,13 +81,16 @@ module.exports = (robot) ->
     DCO.createBountyFor {dcoKey, bountyName, amount}, (error, message) ->
       msg.send error or message
 
-  robot.respond /rate bounty (.+) ([\d.]+)% (?:at |on )(.+?)$/i, (msg) ->
+  robot.respond /rate (.+) bounty (.+) ([\d.]+)%$/i, (msg) ->
     msg.match.shift()
-    [target, value, content] = msg.match
-    value *= 0.01  # convert to percentage
-
-    source = robot.whose msg
-    Claim.put { source, target, value, content }
+    [community, bounty, rating] = msg.match
+    user = robot.whose msg
+    Claim.put {
+      source: user
+      target: bounty
+      value: rating * 0.01  # convert to percentage
+      hints: firebase: "projects/#{community}/bounties/#{bounty}/ratings"
+    }
       .then (messages) ->
         replies = for message in messages
           "Rating saved to #{message}"
