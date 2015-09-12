@@ -2,9 +2,12 @@
 #   User / account managemnet
 #
 # Commands:
+#   hubot register me 
 #   hubot register btc <btc_address>
-#   hubot register email <email>
 #   hubot set community <preferred community>
+
+# Deprecated
+#   hubot register email <email>
 
 swarmbot = require '../models/swarmbot'
 Bounty = require '../models/bounty'
@@ -18,7 +21,7 @@ module.exports = (robot) ->
  #  robot.respond /register?.*/i, (msg) ->
  #    robot.reply 'some msg'?
 
-  robot.respond /register slack$/i, (msg) ->
+  robot.respond /register me$/i, (msg) ->
 
       activeUser = robot.whose msg
       user = User.find activeUser
@@ -27,10 +30,16 @@ module.exports = (robot) ->
       emailAddress = msg.message.user.email_address
       if realName
             user.register "real_name", realName
+            msg.send "registered real name"
+
       if emailAddress
             user.register "email_address", emailAddress
+            msg.send "registered email address"
+
       if slackId
             user.register "slack_id", slackId
+            msg.send "registered slack id"
+
 
   robot.respond /register btc (.+)$/i, (msg) ->
     msg.match.shift()
@@ -40,18 +49,18 @@ module.exports = (robot) ->
     user.register "btc_address", btcAddress
     msg.send "User registered"
 
-  robot.respond /register email (.+)$/i, (msg) ->
-    msg.match.shift()
-    [emailAddress] = msg.match
-    activeUser = robot.whose msg
-    user = User.find activeUser
-    user.register "email_address", emailAddress
+  # robot.respond /register email (.+)$/i, (msg) ->
+  #   msg.match.shift()
+  #   [emailAddress] = msg.match
+  #   activeUser = robot.whose msg
+  #   user = User.find activeUser
+  #   user.register "email_address", emailAddress
 
     #TODO: would  be nice to send out an outbound email notification that then allows them to setup a BTC wallet
     # something like the Mandril usage we have in the Swarm API
     # https://swarm-rome.herokuapp.com/messages/send-template
 
-    msg.send "Email registered"
+    # msg.send "Email registered"
 
   # The following is a way of setting a preferred DCO
   robot.respond /set community (.+)$/i, (msg) ->

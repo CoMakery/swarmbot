@@ -11,8 +11,6 @@ class User
     new User userRef: users.child(userKey)
 
   register: (myKey, value) ->
-    p "key", myKey
-    p "v", value
     newHash= {}
     newHash[myKey] = value
     @userRef.update newHash
