@@ -8,6 +8,7 @@ InitBot = (robot) ->
   robot.whose = (message) -> "@#{message.message.user.name}"
 
   robot.respond /what data\?$/i, (msg) ->
-    msg.send pjson msg.envelope
+    p msg
+    msg.send pjson msg.user
 
 module.exports = InitBot
