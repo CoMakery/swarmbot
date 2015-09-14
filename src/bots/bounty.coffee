@@ -81,7 +81,6 @@ module.exports = (robot) ->
       msg.send error or message
 
   robot.respond /rate (.+) bounty (.+) ([\d.]+)%$/i, (msg) ->
-    p 111, msg
     msg.match.shift()
     [community, bounty, rating] = msg.match
     user = robot.whose msg
@@ -91,14 +90,12 @@ module.exports = (robot) ->
       value: rating * 0.01  # convert to percentage
       hints: firebase: "projects/#{community}/bounties/#{bounty}/ratings"
     }
-      .catch (error) ->
-        msg.send "Rating failed: #{error}\n#{error.stack}"
       .then (messages) ->
-        p 222, msg
-        p 333, messages
         replies = for message in messages
           "Rating saved to #{message}"
         msg.send replies.join "\n"
+      .catch (error) ->
+        msg.send "Rating failed: #{error}\n#{error.stack}"
 
 
 
