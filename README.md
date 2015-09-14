@@ -25,7 +25,7 @@ In more detail:
   - A new _community coin_ is automatically created for the community
 1. A community member can propose a _bounty_ within that community
 1. The community can choose which bounties to devote resource toward
-1. At the discression of the community, the bounty can be either:
+1. At the discretion of the community, the bounty can be either:
   - Competition style (X-Prize model)
   - Claim style (trusted community member may claim first right to completing
     bounty)
