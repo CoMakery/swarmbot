@@ -7,6 +7,8 @@ Helper = require 'hubot-test-helper'
 swarmbot = require '../src/models/swarmbot'
 DCO = require '../src/models/dco'
 
+# consider 'nock' -- like VCR
+
 sinon.stub(swarmbot, 'colu').returns
   on: ->
   init: ->

@@ -3,7 +3,7 @@
 #
 # Commands:
 #   hubot create <bounty name> bounty of <number of coins> for <community>
-#   hubot rate bounty <bounty name> <value>%
+#   hubot rate <community> bounty <bounty name> <value>%
 #   hubot award <bounty name> bounty to <username> in <community>
 
 # Not implemented yet:
@@ -77,11 +77,11 @@ module.exports = (robot) ->
   robot.respond /create (.+) bounty of (\d+) for (.+)$/i, (msg) ->
     msg.match.shift()
     [bountyName, amount, dcoKey] = msg.match
-
     DCO.createBountyFor {dcoKey, bountyName, amount}, (error, message) ->
       msg.send error or message
 
   robot.respond /rate (.+) bounty (.+) ([\d.]+)%$/i, (msg) ->
+    p 111, msg
     msg.match.shift()
     [community, bounty, rating] = msg.match
     user = robot.whose msg
@@ -92,9 +92,13 @@ module.exports = (robot) ->
       hints: firebase: "projects/#{community}/bounties/#{bounty}/ratings"
     }
       .then (messages) ->
+        p 222, msg
+        p 333, messages
         replies = for message in messages
           "Rating saved to #{message}"
         msg.send replies.join "\n"
+      .catch (error) ->
+        msg.send "Rating failed: #{error}"
 
 
 

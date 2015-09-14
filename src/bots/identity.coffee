@@ -2,7 +2,7 @@
 #   User / account managemnet
 #
 # Commands:
-#   hubot register me 
+#   hubot register me
 #   hubot register btc <btc_address>
 #   hubot set community <preferred community>
 
@@ -29,17 +29,16 @@ module.exports = (robot) ->
       realName = msg.message.user.real_name
       emailAddress = msg.message.user.email_address
       if realName
-            user.register "real_name", realName
-            msg.send "registered real name"
+        user.register "real_name", realName
+        msg.send "registered real name"
 
       if emailAddress
-            user.register "email_address", emailAddress
-            msg.send "registered email address"
+        user.register "email_address", emailAddress
+        msg.send "registered email address"
 
       if slackId
-            user.register "slack_id", slackId
-            msg.send "registered slack id"
-
+        user.register "slack_id", slackId
+        msg.send "registered slack id"
 
   robot.respond /register btc (.+)$/i, (msg) ->
     msg.match.shift()
