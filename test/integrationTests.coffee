@@ -7,8 +7,6 @@ Helper = require 'hubot-test-helper'
 swarmbot = require '../src/models/swarmbot'
 DCO = require '../src/models/dco'
 
-# consider 'nock' -- like VCR
-
 sinon.stub(swarmbot, 'colu').returns
   on: ->
   init: ->
@@ -27,25 +25,16 @@ describe 'swarmbot', ->
   afterEach -> @room.destroy()
 
   context 'Identity', ->
-    it 'user can register a bitcoin address', (done) ->
+    xit 'user can register a bitcoin address', (done) ->
       slackUsername = 'slack_username'
       btc_address = '12afeafeaefeaee'
-      #
-      # User.registerUser bountyParams, (error, message) ->
-      #   message.should.equal 'user address registered'
-      #   dco = User.find dcoKey
-      #   dco.getBounty({bountyName}).get 'amount', (value) ->
-      #     value.should.equal amount
-      done()
 
-  # context 'DCO asset', ->
-  #   it 'user can create an asset for an existing dco', ->
-  #     @room.user.say 'alice', '@hubot create 2000 of asset for save-the-world'
-  #     @room.messages.should.deep.equal [
-  #       ['alice', '@hubot create 2000 of asset for save-the-world']
-  #       ['hubot', 'asset created']
-  #     ]
-      # check that the asset exists -- in fb/colu
+      User.registerUser bountyParams, (error, message) ->
+        message.should.equal 'user address registered'
+        dco = User.find dcoKey
+        dco.getBounty({bountyName}).get 'amount', (value) ->
+          value.should.equal amount
+      done()
 
   context 'DCO bounty', ->
     it 'a DCO can create a bounty', (done) ->
@@ -65,15 +54,13 @@ describe 'swarmbot', ->
           done()
 
   context 'dco admin can award bounty to user', ->
-    @timeout 2
-
-    # it 'an admin can award a bounty', (done) ->
-    #   bountyName = 'plant a tree'
-    #   dcoKey = 'save-the-world'
-    #   bountyParams = {
-    #     dcoKey
-    #     bountyName
-    #   }
-    #   dco = DCO.find dcoKey
-    #   dco.awardBounty bountyParams, (error, message) ->
-          # done()
+    xit 'an admin can award a bounty', (done) ->
+      bountyName = 'plant a tree'
+      dcoKey = 'save-the-world'
+      bountyParams = {
+        dcoKey
+        bountyName
+      }
+      dco = DCO.find dcoKey
+      dco.awardBounty bountyParams, (error, message) ->
+          done()
