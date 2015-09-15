@@ -23,9 +23,6 @@
 #   hubot open for membership for $XYZ - allow users to join membership in your DCO for a set price in USD
 #   hubot open for membership for xyzBTC - allow users to join membership in your DCO) for a set price in BTC
 #   hubot rate <dco_name> - Tells you how much the community's assets are trading at on any given day.
-#
-# Author:
-#   fractastical
 
 {log, p, pjson} = require 'lightsaber'
 swarmbot        = require '../models/swarmbot'
