@@ -24,8 +24,6 @@
 
 {log, p, pjson} = require 'lightsaber'
 swarmbot        = require '../models/swarmbot'
-ResponseMessage = require './helpers/response_message'
-UserNormalizer  = require './helpers/user_normalizer'
 DCO = require '../models/dco'
 
 module.exports = (robot) ->
