@@ -6,7 +6,7 @@
 #   hubot register btc <btc_address>
 #   hubot set community <preferred community>
 
-# Deprecated
+# Not in use:
 #   hubot register email <email>
 
 swarmbot = require '../models/swarmbot'

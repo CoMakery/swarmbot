@@ -4,7 +4,7 @@
 # Commands:
 #   hubot x marks the what
 
-# Not implemented yet:
+# Not in use:
 #   hubot tag <community name> <tag>
 #   hubot info <community name>
 

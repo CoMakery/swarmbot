@@ -6,10 +6,8 @@
 #   hubot rate <community> bounty <bounty name> <value>%
 #   hubot award <bounty name> bounty to <username> in <community>
 
-# Not implemented yet:
+# Not in use:
 #   hubot list bounties
-
-# Not displayed in help
 #   hubot (<bounty_name>) bounty add me - add me to the bounty
 #   hubot get balance - get your current balance
 #   hubot (<bounty_name>) bounty add (me|<user>) - add me or <user> to bounty

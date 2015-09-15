@@ -9,10 +9,8 @@
 # Available but not displayed in help
 #   hubot create <number> of asset for <community name>
 
-# Not working
+# Not in use:
 #   hubot how many communities?
-
-# Not displayed in help
 #   hubot tag <dco_name> <tag>
 #   hubot list dco <dco pattern>
 #   hubot select <dco_name> (you must be the creator)
