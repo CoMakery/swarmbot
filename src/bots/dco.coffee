@@ -12,11 +12,8 @@
 
 # Not in use:
 #   hubot how many communities?
-<<<<<<< HEAD
-=======
 
 # DCO Interface Ideas
->>>>>>> Initial pass: list bounties and ratings.
 #   hubot tag <dco_name> <tag>
 #   hubot list dco <dco pattern>
 #   hubot select <dco_name> (you must be the creator)
