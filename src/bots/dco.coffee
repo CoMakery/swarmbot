@@ -60,7 +60,8 @@ module.exports = (robot) ->
     dcoJoinStatus = {stage: 1, dcoKey: dcoKey}
     robot.brain.set "dcoJoinStatus", dcoJoinStatus
 
-  robot.hear /(.+)/i, (msg) ->
+  robot.respond /(yes$|no$|we )/i, (msg) ->
+    p msg.match[0]
     dcoJoinStatus = robot.brain.get("dcoJoinStatus") or null
     dcoCreateStatus = robot.brain.get("dcoCreateStatus") or null
 
