@@ -5,12 +5,18 @@
 #   hubot list communities
 #   hubot create community <community name>
 #   hubot join community <community name>
+#   hubot community <community name> list bounties
 
 # Available but not displayed in help
 #   hubot create <number> of asset for <community name>
 
 # Not in use:
 #   hubot how many communities?
+<<<<<<< HEAD
+=======
+
+# DCO Interface Ideas
+>>>>>>> Initial pass: list bounties and ratings.
 #   hubot tag <dco_name> <tag>
 #   hubot list dco <dco pattern>
 #   hubot select <dco_name> (you must be the creator)
@@ -24,9 +30,23 @@
 
 {log, p, pjson} = require 'lightsaber'
 swarmbot        = require '../models/swarmbot'
+ResponseMessage = require './helpers/response_message'
+UserNormalizer  = require './helpers/user_normalizer'
+TrustExchange   = require 'trust-exchange'
 DCO = require '../models/dco'
 
 module.exports = (robot) ->
+  robot.respond /community (.+) list bounties$/i, (msg) ->
+    [all, community] = msg.match
+    dco = DCO.find(community)
+
+    dco.listBounties (snapshot) ->
+      promises = for bounty, data of snapshot.val()
+        TrustExchange.Reputation.report bounty,
+          firebase: path: "projects/#{community}/bounties"
+
+      Promise.all(promises).then (results) ->
+        msg.send results.join("\n") + " for #{data.amount || '(none)'}"
 
   robot.respond /list communities$/i, (msg) ->
     communities = swarmbot.firebase().child('projects')
@@ -100,8 +120,8 @@ module.exports = (robot) ->
       msg.send snapshot.val()
 
   robot.respond /what data\?$/i, (msg) ->
-        prettyMessage = pjson msg
-        msg.send " yo" + prettyMessage
+    prettyMessage = pjson msg
+    msg.send " yo" + prettyMessage
 
   robot.respond /create community (.+)$/i, (msg) ->
     msg.match.shift()

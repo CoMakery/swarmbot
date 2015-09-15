@@ -15,6 +15,9 @@ class DCO
     dcos = swarmbot.firebase().child('projects')
     new DCO dcoRef: dcos.child(dcoKey)
 
+  listBounties: (cb) ->
+    @dcoRef.child('bounties').orderByKey().on 'value', cb
+
   createBounty: ({bountyName, amount}, cb) ->
     bounty = @dcoRef.child "bounties/#{bountyName}"
     bounty.set {name: bountyName, amount: amount}, (error) ->

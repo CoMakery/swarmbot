@@ -64,7 +64,8 @@ module.exports = (robot) ->
       source: user
       target: bounty
       value: rating * 0.01  # convert to percentage
-      hints: firebase: "projects/#{community}/bounties/#{bounty}/ratings"
+    }, {
+      firebase: path: "projects/#{community}/bounties/#{bounty}/ratings"
     }
       .then (messages) ->
         replies = for message in messages
