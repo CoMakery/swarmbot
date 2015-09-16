@@ -26,6 +26,7 @@
 #   hubot rate <dco_name> - Tells you how much the community's assets are trading at on any given day.
 
 {log, p, pjson} = require 'lightsaber'
+_               = require 'lodash'
 swarmbot        = require '../models/swarmbot'
 ResponseMessage = require './helpers/response_message'
 UserNormalizer  = require './helpers/user_normalizer'
@@ -39,11 +40,24 @@ module.exports = (robot) ->
 
     dco.listBounties (snapshot) ->
       promises = for bounty, data of snapshot.val()
-        TrustExchange.Reputation.report bounty,
-          firebase: path: "projects/#{community}/bounties"
+        do (bounty, data) ->
+          TrustExchange.Reputation.score bounty,
+            firebase: path: "projects/#{community}/bounties"
+          .then (score) ->
+            name: bounty
+            amount: data.amount
+            score: score
 
-      Promise.all(promises).then (results) ->
-        msg.send results.join("\n") + " for #{data.amount || '(none)'}"
+      Promise.all(promises).then (bounties) ->
+        # have to partition bc sorting puts undefined scores at the top.
+        [score, noScore] = _.partition bounties, (b) -> b.score?
+        bounties = _.sortByOrder(score, ['score'], ['desc']).concat(noScore)
+        messages = for bounty in bounties
+          text = "Bounty #{bounty.name}"
+          text += " Reward #{bounty.amount}" if bounty.amount?
+          text += " Rating: #{bounty.score}%" if bounty.score?
+          text
+        msg.send messages.join("\n")
 
   robot.respond /list communities$/i, (msg) ->
     communities = swarmbot.firebase().child('projects')
