@@ -28,20 +28,21 @@ DCO = require '../models/dco'
 BountiesController = require '../controllers/bounties-controller'
 
 module.exports = (robot) ->
+  robot.respond /community (.+) list bounties$/i, (msg) ->
+    [all, community] = msg.match
+    new BountiesController().list(msg, { community })
+
   robot.respond /award (.+) bounty to (.+) in (.+)$/i, (msg) ->
     [all, bountyName, awardee, dcoKey] = msg.match
-    controller = new BountiesController(robot)
-    controller.award(msg, { bountyName, awardee, dcoKey })
+    new BountiesController().award(msg, { bountyName, awardee, dcoKey })
 
   robot.respond /create (.+) bounty of (\d+) for (.+)$/i, (msg) ->
     [all, bountyName, amount, dcoKey] = msg.match
-    controller = new BountiesController(robot)
-    controller.create(msg, { bountyName, amount, dcoKey })
+    new BountiesController().create(msg, { bountyName, amount, dcoKey })
 
   robot.respond /rate (.+) bounty (.+) ([\d.]+)%$/i, (msg) ->
     [all, community, bounty, rating] = msg.match
-    controller = new BountiesController(robot)
-    controller.rate(msg, { community, bounty, rating })
+    new BountiesController().rate(msg, { community, bounty, rating })
 
   # robot.respond /award (.+) bounty to (.+)$/i, (msg) ->
   #   [all, bountyName, awardee] = msg.match

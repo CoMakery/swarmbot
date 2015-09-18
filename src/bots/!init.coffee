@@ -21,9 +21,34 @@ InitBot = (robot) ->
   robot.router.post '/hubot/chatsecrets/:room', (req, res) ->
     p "HTTP webhook received", req, res
 
-
   robot.respond /what data\?$/i, (msg) ->
-    p msg
+    p pjson msg
     msg.send 'check the logs'
 
 module.exports = InitBot
+
+
+# On the msg object:
+# robot: [Object]
+# message:
+#    { user: { id: 1, name: 'Shell', room: 'Shell' },
+#      text: 'swarmbot rate xyz bounty excellence2 50%',
+#      id: 'messageId',
+#      done: false,
+#      room: 'Shell' },
+#   match:
+#    [ 'swarmbot rate xyz bounty excellence2 50%',
+#      'xyz',
+#      'excellence2',
+#      '50',
+#      index: 0,
+#      input: 'swarmbot rate xyz bounty excellence2 50%' ],
+#   envelope:
+#    { room: 'Shell',
+#      user: { id: 1, name: 'Shell', room: 'Shell' },
+#      message:
+#       { user: [Object],
+#         text: 'swarmbot rate xyz bounty excellence2 50%',
+#         id: 'messageId',
+#         done: false,
+#         room: 'Shell' } } }

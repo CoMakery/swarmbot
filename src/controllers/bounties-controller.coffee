@@ -1,11 +1,37 @@
-{ Claim } = require 'trust-exchange'
+{log, p, pjson} = require 'lightsaber'
+{ partition, sortByOrder } = require 'lodash'
+{ Reputation, Claim } = require 'trust-exchange'
 DCO = require '../models/dco'
 
 class BountiesController
-  constructor: (@robot)->
+  constructor: ->
+
+  list: (msg, { community }) ->
+    dco = DCO.find(community)
+
+    dco.listBounties (snapshot) ->
+      promises = for bounty, data of snapshot.val()
+        do (bounty, data) ->
+          Reputation.score bounty,
+            firebase: path: "projects/#{community}/bounties"
+          .then (score) ->
+            name: bounty
+            amount: data.amount
+            score: score
+
+      Promise.all(promises).then (bounties) ->
+        # have to partition because sorting puts undefined scores at the top.
+        [score, noScore] = partition bounties, (b) -> b.score?
+        bounties = sortByOrder(score, ['score'], ['desc']).concat(noScore)
+        messages = for bounty in bounties
+          text = "Bounty #{bounty.name}"
+          text += " Reward #{bounty.amount}" if bounty.amount?
+          text += " Rating: #{bounty.score}%" if bounty.score?
+          text
+        msg.send messages.join("\n")
 
   award: (msg, { bountyName, awardee, dcoKey }) ->
-    activeUser = @robot.whose msg
+    activeUser = msg.robot.whose msg
 
     dco = DCO.find dcoKey
 
@@ -30,7 +56,7 @@ class BountiesController
       msg.send error or message
 
   rate: (msg, { community, bounty, rating }) ->
-    user = @robot.whose msg
+    user = msg.robot.whose msg
     Claim.put {
       source: user
       target: bounty
