@@ -16,7 +16,7 @@ module.exports = (robot) ->
     msg.send "https://www.youtube.com/watch?v=SFY-Kg1OqAk"
 
   robot.respond /hello$/i, (msg) ->
-    msg.send "hello my friend"
+    msg.send msg.random ["hello my friend", "hey buddy", "hi", "hello, it's good to see you, figuratively speaking"]
 
   robot.respond /tag (.+) = (.+)$/i, (msg) ->
     msg.match.shift()
