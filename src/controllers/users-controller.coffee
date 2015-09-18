@@ -35,6 +35,6 @@ class UsersController
     activeUser = msg.robot.whose msg
     user = User.find activeUser
     user.register "current_community", community
-    msg.send "Current community set to '#{community}'"
+    msg.send "You are  community set to '#{community}'"
 
 module.exports = UsersController

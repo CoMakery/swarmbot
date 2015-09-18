@@ -3,15 +3,16 @@
 #
 # Commands:
 #   hubot list communities
+#   hubot find community <start of community name>
 #   hubot create community <community name>
 #   hubot join community <community name>
 #   hubot community <community name> list bounties
+#   hubot how many communities?
 
 # Available but not displayed in help
 #   hubot create <number> of asset for <community name>
 
 # Not in use:
-#   hubot how many communities?
 
 # DCO Interface Ideas
 #   hubot tag <dco_name> <tag>

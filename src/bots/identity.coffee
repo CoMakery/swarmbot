@@ -4,7 +4,7 @@
 # Commands:
 #   hubot register me
 #   hubot register btc <btc_address>
-#   hubot set community <preferred community>
+#   hubot set community <current community>
 
 # Not in use:
 #   hubot register email <email>
@@ -26,7 +26,7 @@ module.exports = (robot) ->
     btcAddress = msg.match[1]
     new UsersController().registerBtc(msg, { btcAddress })
 
-  robot.respond /set community (.+)$/i, (msg) ->
+  robot.respond /set community\s+(.+)$/i, (msg) ->
     community = msg.match[1]
     new UsersController().setCommunity(msg, { community })
 

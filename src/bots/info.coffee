@@ -3,6 +3,7 @@
 #
 # Commands:
 #   hubot x marks the what
+#   hubot hello
 
 # Not in use:
 #   hubot tag <community name> <tag>
