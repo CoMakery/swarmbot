@@ -9,6 +9,7 @@
 # Not in use:
 #   hubot register email <email>
 
+{ p } = require 'lightsaber'
 swarmbot = require '../models/swarmbot'
 Bounty = require '../models/bounty'
 User = require '../models/user'
@@ -28,6 +29,8 @@ module.exports = (robot) ->
       slackId = msg.message.user.id
       realName = msg.message.user.real_name
       emailAddress = msg.message.user.email_address
+      p activeUser, user, slackId, realName, emailAddress
+
       if realName
         user.register "real_name", realName
         msg.send "registered real name"
@@ -48,6 +51,10 @@ module.exports = (robot) ->
     user.register "btc_address", btcAddress
     msg.send "User registered"
 
+  robot.respond /whoami$/i, (msg) ->
+    user = User.find robot.whose(msg)
+
+    msg.send ""
   # robot.respond /register email (.+)$/i, (msg) ->
   #   msg.match.shift()
   #   [emailAddress] = msg.match

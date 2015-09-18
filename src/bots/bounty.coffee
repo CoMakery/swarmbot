@@ -20,60 +20,28 @@
 #   hubot (<bounty_name>) bounty (list|show) - list the people in the bounty
 
 {log, p, pjson} = require 'lightsaber'
-
+{ values } = require 'lodash'
+{ Claim } = require 'trust-exchange'
 swarmbot = require '../models/swarmbot'
 Bounty = require '../models/bounty'
 DCO = require '../models/dco'
-{ values } = require 'lodash'
-{ Claim } = require 'trust-exchange'
+BountiesController = require '../controllers/bounties-controller'
 
 module.exports = (robot) ->
   robot.respond /award (.+) bounty to (.+) in (.+)$/i, (msg) ->
     [all, bountyName, awardee, dcoKey] = msg.match
-    activeUser = robot.whose msg
-
-    dco = DCO.find dcoKey
-
-    usersRef = swarmbot.firebase().child('users')
-    usersRef.orderByChild("slack_username").equalTo(awardee).on 'value', (snapshot) ->
-      v = snapshot.val()
-      vals = values v
-      p "vals", vals
-      awardeeAddress = vals[0].btc_address
-      p "address", awardeeAddress
-
-      # p "awardee", awardeeAddress values btc_address
-      if(awardeeAddress)
-        dco.awardBounty {bountyName, awardeeAddress}
-        message = "Awarded bounty to #{awardee}"
-        msg.send message
-      else
-        msg.send "User not yet registered"
+    controller = new BountiesController(robot)
+    controller.award(msg, { bountyName, awardee, dcoKey })
 
   robot.respond /create (.+) bounty of (\d+) for (.+)$/i, (msg) ->
-    msg.match.shift()
-    [bountyName, amount, dcoKey] = msg.match
-    DCO.createBountyFor {dcoKey, bountyName, amount}, (error, message) ->
-      msg.send error or message
+    [all, bountyName, amount, dcoKey] = msg.match
+    controller = new BountiesController(robot)
+    controller.create(msg, { bountyName, amount, dcoKey })
 
   robot.respond /rate (.+) bounty (.+) ([\d.]+)%$/i, (msg) ->
-    msg.match.shift()
-    [community, bounty, rating] = msg.match
-    user = robot.whose msg
-    Claim.put {
-      source: user
-      target: bounty
-      value: rating * 0.01  # convert to percentage
-    }, {
-      firebase: path: "projects/#{community}/bounties/#{bounty}/ratings"
-    }
-      .then (messages) ->
-        replies = for message in messages
-          "Rating saved to #{message}"
-        msg.send replies.join "\n"
-      .catch (error) ->
-        msg.send "Rating failed: #{error}\n#{error.stack}"
-
+    [all, community, bounty, rating] = msg.match
+    controller = new BountiesController(robot)
+    controller.rate(msg, { community, bounty, rating })
 
   # robot.respond /award (.+) bounty to (.+)$/i, (msg) ->
   #   [all, bountyName, awardee] = msg.match

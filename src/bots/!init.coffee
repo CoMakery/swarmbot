@@ -18,6 +18,10 @@ InitBot = (robot) ->
   throw new Error if robot.whose?
   robot.whose = (message) -> "@#{message.message.user.name}"
 
+  robot.router.post '/hubot/chatsecrets/:room', (req, res) ->
+    p "HTTP webhook received", req, res
+
+
   robot.respond /what data\?$/i, (msg) ->
     p msg
     msg.send 'check the logs'
