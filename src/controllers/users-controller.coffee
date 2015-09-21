@@ -33,6 +33,11 @@ class UsersController extends ApplicationController
   setCommunity: (@msg, { community }) ->
     user = @currentUser()
     user.set "current_community", community
-    @msg.send "Your current community is '#{community}'"
+    @msg.send "Your current community is now '#{community}'."
+
+  unsetCommunity: (@msg) ->
+    user = @currentUser()
+    user.set "current_community", null
+    @msg.send "Your current community has been unset."
 
 module.exports = UsersController

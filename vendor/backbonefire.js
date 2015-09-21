@@ -554,7 +554,7 @@ var SyncCollection = (function() {
     this.listenTo(this, 'destroy', this._removeModel, this);
   }
 
-  SyncCollection.protoype = {
+  SyncCollection.prototype = {
     add: function(models, options) {
       // prepare models
       var parsed = this._parseModels(models);
@@ -906,6 +906,5 @@ Backbone.Firebase.Collection = Backbone.Collection.extend({
   }
 
 });
-
 
 module.exports = Backbone

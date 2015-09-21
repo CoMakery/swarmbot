@@ -5,6 +5,7 @@
 #   hubot register me
 #   hubot register btc <btc_address>
 #   hubot set community <current community>
+#   hubot unset community
 
 # Not in use:
 #   hubot register email <email>
@@ -29,6 +30,9 @@ module.exports = (robot) ->
   robot.respond /set community\s+(.+)\s*$/i, (msg) ->
     community = msg.match[1]
     new UsersController().setCommunity(msg, { community })
+
+  robot.respond /unset community\s*$/i, (msg) ->
+    new UsersController().unsetCommunity(msg)
 
   # Not sure, this may work in slack, not sure about
   #  robot.respond /register?.*/i, (msg) ->
