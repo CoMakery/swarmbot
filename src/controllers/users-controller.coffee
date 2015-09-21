@@ -1,4 +1,4 @@
-{ p } = require 'lightsaber'
+{ p, pjson } = require 'lightsaber'
 ApplicationController = require './application-controller'
 swarmbot = require '../models/swarmbot'
 Bounty = require '../models/bounty'
@@ -7,32 +7,32 @@ DCO = require '../models/dco'
 
 class UsersController extends ApplicationController
   register: (@msg) ->
-    user = @currentUser()
-    slackId = @msg.message.user.id
-    realName = @msg.message.user.real_name
-    emailAddress = @msg.message.user.email_address
-    p activeUser, user, slackId, realName, emailAddress
+    @currentUser().once 'sync', (user) =>
+      slackId = @msg.message.user.id
+      realName = @msg.message.user.real_name
+      emailAddress = @msg.message.user.email_address
+      p user, slackId, realName, emailAddress
 
-    if realName
-      user.register "real_name", realName
-      msg.send "registered real name"
+      if realName
+        user.set "real_name", realName
+        @msg.send "registered real name"
 
-    if emailAddress
-      user.register "email_address", emailAddress
-      msg.send "registered email address"
+      if emailAddress
+        user.set "email_address", emailAddress
+        @msg.send "registered email address"
 
-    if slackId
-      user.register "slack_id", slackId
-      msg.send "registered slack id"
+      if slackId
+        user.set "slack_id", slackId
+        @msg.send "registered slack id"
 
   registerBtc: (@msg, { btcAddress }) ->
     user = @currentUser()
-    user.register "btc_address", btcAddress
+    user.set "btc_address", btcAddress
     @msg.send "BTC address #{btcAddress} registered."
 
   setCommunity: (@msg, { community }) ->
     user = @currentUser()
-    user.register "current_community", community
+    user.set "current_community", community
     @msg.send "Your current community is '#{community}'"
 
 module.exports = UsersController

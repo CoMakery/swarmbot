@@ -23,6 +23,7 @@
     "sinon": "^1.16.1"
   },
   "dependencies": {
+    "backbone": "^1.2.3",
     "colu": "^0.6.4",
     "colu-access": "^0.2.5",
     "firebase": "^2.2.9",
