@@ -1,12 +1,16 @@
 {log, p, pjson} = require 'lightsaber'
 { partition, sortByOrder } = require 'lodash'
 { Reputation, Claim } = require 'trust-exchange'
+ApplicationController = require './application-controller'
 DCO = require '../models/dco'
 
-class BountiesController
-  constructor: ->
+class BountiesController extends ApplicationController
+  list: (@msg, { community }) ->
+    community ?= @getCommunity()
+    unless community?
+      @msg.send "Please either set a community or specify the community in the command."
+      return
 
-  list: (msg, { community }) ->
     dco = DCO.find(community)
 
     dco.listBounties (snapshot) ->
@@ -28,7 +32,7 @@ class BountiesController
           text += " Reward #{bounty.amount}" if bounty.amount?
           text += " Rating: #{bounty.score}%" if bounty.score?
           text
-        msg.send messages.join("\n")
+        @msg.send messages.join("\n")
 
   award: (msg, { bountyName, awardee, dcoKey }) ->
     activeUser = msg.robot.whose msg
@@ -70,5 +74,10 @@ class BountiesController
         msg.send replies.join "\n"
       .catch (error) ->
         msg.send "Rating failed: #{error}\n#{error.stack}"
+
+  getCommunity: ->
+    # user = @currentUser()
+    # p pjson user
+
 
 module.exports = BountiesController

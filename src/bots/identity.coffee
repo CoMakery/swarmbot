@@ -26,7 +26,7 @@ module.exports = (robot) ->
     btcAddress = msg.match[1]
     new UsersController().registerBtc(msg, { btcAddress })
 
-  robot.respond /set community\s+(.+)$/i, (msg) ->
+  robot.respond /set community\s+(.+)\s*$/i, (msg) ->
     community = msg.match[1]
     new UsersController().setCommunity(msg, { community })
 

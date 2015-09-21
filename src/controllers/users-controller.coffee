@@ -1,16 +1,16 @@
 { p } = require 'lightsaber'
+ApplicationController = require './application-controller'
 swarmbot = require '../models/swarmbot'
 Bounty = require '../models/bounty'
 User = require '../models/user'
 DCO = require '../models/dco'
 
-class UsersController
-  register: (msg) ->
-    activeUser = msg.robot.whose msg
-    user = User.find activeUser
-    slackId = msg.message.user.id
-    realName = msg.message.user.real_name
-    emailAddress = msg.message.user.email_address
+class UsersController extends ApplicationController
+  register: (@msg) ->
+    user = @currentUser()
+    slackId = @msg.message.user.id
+    realName = @msg.message.user.real_name
+    emailAddress = @msg.message.user.email_address
     p activeUser, user, slackId, realName, emailAddress
 
     if realName
@@ -25,16 +25,14 @@ class UsersController
       user.register "slack_id", slackId
       msg.send "registered slack id"
 
-  registerBtc: (msg, { btcAddress }) ->
-    activeUser = msg.robot.whose msg
-    user = User.find activeUser
+  registerBtc: (@msg, { btcAddress }) ->
+    user = @currentUser()
     user.register "btc_address", btcAddress
-    msg.send "BTC address #{btcAddress} registered."
+    @msg.send "BTC address #{btcAddress} registered."
 
-  setCommunity: (msg, { community }) ->
-    activeUser = msg.robot.whose msg
-    user = User.find activeUser
+  setCommunity: (@msg, { community }) ->
+    user = @currentUser()
     user.register "current_community", community
-    msg.send "You are  community set to '#{community}'"
+    @msg.send "Your current community is '#{community}'"
 
 module.exports = UsersController
