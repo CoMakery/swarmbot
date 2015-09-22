@@ -14,6 +14,7 @@ class ApplicationController
       return
 
     user = @currentUser()
+    user.fetch()
     user.once 'sync', (user)->
       @community = user.get('current_community')
       if @community?
