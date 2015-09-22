@@ -13,11 +13,16 @@ class ApplicationController
       fn(null, @community)
       return
 
-    @currentUser().once 'sync', (user)->
+    user = @currentUser()
+    user.once 'sync', (user)->
       @community = user.get('current_community')
       if @community?
         fn(null, @community)
       else
         fn("No community found")
+    user.once 'error', (user)->
+      p "Error synchronizing User state", arguments
+      throw new Error("Error synchronizing user state", arguments)
+
 
 module.exports = ApplicationController
