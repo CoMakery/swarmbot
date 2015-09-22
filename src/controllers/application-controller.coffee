@@ -8,17 +8,16 @@ class ApplicationController
     # User.find activeUser
     new User id: activeUser
 
-  getCommunity: ->
-    new Promise (resolve, reject)=>
-      if @community?
-        resolve(@community)
-        return
+  getCommunity: Promise.promisify (fn)->
+    if @community?
+      fn(null, @community)
+      return
 
-      @currentUser().once 'sync', (user)->
-        @community = user.get('current_community')
-        if @community?
-          resolve(@community)
-        else
-          reject()
+    @currentUser().once 'sync', (user)->
+      @community = user.get('current_community')
+      if @community?
+        fn(null, @community)
+      else
+        fn("No community found")
 
 module.exports = ApplicationController

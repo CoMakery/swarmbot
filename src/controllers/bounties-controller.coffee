@@ -31,8 +31,6 @@ class BountiesController extends ApplicationController
     , =>
       @msg.send "Please either set a community or specify the community in the command."
 
-
-
   award: (msg, { bountyName, awardee, dcoKey }) ->
     activeUser = msg.robot.whose msg
 
@@ -58,20 +56,25 @@ class BountiesController extends ApplicationController
     DCO.createBountyFor {dcoKey, bountyName, amount}, (error, message) ->
       msg.send error or message
 
-  rate: (msg, { community, bounty, rating }) ->
-    user = msg.robot.whose msg
-    Claim.put {
-      source: user
-      target: bounty
-      value: rating * 0.01  # convert to percentage
-    }, {
-      firebase: path: "projects/#{community}/bounties/#{bounty}/ratings"
-    }
-      .then (messages) ->
-        replies = for message in messages
-          "Rating saved to #{message}"
-        msg.send replies.join "\n"
-      .catch (error) ->
-        msg.send "Rating failed: #{error}\n#{error.stack}"
+  rate: (@msg, { @community, bounty, rating }) ->
+    @getCommunity().then (community)=>
+      user = @msg.robot.whose @msg
+      # TODO: if exists bounty put ratings else display error
+      # Currently it creates the bounty if you misspell it.
+      Claim.put {
+        source: user
+        target: bounty
+        value: rating * 0.01  # convert to percentage
+      }, {
+        firebase: path: "projects/#{community}/bounties/#{bounty}/ratings"
+      }
+        .then (messages) =>
+          replies = for message in messages
+            "Rating saved to #{message}"
+          @msg.send replies.join "\n"
+        .catch (error) =>
+          @msg.send "Rating failed: #{error}\n#{error.stack}"
+    , =>
+      @msg.send "Which community? Please either set a community or specify it in the command."
 
 module.exports = BountiesController
