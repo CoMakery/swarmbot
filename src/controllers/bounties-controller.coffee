@@ -52,12 +52,13 @@ class BountiesController extends ApplicationController
       else
         msg.send "User not yet registered"
 
-  create: (msg, { bountyName, amount, dcoKey }) ->
-    DCO.createBountyFor {dcoKey, bountyName, amount}, (error, message) ->
-      msg.send error or message
+  create: (@msg, { bountyName, amount, @community }) ->
+    @getCommunity().then (community) =>
+      DCO.createBountyFor {dcoKey: community, bountyName, amount}, (error, message) =>
+        @msg.send error or message
 
   rate: (@msg, { @community, bounty, rating }) ->
-    @getCommunity().then (community)=>
+    @getCommunity().then (community) =>
       user = @msg.robot.whose @msg
       # TODO: if exists bounty put ratings else display error
       # Currently it creates the bounty if you misspell it.

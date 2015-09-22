@@ -2,7 +2,7 @@
 #   Create a bounty
 #
 # Commands:
-#   hubot create <bounty name> bounty of <number of coins> for <community>
+#   hubot create bounty <bounty name> worth <number of coins> [for <community>]
 #   hubot rate <bounty name> <value>% [in <community name]
 #   hubot award <bounty name> bounty to <username> [in <community>]
 #   hubot list bounties [for <community name>]
@@ -36,11 +36,11 @@ module.exports = (robot) ->
     [all, bountyName, awardee, dcoKey] = msg.match
     new BountiesController().award(msg, { bountyName, awardee, dcoKey })
 
-  robot.respond /create\s+(.+)\s+bounty of (\d+) for \s+(.+)\s*$/i, (msg) ->
-    [all, bountyName, amount, dcoKey] = msg.match
-    new BountiesController().create(msg, { bountyName, amount, dcoKey })
+  robot.respond /create bounty\s+(.+)\s+worth (\d+)(?: for\s+(.+))?\s*$/i, (msg) ->
+    [all, bountyName, amount, community] = msg.match
+    new BountiesController().create(msg, { bountyName, amount, community })
 
-  robot.respond /rate\s+(.+)\s+([\d.]+)%(?:\s+in\s+(.*))?\s*$/i, (msg) ->
+  robot.respond /rate\s+(.+)\s+([\d.]+)%(?:\s+(?:in|for)\s+(.*))?\s*$/i, (msg) ->
     [all, bounty, rating, community] = msg.match
     new BountiesController().rate(msg, { community, bounty, rating })
 
