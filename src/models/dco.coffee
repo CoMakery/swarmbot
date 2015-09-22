@@ -16,7 +16,7 @@ class DCO
     new DCO dcoRef: dcos.child(dcoKey)
 
   listBounties: (cb) ->
-    @dcoRef.child('bounties').orderByKey().on 'value', cb
+    @dcoRef.child('bounties').orderByKey().once 'value', cb
 
   createBounty: ({bountyName, amount}, cb) ->
     bounty = @dcoRef.child "bounties/#{bountyName}"
