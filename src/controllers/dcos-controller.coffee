@@ -3,22 +3,24 @@ swarmbot        = require '../models/swarmbot'
 
 class DcosController
   list: (msg) ->
-    communityNames = []
-    swarmbot.firebase().child('projects').orderByKey().once 'value', (communities) ->
-      communities.forEach (community) ->
-        communityNames.push community.key()
+    swarmbot.firebase().child('projects').orderByKey().once 'value', (dcos) ->
+      dcoNames = []
+      dcos.forEach (dco) ->
+        dcoNames.push dco.key()
         false # otherwise the loop is cancelled.
 
-      msg.send communityNames.join("\n")
+      msg.send dcoNames.join("\n")
 
-  find: (msg, { dcoKey }) ->
-    MAX_MESSAGES_FOR_SLACK = 10
-    communities = swarmbot.firebase().child('projects')
-    communities.orderByKey()
-      .startAt(dcoKey).endAt(dcoKey + "~")
-      .limitToFirst(MAX_MESSAGES_FOR_SLACK)
-      .on 'child_added', (snapshot) ->
-        msg.send snapshot.key()
+  find: (msg, { dcoSearch }) ->
+    swarmbot.firebase().child('projects').orderByKey()
+      .startAt(dcoSearch).endAt(dcoSearch + "~")
+      .once 'value', (dcos) ->
+        dcoNames = []
+        dcos.forEach (dco) ->
+          dcoNames.push dco.key()
+          false
+
+        msg.send dcoNames.join("\n")
 
   join: (msg, { dcoKey }) ->
     communities = swarmbot.firebase().child('projects')
