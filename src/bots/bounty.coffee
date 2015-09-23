@@ -2,10 +2,11 @@
 #   Create a bounty
 #
 # Commands:
-#   hubot create bounty <bounty name> worth <number of coins> [for <community>]
+#   hubot create bounty <bounty name> worth <number of coins> [in <community>]
 #   hubot rate <bounty name> <value>% [in <community name]
 #   hubot award <bounty name> bounty to <username> [in <community>]
-#   hubot list bounties [for <community name>]
+#   hubot list bounties [in <community name>]
+#   hubot show bounty <bounty name> [in <community name>]
 
 # Not in use:
 #   hubot (<bounty_name>) bounty add me - add me to the bounty
@@ -28,9 +29,13 @@ DCO = require '../models/dco'
 BountiesController = require '../controllers/bounties-controller'
 
 module.exports = (robot) ->
-  robot.respond /list bounties(?: for (.+))?\s*$/i, (msg) ->
+  robot.respond /list bounties(?: in (.+))?\s*$/i, (msg) ->
     [all, community] = msg.match
     new BountiesController().list(msg, { community })
+
+  robot.respond /show bounty\s+(.*)(?: in (.+))?\s*$/i, (msg) ->
+    [all, bountyName, community] = msg.match
+    new BountiesController().show(msg, { bountyName, community })
 
   robot.respond /award\s+(.+)\s+bounty to\s+(.+)\s+in (.+)\s*$/i, (msg) ->
     [all, bountyName, awardee, dcoKey] = msg.match

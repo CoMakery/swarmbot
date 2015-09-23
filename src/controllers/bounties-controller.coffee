@@ -12,7 +12,7 @@ class BountiesController extends ApplicationController
         promises = for bounty, data of snapshot.val()
           do (bounty, data) ->
             Reputation.score bounty,
-              firebase: path: "projects/#{community}/bounties"
+              firebase: path: "projects/#{@community}/bounties"
             .then (score) ->
               name: bounty
               amount: data.amount
@@ -30,6 +30,11 @@ class BountiesController extends ApplicationController
           @msg.send messages.join("\n")
     , =>
       @msg.send "Please either set a community or specify the community in the command."
+
+  show: (@msg, { bountyName, @community }) ->
+    @getCommunity().then (dco) =>
+      # dco.
+      @msg.send 'showing'
 
   award: (msg, { bountyName, awardee, dcoKey }) ->
     activeUser = msg.robot.whose msg
@@ -53,8 +58,8 @@ class BountiesController extends ApplicationController
         msg.send "User not yet registered"
 
   create: (@msg, { bountyName, amount, @community }) ->
-    @getCommunity().then (community) =>
-      DCO.createBountyFor {dcoKey: community, bountyName, amount}, (error, message) =>
+    @getCommunity().then (dco) =>
+      dco.createBounty { bountyName, amount }, (error, message) =>
         @msg.send error or message
 
   rate: (@msg, { @community, bounty, rating }) ->

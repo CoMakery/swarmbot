@@ -1,6 +1,7 @@
 { p } = require 'lightsaber'
 User = require '../models/user'
 Promise = require 'bluebird'
+DCO = require '../models/dco'
 
 class ApplicationController
   currentUser: ->
@@ -10,7 +11,8 @@ class ApplicationController
 
   getCommunity: Promise.promisify (fn)->
     if @community?
-      fn(null, @community)
+      dco = DCO.find(@community)
+      fn(null, dco)
       return
 
     user = @currentUser()
@@ -18,7 +20,8 @@ class ApplicationController
     user.once 'sync', (user)->
       @community = user.get('current_community')
       if @community?
-        fn(null, @community)
+        dco = DCO.find(@community)
+        fn(null, dco)
       else
         fn("No community found")
     user.once 'error', (user)->
