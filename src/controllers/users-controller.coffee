@@ -7,7 +7,7 @@ DCO = require '../models/dco'
 
 class UsersController extends ApplicationController
   register: (@msg) ->
-    @currentUser().once 'sync', (user) =>
+    @currentUser().fetch().then (user) =>
       slackId = @msg.message.user.id
       realName = @msg.message.user.real_name
       emailAddress = @msg.message.user.email_address

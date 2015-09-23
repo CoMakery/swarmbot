@@ -1,18 +1,13 @@
 {log, p, pjson} = require 'lightsaber'
-Backbone = require '../../vendor/backbonefire'
-swarmbot = require '../models/swarmbot'
-{ values } = require 'lodash'
+FirebaseModel = require './firebase-model'
 
-class User extends Backbone.Firebase.Model
-  urlRoot: process.env.FIREBASE_URL + '/users'
-  autoSync: true
-  
+class User extends FirebaseModel
+  urlRoot: 'users'
+
   # constructor: ({@userRef}) ->
-
   # @find: (userKey) ->
   #   users = swarmbot.firebase().child('users')
   #   new User userRef: users.child(userKey)
-
   # register: (myKey, value) ->
   #   newHash= {}
   #   newHash[myKey] = value

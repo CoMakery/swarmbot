@@ -1,30 +1,44 @@
 {log, p, pjson} = require 'lightsaber'
+Promise = require 'bluebird'
 swarmbot = require '../models/swarmbot'
+FirebaseModel = require './firebase-model'
 Bounty = require '../models/bounty'
-{ values } = require 'lodash'
+{ values, assign, map } = require 'lodash'
 
-class DCO
-
-  constructor: ({@dcoRef}) ->
+class DCO extends FirebaseModel
+  urlRoot: 'projects'
+  # constructor: ({@dcoRef}) ->
 
   @createBountyFor: ({dcoKey, bountyName, amount}, cb) ->
     dco = DCO.find dcoKey
     dco.createBounty {bountyName, amount}, cb
 
+  # @find: (dcoKey) ->
+  #   dcos = swarmbot.firebase().child('projects')
+  #   new DCO dcoRef: dcos.child(dcoKey)
   @find: (dcoKey) ->
-    dcos = swarmbot.firebase().child('projects')
-    new DCO dcoRef: dcos.child(dcoKey)
+    p 'find', dcoKey
+    new DCO id: dcoKey
 
-  listBounties: (cb) ->
-    @dcoRef.child('bounties').orderByKey().once 'value', cb
+  bounties: Promise.promisify (cb) ->
+    @firebase().child('bounties').once 'value', (snapshot) =>
+      bounties = snapshot.val() # should really be an array of Bounty objects.
+      cb(null, bounties)
+
+  # listBounties: (cb) ->
+  #   @dcoRef.child('bounties').orderByKey().once 'value', cb
 
   createBounty: ({bountyName, amount}, cb) ->
-    bounty = @dcoRef.child "bounties/#{bountyName}"
-    bounty.set {name: bountyName, amount: amount}, (error) ->
-      if error
-        cb "error creating bounty :("
-      else
-        cb null, "bounty created"
+    bounty = new Bounty({id: bountyName, amount: amount}, parent: @)
+    bounty.save()
+    cb null, "bounty created"
+
+    # bounty = @dcoRef.child "bounties/#{bountyName}"
+    # bounty.set {name: bountyName, amount: amount}, (error) ->
+    #   if error
+    #     cb "error creating bounty :("
+    #   else
+    #     cb null, "bounty created"
 
   issueAsset: ({dcoKey, amount, issuer}, cb) ->
 

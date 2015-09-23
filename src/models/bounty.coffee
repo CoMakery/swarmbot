@@ -1,8 +1,12 @@
-class Bounty
+Promise = require 'bluebird'
+FirebaseModel = require './firebase-model'
 
-  constructor: ({@bountyRef}) ->
+class Bounty extends FirebaseModel
+  hasParent: true
+  urlRoot: "bounties"
+  # constructor: ({@bountyRef}) ->
 
-  get: (property, cb) ->
-    @bountyRef.child(property).on 'value', (snapshot) -> cb snapshot.val()
+  # get: (property, cb) ->
+  #   @bountyRef.child(property).on 'value', (snapshot) -> cb snapshot.val()
 
 module.exports = Bounty

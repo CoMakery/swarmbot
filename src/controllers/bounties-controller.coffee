@@ -3,18 +3,18 @@
 { Reputation, Claim } = require 'trust-exchange'
 ApplicationController = require './application-controller'
 DCO = require '../models/dco'
+Bounty = require '../models/bounty'
 
 class BountiesController extends ApplicationController
   list: (@msg, { @community }) ->
-    @getCommunity().then (community)=>
-      dco = DCO.find(community)
-      dco.listBounties (snapshot) =>
-        promises = for bounty, data of snapshot.val()
-          do (bounty, data) ->
-            Reputation.score bounty,
+    @getCommunity().then (dco)=>
+      dco.bounties().then (bounties) =>
+        promises = for bountyName, data of bounties
+          do (bountyName, data) ->
+            Reputation.score bountyName,
               firebase: path: "projects/#{@community}/bounties"
             .then (score) ->
-              name: bounty
+              name: bountyName
               amount: data.amount
               score: score
 
@@ -33,8 +33,12 @@ class BountiesController extends ApplicationController
 
   show: (@msg, { bountyName, @community }) ->
     @getCommunity().then (dco) =>
-      # dco.
-      @msg.send 'showing'
+      bounty = new Bounty({id: bountyName}, parent: dco)
+      bounty.fetch().then (bounty) =>
+        p bounty.attributes
+        msgs = for k, v of bounty.attributes
+          "#{k} : #{v}"
+        @msg.send msgs.join("\n")
 
   award: (msg, { bountyName, awardee, dcoKey }) ->
     activeUser = msg.robot.whose msg
@@ -63,7 +67,7 @@ class BountiesController extends ApplicationController
         @msg.send error or message
 
   rate: (@msg, { @community, bounty, rating }) ->
-    @getCommunity().then (community) =>
+    @getCommunity().then (dco) =>
       user = @msg.robot.whose @msg
       # TODO: if exists bounty put ratings else display error
       # Currently it creates the bounty if you misspell it.
@@ -72,7 +76,7 @@ class BountiesController extends ApplicationController
         target: bounty
         value: rating * 0.01  # convert to percentage
       }, {
-        firebase: path: "projects/#{community}/bounties/#{bounty}/ratings"
+        firebase: path: "projects/#{@community}/bounties/#{bounty}/ratings"
       }
         .then (messages) =>
           replies = for message in messages
