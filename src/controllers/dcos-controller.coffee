@@ -1,13 +1,15 @@
+{ p } = require 'lightsaber'
 swarmbot        = require '../models/swarmbot'
 
 class DcosController
   list: (msg) ->
-    communities = swarmbot.firebase().child('projects')
-    MAX_MESSAGES_FOR_SLACK = 10
-    communities.orderByKey()
-      .limitToFirst(MAX_MESSAGES_FOR_SLACK)
-      .on 'child_added', (snapshot) ->
-        msg.send snapshot.key()
+    communityNames = []
+    swarmbot.firebase().child('projects').orderByKey().once 'value', (communities) ->
+      communities.forEach (community) ->
+        communityNames.push community.key()
+        false # otherwise the loop is cancelled.
+
+      msg.send communityNames.join("\n")
 
   find: (msg, { dcoKey }) ->
     MAX_MESSAGES_FOR_SLACK = 10
