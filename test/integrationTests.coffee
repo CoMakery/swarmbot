@@ -6,6 +6,8 @@ Helper = require 'hubot-test-helper'
 
 swarmbot = require '../src/models/swarmbot'
 DCO = require '../src/models/dco'
+User = require '../src/models/user'
+UsersController = require '../src/controllers/users-controller'
 
 sinon.stub(swarmbot, 'colu').returns
   on: ->
@@ -25,19 +27,9 @@ describe 'swarmbot', ->
   afterEach -> @room.destroy()
 
   context 'Identity', ->
-    xit 'user can register a bitcoin address', (done) ->
-      slackUsername = 'slack_username'
-      btc_address = '12afeafeaefeaee'
-
-      User.registerUser bountyParams, (error, message) ->
-        message.should.equal 'user address registered'
-        dco = User.find dcoKey
-        dco.getBounty({bountyName}).get 'amount', (value) ->
-          value.should.equal amount
-      done()
 
   context 'DCO bounty', ->
-    it 'a DCO can create a bounty', (done) ->
+    xit 'a DCO can create a bounty', (done) ->
       amount = Math.round Math.random() * Math.pow 10, 16
       bountyName = 'plant a tree'
       dcoKey = 'save-the-world'
