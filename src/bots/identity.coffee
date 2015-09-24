@@ -20,6 +20,10 @@ DCO = require '../models/dco'
 
 module.exports = (robot) ->
 
+ # Generic auto registaration
+   robot.respond /\s*/i, (msg) ->
+     new UsersController().register(msg)
+
   robot.respond /register me$/i, (msg) ->
     new UsersController().register(msg)
 
@@ -33,6 +37,7 @@ module.exports = (robot) ->
 
   robot.respond /unset community\s*$/i, (msg) ->
     new UsersController().unsetCommunity(msg)
+
 
   # Not sure, this may work in slack, not sure about
   #  robot.respond /register?.*/i, (msg) ->
