@@ -45,21 +45,27 @@ class BountiesController extends ApplicationController
 
     dco = DCO.find dcoKey
 
-    usersRef = swarmbot.firebase().child('users')
-    usersRef.orderByChild("slack_username").equalTo(awardee).on 'value', (snapshot) ->
-      v = snapshot.val()
-      vals = values v
-      p "vals", vals
-      awardeeAddress = vals[0].btc_address
-      p "address", awardeeAddress
+    #check to make sure activeUser is owner of DCO
+    if dco.attributes "owner" === activeUser
 
-      # p "awardee", awardeeAddress values btc_address
-      if(awardeeAddress)
-        dco.awardBounty {bountyName, awardeeAddress}
-        message = "Awarded bounty to #{awardee}"
-        msg.send message
-      else
-        msg.send "User not yet registered"
+      usersRef = swarmbot.firebase().child('users')
+      usersRef.orderByChild("slack_username").equalTo(awardee).on 'value', (snapshot) ->
+        v = snapshot.val()
+        vals = values v
+        p "vals", vals
+        awardeeAddress = vals[0].btc_address
+        p "address", awardeeAddress
+
+        # p "awardee", awardeeAddress values btc_address
+        if(awardeeAddress)
+          dco.awardBounty {bountyName, awardeeAddress}
+          message = "Awarded bounty to #{awardee}"
+          msg.send message
+        else
+          msg.send "User not yet registered"
+    else
+      msg.send "Sorry, you don't have sufficient trust in this community to award this bounty."
+
 
   create: (@msg, { bountyName, amount, @community }) ->
     @getCommunity().then (dco) =>
