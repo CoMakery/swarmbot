@@ -16,7 +16,7 @@ sinon.stub(swarmbot, 'colu').returns
 # call this only after stubbing:
 helper = new Helper '../src/bots'
 
-process.env.EXPRESS_PORT = 8901  # don't conflit with hubot console port 8080
+process.env.EXPRESS_PORT = 8901  # don't conflict with hubot console port 8080
 process.env.FIREBASE_URL = 'https://dazzle-staging.firebaseio-demo.com/'
 
 describe 'swarmbot', ->
