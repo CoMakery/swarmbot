@@ -5,9 +5,9 @@ DCO = require '../models/dco'
 
 class ApplicationController
   currentUser: ->
-    activeUser = @msg.robot.whose @msg
+    activeUserId = @msg.robot.whose @msg
     # User.find activeUser
-    new User id: activeUser.id
+    new User id: activeUserId
 
   getCommunity: Promise.promisify (fn)->
     if @community?

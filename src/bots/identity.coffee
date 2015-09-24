@@ -20,9 +20,9 @@ DCO = require '../models/dco'
 
 module.exports = (robot) ->
 
- # Generic auto registaration
-   robot.respond /\s*/i, (msg) ->
-     new UsersController().register(msg)
+  # Generic auto register
+  robot.respond /\s*/i, (msg) ->
+    new UsersController().register(msg)
 
   robot.respond /register me$/i, (msg) ->
     new UsersController().register(msg)
