@@ -17,10 +17,12 @@
   },
   "devDependencies": {
     "chai": "^3.2.0",
+    "chai-as-promised": "^5.1.0",
     "coffee-script": "^1.9.3",
     "hubot-test-helper": "^0.0.7",
     "mocha": "^2.2.5",
-    "sinon": "^1.16.1"
+    "sinon": "^1.16.1",
+    "sinon-as-promised": "^4.0.0"
   },
   "dependencies": {
     "backbone": "^1.2.3",
