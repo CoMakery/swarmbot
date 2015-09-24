@@ -4,6 +4,8 @@
 ApplicationController = require './application-controller'
 DCO = require '../models/dco'
 Bounty = require '../models/bounty'
+swarmbot = require '../models/swarmbot'
+{ values } = require 'lodash'
 
 class BountiesController extends ApplicationController
   list: (@msg, { @community }) ->
@@ -46,25 +48,29 @@ class BountiesController extends ApplicationController
     dco = DCO.find dcoKey
 
     #check to make sure activeUser is owner of DCO
-    if dco.attributes "owner" === activeUser
 
-      usersRef = swarmbot.firebase().child('users')
-      usersRef.orderByChild("slack_username").equalTo(awardee).on 'value', (snapshot) ->
-        v = snapshot.val()
-        vals = values v
-        p "vals", vals
-        awardeeAddress = vals[0].btc_address
-        p "address", awardeeAddress
+    dco.fetch().then (myDco) ->
+      p "owner", myDco.get "owner"
+      p "activeUser", activeUser
+      if myDco.get("owner") == activeUser
 
-        # p "awardee", awardeeAddress values btc_address
-        if(awardeeAddress)
-          dco.awardBounty {bountyName, awardeeAddress}
-          message = "Awarded bounty to #{awardee}"
-          msg.send message
-        else
-          msg.send "User not yet registered"
-    else
-      msg.send "Sorry, you don't have sufficient trust in this community to award this bounty."
+        usersRef = swarmbot.firebase().child('users')
+        usersRef.orderByChild("slack_username").equalTo(awardee).on 'value', (snapshot) ->
+          v = snapshot.val()
+          vals = values v
+          p "vals", vals
+          awardeeAddress = vals[0].btc_address
+          p "address", awardeeAddress
+
+          # p "awardee", awardeeAddress values btc_address
+          if(awardeeAddress)
+            dco.awardBounty {bountyName, awardeeAddress}
+            message = "Awarded bounty to #{awardee}"
+            msg.send message
+          else
+            msg.send "User not yet registered"
+      else
+        msg.send "Sorry, you don't have sufficient trust in this community to award this bounty."
 
 
   create: (@msg, { bountyName, amount, @community }) ->

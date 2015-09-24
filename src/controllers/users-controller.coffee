@@ -9,10 +9,16 @@ class UsersController extends ApplicationController
   register: (@msg) ->
     p "currentUser", @currentUser()
     @currentUser().fetch().then (user) =>
+      
+      slackUsername = @msg.message.user.name
       slackId = @msg.message.user.id
       realName = @msg.message.user.real_name
       emailAddress = @msg.message.user.email_address
       p user, slackId, realName, emailAddress
+
+      if slackUsername
+        user.set "slack_username", slackUsername
+        @msg.send "registered Slack username"
 
       if realName
         user.set "real_name", realName

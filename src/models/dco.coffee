@@ -60,39 +60,70 @@ class DCO extends FirebaseModel
   awardBounty: ({bountyName, awardeeAddress}, cb) ->
 
     # p "bounty name", bountyName
-    amountRef = @dcoRef.child "bounties/#{bountyName}/amount"
+    # amountRef = @dcoRef.child "bounties/#{bountyName}/amount"
+    bounty = new Bounty({id: bountyName}, parent: @)
+    @fetch().then (dco)->
+      assetId = dco.get 'coluAssetId'
+      fromAddress = dco.get 'coluAssetAddress'
+      toAddress = awardeeAddress
+      p "awardee", awardeeAddress
+      p "asset id", assetId
+      bounty.fetch().then (bounty) ->
+        amount = bounty.get('amount')
+        p "bounty amount", amount
+        colu = swarmbot.colu()
+        # colu.on 'connect', ->
+          #colu.hdwallet.getAddress()
+        p args =
+          from: [ fromAddress ]
+          to: [
+            {
+              address: toAddress
+              assetId: assetId
+              amount: amount
+            }
+            ]
+        colu.sendAsset args, (err, body) ->
+          p "we made it", body
+          if err
+            p "err:", err
+            return console.error "Error: #{err}"
+          console.log 'Body: ', body
+            # cb null, "bounty successfully awarded"
+        # if colu.needToDiscover
+        # colu.init()
 
-    @dcoRef.on 'value', (snapshot) ->
 
-        assetId = snapshot.val().coluAssetId
-        fromAddress = snapshot.val().coluAssetAddress
-        toAddress = awardeeAddress
-        # p "awardee", awardeeAddress
-        # p "asset id", assetId
-        amountRef.on 'value', (snapshot) ->
-          amount = snapshot.val()
-          # p "bounty amount", amount
-          colu = swarmbot.colu()
-          # colu.on 'connect', ->
-            #colu.hdwallet.getAddress()
-          p args =
-            from: [ fromAddress ]
-            to: [
-              {
-                address: toAddress
-                assetId: assetId
-                amount: amount
-              }
-              ]
-          colu.sendAsset args, (err, body) ->
-            p "we made it", body
-            if err
-              p "err:", err
-              return console.error "Error: #{err}"
-            console.log 'Body: ', body
-              # cb null, "bounty successfully awarded"
-          # if colu.needToDiscover
-          # colu.init()
+    # @dcoRef.on 'value', (snapshot) ->
+    #     assetId = snapshot.val().coluAssetId
+    #     fromAddress = snapshot.val().coluAssetAddress
+    #     toAddress = awardeeAddress
+    #     # p "awardee", awardeeAddress
+    #     # p "asset id", assetId
+    #     amountRef.on 'value', (snapshot) ->
+    #       amount = snapshot.val()
+    #       # p "bounty amount", amount
+    #       colu = swarmbot.colu()
+    #       # colu.on 'connect', ->
+    #         #colu.hdwallet.getAddress()
+    #       p args =
+    #         from: [ fromAddress ]
+    #         to: [
+    #           {
+    #             address: toAddress
+    #             assetId: assetId
+    #             amount: amount
+    #           }
+    #           ]
+    #       colu.sendAsset args, (err, body) ->
+    #         p "we made it", body
+    #         if err
+    #           p "err:", err
+    #           return console.error "Error: #{err}"
+    #         console.log 'Body: ', body
+    #           # cb null, "bounty successfully awarded"
+    #       # if colu.needToDiscover
+    #       # colu.init()
 
 
   getBounty: ({bountyName}) ->
