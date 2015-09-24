@@ -11,6 +11,6 @@ class UserNormalizer
       username
 
   @currentUser: (message) ->
-    "@#{message.message.user.name}"
+    "@#{message.message.user.id}"
 
 module.exports = UserNormalizer

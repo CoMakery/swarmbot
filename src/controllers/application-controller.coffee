@@ -7,7 +7,7 @@ class ApplicationController
   currentUser: ->
     activeUser = @msg.robot.whose @msg
     # User.find activeUser
-    new User id: activeUser
+    new User id: activeUser.id
 
   getCommunity: Promise.promisify (fn)->
     if @community?

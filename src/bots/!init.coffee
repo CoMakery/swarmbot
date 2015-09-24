@@ -16,7 +16,7 @@ trustExchange.configure
 
 InitBot = (robot) ->
   throw new Error if robot.whose?
-  robot.whose = (message) -> "@#{message.message.user.name}"
+  robot.whose = (message) -> "@#{message.message.user.id}"
 
   robot.router.post '/hubot/chatsecrets/:room', (req, res) ->
     p "HTTP webhook received", req, res
