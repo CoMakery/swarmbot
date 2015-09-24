@@ -78,17 +78,17 @@ class BountiesController extends ApplicationController
       dco.createBounty { bountyName, amount }, (error, message) =>
         @msg.send error or message
 
-  rate: (@msg, { @community, bounty, rating }) ->
+  rate: (@msg, { @community, bountyName, rating }) ->
     @getCommunity().then (dco) =>
-      user = @msg.robot.whose @msg
+      user = @currentUser()
       # TODO: if exists bounty put ratings else display error
-      # Currently it creates the bounty if you misspell it.
+      # Currently it creates the bounty even if you misspell it.
       Claim.put {
-        source: user
-        target: bounty
+        source: user.get('id')
+        target: bountyName
         value: rating * 0.01  # convert to percentage
       }, {
-        firebase: path: "projects/#{@community}/bounties/#{bounty}/ratings"
+        firebase: path: "projects/#{dco.get('id')}/bounties/#{bountyName}/ratings"
       }
         .then (messages) =>
           replies = for message in messages

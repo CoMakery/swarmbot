@@ -46,8 +46,8 @@ module.exports = (robot) ->
     new BountiesController().create(msg, { bountyName, amount, community })
 
   robot.respond /rate\s+(.+)\s+([\d.]+)%(?:\s+(?:in|for)\s+(.*))?\s*$/i, (msg) ->
-    [all, bounty, rating, community] = msg.match
-    new BountiesController().rate(msg, { community, bounty, rating })
+    [all, bountyName, rating, community] = msg.match
+    new BountiesController().rate(msg, { community, bountyName, rating })
 
   # robot.respond /award (.+) bounty to (.+)$/i, (msg) ->
   #   [all, bountyName, awardee] = msg.match
