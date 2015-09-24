@@ -12,8 +12,6 @@
 # Available but not displayed in help
 #   hubot create <number> of asset for <community name>
 
-# Not in use:
-
 # DCO Interface Ideas
 #   hubot tag <dco_name> <tag>
 #   hubot list dco <dco pattern>
@@ -59,8 +57,8 @@ module.exports = (robot) ->
   # What to do here? Current method will only work for single user.
   # Ideally, state machine stored on the user instance determines what question is
   # being answered.
-  robot.respond /(yes$|no$|we )/i, (msg) ->
-    p msg.match[0]
+  robot.respond /(yes$|no$|we\s+.*\s*)/i, (msg) ->
+    p msg.match[1]
     dcoJoinStatus = robot.brain.get("dcoJoinStatus") or null
     dcoCreateStatus = robot.brain.get("dcoCreateStatus") or null
 
@@ -70,13 +68,7 @@ module.exports = (robot) ->
       switch dcoJoinStatus.stage
         when 1
           if answer == "yes" || answer == "y"
-            msg.reply "Great, you've joined the DCO"
-            dco = DCO.find dcoJoinStatus.dcoKey
-            user = robot.whose msg
-            dco.sendAsset { amount: 1, sendeeUsername: user }
-            # Set to default/preferred community
-            userRef = swarmbot.firebase().child('users/' + user)
-            userRef.update({ preferred_community : dcoJoinStatus.dcoKey })
+            new DcosController().joinAgreed(msg, { dcoKey: dcoJoinStatus.dcoKey })
 
           else if answer == "no" || answer == "n"
             msg.reply "Too bad, maybe next time"
@@ -94,4 +86,4 @@ module.exports = (robot) ->
             swarmbot.firebase().child('projects/' + dcoCreateStatus.dcoKey).update({project_statement : answer})
             dcoCreateStatus = {stage: 0}
             robot.brain.set "dcoCreateStatus", dcoCreateStatus
-            msg.send "Statement of intent set"
+            msg.send "The statement of intent is: #{answer}"

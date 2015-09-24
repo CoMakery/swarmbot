@@ -13,20 +13,13 @@ class DCO extends FirebaseModel
     dco = DCO.find dcoKey
     dco.createBounty {bountyName, amount}, cb
 
-  # @find: (dcoKey) ->
-  #   dcos = swarmbot.firebase().child('projects')
-  #   new DCO dcoRef: dcos.child(dcoKey)
   @find: (dcoKey) ->
-    p 'find', dcoKey
     new DCO id: dcoKey
 
   bounties: Promise.promisify (cb) ->
     @firebase().child('bounties').once 'value', (snapshot) =>
       bounties = snapshot.val() # should really be an array of Bounty objects.
       cb(null, bounties)
-
-  # listBounties: (cb) ->
-  #   @dcoRef.child('bounties').orderByKey().once 'value', cb
 
   createBounty: ({bountyName, amount}, cb) ->
     bounty = new Bounty({id: bountyName, amount: amount}, parent: @)
@@ -40,14 +33,15 @@ class DCO extends FirebaseModel
     #   else
     #     cb null, "bounty created"
 
-  issueAsset: ({dcoKey, amount, issuer}, cb) ->
-
+  issueAsset: ({ amount }, cb) ->
+    dcoKey = @get('id')
+    issuer = @get('owner')
     colu = swarmbot.colu()
     asset =
       amount: amount
       metadata:
-        'assetName': dcoKey
-        'issuer': issuer
+        assetName: dcoKey
+        issuer: issuer
         # 'description': 'Super DCO membership'
     # colu.on 'connect', ->
     colu.issueAsset asset, (err, body) ->
@@ -105,24 +99,18 @@ class DCO extends FirebaseModel
     bountyRef = @dcoRef.child "bounties/#{bountyName}"
     new Bounty {bountyRef}
 
-  sendAsset: ({amount, sendeeUsername}, cb) ->
-
-    usersRef = swarmbot.firebase().child('users')
-    p "username", sendeeUsername
-    usersRef.orderByChild("slack_username").equalTo(sendeeUsername).on 'value', (snapshot) ->
-      v = snapshot.val()
-      vals = values v
-      p "vals", vals
-      if(vals[0].btc_address)
-        sendeeAddress = vals[0].btc_address
-        p "address", sendeeAddress
-        # Doesn't work, awaiting feedback from @harlan
+  sendAsset: ({amount, recipient}, cb) ->
+    p "username", recipient.get('id')
+    recipient.fetch().then (user) ->
+      recipientAddress = user.get('btc_address')
+      if recipientAddress?
+        p "address", recipientAddress
+        # TODO: Doesn't work, awaiting feedback from @harlan
         # @sendAssetToAddress amount, sendeeAddress
       else
         cb "user must register before receiving assets"
 
   sendAssetToAddress: ({amount, sendeeAddress}, cb) ->
-
     @dcoRef.on 'value', (snapshot) ->
 
         assetId = snapshot.val().coluAssetId

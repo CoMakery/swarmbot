@@ -4,6 +4,9 @@ FirebaseModel = require './firebase-model'
 class User extends FirebaseModel
   urlRoot: 'users'
 
+  setDco: (dcoKey) ->
+    @set "current_dco", dcoKey
+    
   # constructor: ({@userRef}) ->
   # @find: (userKey) ->
   #   users = swarmbot.firebase().child('users')
