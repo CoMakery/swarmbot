@@ -9,23 +9,16 @@ class ApplicationController
     # User.find activeUser
     new User id: activeUserId
 
-  getDco: Promise.promisify (fn)->
+  getDco: ->
     if @community?
-      dco = DCO.find(@community)
-      fn(null, dco)
-      return
-
-    @currentUser().fetch().then (user) ->
-      @community = user.get('current_dco')
-      if @community?
-        dco = DCO.find(@community)
-        fn(null, dco)
-      else
-        fn("No community found")
-
-    .error (error) =>
-      log 'error fetching user: ' + error
-      @msg.send "Sorry, unable to complete this command."
+      Promise.resolve(DCO.find(@community)).bind(@)
+    else
+      @currentUser().fetch().bind(@).then (user) ->
+        @community = user.get('current_dco')
+        if @community?
+          DCO.find(@community)
+        else
+          Promise.reject(Promise.OperationalError("No community found"))
 
 
 module.exports = ApplicationController

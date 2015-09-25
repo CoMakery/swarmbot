@@ -36,9 +36,6 @@ class BountiesController extends ApplicationController
             text += " Rating: #{bounty.score}%" if bounty.score?
             text
           @msg.send messages.join("\n")
-    .error (error) =>
-      log "error" + error
-      @msg.send "Please either set a community or specify the community in the command."
 
   show: (@msg, { bountyName, @community }) ->
     @getDco().then (dco) =>
@@ -78,12 +75,17 @@ class BountiesController extends ApplicationController
         msg.send "Sorry, you don't have sufficient trust in this community to award this bounty."
 
   create: (@msg, { bountyName, amount, @community }) ->
-    @getDco().then (dco) =>
+    @getDco().bind(@).then (dco) ->
       dco.createBounty({ bountyName, amount }).then =>
         @msg.send 'bounty created'
-      .error (error) =>
+      .catch (error) =>
         log "bounty creation error: " + error
         @msg.send "error: " + error
+
+    .catch(@noCommunityError)
+
+  noCommunityError: ->
+    @msg.send "Please either set a community or specify the community in the command."
 
   rate: (@msg, { @community, bountyName, rating }) ->
     @getDco().then (dco) =>

@@ -9,6 +9,9 @@
 { json, log, p, pjson } = require 'lightsaber'
 trustExchange = require('trust-exchange').instance
 swarmbot = require '../models/swarmbot'
+Promise = require 'bluebird'
+
+Promise.longStackTraces() # TODO: only in development mode. decreases performance 5x
 
 trustExchange.configure
   adaptors:
@@ -20,7 +23,7 @@ if process.env.FIREBASE_SECRET?
 
 InitBot = (robot) ->
   throw new Error if robot.whose?
-  robot.whose = (message) -> "@#{message.message.user.id}"
+  robot.whose = (room) -> "slack:#{room.message.user.id}"
 
   robot.router.post '/hubot/chatsecrets/:room', (req, res) ->
     p "HTTP webhook received", req, res
