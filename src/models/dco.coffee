@@ -24,7 +24,6 @@ class DCO extends FirebaseModel
   createBounty: ({bountyName, amount}, cb) ->
     bounty = new Bounty({id: bountyName, amount: amount}, parent: @)
     bounty.save()
-    cb null, "bounty created"
 
     # bounty = @dcoRef.child "bounties/#{bountyName}"
     # bounty.set {name: bountyName, amount: amount}, (error) ->

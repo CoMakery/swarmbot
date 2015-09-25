@@ -41,7 +41,7 @@ module.exports = (robot) ->
     [all, bountyName, awardee, dcoKey] = msg.match
     new BountiesController().award(msg, { bountyName, awardee, dcoKey })
 
-  robot.respond /create bounty\s+(.+)\s+for (\d+)(?: for\s+(.+))?\s*$/i, (msg) ->
+  robot.respond /create bounty\s+(.+)\s+for (\d+)(?: in\s+(.+))?\s*$/i, (msg) ->
     [all, bountyName, amount, community] = msg.match
     new BountiesController().create(msg, { bountyName, amount, community })
 

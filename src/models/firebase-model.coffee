@@ -26,8 +26,8 @@ class FirebaseModel
       assign @attributes, @snapshot.val()
       cb(null, @)
 
-  save: ->
-    @firebase().update @attributes
+  save: Promise.promisify (cb)->
+    @firebase().update @attributes, cb
 
   exists: ->
     @snapshot.exists()

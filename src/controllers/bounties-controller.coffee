@@ -10,7 +10,9 @@ swarmbot = require '../models/swarmbot'
 class BountiesController extends ApplicationController
   list: (@msg, { @community }) ->
     @getCommunity().then (dco)=>
-      dco.bounties().then (bounties) =>
+      dco.fetch().then (dco) =>
+        bounties = dco.snapshot.child('bounties').val()
+        p dco.snapshot.child('bounties').numChildren()
         promises = for bountyName, data of bounties
           do (bountyName, data) ->
             Reputation.score bountyName,
@@ -75,8 +77,14 @@ class BountiesController extends ApplicationController
 
   create: (@msg, { bountyName, amount, @community }) ->
     @getCommunity().then (dco) =>
-      dco.createBounty { bountyName, amount }, (error, message) =>
-        @msg.send error or message
+      dco.createBounty { bountyName, amount }
+      .then =>
+        @msg.send 'bounty created'
+      .error (error) =>
+        @msg.send "error: " + error
+      .catch (error) =>
+        log "bounty creation exception: " + error
+        @msg.send "exception: " + error
 
   rate: (@msg, { @community, bountyName, rating }) ->
     @getCommunity()
