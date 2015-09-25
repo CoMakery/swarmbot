@@ -2,7 +2,6 @@
 #   User / account managemnet
 #
 # Commands:
-#   hubot register me
 #   hubot register btc <btc_address>
 #   hubot set community <current community>
 #   hubot unset community
@@ -24,8 +23,9 @@ module.exports = (robot) ->
   robot.respond /\s*/i, (msg) ->
     new UsersController().register(msg)
 
-  robot.respond /register me$/i, (msg) ->
-    new UsersController().register(msg)
+  # Deprecate register me now that we have auto-registration
+  # robot.respond /register me$/i, (msg) ->
+  #   new UsersController().register(msg)
 
   robot.respond /register btc (.+)$/i, (msg) ->
     btcAddress = msg.match[1]
