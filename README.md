@@ -53,9 +53,8 @@ swarmbot community <community name> list bounties
 swarmbot rate <community> bounty <bounty name> <value>%
 swarmbot award <bounty name> bounty to <username> in <community>
 
-Registration:
+Registration is automatic, but at some point you may want to register a bitcoin address:
 swarmbot register btc <btc_address>
-swarmbot register me
 
 > swarmbot create community Decentral-Federation
 
@@ -94,12 +93,6 @@ decentralized-marketplace for 1000 (Ratings: 90%)
 
 BTC registered
 
-> swarmbot register me
-
-registered real name
-registered email address
-registered slack id
-```
 
 
 
