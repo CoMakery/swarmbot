@@ -16,7 +16,7 @@ class ApplicationController
       return
 
     @currentUser().fetch().then (user) ->
-      @community = user.get('current_community')
+      @community = user.get('current_dco')
       if @community?
         dco = DCO.find(@community)
         fn(null, dco)

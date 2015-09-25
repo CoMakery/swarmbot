@@ -22,11 +22,14 @@ class FirebaseModel
     @save()
 
   fetch: Promise.promisify (cb) ->
-    @firebase().once 'value', (snapshot) =>
-      assign @attributes, snapshot.val()
+    @firebase().once 'value', (@snapshot) =>
+      assign @attributes, @snapshot.val()
       cb(null, @)
 
   save: ->
     @firebase().update @attributes
+
+  exists: ->
+    @snapshot.exists()
 
 module.exports = FirebaseModel

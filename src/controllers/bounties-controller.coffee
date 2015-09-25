@@ -79,24 +79,28 @@ class BountiesController extends ApplicationController
         @msg.send error or message
 
   rate: (@msg, { @community, bountyName, rating }) ->
-    @getCommunity().then (dco) =>
+    @getCommunity()
+    .then (dco) =>
       user = @currentUser()
-      # TODO: if exists bounty put ratings else display error
-      # Currently it creates the bounty even if you misspell it.
-      Claim.put {
-        source: user.get('id')
-        target: bountyName
-        value: rating * 0.01  # convert to percentage
-      }, {
-        firebase: path: "projects/#{dco.get('id')}/bounties/#{bountyName}/ratings"
-      }
-        .then (messages) =>
-          replies = for message in messages
-            "Rating saved to #{message}"
-          @msg.send replies.join "\n"
-        .catch (error) =>
-          @msg.send "Rating failed: #{error}\n#{error.stack}"
-    , =>
+
+      Bounty.find(bountyName, parent: dco).fetch().then (bounty) =>
+        unless bounty.exists()
+          return @msg.send "Could not find the bounty '#{bounty.get('id')}'. Please check that it exists."
+
+        Claim.put {
+          source: user.get('id')
+          target: bounty.get('id')
+          value: rating * 0.01  # convert to percentage
+        }, {
+          firebase: path: "projects/#{dco.get('id')}/bounties/#{bountyName}/ratings"
+        }
+          .then (messages) =>
+            replies = for message in messages
+              "Rating saved to #{message}"
+            @msg.send replies.join "\n"
+          .catch (error) =>
+            @msg.send "Rating failed: #{error}\n#{error.stack}"
+    .error (error)=>
       @msg.send "Which community? Please either set a community or specify it in the command."
 
 module.exports = BountiesController
