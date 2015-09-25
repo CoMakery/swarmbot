@@ -14,6 +14,10 @@ trustExchange.configure
   adaptors:
     firebase: swarmbot.firebase()
 
+if process.env.FIREBASE_SECRET?
+  swarmbot.firebase().authWithCustomToken process.env.FIREBASE_SECRET, (error) ->
+    p error
+
 InitBot = (robot) ->
   throw new Error if robot.whose?
   robot.whose = (message) -> "@#{message.message.user.id}"
