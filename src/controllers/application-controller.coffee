@@ -23,13 +23,9 @@ class ApplicationController
       else
         fn("No community found")
 
-    .catch (error) =>
-      log error
+    .error (error) =>
+      log 'error fetching user: ' + error
       @msg.send "Sorry, unable to complete this command."
-
-    # user.once 'error', (user)->
-    #   p "Error synchronizing User state", arguments
-    #   throw new Error("Error synchronizing user state", arguments)
 
 
 module.exports = ApplicationController

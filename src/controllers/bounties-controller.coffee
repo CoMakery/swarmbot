@@ -36,7 +36,8 @@ class BountiesController extends ApplicationController
             text += " Rating: #{bounty.score}%" if bounty.score?
             text
           @msg.send messages.join("\n")
-    , =>
+    .error (error) =>
+      log "error" + error
       @msg.send "Please either set a community or specify the community in the command."
 
   show: (@msg, { bountyName, @community }) ->
@@ -52,9 +53,7 @@ class BountiesController extends ApplicationController
     activeUser = msg.robot.whose msg
 
     dco = DCO.find dcoKey
-
-    #check to make sure activeUser is owner of DCO
-
+    # TODO: check to make sure activeUser is owner of DCO
     dco.fetch().then (myDco) ->
       p "owner", myDco.get "owner"
       p "activeUser", activeUser
@@ -80,18 +79,14 @@ class BountiesController extends ApplicationController
 
   create: (@msg, { bountyName, amount, @community }) ->
     @getDco().then (dco) =>
-      dco.createBounty { bountyName, amount }
-      .then =>
+      dco.createBounty({ bountyName, amount }).then =>
         @msg.send 'bounty created'
       .error (error) =>
+        log "bounty creation error: " + error
         @msg.send "error: " + error
-      .catch (error) =>
-        log "bounty creation exception: " + error
-        @msg.send "exception: " + error
 
   rate: (@msg, { @community, bountyName, rating }) ->
-    @getDco()
-    .then (dco) =>
+    @getDco().then (dco) =>
       user = @currentUser()
 
       Bounty.find(bountyName, parent: dco).fetch().then (bounty) =>

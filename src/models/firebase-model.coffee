@@ -25,6 +25,7 @@ class FirebaseModel
     @firebase().once 'value', (@snapshot) =>
       assign @attributes, @snapshot.val()
       cb(null, @)
+    , cb # failure callback
 
   save: Promise.promisify (cb)->
     @firebase().update @attributes, cb
