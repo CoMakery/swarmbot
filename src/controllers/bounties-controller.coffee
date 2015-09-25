@@ -2,6 +2,7 @@
 { partition, sortByOrder } = require 'lodash'
 { Reputation, Claim } = require 'trust-exchange'
 ApplicationController = require './application-controller'
+Promise = require 'bluebird'
 DCO = require '../models/dco'
 Bounty = require '../models/bounty'
 swarmbot = require '../models/swarmbot'
@@ -9,10 +10,13 @@ swarmbot = require '../models/swarmbot'
 
 class BountiesController extends ApplicationController
   list: (@msg, { @community }) ->
-    @getCommunity().then (dco)=>
+    @getDco().then (dco)=>
       dco.fetch().then (dco) =>
         bounties = dco.snapshot.child('bounties').val()
-        p dco.snapshot.child('bounties').numChildren()
+        numBounties = dco.snapshot.child('bounties').numChildren()
+        if numBounties == 0
+          return @msg.send "There are no bounties to display in #{dco.get('id')}."
+
         promises = for bountyName, data of bounties
           do (bountyName, data) ->
             Reputation.score bountyName,
@@ -36,7 +40,7 @@ class BountiesController extends ApplicationController
       @msg.send "Please either set a community or specify the community in the command."
 
   show: (@msg, { bountyName, @community }) ->
-    @getCommunity().then (dco) =>
+    @getDco().then (dco) =>
       bounty = new Bounty({id: bountyName}, parent: dco)
       bounty.fetch().then (bounty) =>
         p bounty.attributes
@@ -74,9 +78,8 @@ class BountiesController extends ApplicationController
       else
         msg.send "Sorry, you don't have sufficient trust in this community to award this bounty."
 
-
   create: (@msg, { bountyName, amount, @community }) ->
-    @getCommunity().then (dco) =>
+    @getDco().then (dco) =>
       dco.createBounty { bountyName, amount }
       .then =>
         @msg.send 'bounty created'
@@ -87,7 +90,7 @@ class BountiesController extends ApplicationController
         @msg.send "exception: " + error
 
   rate: (@msg, { @community, bountyName, rating }) ->
-    @getCommunity()
+    @getDco()
     .then (dco) =>
       user = @currentUser()
 

@@ -9,7 +9,7 @@ class ApplicationController
     # User.find activeUser
     new User id: activeUserId
 
-  getCommunity: Promise.promisify (fn)->
+  getDco: Promise.promisify (fn)->
     if @community?
       dco = DCO.find(@community)
       fn(null, dco)
