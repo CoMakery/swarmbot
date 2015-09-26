@@ -49,4 +49,12 @@ class UsersController extends ApplicationController
     user.setDco null
     @msg.send "Your current community has been unset."
 
+  getInfo: (@msg) ->
+    @currentUser().fetch().then (user) =>
+      info = ""
+      info += "real name: " + user.get('real_name')
+      info += ", default community: " + user.get('current_dco')
+      info += ", receiving address: " + user.get('btc_address')
+      @msg.send info
+
 module.exports = UsersController

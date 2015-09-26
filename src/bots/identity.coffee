@@ -38,6 +38,9 @@ module.exports = (robot) ->
   robot.respond /unset community\s*$/i, (msg) ->
     new UsersController().unsetCommunity(msg)
 
+  robot.respond /about me$/i, (msg) ->
+    new UsersController().getInfo(msg)
+
 
   # Not sure, this may work in slack, not sure about
   #  robot.respond /register?.*/i, (msg) ->
