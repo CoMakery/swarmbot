@@ -26,17 +26,19 @@ class MembersController extends ApplicationController
         #     .then (score) ->
         #       name: data.slack_username
         #       score: score
-
-        Promise.all(promises).then (members) =>
-          # have to partition because sorting puts undefined scores at the top.
-          [score, noScore] = partition members, (b) -> b.score?
-          members = sortByOrder(score, ['score'], ['desc']).concat(noScore)
-          messages = for proposal in members
-            text = "Proposal #{proposal.name}"
-            text += " Reward #{proposal.amount}" if proposal.amount?
-            text += " Rating: #{proposal.score}%" if proposal.score?
-            text
-          @msg.send messages.join("\n")
+        p "uo"
+        p "mbm", members
+        # Promise.all(promises).then (members) =>
+        #   # have to partition because sorting puts undefined scores at the top.
+        #   [score, noScore] = partition members, (b) -> b.score?
+        #   members = sortByOrder(score, ['score'], ['desc']).concat(noScore)
+        messages = for m in members
+          text = "Members "
+          p "m", m
+          text += " Member: #{m.slack_username}" if m.slack_username?
+          text += " Happiness: #{m.happiness}" if m.happiness?
+          text
+        @msg.send messages.join("\n")
 
   # create: (@msg, { proposalName, amount, @community }) ->
   #

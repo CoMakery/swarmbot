@@ -9,8 +9,13 @@
 swarmbot        = require '../models/swarmbot'
 DCO = require '../models/dco'
 ProposalsController = require '../controllers/proposals-controller'
+MembersController = require '../controllers/members-controller'
 
 module.exports = (robot) ->
+
+  robot.respond /list members(?: in (.+))?\s*$/i, (msg) ->
+    [all, community] = msg.match
+    new MembersController().list(msg, { community })
 
   robot.respond /list proposals(?: in (.+))?\s*$/i, (msg) ->
     [all, community] = msg.match
