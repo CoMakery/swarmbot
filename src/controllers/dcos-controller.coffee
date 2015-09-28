@@ -37,6 +37,7 @@ class DcosController extends ApplicationController
   joinAgreed: (@msg, { dcoKey }) ->
     user = @currentUser()
     dco = DCO.find dcoKey
+    dco.addMember { user } 
     dco.sendAsset { amount: 1, recipient: user }
     user.setDco dcoKey
     @msg.reply "Great, you've joined the DCO"

@@ -25,6 +25,10 @@ class DCO extends FirebaseModel
     proposal = new Proposal({id: proposalName, amount: amount}, parent: @)
     proposal.save()
 
+  addMember: ({user}, cb) ->
+    member = new Member({id: "slackusername", happiness: " ", role : "default"}, parent: @)
+    member.save()
+
     # proposal = @dcoRef.child "bounties/#{proposalName}"
     # proposal.set {name: proposalName, amount: amount}, (error) ->
     #   if error
