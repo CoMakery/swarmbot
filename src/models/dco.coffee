@@ -3,6 +3,8 @@ Promise = require 'bluebird'
 swarmbot = require '../models/swarmbot'
 FirebaseModel = require './firebase-model'
 Proposal = require '../models/proposal'
+Member = require '../models/member'
+
 { values, assign, map } = require 'lodash'
 
 class DCO extends FirebaseModel

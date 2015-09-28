@@ -35,9 +35,12 @@ class DcosController extends ApplicationController
     msg.robot.brain.set "dcoJoinStatus", dcoJoinStatus
 
   joinAgreed: (@msg, { dcoKey }) ->
+
+    #TODO: review, I think this never works/worked on command linde
+
     user = @currentUser()
     dco = DCO.find dcoKey
-    dco.addMember { user } 
+    # dco.addMember { user }
     dco.sendAsset { amount: 1, recipient: user }
     user.setDco dcoKey
     @msg.reply "Great, you've joined the DCO"

@@ -7,4 +7,4 @@ class Member extends FirebaseModel
   @find: (id, { parent }) ->
     new Member({id: id}, parent: parent)
 
-module.exports = Proposal
+module.exports = Member
