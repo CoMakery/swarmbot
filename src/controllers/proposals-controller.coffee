@@ -9,7 +9,10 @@ swarmbot = require '../models/swarmbot'
 { values } = require 'lodash'
 
 class ProposalsController extends ApplicationController
-  list: (@msg, { @community }) ->
+
+  #TODO: Should go through TrustExchange and get approved elements
+
+  listApproved: (@msg, { @community }) ->
     @getDco().then (dco)=>
       dco.fetch().then (dco) =>
         proposals = dco.snapshot.child('proposals').val()
@@ -32,6 +35,35 @@ class ProposalsController extends ApplicationController
           proposals = sortByOrder(score, ['score'], ['desc']).concat(noScore)
           messages = for proposal in proposals
             text = "Bounty #{proposal.name}"
+            text += " Reward #{proposal.amount}" if proposal.amount?
+            text += " Rating: #{proposal.score}%" if proposal.score?
+            text
+          @msg.send messages.join("\n")
+
+
+  list: (@msg, { @community }) ->
+    @getDco().then (dco)=>
+      dco.fetch().then (dco) =>
+        proposals = dco.snapshot.child('proposals').val()
+        numProposals = dco.snapshot.child('proposals').numChildren()
+        if numProposals == 0
+          return @msg.send "There are no proposals to display in #{dco.get('id')}."
+
+        promises = for proposalName, data of proposals
+          do (proposalName, data) ->
+            Reputation.score proposalName,
+              firebase: path: "projects/#{@community}/proposals"
+            .then (score) ->
+              name: proposalName
+              amount: data.amount
+              score: score
+
+        Promise.all(promises).then (proposals) =>
+          # have to partition because sorting puts undefined scores at the top.
+          [score, noScore] = partition proposals, (b) -> b.score?
+          proposals = sortByOrder(score, ['score'], ['desc']).concat(noScore)
+          messages = for proposal in proposals
+            text = "Proposal #{proposal.name}"
             text += " Reward #{proposal.amount}" if proposal.amount?
             text += " Rating: #{proposal.score}%" if proposal.score?
             text
@@ -87,6 +119,7 @@ class ProposalsController extends ApplicationController
   noCommunityError: ->
     @msg.send "Please either set a community or specify the community in the command."
 
+  #TODO: possibly incorporate some gatekeeping here (i.e. only members of a DCO can vote on the output)
   rate: (@msg, { @community, proposalName, rating }) ->
     @getDco().then (dco) =>
       user = @currentUser()
