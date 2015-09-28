@@ -24,30 +24,30 @@
 { values } = require 'lodash'
 { Claim } = require 'trust-exchange'
 swarmbot = require '../models/swarmbot'
-Bounty = require '../models/bounty'
+Proposal = require '../models/proposal'
 DCO = require '../models/dco'
-BountiesController = require '../controllers/bounties-controller'
+ProposalsController = require '../controllers/proposals-controller'
 
 module.exports = (robot) ->
   robot.respond /list bounties(?: in (.+))?\s*$/i, (msg) ->
     [all, community] = msg.match
-    new BountiesController().list(msg, { community })
+    new ProposalsController().list(msg, { community })
 
   robot.respond /show bounty\s+(.*)(?: in (.+))?\s*$/i, (msg) ->
     [all, bountyName, community] = msg.match
-    new BountiesController().show(msg, { bountyName, community })
+    new ProposalsController().show(msg, { bountyName, community })
 
   robot.respond /award\s+(.+)\s+bounty to\s+(.+)\s+in (.+)\s*$/i, (msg) ->
     [all, bountyName, awardee, dcoKey] = msg.match
-    new BountiesController().award(msg, { bountyName, awardee, dcoKey })
+    new ProposalsController().award(msg, { bountyName, awardee, dcoKey })
 
   robot.respond /create bounty\s+(.+)\s+for (\d+)(?: in\s+(.+))?\s*$/i, (msg) ->
     [all, bountyName, amount, community] = msg.match
-    new BountiesController().create(msg, { bountyName, amount, community })
+    new ProposalsController().create(msg, { bountyName, amount, community })
 
   robot.respond /rate\s+(.+)\s+([\d.]+)%(?:\s+(?:in|for)\s+(.*))?\s*$/i, (msg) ->
     [all, bountyName, rating, community] = msg.match
-    new BountiesController().rate(msg, { community, bountyName, rating })
+    new ProposalsController().rate(msg, { community, bountyName, rating })
 
   # robot.respond /award (.+) bounty to (.+)$/i, (msg) ->
   #   [all, bountyName, awardee] = msg.match

@@ -7,27 +7,18 @@
 
 {log, p, pjson} = require 'lightsaber'
 swarmbot        = require '../models/swarmbot'
+DCO = require '../models/dco'
 
 module.exports = (robot) ->
 
-  robot.respond /list proposals$/i, (msg) ->
+  robot.respond /list proposals(?: in (.+))?\s*$/i, (msg) ->
+    [all, community] = msg.match
+    new ProposalsController().list(msg, { community })
 
-      dcoKey = 'save-the-world'
-      proposals = swarmbot.firebase().child('projects/' + dcoKey + '/proposals')
-      MAX_MESSAGES_FOR_SLACK = 10
-      proposals.orderByKey()
-        .limitToFirst(MAX_MESSAGES_FOR_SLACK)
-        .on 'child_added', (snapshot) ->
-          msg.send snapshot.val().name + " | votes: 0"
+  robot.respond /propose\s+(.+)\s+(?: in\s+(.+))?\s*$/i, (msg) ->
+    [all, proposalName, community] = msg.match
+    new ProposalsController().create(msg, { bountyName, 0, community })
 
-      #TODO: awesome trust-exchange stuff could go here, showing votes/endorsements for a specific proposal
-
-  robot.respond /propose (.+)$/i, (msg) ->
-
-    msg.match.shift()
-    [proposalName] = msg.match
-    dcoKey = 'save-the-world'
-    dcoProposalStatus = {stage: 1}
-    proposalRef = swarmbot.firebase().child('projects/' + dcoKey + '/proposals')
-    proposalRef.push( {"name" : proposalName, "author" : robot.whose msg })
-    msg.send "Proposal added"
+  robot.respond /vote\s+(.+)\s+([\d.]+)%(?:\s+(?:in|for)\s+(.*))?\s*$/i, (msg) ->
+    [all, proposalName, rating, community] = msg.match
+    new ProposalsController().rate(msg, { community, proposalName, rating })

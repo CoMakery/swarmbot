@@ -4,49 +4,49 @@
 ApplicationController = require './application-controller'
 Promise = require 'bluebird'
 DCO = require '../models/dco'
-Bounty = require '../models/bounty'
+Proposal = require '../models/proposal'
 swarmbot = require '../models/swarmbot'
 { values } = require 'lodash'
 
-class BountiesController extends ApplicationController
+class ProposalsController extends ApplicationController
   list: (@msg, { @community }) ->
     @getDco().then (dco)=>
       dco.fetch().then (dco) =>
-        bounties = dco.snapshot.child('bounties').val()
-        numBounties = dco.snapshot.child('bounties').numChildren()
-        if numBounties == 0
-          return @msg.send "There are no bounties to display in #{dco.get('id')}."
+        proposals = dco.snapshot.child('proposals').val()
+        numProposals = dco.snapshot.child('proposals').numChildren()
+        if numProposals == 0
+          return @msg.send "There are no proposals to display in #{dco.get('id')}."
 
-        promises = for bountyName, data of bounties
-          do (bountyName, data) ->
-            Reputation.score bountyName,
-              firebase: path: "projects/#{@community}/bounties"
+        promises = for proposalName, data of proposals
+          do (proposalName, data) ->
+            Reputation.score proposalName,
+              firebase: path: "projects/#{@community}/proposals"
             .then (score) ->
-              name: bountyName
+              name: proposalName
               amount: data.amount
               score: score
 
-        Promise.all(promises).then (bounties) =>
+        Promise.all(promises).then (proposals) =>
           # have to partition because sorting puts undefined scores at the top.
-          [score, noScore] = partition bounties, (b) -> b.score?
-          bounties = sortByOrder(score, ['score'], ['desc']).concat(noScore)
-          messages = for bounty in bounties
-            text = "Bounty #{bounty.name}"
-            text += " Reward #{bounty.amount}" if bounty.amount?
-            text += " Rating: #{bounty.score}%" if bounty.score?
+          [score, noScore] = partition proposals, (b) -> b.score?
+          proposals = sortByOrder(score, ['score'], ['desc']).concat(noScore)
+          messages = for proposal in proposals
+            text = "Bounty #{proposal.name}"
+            text += " Reward #{proposal.amount}" if proposal.amount?
+            text += " Rating: #{proposal.score}%" if proposal.score?
             text
           @msg.send messages.join("\n")
 
-  show: (@msg, { bountyName, @community }) ->
+  show: (@msg, { proposalName, @community }) ->
     @getDco().then (dco) =>
-      bounty = new Bounty({id: bountyName}, parent: dco)
-      bounty.fetch().then (bounty) =>
-        p bounty.attributes
-        msgs = for k, v of bounty.attributes
+      proposal = new Bounty({id: proposalName}, parent: dco)
+      proposal.fetch().then (proposal) =>
+        p proposal.attributes
+        msgs = for k, v of proposal.attributes
           "#{k} : #{v}"
         @msg.send msgs.join("\n")
 
-  award: (msg, { bountyName, awardee, dcoKey }) ->
+  award: (msg, { proposalName, awardee, dcoKey }) ->
     activeUser = msg.robot.whose msg
 
     dco = DCO.find dcoKey
@@ -66,20 +66,20 @@ class BountiesController extends ApplicationController
 
           # p "awardee", awardeeAddress values btc_address
           if(awardeeAddress)
-            dco.awardBounty {bountyName, awardeeAddress}
-            message = "Awarded bounty to #{awardee}"
+            dco.awardBounty {proposalName, awardeeAddress}
+            message = "Awarded proposal to #{awardee}"
             msg.send message
           else
             msg.send "User not yet registered"
       else
-        msg.send "Sorry, you don't have sufficient trust in this community to award this bounty."
+        msg.send "Sorry, you don't have sufficient trust in this community to award this proposal."
 
-  create: (@msg, { bountyName, amount, @community }) ->
+  create: (@msg, { proposalName, amount, @community }) ->
     @getDco().bind(@).then (dco) ->
-      dco.createBounty({ bountyName, amount }).then =>
-        @msg.send 'bounty created'
+      dco.createBounty({ proposalName, amount }).then =>
+        @msg.send 'proposal created'
       .catch (error) =>
-        log "bounty creation error: " + error
+        log "proposal creation error: " + error
         @msg.send "error: " + error
 
     .catch(@noCommunityError)
@@ -87,20 +87,20 @@ class BountiesController extends ApplicationController
   noCommunityError: ->
     @msg.send "Please either set a community or specify the community in the command."
 
-  rate: (@msg, { @community, bountyName, rating }) ->
+  rate: (@msg, { @community, proposalName, rating }) ->
     @getDco().then (dco) =>
       user = @currentUser()
 
-      Bounty.find(bountyName, parent: dco).fetch().then (bounty) =>
-        unless bounty.exists()
-          return @msg.send "Could not find the bounty '#{bounty.get('id')}'. Please check that it exists."
+      Bounty.find(proposalName, parent: dco).fetch().then (proposal) =>
+        unless proposal.exists()
+          return @msg.send "Could not find the proposal '#{proposal.get('id')}'. Please check that it exists."
 
         Claim.put {
           source: user.get('id')
-          target: bounty.get('id')
+          target: proposal.get('id')
           value: rating * 0.01  # convert to percentage
         }, {
-          firebase: path: "projects/#{dco.get('id')}/bounties/#{bountyName}/ratings"
+          firebase: path: "projects/#{dco.get('id')}/proposals/#{proposalName}/ratings"
         }
           .then (messages) =>
             replies = for message in messages
@@ -111,4 +111,4 @@ class BountiesController extends ApplicationController
     .error (error)=>
       @msg.send "Which community? Please either set a community or specify it in the command."
 
-module.exports = BountiesController
+module.exports = ProposalsController
