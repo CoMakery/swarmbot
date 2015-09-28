@@ -8,6 +8,7 @@
 {log, p, pjson} = require 'lightsaber'
 swarmbot        = require '../models/swarmbot'
 DCO = require '../models/dco'
+ProposalsController = require '../controllers/proposals-controller'
 
 module.exports = (robot) ->
 
@@ -15,9 +16,11 @@ module.exports = (robot) ->
     [all, community] = msg.match
     new ProposalsController().list(msg, { community })
 
-  robot.respond /propose\s+(.+)\s+(?: in\s+(.+))?\s*$/i, (msg) ->
+  robot.respond /propose\s+(.+)(?:\s+in\s+(.+))?\s*$/i, (msg) ->
     [all, proposalName, community] = msg.match
-    new ProposalsController().create(msg, { bountyName, 0, community })
+    p "com", community
+    p "pname", proposalName
+    new ProposalsController().create(msg, { proposalName, 0, community })
 
   robot.respond /vote\s+(.+)\s+([\d.]+)%(?:\s+(?:in|for)\s+(.*))?\s*$/i, (msg) ->
     [all, proposalName, rating, community] = msg.match

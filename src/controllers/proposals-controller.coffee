@@ -33,6 +33,10 @@ class ProposalsController extends ApplicationController
           # have to partition because sorting puts undefined scores at the top.
           [score, noScore] = partition proposals, (b) -> b.score?
           proposals = sortByOrder(score, ['score'], ['desc']).concat(noScore)
+
+          # TODO:  text += " Rating: #{proposal.score}%" if ?
+              # if ratingsCount > 1 && proposal.score > 50%
+
           messages = for proposal in proposals
             text = "Bounty #{proposal.name}"
             text += " Reward #{proposal.amount}" if proposal.amount?
@@ -107,6 +111,7 @@ class ProposalsController extends ApplicationController
         msg.send "Sorry, you don't have sufficient trust in this community to award this proposal."
 
   create: (@msg, { proposalName, amount, @community }) ->
+
     @getDco().bind(@).then (dco) ->
       dco.createBounty({ proposalName, amount }).then =>
         @msg.send 'proposal created'
