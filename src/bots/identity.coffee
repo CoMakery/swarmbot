@@ -13,7 +13,6 @@
 { values } = require 'lodash'
 UsersController = require '../controllers/users-controller'
 swarmbot = require '../models/swarmbot'
-Bounty = require '../models/bounty'
 User = require '../models/user'
 DCO = require '../models/dco'
 

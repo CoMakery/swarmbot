@@ -1,7 +1,6 @@
 { p, pjson } = require 'lightsaber'
 ApplicationController = require './application-controller'
 swarmbot = require '../models/swarmbot'
-Bounty = require '../models/bounty'
 User = require '../models/user'
 DCO = require '../models/dco'
 

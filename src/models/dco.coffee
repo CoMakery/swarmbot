@@ -2,35 +2,35 @@
 Promise = require 'bluebird'
 swarmbot = require '../models/swarmbot'
 FirebaseModel = require './firebase-model'
-Bounty = require '../models/bounty'
+Proposal = require '../models/proposal'
 { values, assign, map } = require 'lodash'
 
 class DCO extends FirebaseModel
   urlRoot: 'projects'
   # constructor: ({@dcoRef}) ->
 
-  @createBountyFor: ({dcoKey, bountyName, amount}, cb) ->
+  @createProposalFor: ({dcoKey, proposalName, amount}, cb) ->
     dco = DCO.find dcoKey
-    dco.createBounty {bountyName, amount}, cb
+    dco.createProposal {proposalName, amount}, cb
 
   @find: (dcoKey) ->
     new DCO id: dcoKey
 
   bounties: Promise.promisify (cb) ->
     @firebase().child('bounties').once 'value', (snapshot) =>
-      bounties = snapshot.val() # should really be an array of Bounty objects.
+      bounties = snapshot.val() # should really be an array of Proposal objects.
       cb(null, bounties)
 
-  createBounty: ({bountyName, amount}, cb) ->
-    bounty = new Bounty({id: bountyName, amount: amount}, parent: @)
-    bounty.save()
+  createProposal: ({proposalName, amount}, cb) ->
+    proposal = new Proposal({id: proposalName, amount: amount}, parent: @)
+    proposal.save()
 
-    # bounty = @dcoRef.child "bounties/#{bountyName}"
-    # bounty.set {name: bountyName, amount: amount}, (error) ->
+    # proposal = @dcoRef.child "bounties/#{proposalName}"
+    # proposal.set {name: proposalName, amount: amount}, (error) ->
     #   if error
-    #     cb "error creating bounty :("
+    #     cb "error creating proposal :("
     #   else
-    #     cb null, "bounty created"
+    #     cb null, "proposal created"
 
   issueAsset: ({ amount }, cb) ->
     dcoKey = @get('id')
@@ -56,20 +56,20 @@ class DCO extends FirebaseModel
 
       return
 
-  awardBounty: ({bountyName, awardeeAddress}, cb) ->
+  awardProposal: ({proposalName, awardeeAddress}, cb) ->
 
-    # p "bounty name", bountyName
-    # amountRef = @dcoRef.child "bounties/#{bountyName}/amount"
-    bounty = new Bounty({id: bountyName}, parent: @)
+    # p "proposal name", proposalName
+    # amountRef = @dcoRef.child "bounties/#{proposalName}/amount"
+    proposal = new Proposal({id: proposalName}, parent: @)
     @fetch().then (dco)->
       assetId = dco.get 'coluAssetId'
       fromAddress = dco.get 'coluAssetAddress'
       toAddress = awardeeAddress
       p "awardee", awardeeAddress
       p "asset id", assetId
-      bounty.fetch().then (bounty) ->
-        amount = bounty.get('amount')
-        p "bounty amount", amount
+      proposal.fetch().then (proposal) ->
+        amount = proposal.get('amount')
+        p "proposal amount", amount
         colu = swarmbot.colu()
         # colu.on 'connect', ->
           #colu.hdwallet.getAddress()
@@ -88,7 +88,7 @@ class DCO extends FirebaseModel
             p "err:", err
             return console.error "Error: #{err}"
           console.log 'Body: ', body
-            # cb null, "bounty successfully awarded"
+            # cb null, "proposal successfully awarded"
         # if colu.needToDiscover
         # colu.init()
 
@@ -101,7 +101,7 @@ class DCO extends FirebaseModel
     #     # p "asset id", assetId
     #     amountRef.on 'value', (snapshot) ->
     #       amount = snapshot.val()
-    #       # p "bounty amount", amount
+    #       # p "proposal amount", amount
     #       colu = swarmbot.colu()
     #       # colu.on 'connect', ->
     #         #colu.hdwallet.getAddress()
@@ -120,14 +120,14 @@ class DCO extends FirebaseModel
     #           p "err:", err
     #           return console.error "Error: #{err}"
     #         console.log 'Body: ', body
-    #           # cb null, "bounty successfully awarded"
+    #           # cb null, "proposal successfully awarded"
     #       # if colu.needToDiscover
     #       # colu.init()
 
 
-  getBounty: ({bountyName}) ->
-    bountyRef = @dcoRef.child "bounties/#{bountyName}"
-    new Bounty {bountyRef}
+  getProposal: ({proposalName}) ->
+    proposalRef = @dcoRef.child "bounties/#{proposalName}"
+    new Proposal {proposalRef}
 
   sendAsset: ({amount, recipient}, cb) ->
     p "username", recipient.get('id')
@@ -150,7 +150,7 @@ class DCO extends FirebaseModel
         # p "asset id", assetId
         amountRef.on 'value', (snapshot) ->
           amount = snapshot.val()
-          # p "bounty amount", amount
+          # p "proposal amount", amount
           colu = swarmbot.colu()
           # colu.on 'connect', ->
             #colu.hdwallet.getAddress()
@@ -169,7 +169,7 @@ class DCO extends FirebaseModel
               p "err:", err
               return console.error "Error: #{err}"
             console.log 'Body: ', body
-              # cb null, "bounty successfully awarded"
+              # cb null, "proposal successfully awarded"
           # if colu.needToDiscover
           # colu.init()
 
