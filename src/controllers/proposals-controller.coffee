@@ -1,77 +1,38 @@
 {log, p, pjson} = require 'lightsaber'
-{ partition, sortByOrder } = require 'lodash'
 { Reputation, Claim } = require 'trust-exchange'
 ApplicationController = require './application-controller'
 Promise = require 'bluebird'
 DCO = require '../models/dco'
-Proposal = require '../models/proposal'
 swarmbot = require '../models/swarmbot'
-{ values } = require 'lodash'
+Proposal = require '../models/proposal'
+ProposalCollection = require '../collections/proposal-collection'
+{ values, assign, map } = require 'lodash'
 
 class ProposalsController extends ApplicationController
 
   #TODO: Should go through TrustExchange and get approved elements
 
   listApproved: (@msg, { @community }) ->
-    @getDco().then (dco)=>
-      dco.fetch().then (dco) =>
-        proposals = dco.snapshot.child('proposals').val()
-        numProposals = dco.snapshot.child('proposals').numChildren()
-        if numProposals == 0
-          return @msg.send "There are no proposals to display in #{dco.get('id')}."
 
-        promises = for proposalName, data of proposals
-          do (proposalName, data) ->
-            Reputation.score proposalName,
-              firebase: path: "projects/#{@community}/proposals"
-            .then (score) ->
-              name: proposalName
-              amount: data.amount
-              score: score
-
-        Promise.all(promises).then (proposals) =>
-          # have to partition because sorting puts undefined scores at the top.
-          [score, noScore] = partition proposals, (b) -> b.score?
-          proposals = sortByOrder(score, ['score'], ['desc']).concat(noScore)
-
-          # TODO:  text += " Rating: #{proposal.score}%" if ?
-              # if ratingsCount > 1 && proposal.score > 50%
-
-          messages = for proposal in proposals
-            text = "Bounty #{proposal.name}"
-            text += " Reward #{proposal.amount}" if proposal.amount?
-            text += " Rating: #{proposal.score}%" if proposal.score?
-            text
-          @msg.send messages.join("\n")
-
+    # TODO:  text += " Rating: #{proposal.score}%" if ?
+        # if ratingsCount > 1 && proposal.score > 50%
 
   list: (@msg, { @community }) ->
     @getDco().then (dco)=>
       dco.fetch().then (dco) =>
-        proposals = dco.snapshot.child('proposals').val()
-        numProposals = dco.snapshot.child('proposals').numChildren()
-        if numProposals == 0
+        proposals = new ProposalCollection(dco.snapshot.child('proposals'), parent: dco)
+        if proposals.isEmpty()
           return @msg.send "There are no proposals to display in #{dco.get('id')}."
 
-        promises = for proposalName, data of proposals
-          do (proposalName, data) ->
-            Reputation.score proposalName,
-              firebase: path: "projects/#{@community}/proposals"
-            .then (score) ->
-              name: proposalName
-              amount: data.amount
-              score: score
-
-        Promise.all(promises).then (proposals) =>
-          # have to partition because sorting puts undefined scores at the top.
-          [score, noScore] = partition proposals, (b) -> b.score?
-          proposals = sortByOrder(score, ['score'], ['desc']).concat(noScore)
-          messages = for proposal in proposals
-            text = "Proposal #{proposal.name}"
-            text += " Reward #{proposal.amount}" if proposal.amount?
-            text += " Rating: #{proposal.score}%" if proposal.score?
+        Promise.all(proposals.getReputationScores()).then (proposals) =>
+          messages = proposals.map (proposal)->
+            text = "Proposal #{proposal.get('name')}"
+            text += " Reward #{proposal.get('amount')}" if proposal.get('amount')?
+            text += " Rating: #{proposal.get('reputationScore')}%" if proposal.get('reputationScore')?
             text
           @msg.send messages.join("\n")
+
+    .error(@noCommunityError)
 
   show: (@msg, { proposalName, @community }) ->
     @getDco().then (dco) =>
@@ -119,17 +80,14 @@ class ProposalsController extends ApplicationController
         log "proposal creation error: " + error
         @msg.send "error: " + error
 
-    .catch(@noCommunityError)
-
-  noCommunityError: ->
-    @msg.send "Please either set a community or specify the community in the command."
+    .error(@noCommunityError)
 
   #TODO: possibly incorporate some gatekeeping here (i.e. only members of a DCO can vote on the output)
   rate: (@msg, { @community, proposalName, rating }) ->
     @getDco().then (dco) =>
       user = @currentUser()
 
-      Bounty.find(proposalName, parent: dco).fetch().then (proposal) =>
+      Proposal.find(proposalName, parent: dco).fetch().then (proposal) =>
         unless proposal.exists()
           return @msg.send "Could not find the proposal '#{proposal.get('id')}'. Please check that it exists."
 
@@ -146,7 +104,10 @@ class ProposalsController extends ApplicationController
             @msg.send replies.join "\n"
           .catch (error) =>
             @msg.send "Rating failed: #{error}\n#{error.stack}"
-    .error (error)=>
-      @msg.send "Which community? Please either set a community or specify it in the command."
+    .error(@noCommunityError)
+
+  noCommunityError: ->
+    @msg.send "Please either set a community or specify the community in the command."
+
 
 module.exports = ProposalsController

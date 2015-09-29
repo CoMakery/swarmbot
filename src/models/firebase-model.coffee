@@ -9,10 +9,11 @@ class FirebaseModel
     @parent = options.parent
 
   firebase: ->
-    firebase = if @hasParent
-      @parent.firebase().child(@urlRoot).child(@get('id'))
-    else
-      swarmbot.firebase().child(@urlRoot).child(@get('id'))
+    swarmbot.firebase().child(@firebasePath())
+
+  firebasePath: ->
+    parentPath = if @hasParent then @parent.firebasePath() else ''
+    [ parentPath, @urlRoot, @get('id') ].join '/'
 
   get: (attr) ->
     @attributes[attr]

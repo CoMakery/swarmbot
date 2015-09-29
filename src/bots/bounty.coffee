@@ -31,7 +31,8 @@ ProposalsController = require '../controllers/proposals-controller'
 module.exports = (robot) ->
   robot.respond /list bounties(?: in (.+))?\s*$/i, (msg) ->
     [all, community] = msg.match
-    new ProposalsController().listApproved(msg, { community })
+    new ProposalsController().list(msg, { community })
+    # new ProposalsController().listApproved(msg, { community })
 
   robot.respond /show bounty\s+(.*)(?: in (.+))?\s*$/i, (msg) ->
     [all, bountyName, community] = msg.match
@@ -46,8 +47,8 @@ module.exports = (robot) ->
     new ProposalsController().create(msg, { bountyName, amount, community })
 
   robot.respond /rate\s+(.+)\s+([\d.]+)%(?:\s+(?:in|for)\s+(.*))?\s*$/i, (msg) ->
-    [all, bountyName, rating, community] = msg.match
-    new ProposalsController().rate(msg, { community, bountyName, rating })
+    [all, proposalName, rating, community] = msg.match
+    new ProposalsController().rate(msg, { community, proposalName, rating })
 
   # robot.respond /award (.+) bounty to (.+)$/i, (msg) ->
   #   [all, bountyName, awardee] = msg.match
