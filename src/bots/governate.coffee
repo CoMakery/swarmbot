@@ -19,7 +19,8 @@ module.exports = (robot) ->
 
   robot.respond /list proposals(?: in (.+))?\s*$/i, (msg) ->
     [all, community] = msg.match
-    new ProposalsController().list(msg, { community })
+    # new ProposalsController().list(msg, { community })
+    new ProposalsController().listApproved(msg, { community })
 
   robot.respond /propose\s+(.+)(?:\s+in\s+(.+))?\s*$/i, (msg) ->
     [all, proposalName, community] = msg.match

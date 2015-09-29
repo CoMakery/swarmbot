@@ -1,4 +1,5 @@
-{ assign, partition, sortByOrder, forEach, map } = require 'lodash'
+{log, p, pjson} = require 'lightsaber'
+{ assign, partition, sortByOrder, forEach, map, filter } = require 'lodash'
 
 class FirebaseCollection
   constructor: (modelsOrSnapshot, options={})->
@@ -10,7 +11,7 @@ class FirebaseCollection
     else
       @snapshot = modelsOrSnapshot
       @models = for id, data of @snapshot.val()
-        new @model assign(data, id: id), { parent: @parent }
+        new @model assign(data, id: id), { parent: @parent, snapshot: @snapshot.child(id) }
 
   fetch: ->
     @map (model) -> model.fetch()
@@ -25,7 +26,11 @@ class FirebaseCollection
   map: (cb)->
     map @models, cb
 
-  count: ->
+  # TODO: Should this be destructive / edit in-place, or return a new collection?
+  filter: (cb) ->
+    @models = filter @models, cb
+
+  size: ->
     @models.length
 
 module.exports = FirebaseCollection

@@ -13,6 +13,20 @@ class ProposalsController extends ApplicationController
   #TODO: Should go through TrustExchange and get approved elements
 
   listApproved: (@msg, { @community }) ->
+    @getDco().then (dco)=>
+      dco.fetch().then (dco) =>
+        proposals = new ProposalCollection(dco.snapshot.child('proposals'), parent: dco)
+        if proposals.isEmpty()
+          return @msg.send "There are no proposals to display in #{dco.get('id')}."
+
+        proposals.filter (proposal) ->
+          proposal.ratings().size() > 0 && proposal.ratings().score() > 50
+
+        proposals.sortByReputationScore()
+        messages = proposals.map @proposalMessage
+        @msg.send messages.join("\n")
+
+    .error(@showError)
 
         # if ratingsCount > 1 && proposal.score > 50%
 
@@ -23,16 +37,19 @@ class ProposalsController extends ApplicationController
         if proposals.isEmpty()
           return @msg.send "There are no proposals to display in #{dco.get('id')}."
 
-        Promise.all(proposals.fetch()).then (proposals) =>
-          messages = proposals.map (proposal)->
-            text = "Proposal #{proposal.get('id')}"
-            text += " Reward #{proposal.get('amount')}" if proposal.get('amount')?
-            score = proposal.ratings().score()
-            text += " Rating: #{score}%" if score?
-            text
-          @msg.send messages.join("\n")
+        proposals.sortByReputationScore()
+        messages = proposals.map @proposalMessage
+        @msg.send messages.join("\n")
 
     .error(@showError)
+
+  proposalMessage: (proposal) ->
+    text = "Proposal #{proposal.get('id')}"
+    text += " Reward #{proposal.get('amount')}" if proposal.get('amount')?
+    score = proposal.ratings().score()
+    text += " Rating: #{score}%" unless isNaN(score)
+    text
+
 
   show: (@msg, { proposalName, @community }) ->
     @getDco().then (dco) =>

@@ -19,6 +19,6 @@ class Proposal extends FirebaseModel
   #     @
 
   ratings: ->
-    new RatingCollection @snapshot.child('ratings'), parent: @
+    @_ratings ?= new RatingCollection @snapshot.child('ratings'), parent: @
 
 module.exports = Proposal

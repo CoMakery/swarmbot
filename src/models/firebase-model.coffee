@@ -4,10 +4,10 @@ swarmbot = require './swarmbot'
 { assign } = require 'lodash'
 
 class FirebaseModel
-  constructor: (attributesOrSnapshot={}, options={}) ->
-    @attributes = attributesOrSnapshot
+  constructor: (@attributes={}, options={}) ->
     @hasParent = @hasParent || false
     @parent = options.parent
+    @snapshot = options.snapshot
 
   firebase: ->
     swarmbot.firebase().child(@firebasePath())
