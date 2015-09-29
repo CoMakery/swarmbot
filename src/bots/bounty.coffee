@@ -34,6 +34,11 @@ module.exports = (robot) ->
   #   new ProposalsController().list(msg, { community })
   #   # new ProposalsController().listApproved(msg, { community })
 
+  robot.respond /list bounties(?: in (.+))?\s*$/i, (msg) ->
+    [all, community] = msg.match
+    # new ProposalsController().list(msg, { community })
+    new ProposalsController().list(msg, { community })
+
   robot.respond /show proposal\s+(.*)(?: in (.+))?\s*$/i, (msg) ->
     [all, proposalName, community] = msg.match
     new ProposalsController().show(msg, { proposalName, community })
