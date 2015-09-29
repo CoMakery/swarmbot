@@ -17,7 +17,7 @@ class ProposalsController extends ApplicationController
       dco.fetch().then (dco) =>
         proposals = new ProposalCollection(dco.snapshot.child('proposals'), parent: dco)
         if proposals.isEmpty()
-          return @msg.send "There are no proposals to display in #{dco.get('id')}."
+          return @msg.send "There are no approved proposals for #{dco.get('id')}.\nList all proposals and rate your favorites!"
 
         proposals.filter (proposal) ->
           proposal.ratings().size() > 0 && proposal.ratings().score() > 50
@@ -49,7 +49,6 @@ class ProposalsController extends ApplicationController
     score = proposal.ratings().score()
     text += " Rating: #{score}%" unless isNaN(score)
     text
-
 
   show: (@msg, { proposalName, @community }) ->
     @getDco().then (dco) =>
@@ -91,10 +90,11 @@ class ProposalsController extends ApplicationController
   create: (@msg, { proposalName, amount, @community }) ->
     @getDco().then (dco) ->
       dco.createProposal({ name: proposalName, amount }).then =>
-        @msg.send 'proposal created'
+        @msg.send "Proposal '#{proposalName}' created in community '#{dco.get('id')}'"
       .catch (error) =>
         log "proposal creation error: " + error
-        @msg.send "error: " + error
+        @msg.send "Error creating proposal: #{error.message}"
+        # TODO: re-throw to log stacktrace
 
     .error(@showError)
 
@@ -123,7 +123,7 @@ class ProposalsController extends ApplicationController
     .error(@showError)
 
   showError: (error)->
-    @msg.send error
+    @msg.send error.message
 
 
 module.exports = ProposalsController
