@@ -2,11 +2,11 @@
 #   Create a bounty
 #
 # Commands:
-#   hubot create bounty <bounty name> for <number of coins> [in <community>]
-#   hubot rate <bounty name> <value>% [in <community name]
-#   hubot award <bounty name> bounty to <username> [in <community>]
-#   hubot list bounties [in <community name>]
-#   hubot show bounty <bounty name> [in <community name>]
+#   hubot create proposal <proposal name> for <number of coins> [in <community>]
+#   hubot rate <proposal name> <value>% [in <community name]
+#   hubot award <proposal name> bounty to <username> [in <community>]
+#   hubot list proposals [in <community name>]
+#   hubot show proposal <proposal name> [in <community name>]
 
 # Not in use:
 #   hubot (<bounty_name>) bounty add me - add me to the bounty
@@ -43,7 +43,7 @@ module.exports = (robot) ->
     [all, proposalName, community] = msg.match
     new ProposalsController().show(msg, { proposalName, community })
 
-  robot.respond /award\s+(.+)\s+proposal to\s+(.+)\s+in (.+)\s*$/i, (msg) ->
+  robot.respond /award\s+(.+)\s+bounty to\s+(.+)\s+in (.+)\s*$/i, (msg) ->
     [all, proposalName, awardee, dcoKey] = msg.match
     new ProposalsController().award(msg, { proposalName, awardee, dcoKey })
 
