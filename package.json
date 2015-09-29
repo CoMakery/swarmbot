@@ -35,6 +35,7 @@
     "hubot-heroku-keepalive": "0.0.4",
     "hubot-redis-brain": "0.0.3",
     "hubot-scripts": "^2.16.1",
+    "instagram-node-lib": "0.1.1",
     "hubot-slack": "^3.3.0",
     "hubot-suggest": "citizencode/hubot-suggest#v0.0.3",
     "lightsaber": "^0.4.1",
