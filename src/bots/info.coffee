@@ -10,6 +10,10 @@
 #   hubot tag <community name> <tag>
 #   hubot info <community name>
 
+# Propz:
+#   raysrashmi for https://github.com/raysrashmi/hubot-instagram
+#
+
 {log, p, pjson} = require 'lightsaber'
 Instagram = require('instagram-node-lib')
 
