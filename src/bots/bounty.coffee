@@ -5,10 +5,10 @@
 #   hubot create proposal <proposal name> for <number of coins> [in <community>]
 #   hubot rate <proposal name> <value>% [in <community name]
 #   hubot award <proposal name> bounty to <username> [in <community>]
-#   hubot list proposals [in <community name>]
 #   hubot show proposal <proposal name> [in <community name>]
 
 # Not in use:
+#   hubot list bounties [in <community name>]
 #   hubot (<bounty_name>) bounty add me - add me to the bounty
 #   hubot get balance - get your current balance
 #   hubot (<bounty_name>) bounty add (me|<user>) - add me or <user> to bounty

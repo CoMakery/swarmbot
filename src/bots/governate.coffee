@@ -3,6 +3,7 @@
 #
 # Commands:
 #   hubot list proposals
+#   hubot list all proposals
 #   hubot propose <proposal>
 
 {log, p, pjson} = require 'lightsaber'
@@ -17,10 +18,12 @@ module.exports = (robot) ->
     [all, community] = msg.match
     new MembersController().list(msg, { community })
 
-  robot.respond /list proposals(?: in (.+))?\s*$/i, (msg) ->
-    [all, community] = msg.match
-    # new ProposalsController().list(msg, { community })
-    new ProposalsController().listApproved(msg, { community })
+  robot.respond /list\s+(all)?\s*proposals(?: in (.+))?\s*$/i, (msg) ->
+    [all, showAll, community] = msg.match
+    if showAll?
+      new ProposalsController().list(msg, { community })
+    else
+      new ProposalsController().listApproved(msg, { community })
 
   robot.respond /propose\s+(.+)(?:\s+in\s+(.+))?\s*$/i, (msg) ->
     [all, proposalName, community] = msg.match
