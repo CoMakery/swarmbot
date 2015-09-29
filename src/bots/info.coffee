@@ -4,12 +4,14 @@
 # Commands:
 #   hubot x marks the what
 #   hubot hello
+#   hubot space kitty me
 
 # Not in use:
 #   hubot tag <community name> <tag>
 #   hubot info <community name>
 
 {log, p, pjson} = require 'lightsaber'
+Instagram = require('instagram-node-lib')
 
 module.exports = (robot) ->
 
@@ -28,3 +30,26 @@ module.exports = (robot) ->
     msg.match.shift()
     [dcoKey] = msg.match
     # pulls tag and other relevant info from trust exchange / dbrain
+
+  robot.respond /space kitty me$/i, (msg) ->
+    authenticateUser(msg)
+    Instagram.tags.recent
+      name: tag
+      count: count
+      complete: (data) ->
+       for item in data
+          msg.send item['images']['standard_resolution']['url']
+
+authenticateUser = (msg) ->
+  config =
+    client_key:     process.env.HUBOT_INSTAGRAM_CLIENT_KEY
+    client_secret:  process.env.HUBOT_INSTAGRAM_ACCESS_KEY
+
+  unless config.client_key
+    msg.send "Please set the HUBOT_INSTAGRAM_CLIENT_KEY environment variable."
+    return
+  unless config.client_secret
+    msg.send "Please set the HUBOT_INSTAGRAM_ACCESS_TOKEN environment variable."
+    return
+  Instagram.set('client_id', config.client_key)
+  Instagram.set('client_secret', config.client_secret)

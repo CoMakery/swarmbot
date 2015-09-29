@@ -32,7 +32,6 @@
     "firebase": "^2.2.9",
     "hubot": "^2.16.0",
     "hubot-help": "^0.1.1",
-    "hubot-instagram": "0.0.6",
     "hubot-heroku-keepalive": "0.0.4",
     "hubot-redis-brain": "0.0.3",
     "hubot-scripts": "^2.16.1",
