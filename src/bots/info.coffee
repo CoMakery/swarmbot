@@ -39,7 +39,7 @@ module.exports = (robot) ->
     authenticateUser(msg)
     count = 1
     Instagram.tags.recent
-      name: 'spacekitty'
+      name: 'spacekittysay'
       count: count
       complete: (data) ->
        for item in data
