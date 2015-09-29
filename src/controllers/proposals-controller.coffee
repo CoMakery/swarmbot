@@ -10,8 +10,20 @@ ProposalCollection = require '../collections/proposal-collection'
 
 class ProposalsController extends ApplicationController
 
-  #TODO: Should go through TrustExchange and get approved elements
+  list: (@msg, { @community }) ->
+    @getDco().then (dco)=>
+      dco.fetch().then (dco) =>
+        proposals = new ProposalCollection(dco.snapshot.child('proposals'), parent: dco)
+        if proposals.isEmpty()
+          return @msg.send "There are no proposals to display in #{dco.get('id')}."
 
+        proposals.sortByReputationScore()
+        messages = proposals.map @proposalMessage
+        @msg.send messages.join("\n")
+
+    .error(@showError)
+
+  #TODO: Should go through TrustExchange and get approved elements
   listApproved: (@msg, { @community }) ->
     @getDco().then (dco)=>
       dco.fetch().then (dco) =>
@@ -21,21 +33,6 @@ class ProposalsController extends ApplicationController
 
         proposals.filter (proposal) ->
           proposal.ratings().size() > 0 && proposal.ratings().score() > 50
-
-        proposals.sortByReputationScore()
-        messages = proposals.map @proposalMessage
-        @msg.send messages.join("\n")
-
-    .error(@showError)
-
-        # if ratingsCount > 1 && proposal.score > 50%
-
-  list: (@msg, { @community }) ->
-    @getDco().then (dco)=>
-      dco.fetch().then (dco) =>
-        proposals = new ProposalCollection(dco.snapshot.child('proposals'), parent: dco)
-        if proposals.isEmpty()
-          return @msg.send "There are no proposals to display in #{dco.get('id')}."
 
         proposals.sortByReputationScore()
         messages = proposals.map @proposalMessage
