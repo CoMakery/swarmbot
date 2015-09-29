@@ -4,6 +4,8 @@
 # Commands:
 #   hubot list proposals
 #   hubot list all proposals
+
+# Not ready:
 #   hubot propose <proposal>
 
 {log, p, pjson} = require 'lightsaber'
