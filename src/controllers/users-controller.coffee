@@ -48,10 +48,16 @@ class UsersController extends ApplicationController
     user.setDco null
     @msg.send "Your current community has been unset."
 
-  getInfo: (@msg) ->
-    @currentUser().fetch().then (user) =>
+  getInfo: (@msg, { slackUsername }) ->
+    user = if slackUsername
+      User.findBySlackUsername(slackUsername)
+    else
+      @currentUser()
+
+    user.fetch().then (user) =>
       info = ""
       info += "real name: " + user.get('real_name')
+      info += ", slack username: " + user.get('slack_username')
       info += ", default community: " + user.get('current_dco')
       info += ", receiving address: " + user.get('btc_address')
       @msg.send info
