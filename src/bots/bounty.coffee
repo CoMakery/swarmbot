@@ -29,24 +29,24 @@ DCO = require '../models/dco'
 ProposalsController = require '../controllers/proposals-controller'
 
 module.exports = (robot) ->
-  robot.respond /list bounties(?: in (.+))?\s*$/i, (msg) ->
+  robot.respond /list proposals(?: in (.+))?\s*$/i, (msg) ->
     [all, community] = msg.match
     new ProposalsController().list(msg, { community })
     # new ProposalsController().listApproved(msg, { community })
 
-  robot.respond /show bounty\s+(.*)(?: in (.+))?\s*$/i, (msg) ->
-    [all, bountyName, community] = msg.match
-    new ProposalsController().show(msg, { bountyName, community })
+  robot.respond /show proposal\s+(.*)(?: in (.+))?\s*$/i, (msg) ->
+    [all, proposalName, community] = msg.match
+    new ProposalsController().show(msg, { proposalName, community })
 
-  robot.respond /award\s+(.+)\s+bounty to\s+(.+)\s+in (.+)\s*$/i, (msg) ->
-    [all, bountyName, awardee, dcoKey] = msg.match
-    new ProposalsController().award(msg, { bountyName, awardee, dcoKey })
+  robot.respond /award\s+(.+)\s+proposal to\s+(.+)\s+in (.+)\s*$/i, (msg) ->
+    [all, proposalName, awardee, dcoKey] = msg.match
+    new ProposalsController().award(msg, { proposalName, awardee, dcoKey })
 
-  robot.respond /create bounty\s+(.+)\s+for (\d+)(?: in\s+(.+))?\s*$/i, (msg) ->
-    [all, bountyName, amount, community] = msg.match
-    new ProposalsController().create(msg, { bountyName, amount, community })
+  robot.respond /create proposal\s+(.+)\s+for (\d+)(?: in\s+(.+))?\s*$/i, (msg) ->
+    [all, proposalName, amount, community] = msg.match
+    new ProposalsController().create(msg, { proposalName, amount, community })
 
-  robot.respond /rate\s+(.+)\s+([\d.]+)%(?:\s+(?:in|for)\s+(.*))?\s*$/i, (msg) ->
+  robot.respond /rate proposal\s+(.+)\s+([\d.]+)%(?:\s+(?:in|for)\s+(.*))?\s*$/i, (msg) ->
     [all, proposalName, rating, community] = msg.match
     new ProposalsController().rate(msg, { community, proposalName, rating })
 

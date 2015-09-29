@@ -9,11 +9,6 @@ Member = require '../models/member'
 
 class DCO extends FirebaseModel
   urlRoot: 'projects'
-  # constructor: ({@dcoRef}) ->
-
-  @createProposalFor: ({dcoKey, proposalName, amount}, cb) ->
-    dco = DCO.find dcoKey
-    dco.createProposal {proposalName, amount}, cb
 
   @find: (dcoKey) ->
     new DCO id: dcoKey
@@ -23,8 +18,8 @@ class DCO extends FirebaseModel
       bounties = snapshot.val() # should really be an array of Proposal objects.
       cb(null, bounties)
 
-  createProposal: ({proposalName, amount}, cb) ->
-    proposal = new Proposal({id: proposalName, amount: amount}, parent: @)
+  createProposal: ({ name, amount }) ->
+    proposal = new Proposal({id: name, amount: amount}, parent: @)
     proposal.save()
 
   addMember: ({user}, cb) ->
@@ -32,13 +27,6 @@ class DCO extends FirebaseModel
     # TODO: not sure about proper syntax
     # member = new Member({id: user.id, slack_username: user.get('slack_username') happiness: "", role: "default"}, parent: @)
     member.save()
-
-    # proposal = @dcoRef.child "bounties/#{proposalName}"
-    # proposal.set {name: proposalName, amount: amount}, (error) ->
-    #   if error
-    #     cb "error creating proposal :("
-    #   else
-    #     cb null, "proposal created"
 
   issueAsset: ({ amount }, cb) ->
     dcoKey = @get('id')

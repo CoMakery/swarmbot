@@ -72,9 +72,8 @@ class ProposalsController extends ApplicationController
         msg.send "Sorry, you don't have sufficient trust in this community to award this proposal."
 
   create: (@msg, { proposalName, amount, @community }) ->
-
-    @getDco().bind(@).then (dco) ->
-      dco.createBounty({ proposalName, amount }).then =>
+    @getDco().then (dco) ->
+      dco.createProposal({ name: proposalName, amount }).then =>
         @msg.send 'proposal created'
       .catch (error) =>
         log "proposal creation error: " + error
