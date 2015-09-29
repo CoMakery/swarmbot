@@ -16,6 +16,8 @@ class FirebaseCollection
   fetch: ->
     @map (model) -> model.fetch()
 
+  # XXX: Breaks if you edit the @models manually and not the @snapshot. (e.g. @filter())
+  # Maybe just use the @models instead of numChildren
   isEmpty: ->
     length = if @snapshot? then @snapshot.numChildren() else @models.length
     (length == 0)
