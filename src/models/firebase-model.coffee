@@ -5,7 +5,6 @@ swarmbot = require './swarmbot'
 
 class FirebaseModel
   constructor: (attributesOrSnapshot={}, options={}) ->
-    p typeof attributesOrSnapshot
     @attributes = attributesOrSnapshot
     @hasParent = @hasParent || false
     @parent = options.parent
