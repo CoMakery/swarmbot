@@ -14,7 +14,6 @@ class ProposalsController extends ApplicationController
 
   listApproved: (@msg, { @community }) ->
 
-    # TODO:  text += " Rating: #{proposal.score}%" if ?
         # if ratingsCount > 1 && proposal.score > 50%
 
   list: (@msg, { @community }) ->
@@ -24,15 +23,16 @@ class ProposalsController extends ApplicationController
         if proposals.isEmpty()
           return @msg.send "There are no proposals to display in #{dco.get('id')}."
 
-        Promise.all(proposals.getReputationScores()).then (proposals) =>
+        Promise.all(proposals.fetch()).then (proposals) =>
           messages = proposals.map (proposal)->
-            text = "Proposal #{proposal.get('name')}"
+            text = "Proposal #{proposal.get('id')}"
             text += " Reward #{proposal.get('amount')}" if proposal.get('amount')?
-            text += " Rating: #{proposal.get('reputationScore')}%" if proposal.get('reputationScore')?
+            score = proposal.ratings().score()
+            text += " Rating: #{score}%" if score?
             text
           @msg.send messages.join("\n")
 
-    .error(@noCommunityError)
+    .error(@showError)
 
   show: (@msg, { proposalName, @community }) ->
     @getDco().then (dco) =>
@@ -79,7 +79,7 @@ class ProposalsController extends ApplicationController
         log "proposal creation error: " + error
         @msg.send "error: " + error
 
-    .error(@noCommunityError)
+    .error(@showError)
 
   #TODO: possibly incorporate some gatekeeping here (i.e. only members of a DCO can vote on the output)
   rate: (@msg, { @community, proposalName, rating }) ->
@@ -103,10 +103,10 @@ class ProposalsController extends ApplicationController
             @msg.send replies.join "\n"
           .catch (error) =>
             @msg.send "Rating failed: #{error}\n#{error.stack}"
-    .error(@noCommunityError)
+    .error(@showError)
 
-  noCommunityError: ->
-    @msg.send "Please either set a community or specify the community in the command."
+  showError: (error)->
+    @msg.send error
 
 
 module.exports = ProposalsController

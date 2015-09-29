@@ -1,16 +1,9 @@
 { assign, partition, sortByOrder, forEach, map } = require 'lodash'
+FirebaseCollection = require './firebase-collection'
 Proposal = require '../models/proposal'
 
-# TODO: Factor a Collection class out of this class.
-class ProposalCollection
-  constructor: (modelsOrSnapshot, options={})->
-    @parent = options.parent
-    if modelsOrSnapshot instanceof Array
-      @models = modelsOrSnapshot
-    else
-      @snapshot = modelsOrSnapshot
-      @models = for id, data of @snapshot.val()
-        new Proposal assign(data, id: id), { parent: @parent }
+class ProposalCollection extends FirebaseCollection
+  model: Proposal
 
   getReputationScores: ->
     @map (p) -> p.getReputationScore()
@@ -22,15 +15,5 @@ class ProposalCollection
     sorted = sortByOrder(score, [(p) -> p.get('reputationScore')], ['desc'])
     @models = sorted.concat(noScore)
     @
-
-  isEmpty: ->
-    length = if @snapshot? then @snapshot.numChildren() else @models.length
-    (length == 0)
-
-  each: (cb)->
-    forEach @models, cb
-
-  map: (cb)->
-    map @models, cb
 
 module.exports = ProposalCollection

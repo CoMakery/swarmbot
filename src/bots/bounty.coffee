@@ -29,10 +29,10 @@ DCO = require '../models/dco'
 ProposalsController = require '../controllers/proposals-controller'
 
 module.exports = (robot) ->
-  robot.respond /list proposals(?: in (.+))?\s*$/i, (msg) ->
-    [all, community] = msg.match
-    new ProposalsController().list(msg, { community })
-    # new ProposalsController().listApproved(msg, { community })
+  # robot.respond /list proposals(?: in (.+))?\s*$/i, (msg) ->
+  #   [all, community] = msg.match
+  #   new ProposalsController().list(msg, { community })
+  #   # new ProposalsController().listApproved(msg, { community })
 
   robot.respond /show proposal\s+(.*)(?: in (.+))?\s*$/i, (msg) ->
     [all, proposalName, community] = msg.match

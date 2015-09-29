@@ -4,7 +4,9 @@ swarmbot = require './swarmbot'
 { assign } = require 'lodash'
 
 class FirebaseModel
-  constructor: (@attributes={}, options={}) ->
+  constructor: (attributesOrSnapshot={}, options={}) ->
+    p typeof attributesOrSnapshot
+    @attributes = attributesOrSnapshot
     @hasParent = @hasParent || false
     @parent = options.parent
 
@@ -24,7 +26,7 @@ class FirebaseModel
 
   fetch: Promise.promisify (cb) ->
     @firebase().once 'value', (@snapshot) =>
-      assign @attributes, @snapshot.val()
+      @parseSnapshot()
       cb(null, @)
     , cb # failure callback
 
@@ -33,5 +35,8 @@ class FirebaseModel
 
   exists: ->
     @snapshot.exists()
+
+  parseSnapshot: ->
+    assign @attributes, @snapshot.val()
 
 module.exports = FirebaseModel

@@ -18,7 +18,7 @@ class ApplicationController
         if @community?
           DCO.find(@community)
         else
-          Promise.reject(Promise.OperationalError("No community found"))
+          Promise.reject(Promise.OperationalError("Please either set a community or specify the community in the command."))
 
 
 module.exports = ApplicationController
