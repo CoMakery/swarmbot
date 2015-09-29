@@ -18,7 +18,7 @@ class ProposalsController extends ApplicationController
           return @msg.send "There are no proposals to display in #{dco.get('id')}."
 
         proposals.sortByReputationScore()
-        messages = proposals.map @proposalMessage
+        messages = proposals.map @_proposalMessage
         @msg.send messages.join("\n")
 
     .error(@showError)
@@ -35,17 +35,10 @@ class ProposalsController extends ApplicationController
           proposal.ratings().size() > 0 && proposal.ratings().score() > 50
 
         proposals.sortByReputationScore()
-        messages = proposals.map @proposalMessage
+        messages = proposals.map @_proposalMessage
         @msg.send messages.join("\n")
 
     .error(@showError)
-
-  proposalMessage: (proposal) ->
-    text = "Proposal #{proposal.get('id')}"
-    text += " Reward #{proposal.get('amount')}" if proposal.get('amount')?
-    score = proposal.ratings().score()
-    text += " Rating: #{score}%" unless isNaN(score)
-    text
 
   show: (@msg, { proposalName, @community }) ->
     @getDco().then (dco) =>
@@ -121,6 +114,14 @@ class ProposalsController extends ApplicationController
 
   showError: (error)->
     @msg.send error.message
+
+  _proposalMessage: (proposal) ->
+    text = "Proposal #{proposal.get('id')}"
+    text += " Reward #{proposal.get('amount')}" if proposal.get('amount')?
+    score = proposal.ratings().score()
+    text += " Rating: #{score}%" unless isNaN(score)
+    text
+
 
 
 module.exports = ProposalsController
