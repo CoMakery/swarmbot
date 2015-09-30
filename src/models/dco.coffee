@@ -1,11 +1,12 @@
 {log, p, pjson} = require 'lightsaber'
+{ values, find } = require 'lodash'
 Promise = require 'bluebird'
 swarmbot = require '../models/swarmbot'
 FirebaseModel = require './firebase-model'
 Proposal = require '../models/proposal'
 Member = require '../models/member'
 
-{ values, assign, map } = require 'lodash'
+{ values, assign, map, indexOf } = require 'lodash'
 
 class DCO extends FirebaseModel
   urlRoot: 'projects'
@@ -22,11 +23,19 @@ class DCO extends FirebaseModel
     proposal = new Proposal({id: name, amount: amount}, parent: @)
     proposal.save()
 
-  addMember: ({user}, cb) ->
-    member = new Member({id: user.id, happiness: "", role: "default"}, parent: @)
-    # TODO: not sure about proper syntax
-    # member = new Member({id: user.id, slack_username: user.get('slack_username') happiness: "", role: "default"}, parent: @)
-    member.save()
+  memberIds: ->
+    values @get('member_ids')
+
+  addMember: (user) ->
+    userId = user.get('id')
+    present = (indexOf(@memberIds(), userId) != -1)
+
+    if present
+      false
+    else
+      @firebase().child('member_ids').push().set(userId)
+      # @attributes are now out of sync with firebase. Fetch here?
+      user
 
   issueAsset: ({ amount }, cb) ->
     dcoKey = @get('id')

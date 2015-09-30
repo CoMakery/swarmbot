@@ -74,9 +74,11 @@ module.exports = (robot) ->
       switch dcoJoinStatus.stage
         when 1
           if answer == "yes" || answer == "y"
+            log 'YES join'
             new DcosController().joinAgreed(msg, { dcoKey: dcoJoinStatus.dcoKey })
 
           else if answer == "no" || answer == "n"
+            log 'NO join'
             msg.reply "Too bad, maybe next time"
 
           # dcoJoinStatus = {stage: 0}
@@ -90,6 +92,7 @@ module.exports = (robot) ->
 
       switch dcoCreateStatus.stage
         when 1
+          log 'WE statement'
           if firstTwoLetters == "we" && currentUser == dcoCreateStatus.owner
             swarmbot.firebase().child('projects/' + dcoCreateStatus.dcoKey).update({project_statement : answer})
             dcoCreateStatus = {stage: 0}

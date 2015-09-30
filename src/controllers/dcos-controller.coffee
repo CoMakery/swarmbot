@@ -34,16 +34,20 @@ class DcosController extends ApplicationController
     dcoJoinStatus = {stage: 1, dcoKey: dcoKey}
     msg.robot.brain.set "dcoJoinStatus", dcoJoinStatus
 
-  joinAgreed: (@msg, { dcoKey }) ->
+  joinAgreed: (@msg, { @community: dcoKey }) ->
+    p 'joinAgreed'
 
-    #TODO: review, I think this never works/worked on command linde
+    @getDco()
+    .then (dco)-> dco.fetch()
+    .then (dco)->
+      user = @currentUser()
+      if dco.addMember user
+        @msg.reply "Great, you've joined the DCO"
+        # dco.sendAsset { amount: 1, recipient: user }
+        user.setDco dco.get('id')
+      else
+        @msg.reply "You are already a member of #{dco.get('id')}!"
 
-    user = @currentUser()
-    dco = DCO.find dcoKey
-    dco.addMember { user }
-    # dco.sendAsset { amount: 1, recipient: user }
-    user.setDco dcoKey
-    @msg.reply "Great, you've joined the DCO"
 
   count: (msg) ->
     swarmbot.firebase().child('projects').once 'value', (snapshot)=>

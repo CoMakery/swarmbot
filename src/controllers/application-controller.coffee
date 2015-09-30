@@ -9,7 +9,7 @@ class ApplicationController
     # User.find activeUser
     new User id: activeUserId
 
-  getDco: ->
+  getDco: ()->
     if @community?
       Promise.resolve(DCO.find(@community)).bind(@)
     else

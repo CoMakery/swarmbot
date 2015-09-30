@@ -29,6 +29,12 @@ class FirebaseModel
       cb(null, @)
     , cb # failure callback
 
+  fetchIfNeeded: ->
+    if @snapshot?
+      Promise.resolve(@)
+    else
+      @fetch()
+
   save: Promise.promisify (cb)->
     @firebase().update @attributes, cb
 
