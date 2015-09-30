@@ -92,7 +92,7 @@ class ProposalsController extends ApplicationController
 
       Proposal.find(proposalName, parent: dco).fetch().then (proposal) =>
         unless proposal.exists()
-          return @msg.send "Could not find the proposal '#{proposal.get('id')}'. Please check that it exists."
+          return @msg.send "Could not find the proposal '#{proposal.get('id')}'. Please verify that it exists."
 
         claim = Claim.put {
           source: user.get('id')
@@ -101,14 +101,14 @@ class ProposalsController extends ApplicationController
         }, {
           firebase: path: "projects/#{dco.get('id')}/proposals/#{proposalName}/ratings"
         }
-        p claim
         claim.then (messages) =>
-          p messages
           replies = for message in messages
             "Rating saved to #{message}"
-          @msg.send replies.join "\n"
+          p replies.join "\n"
+          @msg.send "You rated '#{proposal.get('id')}' #{rating}%"
         .catch (error) =>
-          @msg.send "Rating failed: #{error}\n#{error.stack}"
+          @msg.send "Rating failed: #{error}"
+          p "#{error}" # TODO: re-throw exception to show stacktrace
     .error(@showError)
 
   showError: (error)->
