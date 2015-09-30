@@ -19,6 +19,7 @@ class UsersController extends ApplicationController
 
       if slackUsername
         user.set "slack_username", slackUsername
+        user.set "last_active_on_slack", Date.now()
         # @msg.send "registered Slack username"
 
       if realName
