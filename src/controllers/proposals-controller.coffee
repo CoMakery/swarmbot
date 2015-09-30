@@ -53,10 +53,9 @@ class ProposalsController extends ApplicationController
     activeUser = msg.robot.whose msg
 
     dco = DCO.find dcoKey
-    # TODO: check to make sure activeUser is owner of DCO
+
     dco.fetch().then (myDco) ->
-      p "owner", myDco.get "owner"
-      p "activeUser", activeUser
+
       if myDco.get("owner") == activeUser
 
         usersRef = swarmbot.firebase().child('users')
