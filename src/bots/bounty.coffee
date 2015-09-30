@@ -4,7 +4,7 @@
 # Commands:
 #   hubot create proposal <proposal name> for <number of coins> [in <community>]
 #   hubot rate <proposal name> <value>% [in <community name]
-#   hubot award <proposal name> bounty to <username> [in <community>]
+#   hubot award <proposal name> proposal to <slack username> [in <community>]
 #   hubot show proposal <proposal name> [in <community name>]
 
 # Not in use:
@@ -33,7 +33,7 @@ module.exports = (robot) ->
     [all, proposalName, community] = msg.match
     new ProposalsController().show(msg, { proposalName, community })
 
-  robot.respond /award\s+(.+)\s+bounty to\s+(.+)\s+in (.+)\s*$/i, (msg) ->
+  robot.respond /award\s+(.+)\s+proposal to\s+(.+)\s+in (.+)\s*$/i, (msg) ->
     [all, proposalName, awardee, dcoKey] = msg.match
     new ProposalsController().award(msg, { proposalName, awardee, dcoKey })
 

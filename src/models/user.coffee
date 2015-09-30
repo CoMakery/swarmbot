@@ -4,6 +4,9 @@ FirebaseModel = require './firebase-model'
 class User extends FirebaseModel
   urlRoot: 'users'
 
+  @findBySlackUsername: (slackUsername)->
+    new User()
+
   setDco: (dcoKey) ->
     @set "current_dco", dcoKey
 

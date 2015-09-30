@@ -13,13 +13,13 @@ Promise = require 'bluebird'
 
 Promise.longStackTraces() # TODO: only in development mode. decreases performance 5x
 
-trustExchange.configure
-  adaptors:
-    firebase: swarmbot.firebase()
-
 if process.env.FIREBASE_SECRET?
   swarmbot.firebase().authWithCustomToken process.env.FIREBASE_SECRET, (error) ->
     p error
+
+trustExchange.configure
+  adaptors:
+    firebase: swarmbot.firebase()
 
 InitBot = (robot) ->
   throw new Error if robot.whose?
