@@ -23,7 +23,6 @@ class ProposalsController extends ApplicationController
 
     .error(@showError)
 
-  #TODO: Should go through TrustExchange and get approved elements
   listApproved: (@msg, { @community }) ->
     @getDco().then (dco)=>
       dco.fetch().then (dco) =>
