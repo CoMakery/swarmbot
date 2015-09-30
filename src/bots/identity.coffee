@@ -11,7 +11,7 @@
 # Not in use:
 #   hubot register email <email>
 
-{ p } = require 'lightsaber'
+{ p, log } = require 'lightsaber'
 { values } = require 'lodash'
 UsersController = require '../controllers/users-controller'
 swarmbot = require '../models/swarmbot'
