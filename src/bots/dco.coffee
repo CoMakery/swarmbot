@@ -33,32 +33,38 @@ DCO = require '../models/dco'
 
 module.exports = (robot) ->
   robot.respond /list communities$/i, (msg) ->
+    log "MATCH 'list communities' : #{msg.match[0]}"
     new DcosController().list(msg)
 
   robot.respond /find community (\S*)$/i, (msg) ->
+    log "MATCH 'find community' : #{msg.match[0]}"
     dcoSearch = msg.match[1]
     new DcosController().find(msg, { dcoSearch })
 
   robot.respond /join community (\S*)$/i, (msg) ->
+    log "MATCH 'join community' : #{msg.match[0]}"
     dcoKey = msg.match[1]
     new DcosController().join(msg, { dcoKey })
 
-  robot.respond /how many communities\?$/i, (msg) ->
+  robot.respond /how many communities\??$/i, (msg) ->
+    log "MATCH 'how many communities?' : #{msg.match[0]}"
     new DcosController().count(msg)
 
   robot.respond /create community (.+)$/i, (msg) ->
+    log "MATCH 'create community' : #{msg.match[0]}"
     dcoKey = msg.match[1]
     new DcosController().create(msg, { dcoKey })
 
   robot.respond /create (\d+) of asset for (.+)$/i, (msg) ->
     [all, amount, dcoKey] = msg.match
+    log "MATCH 'create asset' : #{all}"
     new DcosController().issueAsset(msg, { dcoKey, amount })
 
   # What to do here? Current method will only work for single user.
   # Ideally, state machine stored on the user instance determines what question is
   # being answered.
   robot.respond /(yes$|no$|we\s+.*\s*)/i, (msg) ->
-    p msg.match[1]
+    log "MATCH 'yes|no|we' : #{msg.match[0]}"
     dcoJoinStatus = robot.brain.get("dcoJoinStatus") or null
     dcoCreateStatus = robot.brain.get("dcoCreateStatus") or null
 

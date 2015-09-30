@@ -31,18 +31,22 @@ ProposalsController = require '../controllers/proposals-controller'
 module.exports = (robot) ->
   robot.respond /show proposal\s+(.*)(?: in (.+))?\s*$/i, (msg) ->
     [all, proposalName, community] = msg.match
+    log "MATCH 'show proposal' : #{all}"
     new ProposalsController().show(msg, { proposalName, community })
 
   robot.respond /award\s+(.+)\s+proposal to\s+(.+)\s+in (.+)\s*$/i, (msg) ->
     [all, proposalName, awardee, dcoKey] = msg.match
+    log "MATCH 'award proposal' : #{all}"
     new ProposalsController().award(msg, { proposalName, awardee, dcoKey })
 
   robot.respond /create proposal\s+(.+)\s+for (\d+)(?: in\s+(.+))?\s*$/i, (msg) ->
     [all, proposalName, amount, community] = msg.match
+    log "MATCH 'create proposal' : #{all}"
     new ProposalsController().create(msg, { proposalName, amount, community })
 
   robot.respond /rate proposal\s+(.+)\s+([\d.]+)%(?:\s+(?:in|for)\s+(.*))?\s*$/i, (msg) ->
     [all, proposalName, rating, community] = msg.match
+    log "MATCH 'rate proposal' : #{all}"
     new ProposalsController().rate(msg, { community, proposalName, rating })
 
   # robot.respond /award (.+) bounty to (.+)$/i, (msg) ->

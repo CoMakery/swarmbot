@@ -29,17 +29,21 @@ module.exports = (robot) ->
   #   new UsersController().register(msg)
 
   robot.respond /register btc (.+)$/i, (msg) ->
+    log "MATCH 'register btc' : #{msg.match[0]}"
     btcAddress = msg.match[1]
     new UsersController().registerBtc(msg, { btcAddress })
 
   robot.respond /set community\s+(.+)\s*$/i, (msg) ->
+    log "MATCH 'set community' : #{msg.match[0]}"
     community = msg.match[1]
     new UsersController().setCommunity(msg, { community })
 
   robot.respond /unset community\s*$/i, (msg) ->
+    log "MATCH 'unset community' : #{msg.match[0]}"
     new UsersController().unsetCommunity(msg)
 
   robot.respond /about (.*)\s*$/i, (msg) ->
+    log "MATCH 'about' : #{msg.match[0]}"
     slackUsername = msg.match[1]
     new UsersController().getInfo(msg, { slackUsername })
 
