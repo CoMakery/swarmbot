@@ -13,7 +13,8 @@ class DcosController extends ApplicationController
 
       msg.send dcoNames.join("\n")
 
-  listMembers: (@msg, { @community: dcoKey }) ->
+  listMembers: (@msg, { dcoKey }) ->
+    @community = dcoKey
     @getDco()
     .then (dco)-> dco.fetch()
     .then (dco)->
@@ -21,6 +22,8 @@ class DcosController extends ApplicationController
         messages = members.map (member)=>
           @_userText(member)
         @msg.send(messages.join("\n"))
+
+    .error(@_showError)
 
   find: (msg, { dcoSearch }) ->
     swarmbot.firebase().child('projects').orderByKey()
@@ -43,7 +46,8 @@ class DcosController extends ApplicationController
     dcoJoinStatus = {stage: 1, dcoKey: dcoKey}
     msg.robot.brain.set "dcoJoinStatus", dcoJoinStatus
 
-  joinAgreed: (@msg, { @community: dcoKey }) ->
+  joinAgreed: (@msg, { dcoKey }) ->
+    @community = dcoKey
     @getDco()
     .then (dco)-> dco.fetch()
     .then (dco)->
@@ -55,6 +59,7 @@ class DcosController extends ApplicationController
       else
         @msg.reply "You are already a member of #{dco.get('id')}!"
 
+    .error(@_showError)
 
   count: (msg) ->
     swarmbot.firebase().child('projects').once 'value', (snapshot)=>

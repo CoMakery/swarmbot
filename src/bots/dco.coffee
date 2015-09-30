@@ -37,7 +37,7 @@ module.exports = (robot) ->
     log "MATCH 'list communities' : #{msg.match[0]}"
     new DcosController().list(msg)
 
-  robot.respond /list members(?: of\s+(.*)\s*)?$/i, (msg) ->
+  robot.respond /list members(?: (?:of|in)\s+(.*)\s*)?$/i, (msg) ->
     log "MATCH 'list members' : #{msg.match[0]}"
     dcoKey = msg.match[1]
     new DcosController().listMembers(msg, { dcoKey })

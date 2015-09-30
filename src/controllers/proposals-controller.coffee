@@ -21,7 +21,7 @@ class ProposalsController extends ApplicationController
         messages = proposals.map @_proposalMessage
         @msg.send messages.join("\n")
 
-    .error(@showError)
+    .error(@_showError)
 
   listApproved: (@msg, { @community }) ->
     @getDco().then (dco)=>
@@ -37,7 +37,7 @@ class ProposalsController extends ApplicationController
         messages = proposals.map @_proposalMessage
         @msg.send messages.join("\n")
 
-    .error(@showError)
+    .error(@_showError)
 
   show: (@msg, { proposalName, @community }) ->
     @getDco().then (dco) =>
@@ -83,7 +83,7 @@ class ProposalsController extends ApplicationController
         @msg.send "Error creating proposal: #{error.message}"
         # TODO: re-throw to log stacktrace
 
-    .error(@showError)
+    .error(@_showError)
 
   #TODO: possibly incorporate some gatekeeping here (i.e. only members of a DCO can vote on the output)
   rate: (@msg, { @community, proposalName, rating }) ->
@@ -109,10 +109,7 @@ class ProposalsController extends ApplicationController
         .catch (error) =>
           @msg.send "Rating failed: #{error}"
           p "#{error}" # TODO: re-throw exception to show stacktrace
-    .error(@showError)
-
-  showError: (error)->
-    @msg.send error.message
+    .error(@_showError)
 
   _proposalMessage: (proposal) ->
     text = "Proposal #{proposal.get('id')}"

@@ -20,6 +20,9 @@ class ApplicationController
         else
           Promise.reject(Promise.OperationalError("Please either set a community or specify the community in the command."))
 
+  _showError: (error)->
+    @msg.send error.message
+
   _userText: (user)->
     info = ""
     info += "real name: " + user.get('real_name')
