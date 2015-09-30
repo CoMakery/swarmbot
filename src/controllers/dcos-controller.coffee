@@ -46,12 +46,14 @@ class DcosController extends ApplicationController
     @msg.reply "Great, you've joined the DCO"
 
   count: (msg) ->
-    swarmbot.firebase().child('projects').on 'value', (snapshot)=>
+    log 'count'
+    swarmbot.firebase().child('projects').once 'value', (snapshot)=>
+      log snapshot.numChildren(), snapshot.val()
       msg.send snapshot.numChildren()
 
   create: (msg, { dcoKey }) ->
     owner = msg.robot.whose msg
-    dco = new DCO(id: dcoKey, owner: owner) 
+    dco = new DCO(id: dcoKey, owner: owner)
     dco.save()
 
     # swarmbot.firebase().child('projects/' + dcoKey).update({project_name : dcoKey, owner : owner})
