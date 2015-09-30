@@ -49,10 +49,11 @@ class UsersController extends ApplicationController
     @msg.send "Your current community has been unset."
 
   getInfo: (@msg, { slackUsername }) ->
-    user = if slackUsername
-      User.findBySlackUsername(slackUsername)
-    else
-      @currentUser()
+    if slackUsername != 'me'
+      # User.findBySlackUsername(slackUsername)
+      return @msg.send "Only supports 'about me' for now. Working on it!"
+
+    user = @currentUser()
 
     user.fetch().then (user) =>
       info = ""

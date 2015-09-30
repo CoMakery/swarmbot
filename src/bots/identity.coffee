@@ -41,10 +41,7 @@ module.exports = (robot) ->
 
   robot.respond /about (.*)\s*$/i, (msg) ->
     slackUsername = msg.match[1]
-    if slackUsername == 'me'
-      new UsersController().getInfo(msg)
-    else
-      new UsersController().getInfo(msg, { slackUsername })
+    new UsersController().getInfo(msg, { slackUsername })
 
   # Not sure, this may work in slack, not sure about
   #  robot.respond /register?.*/i, (msg) ->
