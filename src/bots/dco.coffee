@@ -88,4 +88,4 @@ module.exports = (robot) ->
             swarmbot.firebase().child('projects/' + dcoCreateStatus.dcoKey).update({project_statement : answer})
             dcoCreateStatus = {stage: 0}
             robot.brain.set "dcoCreateStatus", dcoCreateStatus
-            msg.send "The statement of intent is: #{answer}"
+            msg.send "The new statement of intent is: #{answer}"
