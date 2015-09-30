@@ -14,7 +14,8 @@ class FirebaseCollection
         new @model assign(data, id: id), { parent: @parent, snapshot: @snapshot.child(id) }
 
   fetch: ->
-    @map (model) -> model.fetch()
+    Promise.all( @map (model) -> model.fetch() )
+    .then => @
 
   # XXX: Breaks if you edit the @models manually and not the @snapshot. (e.g. @filter())
   # Maybe just use the @models instead of numChildren

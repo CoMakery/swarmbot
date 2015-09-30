@@ -56,11 +56,7 @@ class UsersController extends ApplicationController
       @currentUser().fetch()
 
     userPromise.then (user) =>
-      info = ""
-      info += "real name: " + user.get('real_name')
-      info += ", slack username: " + user.get('slack_username')
-      info += ", default community: " + user.get('current_dco')
-      info += ", receiving address: " + user.get('btc_address')
+      info = @_userText(user)
       @msg.send info
 
 module.exports = UsersController

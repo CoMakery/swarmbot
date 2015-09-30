@@ -13,6 +13,15 @@ class DcosController extends ApplicationController
 
       msg.send dcoNames.join("\n")
 
+  listMembers: (@msg, { @community: dcoKey }) ->
+    @getDco()
+    .then (dco)-> dco.fetch()
+    .then (dco)->
+      dco.members().fetch().then (members) =>
+        messages = members.map (member)=>
+          @_userText(member)
+        @msg.send(messages.join("\n"))
+
   find: (msg, { dcoSearch }) ->
     swarmbot.firebase().child('projects').orderByKey()
       .startAt(dcoSearch).endAt(dcoSearch + "~")
@@ -35,8 +44,6 @@ class DcosController extends ApplicationController
     msg.robot.brain.set "dcoJoinStatus", dcoJoinStatus
 
   joinAgreed: (@msg, { @community: dcoKey }) ->
-    p 'joinAgreed'
-
     @getDco()
     .then (dco)-> dco.fetch()
     .then (dco)->

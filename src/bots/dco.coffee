@@ -8,6 +8,7 @@
 #   hubot join community <community name>
 #   hubot community <community name> list bounties
 #   hubot how many communities?
+#   hubot list members [of <community name>]
 
 # Available but not displayed in help
 #   hubot create <number> of asset for <community name>
@@ -35,6 +36,11 @@ module.exports = (robot) ->
   robot.respond /list communities$/i, (msg) ->
     log "MATCH 'list communities' : #{msg.match[0]}"
     new DcosController().list(msg)
+
+  robot.respond /list members(?: of\s+(.*)\s*)?$/i, (msg) ->
+    log "MATCH 'list members' : #{msg.match[0]}"
+    dcoKey = msg.match[1]
+    new DcosController().listMembers(msg, { dcoKey })
 
   robot.respond /find community (\S*)$/i, (msg) ->
     log "MATCH 'find community' : #{msg.match[0]}"

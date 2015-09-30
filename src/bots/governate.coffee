@@ -15,12 +15,6 @@ ProposalsController = require '../controllers/proposals-controller'
 MembersController = require '../controllers/members-controller'
 
 module.exports = (robot) ->
-
-  robot.respond /list members(?: in (.+))?\s*$/i, (msg) ->
-    [all, community] = msg.match
-    log "MATCH 'list members' : #{all}"
-    new MembersController().list(msg, { community })
-
   robot.respond /list\s+(all)?\s*proposals(?: in (.+))?\s*$/i, (msg) ->
     [all, showAll, community] = msg.match
     log "MATCH 'list proposals' : #{all}"

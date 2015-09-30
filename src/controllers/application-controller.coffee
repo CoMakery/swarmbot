@@ -20,5 +20,11 @@ class ApplicationController
         else
           Promise.reject(Promise.OperationalError("Please either set a community or specify the community in the command."))
 
+  _userText: (user)->
+    info = ""
+    info += "real name: " + user.get('real_name')
+    info += ", slack username: " + user.get('slack_username')
+    info += ", default community: " + user.get('current_dco')
+    info += ", receiving address: " + user.get('btc_address')
 
 module.exports = ApplicationController
