@@ -51,7 +51,7 @@ class DcosController extends ApplicationController
 
   create: (msg, { dcoKey }) ->
     owner = msg.robot.whose msg
-    dco = new DCO(id: dcoKey, owner: owner) # TODO: Should use user's unique id here instead of username
+    dco = new DCO(id: dcoKey, owner: owner) 
     dco.save()
 
     # swarmbot.firebase().child('projects/' + dcoKey).update({project_name : dcoKey, owner : owner})
