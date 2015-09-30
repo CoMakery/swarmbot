@@ -56,7 +56,7 @@ class DcosController extends ApplicationController
 
     # swarmbot.firebase().child('projects/' + dcoKey).update({project_name : dcoKey, owner : owner})
     dco.issueAsset { amount: 100000000 }
-    dcoCreateStatus = {stage: 1, dcoKey: dcoKey}
+    dcoCreateStatus = {stage: 1, dcoKey: dcoKey, owner: owner}
     msg.robot.brain.set "dcoCreateStatus", dcoCreateStatus
     msg.send "Community created. Please provide a statement of intent starting with 'We'"
 

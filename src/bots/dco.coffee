@@ -80,9 +80,11 @@ module.exports = (robot) ->
 
       answer = msg.match[1]
       firstTwoLetters = answer.substring(0,2).toLowerCase()
+      currentUser = msg.robot.whose msg
+
       switch dcoCreateStatus.stage
         when 1
-          if firstTwoLetters == "we"
+          if firstTwoLetters == "we" && currentUser == dcoCreateStatus.owner
             swarmbot.firebase().child('projects/' + dcoCreateStatus.dcoKey).update({project_statement : answer})
             dcoCreateStatus = {stage: 0}
             robot.brain.set "dcoCreateStatus", dcoCreateStatus
