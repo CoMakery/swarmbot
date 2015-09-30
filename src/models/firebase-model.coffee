@@ -8,6 +8,7 @@ class FirebaseModel
     @hasParent = @hasParent || false
     @parent = options.parent
     @snapshot = options.snapshot
+    @parseSnapshot() if @snapshot?
 
   firebase: ->
     swarmbot.firebase().child(@firebasePath())
@@ -43,5 +44,6 @@ class FirebaseModel
 
   parseSnapshot: ->
     assign @attributes, @snapshot.val()
+    @
 
 module.exports = FirebaseModel
