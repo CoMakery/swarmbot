@@ -3,7 +3,7 @@
 #
 # Commands:
 #   hubot create proposal <proposal name> for <number of coins> [in <community>]
-#   hubot rate <proposal name> <value>% [in <community name]
+#   hubot rate proposal <proposal name> <value>% [in <community name]
 #   hubot award <proposal name> proposal to <slack username> [in <community>]
 #   hubot show proposal <proposal name> [in <community name>]
 
