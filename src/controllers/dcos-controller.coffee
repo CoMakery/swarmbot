@@ -47,7 +47,6 @@ class DcosController extends ApplicationController
 
   count: (msg) ->
     swarmbot.firebase().child('projects').once 'value', (snapshot)=>
-      p snapshot.numChildren()
       msg.send "There are currently #{snapshot.numChildren()} communities."
 
   create: (msg, { dcoKey }) ->

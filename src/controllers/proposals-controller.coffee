@@ -94,19 +94,21 @@ class ProposalsController extends ApplicationController
         unless proposal.exists()
           return @msg.send "Could not find the proposal '#{proposal.get('id')}'. Please check that it exists."
 
-        Claim.put {
+        claim = Claim.put {
           source: user.get('id')
           target: proposal.get('id')
           value: rating * 0.01  # convert to percentage
         }, {
           firebase: path: "projects/#{dco.get('id')}/proposals/#{proposalName}/ratings"
         }
-          .then (messages) =>
-            replies = for message in messages
-              "Rating saved to #{message}"
-            @msg.send replies.join "\n"
-          .catch (error) =>
-            @msg.send "Rating failed: #{error}\n#{error.stack}"
+        p claim
+        claim.then (messages) =>
+          p messages
+          replies = for message in messages
+            "Rating saved to #{message}"
+          @msg.send replies.join "\n"
+        .catch (error) =>
+          @msg.send "Rating failed: #{error}\n#{error.stack}"
     .error(@showError)
 
   showError: (error)->
