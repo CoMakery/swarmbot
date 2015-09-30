@@ -41,11 +41,10 @@ class ProposalsController extends ApplicationController
 
   show: (@msg, { proposalName, @community }) ->
     @getDco().then (dco) =>
-      proposal = new Bounty({id: proposalName}, parent: dco)
+      proposal = new Proposal({id: proposalName}, parent: dco)
       proposal.fetch().then (proposal) =>
-        p proposal.attributes
         msgs = for k, v of proposal.attributes
-          "#{k} : #{v}"
+          "#{k} : #{v}" unless v instanceof Object
         @msg.send msgs.join("\n")
 
   award: (msg, { proposalName, awardee, dcoKey }) ->
