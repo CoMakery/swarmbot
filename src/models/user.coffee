@@ -12,6 +12,7 @@ class User extends FirebaseModel
       .equalTo(slackUsername)
       .limitToFirst(1)
       .once 'value', (snapshot)->
+        return cb(new Promise.OperationalError("Cannot find a user named '#{slackUsername}'.")) unless snapshot.val()
         userId = Object.keys(snapshot.val())[0]
         cb(null, new User({}, snapshot: snapshot.child(userId)))
     , cb # error

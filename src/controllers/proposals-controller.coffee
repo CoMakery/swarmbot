@@ -126,5 +126,4 @@ class ProposalsController extends ApplicationController
     text
 
 
-
 module.exports = ProposalsController
