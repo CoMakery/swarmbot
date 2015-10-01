@@ -15,7 +15,7 @@ class UsersController extends ApplicationController
       emailAddress = @msg.message.user.email_address
       # p user, slackId, realName, emailAddress
 
-       # quickfix, set to silent register, now that it is automated
+      # quickfix, set to silent register, now that it is automated
 
       if slackUsername
         user.set "slack_username", slackUsername
