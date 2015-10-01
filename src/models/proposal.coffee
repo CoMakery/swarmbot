@@ -24,6 +24,7 @@ class Proposal extends FirebaseModel
 
   awardTo: (btcAddress) ->
     amount = @get('amount')
+    p "active proposal", @
     colu = swarmbot.colu()
     p args =
       from: [ @parent.get('coluAssetAddress') ]

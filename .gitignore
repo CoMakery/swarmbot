@@ -1,4 +1,4 @@
-/.env
+it/.env
 /.env.*
 /.hubot_history
 /node_modules/
@@ -6,4 +6,4 @@
 /tmp/
 npm-debug.log
 dump.rdb
-.tags*
+.env

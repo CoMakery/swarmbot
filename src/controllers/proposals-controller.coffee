@@ -56,11 +56,13 @@ class ProposalsController extends ApplicationController
       user = @currentUser()
       if user.canUpdate(dco)
         User.findBySlackUsername(awardee).then (user)=>
+          p "user", user
           awardeeAddress = user.get('btc_address')
           p "address", awardeeAddress
 
           if awardeeAddress?
             proposal = new Proposal({id: proposalName}, parent: dco)
+            #TODO: following line for some reason isn't fetching all attributes (i.e. "amount")
             proposal.fetch().then (proposal)-> proposal.awardTo awardeeAddress
 
             message = "Awarded proposal to #{awardee}"
