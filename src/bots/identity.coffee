@@ -20,6 +20,13 @@ DCO = require '../models/dco'
 
 module.exports = (robot) ->
 
+
+  robot.enter (msg) ->
+    try
+      robot.messageRoom msg.message.user.name, "Hello I'm the swarmbot!"
+      robot.messageRoom msg.message.user.name, "type \"help\" to find out what I can do"
+    catch error
+
   # Generic auto register
   robot.respond /\s*/i, (msg) ->
     new UsersController().register(msg)
