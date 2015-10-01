@@ -65,16 +65,17 @@ class DcosController extends ApplicationController
     swarmbot.firebase().child('projects').once 'value', (snapshot)=>
       msg.send "There are currently #{snapshot.numChildren()} communities."
 
-  create: (msg, { dcoKey }) ->
-    owner = msg.robot.whose msg
+  create: (@msg, { dcoKey }) ->
+    owner = @currentUser().get('id')
     dco = new DCO(id: dcoKey, owner: owner)
     dco.save()
 
-    # swarmbot.firebase().child('projects/' + dcoKey).update({project_name : dcoKey, owner : owner})
+    @currentUser().setDco dco.get('id')
+
     dco.issueAsset { amount: 100000000 }
     dcoCreateStatus = {stage: 1, dcoKey: dcoKey, owner: owner}
-    msg.robot.brain.set "dcoCreateStatus", dcoCreateStatus
-    msg.send "Community created. Please provide a statement of intent starting with 'We'"
+    @msg.robot.brain.set "dcoCreateStatus", dcoCreateStatus
+    @msg.send "Community created. Please provide a statement of intent starting with 'We'"
 
   issueAsset: (msg, { dcoKey, amount }) ->
     issuer = msg.robot.whose msg
