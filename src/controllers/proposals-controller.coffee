@@ -53,23 +53,25 @@ class ProposalsController extends ApplicationController
     @getDco()
     .then (dco) -> dco.fetch()
     .then (dco) ->
-      user = @currentUser()
-      if user.canUpdate(dco)
+      if @currentUser().canUpdate(dco)
         User.findBySlackUsername(awardee).then (user)=>
           awardeeAddress = user.get('btc_address')
 
           if awardeeAddress?
             proposal = new Proposal({id: proposalName}, parent: dco)
 
-            @msg.send 'Initiating transaction.'
             proposal.fetch().then (proposal) =>
-              proposal.awardTo(awardeeAddress).then (body)=>
-                p "award #{proposal.get('id')} to #{awardee} :", body
-                @msg.send "Awarded proposal to #{awardee}. Txn: #{body.txid}"
-                proposal.set('awarded', true)
-            .catch (error)=>
-              @msg.send "Error awarding '#{proposal.get('id')}' to #{awardee}. Unable to complete the transaction.\n #{err.message}"
-              throw error
+              if proposal.get('awarded')
+                @msg.send "This proposal has already been awarded."
+              else
+                @msg.send 'Initiating transaction.'
+                proposal.awardTo(awardeeAddress).then (body)=>
+                  p "award #{proposal.get('id')} to #{awardee} :", body
+                  @msg.send "Awarded proposal to #{awardee}. Txn: #{body.txid}"
+                  proposal.set('awarded', user.get('id'))
+                .catch (error)=>
+                  @msg.send "Error awarding '#{proposal.get('id')}' to #{awardee}. Unable to complete the transaction.\n #{err.message}"
+                  throw error
           else
             @msg.send "#{user.get('slack_username')} must register a BTC address to receive this award!"
       else
