@@ -32,7 +32,9 @@ class ProposalsController extends ApplicationController
           return @msg.send "There are no approved proposals for #{dco.get('id')}.\nList all proposals and rate your favorites!"
 
         proposals.filter (proposal) ->
-          proposal.ratings().size() > 0 && proposal.ratings().score() > 50
+          proposal.ratings().size() > 0 &&
+          proposal.ratings().score() > 50 &&
+          !proposal.get('awarded')?
 
         proposals.sortByReputationScore()
         messages = proposals.map @_proposalMessage
@@ -120,6 +122,7 @@ class ProposalsController extends ApplicationController
     text += " Reward #{proposal.get('amount')}" if proposal.get('amount')?
     score = proposal.ratings().score()
     text += " Rating: #{score}%" unless isNaN(score)
+    text += " (awarded)" if proposal.get('awarded')?
     text
 
 
