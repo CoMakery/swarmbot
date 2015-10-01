@@ -54,7 +54,7 @@ class ProposalsController extends ApplicationController
     @community = dcoKey
     @getDco()
     .then (dco) -> dco.fetch()
-    .then (dco) ->
+    .then (dco) =>
       if @currentUser().canUpdate(dco)
         User.findBySlackUsername(awardee).then (user)=>
           awardeeAddress = user.get('btc_address')
@@ -77,6 +77,7 @@ class ProposalsController extends ApplicationController
           else
             @msg.send "#{user.get('slack_username')} must register a BTC address to receive this award!"
       else
+        p "#{@currentUser().get('id')} trying to award bounty within dco #{dco.get('id')}"
         # @msg.send "Sorry, you don't have sufficient trust in this community to award this proposal."
         @msg.send "Sorry, you must be the progenitor of this DCO to award proposals."
 
