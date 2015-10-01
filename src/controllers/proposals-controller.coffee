@@ -69,7 +69,7 @@ class ProposalsController extends ApplicationController
                 @msg.send 'Initiating transaction.'
                 proposal.awardTo(awardeeAddress).then (body)=>
                   p "award #{proposal.get('id')} to #{awardee} :", body
-                  @msg.send "Awarded proposal to #{awardee}. Txn: #{body.txid}"
+                  @msg.send "Awarded proposal to #{awardee}.\n#{@_coloredCoinTxnUrl(body.txid)}"
                   proposal.set('awarded', user.get('id'))
                 .catch (error)=>
                   @msg.send "Error awarding '#{proposal.get('id')}' to #{awardee}. Unable to complete the transaction.\n #{err.message}"
@@ -126,5 +126,11 @@ class ProposalsController extends ApplicationController
     text += " (awarded)" if proposal.get('awarded')?
     text
 
+  _coloredCoinTxnUrl: (txnId) ->
+    url = ["http://coloredcoins.org/explorer"]
+    url.push 'testnet' if process.env.COLU_NETWORK == 'testnet'
+    url.push "tx/#{txnId}"
+
+    url.join('/')
 
 module.exports = ProposalsController
