@@ -56,19 +56,22 @@ class ProposalsController extends ApplicationController
       user = @currentUser()
       if user.canUpdate(dco)
         User.findBySlackUsername(awardee).then (user)=>
-          p "user", user
           awardeeAddress = user.get('btc_address')
-          p "address", awardeeAddress
 
           if awardeeAddress?
             proposal = new Proposal({id: proposalName}, parent: dco)
-            #TODO: following line for some reason isn't fetching all attributes (i.e. "amount")
-            proposal.fetch().then (proposal)-> proposal.awardTo awardeeAddress
 
-            message = "Awarded proposal to #{awardee}"
-            @msg.send message
+            @msg.send 'Initiating transaction.'
+            proposal.fetch().then (proposal) =>
+              proposal.awardTo(awardeeAddress).then (body)=>
+                p "award #{proposal.get('id')} to #{awardee} :", body
+                @msg.send "Awarded proposal to #{awardee}. Txn: #{body.txid}"
+                proposal.set('awarded', true)
+            .catch (error)=>
+              @msg.send "Error awarding '#{proposal.get('id')}' to #{awardee}. Unable to complete the transaction.\n #{err.message}"
+              throw error
           else
-            @msg.send "#{user.get('slack_username')} must register a BTC address to receive this award."
+            @msg.send "#{user.get('slack_username')} must register a BTC address to receive this award!"
       else
         # @msg.send "Sorry, you don't have sufficient trust in this community to award this proposal."
         @msg.send "Sorry, you must be the progenitor of this DCO to award proposals."

@@ -5,15 +5,13 @@ DCO = require '../models/dco'
 
 class ApplicationController
   currentUser: ->
-    activeUserId = @msg.robot.whose @msg
-    # User.find activeUser
-    new User id: activeUserId
+    @_currentUser ||= new User id: @msg.robot.whose(@msg)
 
   getDco: ()->
     if @community?
       Promise.resolve(DCO.find(@community)).bind(@)
     else
-      @currentUser().fetch().bind(@).then (user) ->
+      @currentUser().fetchIfNeeded().bind(@).then (user) ->
         @community = user.get('current_dco')
         if @community?
           DCO.find(@community)

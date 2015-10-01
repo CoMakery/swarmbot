@@ -11,7 +11,7 @@ trustExchange = require('trust-exchange').instance
 swarmbot = require '../models/swarmbot'
 Promise = require 'bluebird'
 
-Promise.longStackTraces() # TODO: only in development mode. decreases performance 5x
+# Promise.longStackTraces() # only in development mode. decreases performance 5x
 
 if process.env.FIREBASE_SECRET?
   swarmbot.firebase().authWithCustomToken process.env.FIREBASE_SECRET, (error) ->

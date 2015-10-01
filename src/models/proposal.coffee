@@ -22,24 +22,20 @@ class Proposal extends FirebaseModel
   ratings: ->
     @_ratings ?= new RatingCollection @snapshot.child('ratings'), parent: @
 
-  awardTo: (btcAddress) ->
-    amount = @get('amount')
-    p "active proposal", @
+  awardTo: Promise.promisify (btcAddress, cb) ->
     colu = swarmbot.colu()
-    p args =
-      from: [ @parent.get('coluAssetAddress') ]
-      to: [
-        {
-          address: btcAddress
-          assetId: @parent.get('coluAssetId')
-          amount: amount
-        }
-      ]
-    colu.sendAsset args, (err, body) ->
-      p "we made it", body
-      if err
-        p "err:", err
-        return console.error "Error: #{err}"
-      console.log 'Body: ', body
+    dco = @parent
+    args =
+      from: [ dco.get('coluAssetAddress') ]
+      to: [{
+        address: btcAddress
+        assetId: dco.get('coluAssetId')
+        amount: @get('amount')
+      }]
+      metadata:
+        community: dco.get('id')
+        proposal:  @get('id')
+
+    colu.sendAsset args, cb
 
 module.exports = Proposal
