@@ -5,6 +5,7 @@ Promise = require 'bluebird'
 DCO = require '../models/dco'
 swarmbot = require '../models/swarmbot'
 Proposal = require '../models/proposal'
+User = require '../models/user'
 ProposalCollection = require '../collections/proposal-collection'
 { values, assign, map } = require 'lodash'
 
@@ -47,32 +48,28 @@ class ProposalsController extends ApplicationController
           "#{k} : #{v}" unless v instanceof Object
         @msg.send msgs.join("\n")
 
-  award: (msg, { proposalName, awardee, dcoKey }) ->
-    activeUser = msg.robot.whose msg
-
-    dco = DCO.find dcoKey
-
-    dco.fetch().then (myDco) ->
-
-      if myDco.get("owner") == activeUser
-
-        usersRef = swarmbot.firebase().child('users')
-        usersRef.orderByChild("slack_username").equalTo(awardee).on 'value', (snapshot) ->
-          v = snapshot.val()
-          vals = values v
-          p "vals", vals
-          awardeeAddress = vals[0].btc_address
+  award: (@msg, { proposalName, awardee, dcoKey }) ->
+    @community = dcoKey
+    @getDco()
+    .then (dco) -> dco.fetch()
+    .then (dco) ->
+      user = @currentUser()
+      if user.canUpdate(dco)
+        User.findBySlackUsername(awardee).then (user)=>
+          awardeeAddress = user.get('btc_address')
           p "address", awardeeAddress
 
-          # p "awardee", awardeeAddress values btc_address
-          if(awardeeAddress)
-            dco.awardBounty {proposalName, awardeeAddress}
+          if awardeeAddress?
+            proposal = new Proposal({id: proposalName}, parent: dco)
+            proposal.fetch().then (proposal)-> proposal.awardTo awardeeAddress
+
             message = "Awarded proposal to #{awardee}"
-            msg.send message
+            @msg.send message
           else
-            msg.send "User not yet registered"
+            @msg.send "#{user.get('slack_username')} must register a BTC address to receive this award."
       else
-        msg.send "Sorry, you don't have sufficient trust in this community to award this proposal."
+        # @msg.send "Sorry, you don't have sufficient trust in this community to award this proposal."
+        @msg.send "Sorry, you must be the progenitor of this DCO to award proposals."
 
   create: (@msg, { proposalName, amount, @community }) ->
     @getDco().then (dco) ->

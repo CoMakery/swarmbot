@@ -65,43 +65,6 @@ class DCO extends FirebaseModel
 
       return
 
-  awardProposal: ({proposalName, awardeeAddress}, cb) ->
-
-    # p "proposal name", proposalName
-    # amountRef = @dcoRef.child "bounties/#{proposalName}/amount"
-    proposal = new Proposal({id: proposalName}, parent: @)
-    @fetch().then (dco)->
-      assetId = dco.get 'coluAssetId'
-      fromAddress = dco.get 'coluAssetAddress'
-      toAddress = awardeeAddress
-      p "awardee", awardeeAddress
-      p "asset id", assetId
-      proposal.fetch().then (proposal) ->
-        amount = proposal.get('amount')
-        p "proposal amount", amount
-        colu = swarmbot.colu()
-        # colu.on 'connect', ->
-          #colu.hdwallet.getAddress()
-        p args =
-          from: [ fromAddress ]
-          to: [
-            {
-              address: toAddress
-              assetId: assetId
-              amount: amount
-            }
-            ]
-        colu.sendAsset args, (err, body) ->
-          p "we made it", body
-          if err
-            p "err:", err
-            return console.error "Error: #{err}"
-          console.log 'Body: ', body
-            # cb null, "proposal successfully awarded"
-        # if colu.needToDiscover
-        # colu.init()
-
-
     # @dcoRef.on 'value', (snapshot) ->
     #     assetId = snapshot.val().coluAssetId
     #     fromAddress = snapshot.val().coluAssetAddress

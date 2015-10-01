@@ -20,6 +20,9 @@ class User extends FirebaseModel
   setDco: (dcoKey) ->
     @set "current_dco", dcoKey
 
+  canUpdate: (dco) ->
+    dco.get('owner') == @get('id')
+
   # constructor: ({@userRef}) ->
   # @find: (userKey) ->
   #   users = swarmbot.firebase().child('users')
