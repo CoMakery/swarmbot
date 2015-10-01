@@ -21,7 +21,7 @@ class UsersController extends ApplicationController
         user.set "slack_username", slackUsername
         user.set "last_active_on_slack", Date.now()
 
-      if  process.env.HUBOT_DEFAULT_COMMUNITY && user.getDCO == null
+      if process.env.HUBOT_DEFAULT_COMMUNITY && !user.get('current_dco')
         user.set "current_dco", process.env.HUBOT_DEFAULT_COMMUNITY
         # @msg.send "registered Slack username"
 
