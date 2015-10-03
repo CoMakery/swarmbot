@@ -39,9 +39,11 @@ class DcosController extends ApplicationController
   join: (msg, { dcoKey }) ->
     communities = swarmbot.firebase().child('projects')
     communities.child(dcoKey + '/project_statement').once 'value', (snapshot) ->
-      msg.send 'Do you agree with this statement of intent?'
-      msg.send snapshot.val()
-      msg.send 'Yes/No?'
+      msg.send [
+        'Do you agree with this statement of intent?',
+        "#{snapshot.val()}",
+        'Yes/No?'
+      ].join "\n"
 
     dcoJoinStatus = {stage: 1, dcoKey: dcoKey}
     msg.robot.brain.set "dcoJoinStatus", dcoJoinStatus

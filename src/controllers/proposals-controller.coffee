@@ -72,7 +72,7 @@ class ProposalsController extends ApplicationController
                   @msg.send "Awarded proposal to #{awardee}.\n#{@_coloredCoinTxnUrl(body.txid)}"
                   proposal.set('awarded', user.get('id'))
                 .catch (error)=>
-                  @msg.send "Error awarding '#{proposal.get('id')}' to #{awardee}. Unable to complete the transaction.\n #{err.message}"
+                  @msg.send "Error awarding '#{proposal.get('id')}' to #{awardee}. Unable to complete the transaction.\n #{error.message}"
                   throw error
           else
             @msg.send "#{user.get('slack_username')} must register a BTC address to receive this award!"

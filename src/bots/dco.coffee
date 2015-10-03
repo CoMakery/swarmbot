@@ -6,7 +6,6 @@
 #   hubot find community <start of community name>
 #   hubot create community <community name>
 #   hubot join community <community name>
-#   hubot community <community name> list bounties
 #   hubot how many communities?
 #   hubot list members [of <community name>]
 
