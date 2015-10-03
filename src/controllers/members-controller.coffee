@@ -4,7 +4,6 @@
 ApplicationController = require './application-controller'
 Promise = require 'bluebird'
 DCO = require '../models/dco'
-Member = require '../models/member'
 swarmbot = require '../models/swarmbot'
 { values } = require 'lodash'
 

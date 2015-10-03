@@ -36,26 +36,33 @@ class DcosController extends ApplicationController
 
         msg.send dcoNames.join("\n")
 
-  join: (msg, { dcoKey }) ->
-    communities = swarmbot.firebase().child('projects')
-    communities.child(dcoKey + '/project_statement').once 'value', (snapshot) ->
-      msg.send [
+  join: (@msg, { dcoKey }) ->
+    @community = dcoKey
+    @getDco()
+    .then (dco) -> dco.fetch()
+    .then (dco) ->
+      return @msg.send "The community '#{dco.get('id')}' does not exist." unless dco.exists()
+      return @msg.send "You are already a member of this community." if dco.hasMember(@currentUser())
+
+      @msg.send [
         'Do you agree with this statement of intent?',
-        "#{snapshot.val()}",
+        "#{dco.get('project_statement')}",
         'Yes/No?'
       ].join "\n"
 
-    dcoJoinStatus = {stage: 1, dcoKey: dcoKey}
-    msg.robot.brain.set "dcoJoinStatus", dcoJoinStatus
+      dcoJoinStatus = {stage: 1, dcoKey: dcoKey}
+      @msg.robot.brain.set "dcoJoinStatus", dcoJoinStatus
 
   joinAgreed: (@msg, { dcoKey }) ->
     @community = dcoKey
     @getDco()
     .then (dco)-> dco.fetch()
     .then (dco)->
+      return @msg.send "The community '#{dco.get('id')}' does not exist." unless dco.exists()
       user = @currentUser()
       if dco.addMember user
         @msg.reply "Great, you've joined the DCO"
+        # TODO: Membership coin as well as bounty coin
         # dco.sendAsset { amount: 1, recipient: user }
         user.setDco dco.get('id')
       else

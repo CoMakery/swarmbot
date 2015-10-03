@@ -1,5 +1,5 @@
 {log, p, pjson} = require 'lightsaber'
-{ values, find, map } = require 'lodash'
+{ values, find, map, contains } = require 'lodash'
 Promise = require 'bluebird'
 swarmbot = require '../models/swarmbot'
 FirebaseModel = require './firebase-model'
@@ -29,6 +29,9 @@ class DCO extends FirebaseModel
 
   members: ->
     new UserCollection(map @memberIds(), (id) -> new User({id: id}))
+
+  hasMember: (user) ->
+    contains @memberIds(), user.get('id')
 
   addMember: (user) ->
     userId = user.get('id')
