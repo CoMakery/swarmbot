@@ -12,9 +12,6 @@ UserCollection = require '../collections/user-collection'
 class DCO extends FirebaseModel
   urlRoot: 'projects'
 
-  @find: (dcoKey) ->
-    new DCO id: dcoKey
-
   bounties: Promise.promisify (cb) ->
     @firebase().child('bounties').once 'value', (snapshot) =>
       bounties = snapshot.val() # should really be an array of Proposal objects.

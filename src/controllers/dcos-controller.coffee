@@ -76,15 +76,17 @@ class DcosController extends ApplicationController
 
   create: (@msg, { dcoKey }) ->
     owner = @currentUser().get('id')
-    dco = new DCO(id: dcoKey, owner: owner)
-    dco.save()
+    DCO.find(dcoKey).then (dco) =>
+      if dco.exists()
+        return @msg.send "Community '#{dcoKey}' already exists!"
 
-    @currentUser().setDco dco.get('id')
+      dco.save()
+      @currentUser().setDco dco.get('id')
 
-    dco.issueAsset { amount: 100000000 }
-    dcoCreateStatus = {stage: 1, dcoKey: dcoKey, owner: owner}
-    @msg.robot.brain.set "dcoCreateStatus", dcoCreateStatus
-    @msg.send "Community created. Please provide a statement of intent starting with 'We'"
+      dco.issueAsset { amount: 100000000 }
+      dcoCreateStatus = {stage: 1, dcoKey: dcoKey, owner: owner}
+      @msg.robot.brain.set "dcoCreateStatus", dcoCreateStatus
+      @msg.send "Community created. Please provide a statement of intent starting with 'We'"
 
   issueAsset: (msg, { dcoKey, amount }) ->
     issuer = msg.robot.whose msg

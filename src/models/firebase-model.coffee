@@ -4,6 +4,10 @@ swarmbot = require './swarmbot'
 { assign } = require 'lodash'
 
 class FirebaseModel
+
+  @find: (id, options={}) ->
+    new @(id: id, options).fetch()
+
   constructor: (@attributes={}, options={}) ->
     @hasParent = @hasParent || false
     @parent = options.parent
