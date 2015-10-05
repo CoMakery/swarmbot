@@ -26,6 +26,7 @@
   },
   "dependencies": {
     "backbone": "^1.2.3",
+    "bitcoinjs-lib": "^2.1.1",
     "bluebird": "^2.10.0",
     "colu": "^0.6.4",
     "colu-access": "^0.2.5",
@@ -35,9 +36,9 @@
     "hubot-heroku-keepalive": "0.0.4",
     "hubot-redis-brain": "0.0.3",
     "hubot-scripts": "^2.16.1",
-    "instagram-node-lib": "0.1.1",
     "hubot-slack": "^3.3.0",
     "hubot-suggest": "citizencode/hubot-suggest#v0.0.3",
+    "instagram-node-lib": "0.1.1",
     "lightsaber": "^0.4.1",
     "lodash": "^3.10.0",
     "trust-exchange": "citizencode/trust-exchange"

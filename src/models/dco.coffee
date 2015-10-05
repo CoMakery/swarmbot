@@ -46,12 +46,12 @@ class DCO extends FirebaseModel
 
   issueAsset: ({ amount }, cb) ->
     dcoKey = @get('id')
-    issuer = @get('owner')
+    issuer = dcoKey
     colu = swarmbot.colu()
     asset =
       amount: amount
       metadata:
-        assetName: dcoKey
+        assetName: dcoKey + ' Coin'
         issuer: issuer
         # 'description': 'Super DCO membership'
     # colu.on 'connect', ->

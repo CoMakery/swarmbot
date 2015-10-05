@@ -35,7 +35,7 @@ module.exports = (robot) ->
   # robot.respond /register me$/i, (msg) ->
   #   new UsersController().register(msg)
 
-  robot.respond /register btc (.+)$/i, (msg) ->
+  robot.respond /register btc <?(\w+)>?$/i, (msg) ->
     log "MATCH 'register btc' : #{msg.match[0]}"
     btcAddress = msg.match[1]
     new UsersController().registerBtc(msg, { btcAddress })

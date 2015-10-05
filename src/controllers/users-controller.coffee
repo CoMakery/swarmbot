@@ -1,4 +1,5 @@
 { p, pjson } = require 'lightsaber'
+{ address } = require 'bitcoinjs-lib'
 ApplicationController = require './application-controller'
 swarmbot = require '../models/swarmbot'
 User = require '../models/user'
@@ -38,6 +39,12 @@ class UsersController extends ApplicationController
         # @msg.send "registered slack id"
 
   registerBtc: (@msg, { btcAddress }) ->
+    try
+      address.fromBase58Check(btcAddress)
+    catch error
+      p error.message
+      return @msg.send "'#{btcAddress}' is an invalid bitcoin address.  #{error.message}"
+
     user = @currentUser()
     user.set "btc_address", btcAddress
     @msg.send "BTC address #{btcAddress} registered."
