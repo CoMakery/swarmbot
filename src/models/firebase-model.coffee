@@ -1,7 +1,7 @@
 {log, p, pjson} = require 'lightsaber'
 Promise = require 'bluebird'
-swarmbot = require './swarmbot'
 { assign } = require 'lodash'
+swarmbot = require './swarmbot'
 
 class FirebaseModel
 

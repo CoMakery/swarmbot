@@ -1,7 +1,14 @@
+Promise = require 'bluebird'
 {log, p, pjson} = require 'lightsaber'
 { assign, partition, sortByOrder, forEach, map, filter } = require 'lodash'
+swarmbot = require '../models/swarmbot'
 
 class FirebaseCollection
+
+  @all: Promise.promisify (cb) ->
+    swarmbot.firebase().child(@::model::urlRoot).once 'value', (snapshot) =>
+      cb null, new @ snapshot
+
   constructor: (modelsOrSnapshot, options={})->
     throw new Error("Collection requires a model.") unless @model?
 

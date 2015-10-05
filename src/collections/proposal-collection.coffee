@@ -11,7 +11,7 @@ class ProposalCollection extends FirebaseCollection
 
   sortByReputationScore: ->
     @models = sortByOrder @models, [
-        (p) -> isNaN(p.ratings().score()),
+        (p) -> isNaN(p.ratings().score())
         (p) -> p.ratings().score()
       ],
       ['asc', 'desc']

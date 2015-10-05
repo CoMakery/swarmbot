@@ -2,16 +2,13 @@
 ApplicationController = require './application-controller'
 swarmbot = require '../models/swarmbot'
 DCO = require '../models/dco'
+DcoCollection = require '../collections/dco-collection'
 
 class DcosController extends ApplicationController
-  list: (msg) ->
-    swarmbot.firebase().child('projects').orderByKey().once 'value', (dcos) ->
-      dcoNames = []
-      dcos.forEach (dco) ->
-        dcoNames.push dco.key()
-        false # otherwise the loop is cancelled.
-
-      msg.send dcoNames.join("\n")
+  list: (@msg) ->
+    DcoCollection.all().then (dcos) =>
+      dcoNames = dcos.map (dco) -> dco.get('id')
+      @msg.send dcoNames.join "\n"
 
   listMembers: (@msg, { dcoKey }) ->
     @community = dcoKey
@@ -22,7 +19,6 @@ class DcosController extends ApplicationController
         messages = members.map (member)=>
           @_userText(member)
         @msg.send(messages.join("\n"))
-
     .error(@_showError)
 
   find: (msg, { dcoSearch }) ->
@@ -33,7 +29,6 @@ class DcosController extends ApplicationController
         dcos.forEach (dco) ->
           dcoNames.push dco.key()
           false
-
         msg.send dcoNames.join("\n")
 
   join: (@msg, { dcoKey }) ->
