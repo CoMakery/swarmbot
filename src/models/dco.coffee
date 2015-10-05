@@ -33,7 +33,7 @@ class DCO extends FirebaseModel
 
 
   memberIds: ->
-    values @get('member_ids')
+    keys @get('members')
 
   members: ->
     new UserCollection(map @memberIds(), (id) -> new User({id: id}))
@@ -48,7 +48,9 @@ class DCO extends FirebaseModel
     if present
       false
     else
-      @firebase().child('member_ids').push().set(userId)
+      member = {}
+      member[userId] = new Date
+      @firebase().child('members').update(member)
       # @attributes are now out of sync with firebase. Fetch here?
       user
 

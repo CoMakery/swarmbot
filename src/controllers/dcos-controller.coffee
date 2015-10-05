@@ -6,7 +6,7 @@ DcoCollection = require '../collections/dco-collection'
 
 class DcosController extends ApplicationController
   list: (@msg) ->
-    DcoCollection.all().then (dcos) =>
+    DcoCollection.create().then (dcos) =>
       dcoNames = dcos.map (dco) -> dco.get('id')
       @msg.send dcoNames.join "\n"
 

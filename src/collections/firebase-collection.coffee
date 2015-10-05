@@ -5,7 +5,7 @@ swarmbot = require '../models/swarmbot'
 
 class FirebaseCollection
 
-  @all: Promise.promisify (cb) ->
+  @create: Promise.promisify (cb) ->
     swarmbot.firebase().child(@::model::urlRoot).once 'value', (snapshot) =>
       cb null, new @ snapshot
 
@@ -28,7 +28,7 @@ class FirebaseCollection
   # Maybe just use the @models instead of numChildren
   isEmpty: ->
     length = if @snapshot? then @snapshot.numChildren() else @models.length
-    (length == 0)
+    (length is 0)
 
   each: (cb)->
     forEach @models, cb
