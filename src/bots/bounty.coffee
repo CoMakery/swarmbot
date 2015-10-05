@@ -6,6 +6,7 @@
 #   hubot rate proposal <proposal name> <value>% [in <community name]
 #   hubot award proposal <proposal name> to <slack username> [in <community>]
 #   hubot show proposal <proposal name> [in <community name>]
+#   hubot I'd like <suggested improvement for swarmbot>
 
 # Not in use:
 #   hubot list bounties [in <community name>]
@@ -48,6 +49,12 @@ module.exports = (robot) ->
     [all, proposalName, rating, community] = msg.match
     log "MATCH 'rate proposal' : #{all}"
     new ProposalsController().rate(msg, { community, proposalName, rating })
+
+  robot.respond /i'd like\s+(.*)$/i, (msg) ->
+    suggestion = msg.match[1]
+    log "MATCH 'i'd like' : #{msg.match[0]}"
+    new ProposalsController().swarmbotSuggestion(msg, { suggestion })
+
 
   # robot.respond /award (.+) bounty to (.+)$/i, (msg) ->
   #   [all, bountyName, awardee] = msg.match

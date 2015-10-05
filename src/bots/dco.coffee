@@ -46,7 +46,7 @@ module.exports = (robot) ->
     dcoSearch = msg.match[1]
     new DcosController().find(msg, { dcoSearch })
 
-  robot.respond /join community (\S*)$/i, (msg) ->
+  robot.respond /join community\s+(.*)$/i, (msg) ->
     log "MATCH 'join community' : #{msg.match[0]}"
     dcoKey = msg.match[1]
     new DcosController().join(msg, { dcoKey })

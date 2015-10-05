@@ -18,8 +18,19 @@ class DCO extends FirebaseModel
       cb(null, bounties)
 
   createProposal: ({ name, amount }) ->
-    proposal = new Proposal({id: name, amount: amount}, parent: @)
-    proposal.save()
+    @fetchIfNeeded().then (dco)->
+      if dco.exists()
+        proposal = new Proposal({ id: name, amount: amount },
+          parent: dco
+          snapshot: dco.snapshot.child(Proposal::urlRoot).child(name))
+
+        if proposal.exists()
+          Promise.reject(Promise.OperationalError("Proposal '#{name}' already exists within #{dco.get('id')}."))
+        else
+          proposal.save()
+      else
+        Promise.reject(Promise.OperationalError("The community '#{dco.get('id')}' does not exist."))
+
 
   memberIds: ->
     values @get('member_ids')
@@ -97,9 +108,9 @@ class DCO extends FirebaseModel
     #       # colu.init()
 
 
-  getProposal: ({proposalName}) ->
-    proposalRef = @dcoRef.child "bounties/#{proposalName}"
-    new Proposal {proposalRef}
+  # getProposal: ({proposalName}) ->
+  #   proposalRef = @dcoRef.child "bounties/#{proposalName}"
+  #   new Proposal {proposalRef}
 
   sendAsset: ({amount, recipient}, cb) ->
     p "username", recipient.get('id')
@@ -112,39 +123,38 @@ class DCO extends FirebaseModel
       else
         cb "user must register before receiving assets"
 
-  sendAssetToAddress: ({amount, sendeeAddress}, cb) ->
-    @dcoRef.on 'value', (snapshot) ->
-
-        assetId = snapshot.val().coluAssetId
-        fromAddress = snapshot.val().coluAssetAddress
-        toAddress = sendeeAddress
-        # p "awardee", awardeeAddress
-        # p "asset id", assetId
-        amountRef.on 'value', (snapshot) ->
-          amount = snapshot.val()
-          # p "proposal amount", amount
-          colu = swarmbot.colu()
-          # colu.on 'connect', ->
-            #colu.hdwallet.getAddress()
-          p args =
-            from: [ fromAddress ]
-            to: [
-              {
-                address: toAddress
-                assetId: assetId
-                amount: amount
-              }
-              ]
-          colu.sendAsset args, (err, body) ->
-            p "we made it", body
-            if err
-              p "err:", err
-              return console.error "Error: #{err}"
-            console.log 'Body: ', body
-              # cb null, "proposal successfully awarded"
-          # if colu.needToDiscover
-          # colu.init()
-
+  # sendAssetToAddress: ({amount, sendeeAddress}, cb) ->
+  #   @dcoRef.on 'value', (snapshot) ->
+  #
+  #       assetId = snapshot.val().coluAssetId
+  #       fromAddress = snapshot.val().coluAssetAddress
+  #       toAddress = sendeeAddress
+  #       # p "awardee", awardeeAddress
+  #       # p "asset id", assetId
+  #       amountRef.on 'value', (snapshot) ->
+  #         amount = snapshot.val()
+  #         # p "proposal amount", amount
+  #         colu = swarmbot.colu()
+  #         # colu.on 'connect', ->
+  #           #colu.hdwallet.getAddress()
+  #         p args =
+  #           from: [ fromAddress ]
+  #           to: [
+  #             {
+  #               address: toAddress
+  #               assetId: assetId
+  #               amount: amount
+  #             }
+  #             ]
+  #         colu.sendAsset args, (err, body) ->
+  #           p "we made it", body
+  #           if err
+  #             p "err:", err
+  #             return console.error "Error: #{err}"
+  #           console.log 'Body: ', body
+  #             # cb null, "proposal successfully awarded"
+  #         # if colu.needToDiscover
+  #         # colu.init()
 
   # pledge: ({email, name}) ->
   #

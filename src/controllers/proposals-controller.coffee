@@ -82,19 +82,17 @@ class ProposalsController extends ApplicationController
         @msg.send "Sorry, you must be the progenitor of this DCO to award proposals."
 
   create: (@msg, { proposalName, amount, @community }) ->
-    @getDco().then (dco) ->
-      dco.createProposal({ name: proposalName, amount }).then =>
-        @msg.send "Proposal '#{proposalName}' created in community '#{dco.get('id')}'"
-      .catch (error) =>
-        log "proposal creation error: " + error
-        @msg.send "Error creating proposal: #{error.message}"
-        # TODO: re-throw to log stacktrace
+    @getDco()
+    .then (@dco) =>
+      @dco.createProposal({ name: proposalName, amount })
+    .then =>
+      @msg.send "Proposal '#{proposalName}' created in community '#{@dco.get('id')}'"
 
     .error(@_showError)
 
   #TODO: possibly incorporate some gatekeeping here (i.e. only members of a DCO can vote on the output)
   rate: (@msg, { @community, proposalName, rating }) ->
-    @getDco().then (dco) =>
+    @getDco().then (dco) ->
       user = @currentUser()
 
       Proposal.find(proposalName, parent: dco).fetch().then (proposal) =>
@@ -117,6 +115,14 @@ class ProposalsController extends ApplicationController
           @msg.send "Rating failed: #{error}"
           p "#{error}" # TODO: re-throw exception to show stacktrace
     .error(@_showError)
+
+  swarmbotSuggestion: (@msg, { suggestion }) ->
+    DCO.find(swarmbot.feedbackDcokey)
+    .then (dco) =>
+      if dco.exists()
+        @create @msg, { proposalName: suggestion, amount: 0, community: swarmbot.feedbackDcokey }
+      else
+        @msg.send "The community '#{swarmbot.feedbackDcokey}' does not exist. Please ask your amazing swarmbot admin to create it!"
 
   _proposalMessage: (proposal) ->
     text = "Proposal #{proposal.get('id')}"
