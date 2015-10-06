@@ -3,6 +3,7 @@
 #
 # Commands:
 #   hubot list communities
+#   hubot my communities
 #   hubot find community <start of community name>
 #   hubot create community <community name>
 #   hubot join community <community name>
@@ -35,6 +36,10 @@ module.exports = (robot) ->
   robot.respond /list communities$/i, (msg) ->
     log "MATCH 'list communities' : #{msg.match[0]}"
     new DcosController().list(msg)
+
+  robot.respond /my communities$/i, (msg) ->
+    log "MATCH 'my communities' : #{msg.match[0]}"
+    new DcosController().listMine(msg)
 
   robot.respond /list members(?: (?:of|in)\s+(.*)\s*)?$/i, (msg) ->
     log "MATCH 'list members' : #{msg.match[0]}"

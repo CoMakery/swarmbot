@@ -7,8 +7,16 @@ DcoCollection = require '../collections/dco-collection'
 class DcosController extends ApplicationController
   list: (@msg) ->
     DcoCollection.create().then (dcos) =>
-      dcoNames = dcos.map (dco) -> dco.get('id')
-      @msg.send dcoNames.join "\n"
+      @msg.send @textList dcos
+
+  listMine: (@msg) ->
+    DcoCollection.create().then (allDcos) =>
+      myDcos = allDcos.filter((dco) => dco.hasMember @currentUser())
+      @msg.send @textList myDcos
+
+  textList: (dcos) ->
+    dcoNames = dcos.map (dco) -> dco.get('id')
+    dcoNames.join "\n"
 
   listMembers: (@msg, { dcoKey }) ->
     @community = dcoKey

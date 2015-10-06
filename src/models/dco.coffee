@@ -1,13 +1,11 @@
 {log, p, pjson} = require 'lightsaber'
-{ values, find, map, contains } = require 'lodash'
+{ assign, keys, find, indexOf, map, contains } = require 'lodash'
 Promise = require 'bluebird'
 swarmbot = require '../models/swarmbot'
 FirebaseModel = require './firebase-model'
 Proposal = require '../models/proposal'
 User = require '../models/user'
 UserCollection = require '../collections/user-collection'
-
-{ values, assign, map, indexOf } = require 'lodash'
 
 class DCO extends FirebaseModel
   urlRoot: 'projects'
