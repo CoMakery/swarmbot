@@ -83,6 +83,7 @@ class DcosController extends ApplicationController
       if dco.exists()
         return @msg.send "Community '#{dcoKey}' already exists!"
 
+      dco.set 'owner', owner
       dco.save()
       @currentUser().setDco dco.get('id')
 

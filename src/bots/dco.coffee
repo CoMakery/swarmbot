@@ -94,7 +94,7 @@ module.exports = (robot) ->
           # dcoJoinStatus = {stage: 0}
           # robot.brain.set "dcoJoinStatus", dcoJoinStatus
 
-    if dcoCreateStatus != null
+    if dcoCreateStatus?
 
       answer = msg.match[1]
       firstTwoLetters = answer.substring(0,2).toLowerCase()
