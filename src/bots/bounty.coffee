@@ -50,7 +50,7 @@ module.exports = (robot) ->
     log "MATCH 'rate proposal' : #{all}"
     new ProposalsController().rate(msg, { community, proposalName, rating })
 
-  robot.respond /i'd like\s+(.*)$/i, (msg) ->
+  robot.respond /i(?:[’']d| would) like\s+(.+)$/i, (msg) ->
     suggestion = msg.match[1]
     log "MATCH 'i'd like' : #{msg.match[0]}"
     new ProposalsController().swarmbotSuggestion(msg, { suggestion })
