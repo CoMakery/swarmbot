@@ -7,9 +7,10 @@
 #
 
 { json, log, p, pjson } = require 'lightsaber'
+Promise = require 'bluebird'
 trustExchange = require('trust-exchange').instance
 swarmbot = require '../models/swarmbot'
-Promise = require 'bluebird'
+router = require '../router'
 
 # Promise.longStackTraces() # only in development mode. decreases performance 5x
 
@@ -24,6 +25,11 @@ trustExchange.configure
 InitBot = (robot) ->
   throw new Error if robot.whose?
   robot.whose = (room) -> "slack:#{room.message.user.id}"
+
+  # State-based message routing
+  robot.respond /.*/, (msg) ->
+    router.route(msg)
+
 
   robot.router.post '/hubot/chatsecrets/:room', (req, res) ->
     p "HTTP webhook received", req, res

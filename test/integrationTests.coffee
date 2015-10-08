@@ -26,33 +26,6 @@ describe 'swarmbot', ->
   beforeEach -> @room = helper.createRoom()
   afterEach -> @room.destroy()
 
-  context 'Identity', ->
-
-  context 'DCO bounty', ->
-    xit 'a DCO can create a bounty', (done) ->
-      amount = Math.round Math.random() * Math.pow 10, 16
-      bountyName = 'plant a tree'
-      dcoKey = 'save-the-world'
-      bountyParams = {
-        dcoKey
-        bountyName
-        amount
-      }
-      DCO.createBountyFor bountyParams, (error, message) ->
-        message.should.equal 'bounty created'
-        dco = DCO.find dcoKey
-        dco.getBounty({bountyName}).get 'amount', (value) ->
-          value.should.equal amount
-          done()
-
-  context 'dco admin can award bounty to user', ->
-    xit 'an admin can award a bounty', (done) ->
-      bountyName = 'plant a tree'
-      dcoKey = 'save-the-world'
-      bountyParams = {
-        dcoKey
-        bountyName
-      }
-      dco = DCO.find dcoKey
-      dco.awardBounty bountyParams, (error, message) ->
-          done()
+  context 'help', ->
+    it "returns top-level help"
+    it "returns specific help based on user's state"
