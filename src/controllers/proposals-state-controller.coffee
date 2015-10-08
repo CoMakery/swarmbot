@@ -5,11 +5,14 @@ class ProposalsStateController
     @user = @msg.currentUser
 
   process: ->
-    p "Processing proposals state", @msg.match[1], @user.current
+    message = @msg.match[1]
+
+    p "message: #{message}"
+    p "user: #{@user.current}"
 
     switch @user.current
       when 'home'
-        switch @msg.match[1]
+        switch message
           when '1'
             @user.show(1)
             @router.route(@msg)
@@ -17,13 +20,13 @@ class ProposalsStateController
           when '0' then @user.exit()
 
       when 'proposals-index'
-        switch @msg.match[1]
+        switch message
           when '1' then @show(1)
           when '2' then p 2
           when '0' then @user.exit()
 
       when 'proposals-show'
-        switch @msg.match[1]
+        switch message
           when '1' then @show(1)
           when '0' then @user.exit(); @router.route(@msg)
 
