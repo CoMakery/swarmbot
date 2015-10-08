@@ -96,7 +96,7 @@ BTC registered
 
 
 
-## Local development
+## Development
 
     npm install
 
@@ -107,6 +107,12 @@ You can start the bot locally by running:
 If you wish to load environment variables from a local `.env` file:
 
     env `cat .env` npm run dev
+
+
+### Dev Notes
+
+* We are currently using https://github.com/citizencode/colu-nodejs
+  until https://github.com/Colu-platform/colu-nodejs/pull/2 or a similar fix is merged
 
 ## Social Contract License
 
