@@ -22,10 +22,13 @@ class ApplicationController
     @msg.send error.message
 
   _userText: (user)->
-    info = ""
-    info += "real name: " + user.get('real_name')
-    info += ", slack username: " + user.get('slack_username')
-    info += ", default community: " + user.get('current_dco')
-    info += ", receiving address: " + user.get('btc_address')
+    if user?
+      info = ""
+      info += "real name: " + user.get('real_name')
+      info += ", slack username: " + user.get('slack_username')
+      info += ", default community: " + user.get('current_dco')
+      info += ", receiving address: " + user.get('btc_address')
+    else
+      "User not found"
 
 module.exports = ApplicationController
