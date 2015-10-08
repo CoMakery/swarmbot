@@ -111,7 +111,7 @@ If you wish to load environment variables from a local `.env` file:
 
 ### Dev Notes
 
-* We are currently using https://github.com/citizencode/colu-nodejs
+* We are currently using https://github.com/citizencode/colu-nodejs/tree/main-path
   until https://github.com/Colu-platform/colu-nodejs/pull/2 or a similar fix is merged
 
 ## Social Contract License
