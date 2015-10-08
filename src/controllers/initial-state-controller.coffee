@@ -1,7 +1,7 @@
 { log, p, pjson } = require 'lightsaber'
 
 class InitialStateController
-  constructor: (@msg) ->
+  constructor: (@msg, @user) ->
 
   process: ->
     p "Processing", @msg.message, @msg

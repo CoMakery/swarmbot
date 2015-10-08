@@ -40,12 +40,16 @@ class User extends FirebaseModel
     events: [
       { name: 'proposals', from: 'none', to: 'proposals' }
       { name: 'exit', from: 'proposals', to: 'none' }
+
       { name: 'index', from: 'proposals', to: 'proposals-index' }
       { name: 'exit', from: 'proposals-index', to: 'proposals' }
+
       { name: 'create', from: 'proposals', to: 'proposals-create' }
       { name: 'exit', from: 'proposals-create', to: 'proposals' }
+
       { name: 'show', from: 'proposals-index', to: 'proposals-show' }
       { name: 'exit', from: 'proposals-show', to: 'proposals-index' }
+
       { name: 'createSolution', from: 'proposals-show', to: 'solutions-create' }
       { name: 'solutions', from: 'proposals-show', to: 'solutions-index' }
       { name: 'show', from: 'solutions-index', to: 'solutions-show' }

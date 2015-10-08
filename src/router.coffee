@@ -1,7 +1,7 @@
 { log, p, pjson } = require 'lightsaber'
 User = require './models/user'
-InitialStateController = require './controllers/state/initial-state-controller'
-ProposalsStateController = require './controllers/state/proposals-state-controller'
+InitialStateController = require './controllers/initial-state-controller'
+ProposalsStateController = require './controllers/proposals-state-controller'
 
 class Router
   route: (msg)->
@@ -9,7 +9,7 @@ class Router
     .then (user) ->
       p user.get('state')
       switch user.get('state')
-        when 'none'      then new InitialStateController(msg).process()
-        when 'proposals' then new ProposalsStateController(msg).process()
+        when 'none'      then new InitialStateController(msg, user).process()
+        when 'proposals' then new ProposalsStateController(msg, user).process()
 
 module.exports = new Router()

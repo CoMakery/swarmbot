@@ -13,6 +13,7 @@ User = require '../src/models/user'
 DCO = require '../src/models/dco'
 ApplicationController = require '../src/controllers/application-controller'
 UsersController = require '../src/controllers/users-controller'
+ProposalsStateController = require '../src/controllers/proposals-state-controller'
 
 process.env.EXPRESS_PORT = 8901  # don't conflict with hubot console port 8080
 # process.env.FIREBASE_URL = 'https://dazzle-staging.firebaseio-demo.com/'
@@ -25,6 +26,9 @@ describe 'controllers', ->
 
   beforeEach -> @room = helper.createRoom()
   afterEach -> @room.destroy()
+
+  context 'ProposalsStateController', ->
+
 
   context 'ApplicationController', ->
     beforeEach ->
