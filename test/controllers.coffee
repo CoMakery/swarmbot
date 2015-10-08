@@ -1,12 +1,14 @@
 {log, p, pjson} = require 'lightsaber'
+Helper = require 'hubot-test-helper'
+Promise = require('bluebird')
+
 chai = require 'chai'
 chaiAsPromised = require("chai-as-promised")
 chai.should()
 chai.use(chaiAsPromised);
 sinon = require 'sinon'
-Helper = require 'hubot-test-helper'
-Promise = require('bluebird')
 require('sinon-as-promised')(Promise)
+require 'sinon-chai'
 
 FirebaseModel = require '../src/models/firebase-model'
 User = require '../src/models/user'
@@ -28,7 +30,15 @@ describe 'controllers', ->
   afterEach -> @room.destroy()
 
   context 'ProposalsStateController', ->
+    context "state: proposals", ->
+      it "calls show from the 1 command and transitions state", ->
+        router = {route: ->}
+        user = new User(id: 'x', state: 'home')
+        user.current = 'home'
+        msg = { match: [ 'swarmbot 1', '1' ], currentUser: user }
 
+        new ProposalsStateController(router, msg).process()
+        user.current.should.eq 'proposals-show'
 
   context 'ApplicationController', ->
     beforeEach ->

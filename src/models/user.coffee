@@ -18,7 +18,6 @@ class User extends FirebaseModel
         cb(null, new User({}, snapshot: snapshot.child(userId)))
     , cb # error
 
-
   setDco: (dcoKey) ->
     @set "current_dco", dcoKey
 
@@ -27,25 +26,27 @@ class User extends FirebaseModel
 
   fetch: ->
     super().then =>
-      @current = @get('state')
+      @current = @get('state') || 'home'
       @
 
   onafterevent: (event, from, to, data) ->
-    p "#{event} : #{from} -> #{to} :: #{pjson data}"
+    p "#{event} : #{from} -> #{to} :: #{data}"
     @set('state', to)
     # also set data here
 
   StateMachine.create
     target: @prototype
+    error: (event, from, to, args, errorCode, errorMessage) ->
+      p "state machine error! #{event} : #{from} -> #{to} :: #{args} : #{errorCode} : #{errorMessage}"
+      @set('state', 'home')
+
     events: [
-      { name: 'proposals', from: 'none', to: 'proposals' }
-      { name: 'exit', from: 'proposals', to: 'none' }
+      { name: 'index', from: 'home', to: 'proposals-index' }
+      { name: 'show', from: 'home', to: 'proposals-show' }
+      { name: 'exit', from: 'proposals-index', to: 'home' }
 
-      { name: 'index', from: 'proposals', to: 'proposals-index' }
-      { name: 'exit', from: 'proposals-index', to: 'proposals' }
-
-      { name: 'create', from: 'proposals', to: 'proposals-create' }
-      { name: 'exit', from: 'proposals-create', to: 'proposals' }
+      { name: 'create', from: 'proposals-index', to: 'proposals-create' }
+      { name: 'exit', from: 'proposals-create', to: 'proposals-index' }
 
       { name: 'show', from: 'proposals-index', to: 'proposals-show' }
       { name: 'exit', from: 'proposals-show', to: 'proposals-index' }

@@ -22,7 +22,8 @@
     "hubot-test-helper": "^0.0.7",
     "mocha": "^2.2.5",
     "sinon": "^1.16.1",
-    "sinon-as-promised": "^4.0.0"
+    "sinon-as-promised": "^4.0.0",
+    "sinon-chai": "^2.8.0"
   },
   "dependencies": {
     "backbone": "^1.2.3",

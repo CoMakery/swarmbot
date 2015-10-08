@@ -11,6 +11,7 @@ Promise = require 'bluebird'
 trustExchange = require('trust-exchange').instance
 swarmbot = require '../models/swarmbot'
 router = require '../router'
+User = require '../models/user'
 
 # Promise.longStackTraces() # only in development mode. decreases performance 5x
 
@@ -23,11 +24,11 @@ trustExchange.configure
     firebase: swarmbot.firebase()
 
 InitBot = (robot) ->
-  throw new Error if robot.whose?
-  robot.whose = (room) -> "slack:#{room.message.user.id}"
+  throw new Error if robot.whose? || robot.currentUser?
+  robot.whose = (msg) -> "slack:#{msg.message.user.id}"
 
   # State-based message routing
-  robot.respond /.*/, (msg) ->
+  robot.respond /(.*)/, (msg) ->
     router.route(msg)
 
 
