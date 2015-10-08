@@ -11,18 +11,6 @@ ProposalCollection = require '../collections/proposal-collection'
 
 class ProposalsController extends ApplicationController
 
-  list: (@msg, { @community }) ->
-    @getDco().then (dco)=>
-      dco.fetch().then (dco) =>
-        proposals = new ProposalCollection(dco.snapshot.child('proposals'), parent: dco)
-        if proposals.isEmpty()
-          return @msg.send "There are no proposals to display in #{dco.get('id')}."
-
-        proposals.sortByReputationScore()
-        messages = proposals.map @_proposalMessage
-        @msg.send messages.join("\n")
-
-    .error(@_showError)
 
   listApproved: (@msg, { @community }) ->
     @getDco().then (dco)=>
@@ -123,14 +111,6 @@ class ProposalsController extends ApplicationController
         @create @msg, { proposalName: suggestion, amount: 0, community: swarmbot.feedbackDcokey }
       else
         @msg.send "The community '#{swarmbot.feedbackDcokey}' does not exist. Please ask your amazing swarmbot admin to create it!"
-
-  _proposalMessage: (proposal) ->
-    text = "Proposal #{proposal.get('id')}"
-    text += " Reward #{proposal.get('amount')}" if proposal.get('amount')?
-    score = proposal.ratings().score()
-    text += " Rating: #{score}%" unless isNaN(score)
-    text += " (awarded)" if proposal.get('awarded')?
-    text
 
   _coloredCoinTxnUrl: (txnId) ->
     url = ["http://coloredcoins.org/explorer"]

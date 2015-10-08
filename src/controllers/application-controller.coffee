@@ -4,14 +4,14 @@ Promise = require 'bluebird'
 DCO = require '../models/dco'
 
 class ApplicationController
-  currentUser: ->
-    @_currentUser ||= new User id: @msg.robot.whose(@msg)
+  constructor: (@router, @msg) ->
+    @currentUser = @msg.currentUser
 
-  getDco: ()->
+  getDco: ->
     if @community?
       Promise.resolve(DCO.find(@community)).bind(@)
     else
-      @currentUser().fetchIfNeeded().bind(@).then (user) ->
+      @currentUser.fetchIfNeeded().bind(@).then (user) ->
         @community = user.get('current_dco')
         if @community?
           DCO.find(@community)
@@ -21,14 +21,14 @@ class ApplicationController
   _showError: (error)->
     @msg.send error.message
 
-  _userText: (user)->
-    if user?
-      info = ""
-      info += "real name: " + user.get('real_name')
-      info += ", slack username: " + user.get('slack_username')
-      info += ", default community: " + user.get('current_dco')
-      info += ", receiving address: " + user.get('btc_address')
-    else
-      "User not found"
+  # _userText: (user)->
+  #   if user?
+  #     info = ""
+  #     info += "real name: " + user.get('real_name')
+  #     info += ", slack username: " + user.get('slack_username')
+  #     info += ", default community: " + user.get('current_dco')
+  #     info += ", receiving address: " + user.get('btc_address')
+  #   else
+  #     "User not found"
 
 module.exports = ApplicationController

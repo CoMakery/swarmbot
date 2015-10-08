@@ -31,7 +31,6 @@ InitBot = (robot) ->
   robot.respond /(.*)/, (msg) ->
     router.route(msg)
 
-
   robot.router.post '/hubot/chatsecrets/:room', (req, res) ->
     p "HTTP webhook received", req, res
 
