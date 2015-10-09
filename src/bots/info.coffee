@@ -34,13 +34,9 @@ module.exports = (robot) ->
     [dcoKey, tag] = msg.match
     # write tag to trust exchange
 
-  robot.respond /info (.+) $/i, (msg) ->
-    msg.match.shift()
-    [dcoKey] = msg.match
-    msg.send "create community <community name>\n  "
-
   robot.respond /more help$/i, (msg) ->
-    # pulls tag and other relevant info from trust exchange / dbrain
+    #TODO: This should pull from wizard or some other repo where all the comamnds live
+    msg.send "More commands:\ncreate community <community name>\nlist communities\njoin community <community name>"
 
   robot.respond /space kitty me$/i, (msg) ->
     authenticateUser(msg)
