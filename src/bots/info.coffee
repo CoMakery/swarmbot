@@ -33,6 +33,9 @@ module.exports = (robot) ->
   robot.respond /info (.+) $/i, (msg) ->
     msg.match.shift()
     [dcoKey] = msg.match
+    msg.send "create community <community name>\n  " ]
+
+  robot.respond /more help$/i, (msg) ->
     # pulls tag and other relevant info from trust exchange / dbrain
 
   robot.respond /space kitty me$/i, (msg) ->
