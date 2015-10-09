@@ -3,6 +3,9 @@
 #
 # Commands:
 #   hubot register btc <btc_address>
+
+# Hidden Commands:
+
 #   hubot set community <current community>
 #   hubot unset community
 #   hubot about me

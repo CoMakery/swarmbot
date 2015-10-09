@@ -2,6 +2,10 @@
 #   Create a community
 #
 # Commands:
+#
+
+
+# Hidden Commands:
 #   hubot list communities
 #   hubot my communities
 #   hubot find community <start of community name>
@@ -69,6 +73,7 @@ module.exports = (robot) ->
     [all, amount, dcoKey] = msg.match
     log "MATCH 'create asset' : #{all}"
     new DcosController().issueAsset(msg, { dcoKey, amount })
+
 
   # What to do here? Current method will only work for single user.
   # Ideally, state machine stored on the user instance determines what question is
