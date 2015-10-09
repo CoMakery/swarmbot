@@ -28,9 +28,11 @@ module.exports = (robot) ->
     try
       robot.messageRoom msg.message.user.name, "Hello I'm Nyan!"
       robot.messageRoom msg.message.user.name, "Type 'bounties' to see active bounties"
+      robot.messageRoom msg.message.user.name, "Type 'register <my_bitcoin_address> to start getting bounties"
       robot.messageRoom msg.message.user.name, "Type 'proposals' to participate in governance"
       robot.messageRoom msg.message.user.name, "Type 'more help' to see other commands"
     catch error
+
 
   # Generic auto register
   robot.respond /\s*/i, (msg) ->
