@@ -2,9 +2,13 @@
 #   Informational and help related commands
 #
 # Commands:
+#   hubot space kitty me
+
+
+# Hidden Commands:
+
 #   hubot x marks the what
 #   hubot hello
-#   hubot space kitty me
 
 # Not in use:
 #   hubot tag <community name> <tag>
@@ -33,7 +37,7 @@ module.exports = (robot) ->
   robot.respond /info (.+) $/i, (msg) ->
     msg.match.shift()
     [dcoKey] = msg.match
-    msg.send "create community <community name>\n  " ]
+    msg.send "create community <community name>\n  "
 
   robot.respond /more help$/i, (msg) ->
     # pulls tag and other relevant info from trust exchange / dbrain
