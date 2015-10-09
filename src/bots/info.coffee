@@ -3,6 +3,7 @@
 #
 # Commands:
 #  hubot space kitty
+#  hubot fork me
 #  hubot more help
 
 # Hidden Commands:
@@ -33,6 +34,9 @@ module.exports = (robot) ->
     msg.match.shift()
     [dcoKey, tag] = msg.match
     # write tag to trust exchange
+
+  robot.respond /fork me$/i, (msg) ->
+    msg.send "https://github.com/citizencode/swarmbot"
 
   robot.respond /more help$/i, (msg) ->
     #TODO: This should pull from wizard or some other repo where all the comamnds live
