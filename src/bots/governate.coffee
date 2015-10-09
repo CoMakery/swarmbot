@@ -23,6 +23,9 @@ module.exports = (robot) ->
   robot.respond /bounties$/i, (msg) ->
       new ProposalsController().listApproved(msg, { })
 
+  robot.respond /proposals$/i, (msg) ->
+      new ProposalsController().list(msg, { })
+
   robot.respond /list\s+(all)?\s*proposals(?: in (.+))?\s*$/i, (msg) ->
     [all, showAll, community] = msg.match
     log "MATCH 'list proposals' : #{all}"
