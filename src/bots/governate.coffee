@@ -17,12 +17,6 @@ MembersController = require '../controllers/members-controller'
 module.exports = (robot) ->
 
 
-  robot.enter (msg) ->
-  # limit our annoyance to this channel
-    # if(get_channel(msg) == channel_to_watch)
-      # https://github.com/github/hubot/blob/master/docs/scripting.md#random
-      msg.send msg.random ['welcome', 'hello', 'who are you?']
-
   robot.respond /list\s+(all)?\s*proposals(?: in (.+))?\s*$/i, (msg) ->
     [all, showAll, community] = msg.match
     log "MATCH 'list proposals' : #{all}"
