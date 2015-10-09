@@ -6,7 +6,8 @@ swarmbot = require './swarmbot'
 class FirebaseModel
 
   @find: (id, options={}) ->
-    new @(id: id, options).fetch()
+    new @(id: id, options)
+      .fetch()
 
   constructor: (@attributes={}, options={}) ->
     @hasParent = @hasParent || false
@@ -29,6 +30,7 @@ class FirebaseModel
     @save()
 
   fetch: Promise.promisify (cb) ->
+    throw new Error "No id attribute is set, cannot fetch" unless @.get('id')
     @firebase().once 'value', (@snapshot) =>
       @parseSnapshot()
       cb(null, @)

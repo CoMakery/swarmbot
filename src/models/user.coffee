@@ -18,8 +18,8 @@ class User extends FirebaseModel
         cb(null, new User({}, snapshot: snapshot.child(userId)))
     , cb # error
 
-  constructor: ->
-    super()
+  constructor: (args...) ->
+    super args...
     @menu = new Menu
 
   setDco: (dcoKey) ->

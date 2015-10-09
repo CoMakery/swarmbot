@@ -8,23 +8,15 @@ class ApplicationController
     @currentUser = @msg.currentUser
 
   getDco: ->
-    if @community?
-      Promise.resolve(DCO.find(@community)).bind(@)
-    else
-      @currentUser.fetchIfNeeded().bind(@).then (user) ->
-        @community = user.get('current_dco')
-        if @community?
-          DCO.find(@community)
-        else
-          Promise.reject(Promise.OperationalError("Please either set a community or specify the community in the command."))
+    @currentUser.fetchIfNeeded().bind(@).then (user) ->
+      dcoId = user.get('current_dco')
+      if dcoId?
+        DCO.find dcoId
+      else
+        Promise.reject(Promise.OperationalError("Please specify the community in the command."))
 
   _showError: (error)->
     @msg.send error.message
-
-  menuText: (items) ->
-    lines = for number, item of items
-      "#{number}: #{item}"
-    lines.join "\n"
 
   # _userText: (user)->
   #   if user?
