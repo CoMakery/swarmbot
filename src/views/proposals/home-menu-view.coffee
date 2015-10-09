@@ -26,16 +26,23 @@ class HomeMenuView
     @items = {}
 
     # TODO: top 5 proposals
-    @items[1] = @proposalMenuItem( @proposals.get(0) )
+    for proposal, i in @proposals.models
+      @items[i+1] = @proposalMenuItem proposal
 
-    @items[6] = { text: "More", transition: 'index' }
+    @items[i+1] = { text: "More", transition: 'index' }
     @items['x'] = { text: "Exit", transition: 'exit' }
     @
 
   render: ->
     lines = for i, menuItem of @items
       "#{i}: #{menuItem.text}"
-    lines.join("\n")
+    """
+    Top Proposals
+    -------------
+    #{lines.join("\n")}
+
+    To take an action, simply enter the number or letter at the beginning of the line.
+    """
 
   proposalMenuItem: (proposal) ->
     {

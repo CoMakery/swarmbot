@@ -2,8 +2,8 @@
 ApplicationController = require './application-controller'
 ProposalCollection = require '../collections/proposal-collection'
 Proposal = require '../models/proposal'
-
 HomeMenuView = require '../views/proposals/home-menu-view'
+ShowView = require '../views/proposals/show-view'
 
 class ProposalsStateController extends ApplicationController
   redirect: ->
@@ -28,34 +28,26 @@ class ProposalsStateController extends ApplicationController
     else
       switch @currentUser.current
         when 'home'
+          @home()
+        when 'proposalsShow'
+          @show action
 
-          if message is 'help'
-            @homeInfo()
-          # else if choice = message.match(/^[1-5]$/)?[0]
-          #   @currentUser.show(choice)
-          #   @redirect()
-          # else if message is 'x' then @currentUser.exit()
-
-        # when 'proposals-index'
+        # when 'proposalsIndex'
         #   switch message
         #     when '1' then @show(1)
         #     when '2' then p 2
         #     when 'x' then @currentUser.exit()
-        #
-        # when 'proposals-show'
-        #   switch message
-        #     when 'x' then @currentUser.exit(); @router.route(@msg)
-        #     when 'help' then @showInfo(1)
 
-  showInfo: (proposalId) ->
-    @msg.send "showing proposal show for id #{proposalId}"
-
-  show: (proposalId) ->
+  show: (proposalInfo) ->
+    proposalId = proposalInfo?.object?.id ? throw new Error
     @getDco()
     .then (dco) => Proposal.find proposalId, parent: dco
-    .then (proposal) => @msg.send @_proposalMessage proposal
+    .then (proposal) =>
+      @msg.send @_proposalMessage proposal
+      view = new ShowView(proposal).build()
+      @msg.send view.render()
 
-  homeInfo: ->
+  home: ->
     @getDco()
     .then (dco) => dco.fetch()
     .then (dco) =>

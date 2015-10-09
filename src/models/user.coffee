@@ -41,7 +41,7 @@ class User extends FirebaseModel
   StateMachine.create
     target: @prototype
     error: (event, from, to, args, errorCode, errorMessage) ->
-      p "state machine error! #{event} : #{from} -> #{to} :: #{args} : #{errorCode} : #{errorMessage}"
+      p "state machine error! event: #{event} // #{from} -> #{to} // args: #{pjson args} // error: #{errorCode}  #{errorMessage}"
       @set('state', 'home')
 
     events: [
