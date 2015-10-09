@@ -38,6 +38,9 @@ module.exports = (robot) ->
   robot.respond /fork me$/i, (msg) ->
     msg.send "https://github.com/citizencode/swarmbot"
 
+  robot.respond /nyan$/i, (msg) ->
+    msg.send "https://www.youtube.com/watch?v=QH2-TGUlwu4"
+
   robot.respond /more help$/i, (msg) ->
     #TODO: This should pull from wizard or some other repo where all the comamnds live
     msg.send "More commands:\ncreate community <community name>\nlist communities\njoin community <community name>"
