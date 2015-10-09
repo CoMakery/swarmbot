@@ -2,8 +2,8 @@
 #   Informational and help related commands
 #
 # Commands:
-#   hubot space kitty me
-
+#  hubot space kitty
+#  hubot more help
 
 # Hidden Commands:
 
@@ -38,7 +38,7 @@ module.exports = (robot) ->
     #TODO: This should pull from wizard or some other repo where all the comamnds live
     msg.send "More commands:\ncreate community <community name>\nlist communities\njoin community <community name>"
 
-  robot.respond /space kitty me$/i, (msg) ->
+  robot.respond /space kitty$/i, (msg) ->
     authenticateUser(msg)
     count = 1
     Instagram.tags.recent
