@@ -33,12 +33,15 @@ describe 'controllers', ->
     context "state: proposals", ->
       it "calls show from the 1 command and transitions state", ->
         router = {route: ->}
-        user = new User(id: 'x', state: 'home')
+        user = new User
+          id: 'x'
+          state: 'home'
+          menu: {1: {transition: 'show'}}
         user.current = 'home'
         msg = { match: [ 'swarmbot 1', '1' ], currentUser: user }
 
         new ProposalsStateController(router, msg).process()
-        user.current.should.eq 'proposals-show'
+        user.current.should.eq 'proposalsShow'
 
   context 'ApplicationController', ->
     beforeEach ->

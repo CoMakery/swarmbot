@@ -22,7 +22,7 @@ class ProposalsStateController extends ApplicationController
     message = @msg.match[1].toLowerCase()
     lastMenuItems = @currentUser.get('menu')
 
-    action = lastMenuItems[message]
+    action = lastMenuItems?[message]
     if action?
       @execute(action)
     else
