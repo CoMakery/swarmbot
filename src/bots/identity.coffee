@@ -27,7 +27,9 @@ module.exports = (robot) ->
   robot.enter (msg) ->
     try
       robot.messageRoom msg.message.user.name, "Hello I'm Nyan!"
-      robot.messageRoom msg.message.user.name, "Maybe you'd like  \"help\" to find out what I can do"
+      robot.messageRoom msg.message.user.name, "Type 'bounties' to see active bounties"
+      robot.messageRoom msg.message.user.name, "Type 'proposals' to participate in governance"
+      robot.messageRoom msg.message.user.name, "Type 'more help' to see other commands"
     catch error
 
   # Generic auto register
