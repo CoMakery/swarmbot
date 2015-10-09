@@ -20,7 +20,6 @@ class Router
           p 'no route!'
 
   setCurrentUser: (msg)->
-    throw new Error if msg.currentUser?
     msg.currentUser ?= new User(id: msg.robot.whose(msg))
 
 module.exports = new Router()

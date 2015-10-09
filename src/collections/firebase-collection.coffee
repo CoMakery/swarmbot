@@ -20,6 +20,9 @@ class FirebaseCollection
       @models = for id, data of @snapshot.val()
         new @model assign(data, id: id), { parent: @parent, snapshot: @snapshot.child(id) }
 
+  get: (i)->
+    @models[i]
+
   fetch: ->
     Promise.all( @map (model) -> model.fetch() )
     .then => @

@@ -51,10 +51,6 @@ describe 'controllers', ->
         msg = { match: [ 'swarmbot 1', '1' ], currentUser: @user }
         @controller = new ApplicationController router, msg
 
-      it 'gets the community if it\'s set on the controller', ->
-        @controller.community = 'xyz'
-        @controller.getDco().then((dco)-> dco.get('id')).should.eventually.equal 'xyz'
-
       it "gets the community if it's the user's current community", ->
         @user.attributes.current_dco = 'zzz'
         @controller.getDco().then((dco)-> dco.get('id')).should.eventually.equal 'zzz'
