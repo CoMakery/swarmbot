@@ -17,6 +17,9 @@ class HomeMenuView
   #     text: "Exit"
   #     transition: 'exit'
   #   }
+  #   help: {
+  #     command: 'homeHelp'
+  #   }
   # }
 
   build: ->

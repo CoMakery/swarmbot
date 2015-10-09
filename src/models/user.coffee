@@ -45,19 +45,24 @@ class User extends FirebaseModel
       @set('state', 'home')
 
     events: [
-      { name: 'index', from: 'home', to: 'proposals-index' }
-      { name: 'show', from: 'home', to: 'proposals-show' }
-      { name: 'exit', from: 'proposals-index', to: 'home' }
+      { name: 'index', from: 'home', to: 'proposalsIndex' }
+      { name: 'show', from: 'home', to: 'proposalsShow' }
+      { name: 'exit', from: 'proposalsIndex', to: 'home' }
 
-      { name: 'create', from: 'proposals-index', to: 'proposals-create' }
-      { name: 'exit', from: 'proposals-create', to: 'proposals-index' }
+      { name: 'create', from: 'proposalsIndex', to: 'proposalsCreate' }
+      { name: 'exit', from: 'proposalsCreate', to: 'proposalsIndex' }
 
-      { name: 'show', from: 'proposals-index', to: 'proposals-show' }
-      { name: 'exit', from: 'proposals-show', to: 'proposals-index' }
+      { name: 'show', from: 'proposalsIndex', to: 'proposalsShow' }
+      { name: 'exit', from: 'proposalsShow', to: 'proposalsIndex' }
 
-      { name: 'createSolution', from: 'proposals-show', to: 'solutions-create' }
-      { name: 'solutions', from: 'proposals-show', to: 'solutions-index' }
-      { name: 'show', from: 'solutions-index', to: 'solutions-show' }
+      { name: 'createSolution', from: 'proposalsShow', to: 'solutionsCreate' }
+      { name: 'exit', from: 'solutionsCreate', to: 'proposalsShow' }
+
+      { name: 'solutions', from: 'proposalsShow', to: 'solutionsIndex' }
+      { name: 'exit', from: 'solutionsIndex', to: 'proposalsShow' }
+
+      { name: 'show', from: 'solutionsIndex', to: 'solutionsShow' }
+      { name: 'exit', from: 'solutionsShow', to: 'solutionsIndex' }
     ]
 
   # private class within User:

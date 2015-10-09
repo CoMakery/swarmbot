@@ -10,29 +10,42 @@ class ProposalsStateController extends ApplicationController
     @msg.match[1] = 'help'
     @router.route(@msg)
 
+  execute: (action) ->
+    if action.command?
+      @[action.command]()
+
+    if action.transition?
+      @currentUser[action.transition]()
+      @redirect()
+
   process: ->
-    message = @msg.match[1]
+    message = @msg.match[1].toLowerCase()
+    lastMenuItems = @currentUser.get('menu')
 
-    switch @currentUser.current
-      when 'home'
+    action = lastMenuItems[message]
+    if action?
+      @execute(action)
+    else
+      switch @currentUser.current
+        when 'home'
 
-        if message is 'help'
-          @homeInfo()
-        else if choice = message.match(/^[1-5]$/)?[0]
-          @currentUser.show(choice)
-          @redirect()
-        else if message.match(/^x$/i) then @currentUser.exit()
+          if message is 'help'
+            @homeInfo()
+          # else if choice = message.match(/^[1-5]$/)?[0]
+          #   @currentUser.show(choice)
+          #   @redirect()
+          # else if message is 'x' then @currentUser.exit()
 
-      when 'proposals-index'
-        switch message
-          when '1' then @show(1)
-          when '2' then p 2
-          when 'x' then @currentUser.exit()
-
-      when 'proposals-show'
-        switch message
-          when 'x' then @currentUser.exit(); @router.route(@msg)
-          when 'help' then @showInfo(1)
+        # when 'proposals-index'
+        #   switch message
+        #     when '1' then @show(1)
+        #     when '2' then p 2
+        #     when 'x' then @currentUser.exit()
+        #
+        # when 'proposals-show'
+        #   switch message
+        #     when 'x' then @currentUser.exit(); @router.route(@msg)
+        #     when 'help' then @showInfo(1)
 
   showInfo: (proposalId) ->
     @msg.send "showing proposal show for id #{proposalId}"
