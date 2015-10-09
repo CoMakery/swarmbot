@@ -2,8 +2,12 @@
 #   Because I want to govern myself
 #
 # Commands:
-#   hubot list proposals
+#   hubot bounties
+#   hubot proposals
+
+# Hidden Commands:
 #   hubot list all proposals
+#   hubot list proposals
 
 # Not ready:
 #   hubot propose <proposal>
@@ -16,6 +20,8 @@ MembersController = require '../controllers/members-controller'
 
 module.exports = (robot) ->
 
+  robot.respond /bounties$/i, (msg) ->
+      new ProposalsController().listApproved(msg, { })
 
   robot.respond /list\s+(all)?\s*proposals(?: in (.+))?\s*$/i, (msg) ->
     [all, showAll, community] = msg.match
