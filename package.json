@@ -11,7 +11,7 @@
   "description": "Bot for bounties",
   "scripts": {
     "colu": "colu",
-    "dev": "bin/hubot",
+    "dev": "bin/hubot --name s",
     "start": "bin/hubot --adapter slack",
     "test": "mocha"
   },

@@ -8,8 +8,10 @@ RatingCollection = require '../collections/rating-collection'
 class Proposal extends FirebaseModel
   hasParent: true
   urlRoot: "proposals"
+
   @find: (id, { parent }) ->
-    new Proposal({id: id}, parent: parent)
+    proposal = new Proposal({id: id}, parent: parent)
+    proposal.fetch()
 
   # getReputationScore: ->
   #   return Promise.resolve(null) unless @get('id')?

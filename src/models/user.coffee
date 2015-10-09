@@ -18,6 +18,10 @@ class User extends FirebaseModel
         cb(null, new User({}, snapshot: snapshot.child(userId)))
     , cb # error
 
+  constructor: ->
+    super()
+    @menu = new Menu
+
   setDco: (dcoKey) ->
     @set "current_dco", dcoKey
 
@@ -30,7 +34,7 @@ class User extends FirebaseModel
       @
 
   onafterevent: (event, from, to, data) ->
-    p "#{event} : #{from} -> #{to} :: #{data}"
+    p "// Transition #{from} -> #{to} // Event #{event} // Data: #{data} //"
     @set('state', to)
     # also set data here
 
@@ -55,5 +59,12 @@ class User extends FirebaseModel
       { name: 'solutions', from: 'proposals-show', to: 'solutions-index' }
       { name: 'show', from: 'solutions-index', to: 'solutions-show' }
     ]
+
+  # private class within User:
+  class Menu
+    clear: -> @items = {}
+
+    set: (number, data) ->
+      @items[number] = data
 
 module.exports = User

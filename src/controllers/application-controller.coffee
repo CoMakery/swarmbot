@@ -21,6 +21,11 @@ class ApplicationController
   _showError: (error)->
     @msg.send error.message
 
+  menuText: (items) ->
+    lines = for number, item of items
+      "#{number}: #{item}"
+    lines.join "\n"
+
   # _userText: (user)->
   #   if user?
   #     info = ""

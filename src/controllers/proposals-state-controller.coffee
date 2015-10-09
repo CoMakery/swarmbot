@@ -1,36 +1,43 @@
 { log, p, pjson } = require 'lightsaber'
 ApplicationController = require './application-controller'
 ProposalCollection = require '../collections/proposal-collection'
+Proposal = require '../models/proposal'
 
 class ProposalsStateController extends ApplicationController
+
   process: ->
     message = @msg.match[1]
 
-    p "message: #{message}"
-    p "@currentUser: #{@currentUser.get('slack_username')}"
-
     switch @currentUser.current
       when 'home'
-        switch message
-          when 'help' then @help()
-          when '1'
-            @currentUser.show(1)
-            @router.route(@msg)
-          when '2' then p 2
-          when '0' then @currentUser.exit()
+        # choice = Number message
+        if message is 'help' then @homeInfo()
+        else if choice = message.match(/^[1-5]$/)?[0]
+          @currentUser.show(choice)
+          @msg.match[1] = 'help'
+          @router.route(@msg)
+        else if message.match(/^x$/i) then @currentUser.exit()
 
       when 'proposals-index'
         switch message
           when '1' then @show(1)
           when '2' then p 2
-          when '0' then @currentUser.exit()
+          when 'x' then @currentUser.exit()
 
       when 'proposals-show'
         switch message
-          when '1' then @show(1)
-          when '0' then @currentUser.exit(); @router.route(@msg)
+          when 'x' then @currentUser.exit(); @router.route(@msg)
+          when 'help' then @showInfo(1)
 
-  help: ->
+  showInfo: (proposalId) ->
+    @msg.send "showing proposal show for id #{proposalId}"
+
+  show: (proposalId) ->
+    @getDco()
+    .then (dco) => Proposal.find proposalId, parent: dco
+    .then (proposal) => @msg.send @_proposalMessage proposal
+
+  homeInfo: ->
     @getDco()
     .then (dco) => dco.fetch()
     .then (dco) =>
@@ -39,13 +46,20 @@ class ProposalsStateController extends ApplicationController
       #   return @msg.send "There are no proposals to display in #{dco.get('id')}."
       proposals.sortByReputationScore()
       messages = proposals.map(@_proposalMessage)[0...5]
+
+      @user.menu.clear()
       messages = for message, i in messages
-        "#{i+1}: #{message}"
+        @user.menu.set i+1, proposals[i].get('id')
+      @user.set 'menu', menu.items
+
+      menuLines = for number, proposalId of @user.menu.items
+        "#{number}: #{@_proposalMessage proposalId}"
 
       @msg.send """
-        #{messages}
+        #{menuLines.join "\n"}
         x: Exit
         """
+
     .error(@_showError)
 
   _proposalMessage: (proposal) ->
@@ -55,9 +69,5 @@ class ProposalsStateController extends ApplicationController
     text += " Rating: #{score}%" unless isNaN(score)
     text += " (awarded)" if proposal.get('awarded')?
     text
-
-  show: (proposalId) ->
-
-    p 'showing ' + proposalId
 
 module.exports = ProposalsStateController
