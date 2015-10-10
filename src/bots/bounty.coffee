@@ -8,7 +8,7 @@
 
 # Hidden Commands:
 #   hubot create proposal <proposal name> for <number of coins> [in <community>]
-#   hubot rate proposal <proposal name> <value>% [in <community name]
+#   hubot rate <proposal name> <value>% [in <community name]
 #   hubot award proposal <proposal name> to <slack username> [in <community>]
 #   hubot show proposal <proposal name> [in <community name>]
 
@@ -50,7 +50,7 @@ module.exports = (robot) ->
     log "MATCH 'create proposal' : #{all}"
     new ProposalsController().create(msg, { proposalName, amount, community })
 
-  robot.respond /rate \s+(.+)\s+([\d.]+)%(?:\s+(?:in|for)\s+(.*))?\s*$/i, (msg) ->
+  robot.respond /rate\s+(.+)\s+([\d.]+)%(?:\s+(?:in|for)\s+(.*))?\s*$/i, (msg) ->
     [all, proposalName, rating, community] = msg.match
     log "MATCH 'rate' : #{all}"
     new ProposalsController().rate(msg, { community, proposalName, rating })
