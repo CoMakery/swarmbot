@@ -30,7 +30,7 @@ module.exports = (robot) ->
       robot.messageRoom msg.message.user.name, "Type 'bounties' to see active bounties"
       robot.messageRoom msg.message.user.name, "Type 'register <my_bitcoin_address> to start getting bounties"
       robot.messageRoom msg.message.user.name, "Type 'proposals' see active governance "
-      robot.messageRoom msg.message.user.name, "Type 'propose X' create a new proposal"
+      robot.messageRoom msg.message.user.name, "Type 'propose <proposal_name> for <number> bucks' to create a new proposal"
       robot.messageRoom msg.message.user.name, "Type 'more help' to see other suggested commands"
     catch error
 
