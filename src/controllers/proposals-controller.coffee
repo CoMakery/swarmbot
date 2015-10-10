@@ -126,7 +126,7 @@ class ProposalsController extends ApplicationController
 
   _proposalMessage: (proposal) ->
     text = "Proposal #{proposal.get('id')}"
-    text += " Reward #{proposal.get('amount')}" if proposal.get('amount')?
+    text += " Reward $#{proposal.get('amount')}" if proposal.get('amount')?
     score = proposal.ratings().score()
     text += " Rating: #{score}%" unless isNaN(score)
     text += " (awarded)" if proposal.get('awarded')?

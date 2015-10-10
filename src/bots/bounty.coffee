@@ -45,7 +45,7 @@ module.exports = (robot) ->
     log "MATCH 'award proposal' : #{pjson msg.match}"
     new ProposalsController().award(msg, { proposalName, awardee, dcoKey })
 
-  robot.respond /create proposal\s+(.+)\s+for (\d+)(?: in\s+(.+))?\s*$/i, (msg) ->
+  robot.respond /create proposal\s+(.+)\s+for $(\d+)(?: in\s+(.+))?\s*$/i, (msg) ->
     [all, proposalName, amount, community] = msg.match
     log "MATCH 'create proposal' : #{all}"
     new ProposalsController().create(msg, { proposalName, amount, community })
