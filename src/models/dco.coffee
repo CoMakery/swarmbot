@@ -39,6 +39,17 @@ class DCO extends FirebaseModel
   hasMember: (user) ->
     contains @memberIds(), user.get('id')
 
+ # TODO:complete 
+  # addClaim: ("proposal name") ->
+  #   userId = user.get('id')
+  #   present = (indexOf(@memberIds(), userId) != -1)
+  #
+  #   if present
+  #     claim = { last_active: new Date, bounties_claimed: {} }
+  #     @firebase().child('members/'+ userId + '/bounties_claimed').push(claim)
+  #     # @attributes are now out of sync with firebase. Fetch here?
+  #     user
+
   addMember: (user) ->
     userId = user.get('id')
     present = (indexOf(@memberIds(), userId) != -1)
@@ -47,7 +58,7 @@ class DCO extends FirebaseModel
       false
     else
       member = {}
-      member[userId] = new Date
+      member[userId] = { joined_at: new Date, bounties_claimed: {} }
       @firebase().child('members').update(member)
       # @attributes are now out of sync with firebase. Fetch here?
       user
