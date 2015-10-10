@@ -38,7 +38,7 @@ class ProposalsController extends ApplicationController
         messages = proposals.map @_proposalMessage
 
         if messages.length == 0
-          return @msg.send "There are no approved bounties for #{dco.get('id')}.\n Type 'proposals' and rate your favorites!"
+          return @msg.send "There are no approved bounties for #{dco.get('id')}.\n Type 'proposals' to see what needs to be approved!"
 
 
         @msg.send messages.join("\n")
