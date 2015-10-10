@@ -3,13 +3,13 @@
 #
 # Commands:
 #  hubot space kitty say
-#  hubot fork me
-#  hubot more help
+#  hubot more commands
 
 # Hidden Commands:
 
 #   hubot x marks the what
 #   hubot hello
+#  hubot fork me
 
 # Not in use:
 #   hubot tag <community name> <tag>
@@ -41,9 +41,9 @@ module.exports = (robot) ->
   robot.respond /nyan$/i, (msg) ->
     msg.send "https://www.youtube.com/watch?v=QH2-TGUlwu4"
 
-  robot.respond /more help$/i, (msg) ->
+  robot.respond /more commands$/i, (msg) ->
     #TODO: This should pull from wizard or some other repo where all the comamnds live
-    msg.send "More commands:\ncreate community <community name>\nlist communities\njoin <community name>"
+    msg.send "More commands:\ncreate community <community name>\nlist communities\njoin <community name>\nhow many communities?\nfork me\nabout me"
 
   robot.respond /space kitty say$/i, (msg) ->
     authenticateUser(msg)
