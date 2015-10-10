@@ -37,9 +37,8 @@ module.exports = (robot) ->
   robot.respond /propose\s+(.+)(?:\s+in\s+(.+))?\s*$/i, (msg) ->
     [all, proposalName, community] = msg.match
     log "MATCH 'propose' : #{all}"
-    p "com", community
-    p "pname", proposalName
-    new ProposalsController().create(msg, { proposalName, 0, community })
+    amount = 0
+    new ProposalsController().create(msg, { proposalName, amount, community })
 
   robot.respond /vote\s+(.+)\s+([\d.]+)%(?:\s+(?:in|for)\s+(.*))?\s*$/i, (msg) ->
     [all, proposalName, rating, community] = msg.match
