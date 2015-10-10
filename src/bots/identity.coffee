@@ -2,7 +2,7 @@
 #   User / account managemnet
 #
 # Commands:
-#   hubot register btc <btc_address>
+#   hubot register <btc_address>
 
 # Hidden Commands:
 
@@ -44,7 +44,7 @@ module.exports = (robot) ->
   #   new UsersController().register(msg)
 
   robot.respond /register <?(\w+)>?$/i, (msg) ->
-    log "MATCH 'register btc' : #{msg.match[0]}"
+    log "MATCH 'register' : #{msg.match[0]}"
     btcAddress = msg.match[1]
     new UsersController().registerBtc(msg, { btcAddress })
 
