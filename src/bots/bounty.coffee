@@ -50,9 +50,9 @@ module.exports = (robot) ->
     log "MATCH 'create proposal' : #{all}"
     new ProposalsController().create(msg, { proposalName, amount, community })
 
-  robot.respond /rate proposal\s+(.+)\s+([\d.]+)%(?:\s+(?:in|for)\s+(.*))?\s*$/i, (msg) ->
+  robot.respond /rate \s+(.+)\s+([\d.]+)%(?:\s+(?:in|for)\s+(.*))?\s*$/i, (msg) ->
     [all, proposalName, rating, community] = msg.match
-    log "MATCH 'rate proposal' : #{all}"
+    log "MATCH 'rate' : #{all}"
     new ProposalsController().rate(msg, { community, proposalName, rating })
 
   robot.respond /i(?:[’']d| would) like\s+(.+)$/i, (msg) ->

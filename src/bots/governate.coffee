@@ -25,6 +25,7 @@ module.exports = (robot) ->
 
   robot.respond /proposals$/i, (msg) ->
       new ProposalsController().list(msg, { })
+      msg.send "type 'rate <proposal_name> X%' to help decide if it should be approved"
 
   robot.respond /list\s+(all)?\s*proposals(?: in (.+))?\s*$/i, (msg) ->
     [all, showAll, community] = msg.match
