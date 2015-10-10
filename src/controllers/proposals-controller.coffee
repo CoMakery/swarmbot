@@ -28,13 +28,14 @@ class ProposalsController extends ApplicationController
     @getDco().then (dco)=>
       dco.fetch().then (dco) =>
         proposals = new ProposalCollection(dco.snapshot.child('proposals'), parent: dco)
-        if proposals.isEmpty()
-          return @msg.send "There are no approved proposals for #{dco.get('id')}.\nList all proposals and rate your favorites!"
 
         proposals.filter (proposal) ->
           proposal.ratings().size() > 0 &&
           proposal.ratings().score() > 50 &&
           !proposal.get('awarded')?
+
+        if proposals.isEmpty()
+          return @msg.send "There are no approved proposals for #{dco.get('id')}.\nList all proposals and rate your favorites!"
 
         proposals.sortByReputationScore()
         messages = proposals.map @_proposalMessage
