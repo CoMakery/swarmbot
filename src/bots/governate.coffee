@@ -35,11 +35,19 @@ module.exports = (robot) ->
     else
       new ProposalsController().listApproved(msg, { community })
 
-  robot.respond /propose\s+(.+)(?:\s+in\s+(.+))?\s*$/i, (msg) ->
-    [all, proposalName, community] = msg.match
+  robot.respond /propose\s+(.+)\s+for\s+(.+)\s+bucks$/i, (msg) ->
+    [all, proposalName, amount, community] = msg.match
     log "MATCH 'propose' : #{all}"
-    amount = 0
+    if amount == undefined
+      amount = 0
     new ProposalsController().create(msg, { proposalName, amount, community })
+  #
+  # robot.respond /propose\s+(.+)(?:\s+for\s+\$(.+))?\s*$/i, (msg) ->
+  #   [all, proposalName, amount, community] = msg.match
+  #   log "MATCH 'propose' : #{all}"
+  #   if amount == undefined
+  #     amount = 0
+  #   new ProposalsController().create(msg, { proposalName, amount, community })
 
   robot.respond /vote\s+(.+)\s+([\d.]+)%(?:\s+(?:in|for)\s+(.*))?\s*$/i, (msg) ->
     [all, proposalName, rating, community] = msg.match
