@@ -43,7 +43,7 @@ module.exports = (robot) ->
 
   robot.respond /more help$/i, (msg) ->
     #TODO: This should pull from wizard or some other repo where all the comamnds live
-    msg.send "More commands:\ncreate community <community name>\nlist communities\njoin community <community name>"
+    msg.send "More commands:\ncreate community <community name>\nlist communities\njoin <community name>"
 
   robot.respond /space kitty say$/i, (msg) ->
     authenticateUser(msg)

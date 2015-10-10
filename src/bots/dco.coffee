@@ -9,7 +9,7 @@
 #   hubot my communities
 #   hubot find community <start of community name>
 #   hubot create community <community name>
-#   hubot join community <community name>
+#   hubot join <community name>
 #   hubot how many communities?
 #   hubot list members [of <community name>]
 
@@ -54,8 +54,8 @@ module.exports = (robot) ->
     dcoSearch = msg.match[1]
     new DcosController().find(msg, { dcoSearch })
 
-  robot.respond /join community\s+(.*)$/i, (msg) ->
-    log "MATCH 'join community' : #{msg.match[0]}"
+  robot.respond /join\s+(.*)$/i, (msg) ->
+    log "MATCH 'join' : #{msg.match[0]}"
     dcoKey = msg.match[1]
     new DcosController().join(msg, { dcoKey })
 
