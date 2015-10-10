@@ -4,7 +4,6 @@
 # Commands:
 #
 
-
 # Hidden Commands:
 #   hubot list communities
 #   hubot my communities
