@@ -34,11 +34,13 @@ class ProposalsController extends ApplicationController
           proposal.ratings().score() > 50 &&
           !proposal.get('awarded')?
 
-        if proposals.isEmpty()
-          return @msg.send "There are no approved proposals for #{dco.get('id')}.\nList all proposals and rate your favorites!"
-
         proposals.sortByReputationScore()
         messages = proposals.map @_proposalMessage
+
+        if messages.length == 0
+          return @msg.send "There are no approved bounties for #{dco.get('id')}.\n Type 'proposals' and rate your favorites!"
+
+
         @msg.send messages.join("\n")
 
     .error(@_showError)
