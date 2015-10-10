@@ -7,6 +7,33 @@ class ApplicationController
   constructor: (@router, @msg) ->
     @currentUser = @msg.currentUser
 
+  redirect: ->
+    @msg.match = [] # call default action in the next state
+    @router.route(@msg)
+
+  execute: (action) ->
+    @currentUser.set 'stateData', action.data ? ''
+
+    if action.command?
+      @[action.command]()
+
+    if action.transition?
+      @currentUser[action.transition]()
+      @redirect()
+
+  process: ->
+    message = @msg.match[1]?.toLowerCase()
+    lastMenuItems = @currentUser.get('menu')
+    action = lastMenuItems?[message]
+    if action?
+      # specific action of entered command
+      @execute(action)
+    else if @stateActions[@currentUser.current]?
+      # default action of this state
+      @[ @stateActions[@currentUser.current] ](@currentUser.get('stateData'))
+    else
+      throw new Error("Action for state '#{@currentUser.current}' not defined.")
+
   getDco: ->
     @currentUser.fetchIfNeeded().bind(@).then (user) ->
       dcoId = user.get('current_dco')

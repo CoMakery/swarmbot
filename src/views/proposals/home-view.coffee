@@ -1,12 +1,10 @@
 { log, p, pjson } = require 'lightsaber'
 
-class HomeMenuView
-  constructor: (@proposals) ->
-
+class HomeView
   # {
   #   1: {
   #     text: "Proposal xyz"
-  #     object: {id: 'this is a proposal'}
+  #     data: {id: 'this is a proposal'}
   #     transition: 'show'
   #   }
   #   6: {
@@ -22,23 +20,20 @@ class HomeMenuView
   #   }
   # }
 
-  build: ->
-    @items = {}
+  constructor: (@proposals) ->
+    @menu = {}
 
     # TODO: top 5 proposals
     for proposal, i in @proposals.models
-      @items[i+1] = @proposalMenuItem proposal
+      @menu[i+1] = @proposalMenuItem proposal
 
-    @items[i+1] = { text: "More", transition: 'index' }
-    @items['x'] = { text: "Exit", transition: 'exit' }
-    @
+    @menu[i+1] = { text: "More", transition: 'index' }
 
   render: ->
-    lines = for i, menuItem of @items
+    lines = for i, menuItem of @menu
       "#{i}: #{menuItem.text}"
     """
-    Top Proposals
-    -------------
+    *Top Proposals*
     #{lines.join("\n")}
 
     To take an action, simply enter the number or letter at the beginning of the line.
@@ -47,7 +42,7 @@ class HomeMenuView
   proposalMenuItem: (proposal) ->
     {
       text: @proposalMessage(proposal)
-      object: { id: proposal.get('id') }
+      data: { id: proposal.get('id') }
       transition: 'show'
     }
 
@@ -59,4 +54,4 @@ class HomeMenuView
     # text += " (awarded)" if proposal.get('awarded')?
     text
 
-module.exports = HomeMenuView
+module.exports = HomeView
