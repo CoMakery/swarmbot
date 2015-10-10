@@ -1,10 +1,9 @@
 # Description:
 #   Create a bounty
 #
-
 # Commands:
 #   hubot I'd like <suggested improvement for swarmbot>
-
+#   hubot upvote <proposal name>
 
 # Hidden Commands:
 #   hubot create proposal <proposal name> for <number of coins> [in <community>]
