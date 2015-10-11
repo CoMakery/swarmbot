@@ -43,11 +43,11 @@ module.exports = (robot) ->
 
   robot.respond /more commands$/i, (msg) ->
     #TODO: This should pull from wizard or some other repo where all the comamnds live
-    msg.send "More commands:\ncreate community <community name>\nlist communities\njoin <community name>\nhow many communities?\nfork me\nabout me\nadmin"
+    msg.send "More commands:\ncreate community <community name>\nlist communities\njoin <community name>\nhow many communities?\nfork me\nabout me\nadmin commands"
 
   robot.respond /admin commands$/i, (msg) ->
     #TODO: This should pull from wizard or some other repo where all the comamnds live
-    msg.send "Admin commands works for community owner only:\naward <bounty name> bounty to <username>"
+    msg.send "Admin commands work for owner only:\naward <bounty name> bounty to <username>"
 
   robot.respond /space kitty say$/i, (msg) ->
     authenticateUser(msg)
