@@ -113,7 +113,14 @@ class ProposalsController extends ApplicationController
           replies = for message in messages
             "Rating saved to #{message}"
           p replies.join "\n"
-          @msg.send "You rated '#{proposal.get('id')}' #{rating}%"
+
+          if rating > 50
+            @msg.send "You upvoted '#{proposal.get('id')}'"
+          else if rating < 50
+            @msg.send "You downvoted '#{proposal.get('id')}'"
+          else
+            @msg.send "You rated '#{proposal.get('id')}' #{rating}%"
+
         .catch (error) =>
           @msg.send "Rating failed: #{error}"
           p "#{error}" # TODO: re-throw exception to show stacktrace
