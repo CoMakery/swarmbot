@@ -55,16 +55,17 @@ module.exports = (robot) ->
     new ProposalsController().rate(msg, { community, proposalName, rating })
 
 
-  robot.respond /upvote\s+(.+)\s+(?:\s+(?:in|for)\s+(.*))?\s*$/i, (msg) ->
-    [all, proposalName, rating, community] = msg.match
-    rating = 95;
-    log "MATCH 'rate' : #{all}"
+  robot.respond /upvote\s+(.+)\s*$/i, (msg) ->
+    [all, proposalName] = msg.match
+    rating = 95
+    community = undefined
+    log "MATCH 'upvote' : #{all}"
     new ProposalsController().rate(msg, { community, proposalName, rating })
 
 
   robot.respond /downvote\s+(.+)\s+(?:\s+(?:in|for)\s+(.*))?\s*$/i, (msg) ->
     [all, proposalName, community] = msg.match
-    rating = 5;
+    rating = 5
     log "MATCH 'rate' : #{all}"
     new ProposalsController().rate(msg, { community, proposalName, rating })
 
