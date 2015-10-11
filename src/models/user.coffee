@@ -22,7 +22,7 @@ class User extends FirebaseModel
     @set "current_dco", dcoKey
 
   canUpdate: (dco) ->
-    dco.get('owner') == @get('id')
+    dco.get('project_owner') == @get('id')
 
   # constructor: ({@userRef}) ->
   # @find: (userKey) ->
