@@ -75,6 +75,13 @@ module.exports = (robot) ->
     log "MATCH 'rate' : #{all}"
     new ProposalsController().rate(msg, { community, proposalName, rating })
 
+  robot.respond /:\-1:\s+(.+)\s*$/i, (msg) ->
+    [all, proposalName] = msg.match
+    rating = 5
+    community = undefined
+    log "MATCH 'rate' : #{all}"
+    new ProposalsController().rate(msg, { community, proposalName, rating })
+
   robot.respond /i(?:[’']d| would) like\s+(.+)$/i, (msg) ->
     suggestion = msg.match[1]
     log "MATCH 'i'd like' : #{msg.match[0]}"
