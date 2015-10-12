@@ -10,6 +10,7 @@ sinon = require 'sinon'
 require('sinon-as-promised')(Promise)
 require 'sinon-chai'
 
+swarmbot = require '../src/models/swarmbot'
 FirebaseModel = require '../src/models/firebase-model'
 User = require '../src/models/user'
 DCO = require '../src/models/dco'
@@ -58,8 +59,10 @@ describe 'controllers', ->
         @user.attributes.current_dco = 'zzz'
         @controller.getDco().then((dco)-> dco.get('id')).should.eventually.equal 'zzz'
 
-      it "rejects the promise with an error if the user has no community.", ->
-        @controller.getDco().should.be.rejected
+      it "sets the community to the default community otherwise", ->
+        @user.attributes.current_dco = null
+        @controller.getDco()
+        .then((dco)-> dco.get('id')).should.eventually.equal swarmbot.feedbackDcokey
 
   # context 'UsersController', ->
   #
