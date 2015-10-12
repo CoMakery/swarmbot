@@ -29,7 +29,7 @@
     "backbone": "^1.2.3",
     "bitcoinjs-lib": "^2.1.1",
     "bluebird": "^2.10.0",
-    "colu": "Colu-platform/colu-nodejs#55b04f9e092afcbc543f729cdebeb82e43a1abe5",
+    "colu": "^0.6.10",
     "colu-access": "^0.2.5",
     "firebase": "^2.2.9",
     "hubot": "^2.16.0",
