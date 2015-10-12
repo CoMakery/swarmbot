@@ -61,6 +61,13 @@ module.exports = (robot) ->
     log "MATCH 'upvote' : #{all}"
     new ProposalsController().rate(msg, { community, proposalName, rating })
 
+  robot.respond /:\+1:\s+(.+)\s*$/i, (msg) ->
+    [all, proposalName] = msg.match
+    rating = 95
+    community = undefined
+    log "MATCH 'upvote' : #{all}"
+    new ProposalsController().rate(msg, { community, proposalName, rating })
+
   robot.respond /downvote\s+(.+)\s*$/i, (msg) ->
     [all, proposalName] = msg.match
     rating = 5
