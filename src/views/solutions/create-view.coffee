@@ -3,7 +3,7 @@
 class CreateView
   constructor: (@data) ->
     @menu = {
-      x: { text: "Exit", transition: 'exit' }
+      x: { text: "Exit", transition: 'exit', data: {id: @data.proposalId} }
     }
 
   render: ->

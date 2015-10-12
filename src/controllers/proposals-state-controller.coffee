@@ -87,22 +87,23 @@ class ProposalsStateController extends ApplicationController
     @msg.send view.render()
 
   # TODO: move to solutions controller
-  solutionsCreate: ->
+  solutionsCreate: (data)->
     if @input?
-      data = @currentUser.get('stateData') ? {}
       if not data.id?
         data.id = @input
       else if not data.link?
         data.link = @input
         @getDco()
         .then (dco) =>
-          p 2, data
           proposal = Proposal.find data.proposalId, parent: dco
         .then (proposal) =>
         # TODO:
         #   proposal.createSolution data
         # .then (solution) =>
           @msg.send "Your solution has been submitted and will be reviewed!"
+          # go back to proposals show
+          @currentUser.set 'stateData', id: data.proposalId
+          @execute transition: 'exit'
 
     data ?= {}
     @currentUser.set 'stateData', data
