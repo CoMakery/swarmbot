@@ -10,6 +10,7 @@ class Proposal extends FirebaseModel
   urlRoot: "proposals"
 
   @find: (id, { parent }) ->
+    # p 1, arguments...
     proposal = new Proposal({id: id}, parent: parent)
     proposal.fetch()
 

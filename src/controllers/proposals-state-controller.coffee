@@ -6,6 +6,7 @@ HomeView = require '../views/proposals/home-view'
 ShowView = require '../views/proposals/show-view'
 IndexView = require '../views/proposals/index-view'
 CreateView = require '../views/proposals/create-view'
+CreateSolutionView = require '../views/solutions/create-view'
 
 class ProposalsStateController extends ApplicationController
   # map of state name -> controller action
@@ -50,7 +51,7 @@ class ProposalsStateController extends ApplicationController
     .then (proposal) =>
       # @msg.send @_proposalMessage proposal
       view = new ShowView(proposal)
-      @currentUser.set('menu', view.menu)
+      @currentUser.set 'menu', view.menu
       @msg.send view.render()
 
   voteUp: ->
@@ -85,10 +86,31 @@ class ProposalsStateController extends ApplicationController
 
     @msg.send view.render()
 
+  # TODO: move to solutions controller
+  solutionsCreate: ->
+    if @input?
+      data = @currentUser.get('stateData') ? {}
+      if not data.id?
+        data.id = @input
+      else if not data.link?
+        data.link = @input
+        @getDco()
+        .then (dco) =>
+          p 2, data
+          proposal = Proposal.find data.proposalId, parent: dco
+        .then (proposal) =>
+        # TODO:
+        #   proposal.createSolution data
+        # .then (solution) =>
+          @msg.send "Your solution has been submitted and will be reviewed!"
 
+    data ?= {}
+    @currentUser.set 'stateData', data
 
-    # else
-    #   p "We are creating this proposal!", @currentUser.get('stateData')
-    #   # create the proposal
+    # view here. create menu.
+    view = new CreateSolutionView(data)
+    @currentUser.set('menu', view.menu)
+
+    @msg.send view.render()
 
 module.exports = ProposalsStateController
