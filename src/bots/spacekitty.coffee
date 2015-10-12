@@ -26,6 +26,10 @@ module.exports = (robot) ->
         template_id: 405658
       },
       {
+        regex: /(propose .*) (for .*)/i,
+        template_id: 37676936
+      },
+      {
         regex: /(yo dawg .*) (so .*)/i,
         template_id: 101716
       }
