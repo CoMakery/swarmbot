@@ -37,7 +37,11 @@ class ApplicationController
     @router.route(@msg)
 
   stateAction: ->
-    @[ @stateActions[@currentUser.current] ](@currentUser.get('stateData'))
+    userState = @currentUser.current
+    controllerMethodName = @stateActions[userState]
+    controllerMethod = @[controllerMethodName].bind @
+    stateData = @currentUser.get 'stateData'
+    controllerMethod stateData
 
   getDco: ->
     @currentUser.fetchIfNeeded().bind(@).then (user) ->
