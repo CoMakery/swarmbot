@@ -24,11 +24,12 @@ class HomeView
     @menu = {}
 
     # TODO: top 5 proposals
-    for proposal, i in @proposals.models
-      @menu[i+1] = @proposalMenuItem proposal
+    i = 1
+    for proposal in @proposals.models
+      @menu[i++] = @proposalMenuItem proposal
 
-    @menu[i+1] = { text: "More", transition: 'index' }
-    @menu[i+2] = { text: "Create a proposal", transition: 'create' }
+    # @menu[i++] = { text: "More", transition: 'index' }
+    @menu[i++] = { text: "Create a proposal", transition: 'create' }
 
   render: ->
     lines = for i, menuItem of @menu

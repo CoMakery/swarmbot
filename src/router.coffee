@@ -9,16 +9,14 @@ class Router
 
     msg.currentUser.fetchIfNeeded()
     .then (user) =>
-      # p "\nmessage: #{msg.match[1]}"
-      # p "user: #{user.get('slack_username')}"
       p "state: #{user.current}"
 
       switch user.current
         when 'home', 'proposalsIndex', 'proposalsShow', 'proposalsCreate'
           new ProposalsStateController(@, msg).process()
         else
-          p 'no route!'
-          # set to home, show help
+          throw new Error "No route! for state #{user.current}"
+          # TODO: set to home, show help
 
   setCurrentUser: (msg)->
     msg.currentUser ?= new User(id: msg.robot.whose(msg))

@@ -21,6 +21,9 @@ class Proposal extends FirebaseModel
   #     @attributes.reputationScore = score if score?
   #     @
 
+  # TODO implement:
+  # createSolution: (attributes) ->
+
   ratings: ->
     @_ratings ?= new RatingCollection @snapshot.child('ratings'), parent: @
 

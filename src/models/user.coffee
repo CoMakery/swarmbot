@@ -45,17 +45,16 @@ class User extends FirebaseModel
       @set('state', 'home')
 
     events: [
-      { name: 'index', from: 'home', to: 'proposalsIndex' }
+      # { name: 'index', from: 'home', to: 'proposalsIndex' }
       { name: 'show', from: 'home', to: 'proposalsShow' }
-      { name: 'exit', from: 'proposalsIndex', to: 'home' }
+      { name: 'exit', from: 'proposalsShow', to: 'home' }
+      # { name: 'exit', from: 'proposalsIndex', to: 'home' }
 
       { name: 'create', from: 'home', to: 'proposalsCreate' }
       { name: 'exit', from: 'proposalsCreate', to: 'home' }
 
-      { name: 'create', from: 'proposalsIndex', to: 'proposalsCreate' }
-
-      { name: 'show', from: 'proposalsIndex', to: 'proposalsShow' }
-      { name: 'exit', from: 'proposalsShow', to: 'proposalsIndex' }
+      # { name: 'create', from: 'proposalsIndex', to: 'proposalsCreate' }
+      # { name: 'show', from: 'proposalsIndex', to: 'proposalsShow' }
 
       { name: 'createSolution', from: 'proposalsShow', to: 'solutionsCreate' }
       { name: 'exit', from: 'solutionsCreate', to: 'proposalsShow' }

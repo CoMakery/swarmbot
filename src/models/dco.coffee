@@ -28,7 +28,6 @@ class DCO extends FirebaseModel
       else
         Promise.reject(Promise.OperationalError("The community '#{dco.get('id')}' does not exist."))
 
-
   memberIds: ->
     keys @get('members')
 

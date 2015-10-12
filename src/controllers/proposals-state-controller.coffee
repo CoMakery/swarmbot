@@ -8,11 +8,13 @@ IndexView = require '../views/proposals/index-view'
 CreateView = require '../views/proposals/create-view'
 
 class ProposalsStateController extends ApplicationController
+  # map of state name -> controller action
   stateActions:
-    'home': 'home'
-    'proposalsIndex': 'index'
-    'proposalsShow': 'show'
-    'proposalsCreate': 'create'
+    home: 'home'
+    # proposalsIndex: 'index'
+    proposalsShow: 'show'
+    proposalsCreate: 'create'
+    solutionsCreate: 'solutionsCreate'
 
   home: ->
     @getDco()
@@ -53,30 +55,25 @@ class ProposalsStateController extends ApplicationController
 
   voteUp: ->
     # TODO: record the vote
-    @msg.send 'Your vote has been recorded.' # Not
+    @msg.send "Your vote has been recorded.\n" # Not
     @stateAction()
 
   voteDown: ->
     # TODO: record the vote
-    @msg.send 'Your vote has been recorded.' # Not
+    @msg.send "Your vote has been recorded.\n" # Not
     @stateAction()
 
-  # {
-  #   id: 'a proposal'
-  #   description: 'this is a proposal'
-  # }
   create: ->
     if @input?
       data = @currentUser.get('stateData') ? {}
       if not data.id?
         data.id = @input
       else if not data.description?
-        description = @input
-        data.description = description
+        data.description = @input
         @getDco()
-        .then (@dco) =>
-          @dco.createProposal data
-        .then (proposal) =>
+        .then (dco) =>
+          dco.createProposal data
+        .then =>
           @msg.send "Proposal created!"
 
     data ?= {}
