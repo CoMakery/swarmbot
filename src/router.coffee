@@ -4,21 +4,20 @@ InitialStateController = require './controllers/initial-state-controller'
 ProposalsStateController = require './controllers/proposals-state-controller'
 
 class Router
-  route: (msg)->
-    @setCurrentUser(msg)
-
-    msg.currentUser.fetchIfNeeded()
+  route: (msg) ->
+    @setCurrentUser msg
+    msg.currentUser.fetch()
     .then (user) =>
       p "state: #{user.current}"
-
       switch user.current
-        when 'home', 'proposalsIndex', 'proposalsShow', 'proposalsCreate'
+        when 'home', 'proposalsShow', 'proposalsCreate', 'solutionsCreate'
           new ProposalsStateController(@, msg).process()
         else
-          throw new Error "No route! for state #{user.current}"
-          # TODO: set to home, show help
+          p "Unexpected user state #{user.current} -- resetting to default state"
+          user.set 'state', 'home'
+          .then => @route msg
 
-  setCurrentUser: (msg)->
-    msg.currentUser ?= new User(id: msg.robot.whose(msg))
+  setCurrentUser: (msg) ->
+    msg.currentUser ?= new User id: msg.robot.whose(msg)
 
 module.exports = new Router()
