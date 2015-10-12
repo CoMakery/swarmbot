@@ -2,6 +2,7 @@
 User = require '../models/user'
 Promise = require 'bluebird'
 DCO = require '../models/dco'
+swarmbot = require '../models/swarmbot'
 
 class ApplicationController
   constructor: (@router, @msg) ->
@@ -37,6 +38,7 @@ class ApplicationController
   getDco: ->
     @currentUser.fetchIfNeeded().bind(@).then (user) ->
       dcoId = user.get('current_dco')
+      dcoId ?= swarmbot.feedbackDcokey
       if dcoId?
         DCO.find dcoId
       else
