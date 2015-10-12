@@ -8,20 +8,6 @@ class ApplicationController
   constructor: (@router, @msg) ->
     @currentUser = @msg.currentUser
 
-  redirect: ->
-    @msg.match = [] # call default action in the next state
-    @router.route(@msg)
-
-  execute: (action) ->
-    @currentUser.set 'stateData', action.data if action.data
-
-    if action.command?
-      @[action.command]()
-
-    if action.transition?
-      @currentUser[action.transition]()
-      @redirect()
-
   # ENTRY POINT
   process: ->
     @input = @msg.match[1]
@@ -35,6 +21,20 @@ class ApplicationController
       @stateAction()
     else
       throw new Error("Action for state '#{@currentUser.current}' not defined.")
+
+  execute: (action) ->
+    @currentUser.set 'stateData', action.data if action.data
+
+    if action.command?
+      @[action.command]()
+
+    if action.transition?
+      @currentUser[action.transition]()
+      @redirect()
+
+  redirect: ->
+    @msg.match = [] # call default action in the next state
+    @router.route(@msg)
 
   stateAction: ->
     @[ @stateActions[@currentUser.current] ](@currentUser.get('stateData'))

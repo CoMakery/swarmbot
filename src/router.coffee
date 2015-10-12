@@ -12,9 +12,8 @@ class Router
         when 'home', 'proposalsShow', 'proposalsCreate', 'solutionsCreate'
           new ProposalsStateController(@, msg).process()
         else
-          p "Unexpected user state #{user.current} -- resetting to default state"
-          user.set 'state', 'home'
-          .then => @route msg
+          console.error "Unexpected user state #{user.current} -- resetting to default state"
+          user.set('state', 'home').then => @route msg
 
   setCurrentUser: (msg) ->
     msg.currentUser ?= new User id: msg.robot.whose(msg)

@@ -1,25 +1,6 @@
 { log, p, pjson } = require 'lightsaber'
 
 class HomeView
-  # {
-  #   1: {
-  #     text: "Proposal xyz"
-  #     data: {id: 'this is a proposal'}
-  #     transition: 'show'
-  #   }
-  #   6: {
-  #     text: "More"
-  #     transition: 'index'
-  #   }
-  #   x: {
-  #     text: "Exit"
-  #     transition: 'exit'
-  #   }
-  #   help: {
-  #     command: 'homeHelp'
-  #   }
-  # }
-
   constructor: (@dco, proposals) ->
     @menu = {}
 
