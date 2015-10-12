@@ -5,7 +5,7 @@ class ShowView
     @menu = {
       1: { text: "Vote Up", command: 'voteUp' }
       2: { text: "Vote Down", command: 'voteDown' }
-      'x': { text: "Exit", transition: 'exit' }
+      x: { text: "Exit", transition: 'exit' }
     }
 
   render: ->

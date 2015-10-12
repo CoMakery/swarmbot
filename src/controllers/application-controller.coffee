@@ -13,7 +13,7 @@ class ApplicationController
     @router.route(@msg)
 
   execute: (action) ->
-    @currentUser.set 'stateData', action.data ? ''
+    @currentUser.set 'stateData', action.data if action.data
 
     if action.command?
       @[action.command]()
@@ -22,18 +22,22 @@ class ApplicationController
       @currentUser[action.transition]()
       @redirect()
 
+  # ENTRY POINT
   process: ->
-    message = @msg.match[1]?.toLowerCase()
+    @input = @msg.match[1]
     lastMenuItems = @currentUser.get('menu')
-    action = lastMenuItems?[message]
+    action = lastMenuItems?[@input?.toLowerCase()]
     if action?
       # specific action of entered command
       @execute(action)
     else if @stateActions[@currentUser.current]?
       # default action of this state
-      @[ @stateActions[@currentUser.current] ](@currentUser.get('stateData'))
+      @stateAction()
     else
       throw new Error("Action for state '#{@currentUser.current}' not defined.")
+
+  stateAction: ->
+    @[ @stateActions[@currentUser.current] ](@currentUser.get('stateData'))
 
   getDco: ->
     @currentUser.fetchIfNeeded().bind(@).then (user) ->

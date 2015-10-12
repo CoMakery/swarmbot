@@ -14,7 +14,7 @@ class Router
       p "state: #{user.current}"
 
       switch user.current
-        when 'home', 'proposalsIndex', 'proposalsShow'
+        when 'home', 'proposalsIndex', 'proposalsShow', 'proposalsCreate'
           new ProposalsStateController(@, msg).process()
         else
           p 'no route!'

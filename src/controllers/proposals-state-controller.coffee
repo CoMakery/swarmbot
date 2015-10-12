@@ -5,12 +5,14 @@ Proposal = require '../models/proposal'
 HomeView = require '../views/proposals/home-view'
 ShowView = require '../views/proposals/show-view'
 IndexView = require '../views/proposals/index-view'
+CreateView = require '../views/proposals/create-view'
 
 class ProposalsStateController extends ApplicationController
   stateActions:
     'home': 'home'
     'proposalsIndex': 'index'
     'proposalsShow': 'show'
+    'proposalsCreate': 'create'
 
   home: ->
     @getDco()
@@ -50,9 +52,39 @@ class ProposalsStateController extends ApplicationController
       @msg.send view.render()
 
   voteUp: ->
-    p 'voting up'
+    # TODO: record the vote
+    @msg.send 'Your vote has been recorded.' # Not
+    @stateAction()
 
   voteDown: ->
-    p 'voting down'
+    # TODO: record the vote
+    @msg.send 'Your vote has been recorded.' # Not
+    @stateAction()
+
+  # {
+  #   id: 'a proposal'
+  #   description: 'this is a proposal'
+  # }
+  create: ->
+    if @input?
+      data = @currentUser.get('stateData') ? {}
+      key = 'id' unless data.id?
+      key ?= 'description' unless data.description?
+      data[key] = @input
+
+    data ?= {}
+    @currentUser.set 'stateData', data
+
+    # view here. create menu.
+    view = new CreateView(data)
+    @currentUser.set('menu', view.menu)
+
+    @msg.send view.render()
+
+
+
+    # else
+    #   p "We are creating this proposal!", @currentUser.get('stateData')
+    #   # create the proposal
 
 module.exports = ProposalsStateController

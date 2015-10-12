@@ -49,8 +49,10 @@ class User extends FirebaseModel
       { name: 'show', from: 'home', to: 'proposalsShow' }
       { name: 'exit', from: 'proposalsIndex', to: 'home' }
 
+      { name: 'create', from: 'home', to: 'proposalsCreate' }
+      { name: 'exit', from: 'proposalsCreate', to: 'home' }
+
       { name: 'create', from: 'proposalsIndex', to: 'proposalsCreate' }
-      { name: 'exit', from: 'proposalsCreate', to: 'proposalsIndex' }
 
       { name: 'show', from: 'proposalsIndex', to: 'proposalsShow' }
       { name: 'exit', from: 'proposalsShow', to: 'proposalsIndex' }

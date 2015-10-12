@@ -28,6 +28,7 @@ class HomeView
       @menu[i+1] = @proposalMenuItem proposal
 
     @menu[i+1] = { text: "More", transition: 'index' }
+    @menu[i+2] = { text: "Create a proposal", transition: 'create' }
 
   render: ->
     lines = for i, menuItem of @menu
