@@ -42,6 +42,7 @@ class FirebaseModel
     else
       @fetch()
 
+  # TODO: should return the model instance
   save: Promise.promisify (cb)->
     @firebase().update @attributes, cb
 

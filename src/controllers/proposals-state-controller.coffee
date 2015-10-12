@@ -68,9 +68,16 @@ class ProposalsStateController extends ApplicationController
   create: ->
     if @input?
       data = @currentUser.get('stateData') ? {}
-      key = 'id' unless data.id?
-      key ?= 'description' unless data.description?
-      data[key] = @input
+      if not data.id?
+        data.id = @input
+      else if not data.description?
+        description = @input
+        data.description = description
+        @getDco()
+        .then (@dco) =>
+          @dco.createProposal data
+        .then (proposal) =>
+          @msg.send "Proposal created!"
 
     data ?= {}
     @currentUser.set 'stateData', data

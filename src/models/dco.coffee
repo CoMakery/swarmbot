@@ -15,15 +15,14 @@ class DCO extends FirebaseModel
       bounties = snapshot.val() # should really be an array of Proposal objects.
       cb(null, bounties)
 
-  createProposal: ({ name, amount }) ->
+  createProposal: (attributes) ->
     @fetchIfNeeded().then (dco)->
       if dco.exists()
-        proposal = new Proposal({ id: name, amount: amount },
+        proposal = new Proposal attributes,
           parent: dco
-          snapshot: dco.snapshot.child(Proposal::urlRoot).child(name))
-
+          snapshot: dco.snapshot.child(Proposal::urlRoot).child(attributes.id)
         if proposal.exists()
-          Promise.reject(Promise.OperationalError("Proposal '#{name}' already exists within #{dco.get('id')}."))
+          Promise.reject(Promise.OperationalError("Proposal '#{attributes.id}' already exists within #{dco.get('id')}."))
         else
           proposal.save()
       else

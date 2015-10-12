@@ -12,6 +12,6 @@ class CreateView
     else if !@data.description?
       "Please enter a brief description of your proposal. ('x' to exit)"
     else
-      "[create a proposal now]"
+      ''
 
 module.exports = CreateView
