@@ -27,7 +27,7 @@ class ProposalsStateController extends ApplicationController
       proposals.sortByReputationScore()
       # messages = proposals.map(@_proposalMessage)[0...5]
 
-      view = new HomeView(proposals)
+      view = new HomeView dco, proposals
       @currentUser.set 'menu', view.menu
       @msg.send view.render()
 

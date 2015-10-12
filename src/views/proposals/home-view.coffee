@@ -20,12 +20,12 @@ class HomeView
   #   }
   # }
 
-  constructor: (@proposals) ->
+  constructor: (@dco, proposals) ->
     @menu = {}
 
     # TODO: top 5 proposals
     i = 1
-    for proposal in @proposals.models
+    for proposal in proposals.models
       @menu[i++] = @proposalMenuItem proposal
 
     # @menu[i++] = { text: "More", transition: 'index' }
@@ -35,7 +35,7 @@ class HomeView
     lines = for i, menuItem of @menu
       "#{i}: #{menuItem.text}"
     """
-    *Top Proposals*
+    *Proposals in #{@dco.get 'id'}*
     #{lines.join("\n")}
 
     To take an action, simply enter the number or letter at the beginning of the line.
@@ -51,8 +51,8 @@ class HomeView
   proposalMessage: (proposal) ->
     text = "#{proposal.get('id')}"
     # text += " Reward #{proposal.get('amount')}" if proposal.get('amount')?
-    score = proposal.ratings().score()
-    text += " Rating: #{score}%" unless isNaN(score)
+    # score = proposal.ratings().score()
+    # text += " Rating: #{score}%" unless isNaN(score)
     # text += " (awarded)" if proposal.get('awarded')?
     text
 

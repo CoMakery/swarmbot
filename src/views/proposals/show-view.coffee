@@ -17,7 +17,7 @@ class ShowView
       "#{i}: #{menuItem.text}"
 
     """
-    Proposal: *#{@proposal.get('id')}*
+    *Proposal: #{@proposal.get('id')}*
     #{lines.join("\n")}
 
     To take an action, simply enter the number or letter at the beginning of the line.

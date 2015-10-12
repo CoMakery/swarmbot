@@ -1,6 +1,5 @@
 { log, p, pjson } = require 'lightsaber'
 User = require './models/user'
-InitialStateController = require './controllers/initial-state-controller'
 ProposalsStateController = require './controllers/proposals-state-controller'
 
 class Router
