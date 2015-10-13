@@ -23,7 +23,7 @@ module.exports = (robot) ->
     robot.brain.data.imgflip_memes = [
       {
         regex: /grumpy cat ()(.*)/i,
-        template_id: 405658
+        template_id: 6624009
       },
       {
         regex: /(propose .*) (for .*)/i,

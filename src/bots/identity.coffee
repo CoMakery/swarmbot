@@ -20,13 +20,39 @@ UsersController = require '../controllers/users-controller'
 swarmbot = require '../models/swarmbot'
 User = require '../models/user'
 DCO = require '../models/dco'
+inspect = require('util').inspect
 
 module.exports = (robot) ->
 
 
   robot.enter (msg) ->
     try
-      robot.messageRoom msg.message.user.name, "Hello I'm Nyan!"
+      username = 'imgflip_hubot'
+      password = 'imgflip_hubot'
+
+      msg.http('https://api.imgflip.com/caption_image')
+      .query
+          template_id: template_id,
+          username: username,
+          password: password,
+          text0: "hello " + msg.message.user.name,
+          text1: "I'm Nyan"
+      .post() (error, res, body) ->
+        if error
+          msg.reply "I got an error when talking to imgflip:", inspect(error)
+          return
+
+        result = JSON.parse(body)
+        success = result.success
+        errorMessage = result.error_message
+
+        if not success
+          msg.reply "Imgflip API request failed: #{errorMessage}"
+          return
+
+      robot.messageRoom result.data.url
+
+      # robot.messageRoom msg.message.user.name, "Hello I'm Nyan!"
       robot.messageRoom msg.message.user.name, "Type 'bounties' to see active bounties"
       robot.messageRoom msg.message.user.name, "Type 'register <my_bitcoin_address> to start getting bounties"
       robot.messageRoom msg.message.user.name, "Type 'proposals' to see proposals"
