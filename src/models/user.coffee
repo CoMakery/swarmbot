@@ -18,11 +18,7 @@ class User extends FirebaseModel
         cb(null, new User({}, snapshot: snapshot.child(userId)))
     , cb # error
 
-  constructor: (args...) ->
-    super args...
-    @menu = new Menu
-
-  setDco: (dcoKey) ->
+  setDcoTo: (dcoKey) ->
     @set "current_dco", dcoKey
 
   canUpdate: (dco) ->
@@ -64,13 +60,12 @@ class User extends FirebaseModel
 
       { name: 'show', from: 'solutionsIndex', to: 'solutionsShow' }
       { name: 'exit', from: 'solutionsShow', to: 'solutionsIndex' }
+
+      { name: 'more', from: 'home', to: 'moreCommands' }
+      { name: 'exit', from: 'moreCommands', to: 'home' }
+
+      { name: 'setDco', from: 'moreCommands', to: 'dcosSet' }
+      { name: 'exit', from: 'dcosSet', to: 'home' }
     ]
-
-  # private class within User:
-  class Menu
-    clear: -> @items = {}
-
-    set: (number, data) ->
-      @items[number] = data
 
 module.exports = User

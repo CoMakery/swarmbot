@@ -1,6 +1,8 @@
 { log, p, pjson } = require 'lightsaber'
 User = require './models/user'
 ProposalsStateController = require './controllers/proposals-state-controller'
+GeneralStateController = require './controllers/general-state-controller'
+DcosStateController = require './controllers/dcos-state-controller'
 
 class Router
   route: (msg) ->
@@ -11,6 +13,10 @@ class Router
       switch user.current
         when 'home', 'proposalsShow', 'proposalsCreate', 'solutionsCreate'
           new ProposalsStateController(@, msg).process()
+        when 'moreCommands'
+          new GeneralStateController(@, msg).process()
+        when 'dcosSet'
+          new DcosStateController(@, msg).process()
         else
           console.error "Unexpected user state #{user.current} -- resetting to default state"
           user.set('state', 'home').then => @route msg

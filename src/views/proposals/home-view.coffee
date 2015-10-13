@@ -1,22 +1,23 @@
 { log, p, pjson } = require 'lightsaber'
 
 class HomeView
-  constructor: (@dco, proposals) ->
+  constructor: (@dco, @proposals) ->
     @menu = {}
 
-    # TODO: top 5 proposals
+    # TODO: top 5 proposals only
     i = 1
-    for proposal in proposals.models
+    for proposal in @proposals.all()
       @menu[i++] = @proposalMenuItem proposal
 
     # @menu[i++] = { text: "More", transition: 'index' }
     @menu[i++] = { text: "Create a proposal", transition: 'create' }
+    @menu[i++] = { text: "More commands", transition: 'more' }
 
   render: ->
     lines = for i, menuItem of @menu
       "#{i}: #{menuItem.text}"
     """
-    *Proposals in #{@dco.get 'id'}*
+    *#{if @proposals.isEmpty() then 'No proposals' else 'Proposals'} in #{@dco.get 'id'}*
     #{lines.join("\n")}
 
     To take an action, simply enter the number or letter at the beginning of the line.

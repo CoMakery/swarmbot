@@ -20,8 +20,9 @@ class FirebaseCollection
       @models = for id, data of @snapshot.val()
         new @model assign(data, id: id), { parent: @parent, snapshot: @snapshot.child(id) }
 
-  get: (i)->
-    @models[i]
+  all: -> @models
+
+  get: (i) -> @models[i]
 
   fetch: ->
     Promise.all( @map (model) -> model.fetch() )
@@ -33,17 +34,13 @@ class FirebaseCollection
     length = if @snapshot? then @snapshot.numChildren() else @models.length
     (length is 0)
 
-  each: (cb)->
-    forEach @models, cb
+  each: (cb)-> forEach @models, cb
 
-  map: (cb)->
-    map @models, cb
+  map: (cb)-> map @models, cb
 
   # TODO: Should this be destructive / edit in-place, or return a new collection?
-  filter: (cb) ->
-    @models = filter @models, cb
+  filter: (cb) -> @models = filter @models, cb
 
-  size: ->
-    @models.length
+  size: -> @models.length
 
 module.exports = FirebaseCollection
