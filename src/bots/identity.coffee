@@ -27,14 +27,14 @@ module.exports = (robot) ->
 
   robot.enter (msg) ->
     try
-      greet(msg, msg.message.user.name, true)
+      greet(msg, msg.message.user.name, true, robot)
 
     catch error
 
   robot.respond /help\s*/i, (msg) ->
     p "help"
     try
-      greet(msg, msg.message.user.name, true)
+      greet(msg, msg.message.user.name, true, robot)
     catch error
 
 
@@ -65,9 +65,9 @@ module.exports = (robot) ->
     slackUsername = msg.match[1]
     new UsersController().getInfo(msg, { slackUsername })
 
- greet = (msg, username, privateMessage) ->
+ greet = (msg, username, privateMessage, robot) ->
 
-      msg.send "greeting you"
+      # msg.send "greeting you"
 
       # p "msg", msg
       p "usr", username
