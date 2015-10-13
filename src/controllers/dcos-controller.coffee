@@ -89,7 +89,8 @@ class DcosController extends ApplicationController
 
       dco.issueAsset { amount: 100000000 }
       dcoCreateStatus = {stage: 1, dcoKey: dcoKey, project_owner: owner}
-      @msg.robot.brain.set "dcoCreateStatus", dcoCreateStatus
+      p "dcoCreateStatus", dcoCreateStatus
+      @msg.robot.brain.set "dcoCreateStatus_" + owner, dcoCreateStatus
       @msg.send "Community created. Please provide a statement of intent starting with 'We'"
 
   issueAsset: (msg, { dcoKey, amount }) ->

@@ -79,8 +79,10 @@ module.exports = (robot) ->
   # being answered.
   robot.respond /(yes$|no$|we\s+.*\s*)/i, (msg) ->
     log "MATCH 'yes|no|we' : #{msg.match[0]}"
+    currentUser = msg.robot.whose msg
+
     dcoJoinStatus = robot.brain.get("dcoJoinStatus") or null
-    dcoCreateStatus = robot.brain.get("dcoCreateStatus") or null
+    dcoCreateStatus = robot.brain.get("dcoCreateStatus_" + currentUser) or null
 
     if dcoJoinStatus != null
       answer = msg.match[1].toLowerCase()
@@ -102,13 +104,13 @@ module.exports = (robot) ->
 
       answer = msg.match[1]
       firstTwoLetters = answer.substring(0,2).toLowerCase()
-      currentUser = msg.robot.whose msg
 
       switch dcoCreateStatus.stage
         when 1
           log 'WE statement'
-          if firstTwoLetters == "we" && currentUser == dcoCreateStatus.owner
+          if firstTwoLetters == "we" && currentUser == dcoCreateStatus.project_owner
             swarmbot.firebase().child('projects/' + dcoCreateStatus.dcoKey).update({project_statement : answer})
             dcoCreateStatus = {stage: 0}
-            robot.brain.set "dcoCreateStatus", dcoCreateStatus
+            key = "dcoCreateStatus_" + currentUser
+            robot.brain.set key, dcoCreateStatus
             msg.send "The new statement of intent is: #{answer}"
