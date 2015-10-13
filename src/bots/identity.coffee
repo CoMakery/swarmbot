@@ -85,7 +85,8 @@ module.exports = (robot) ->
           text1: "Im Nyan"
       .post() (error, res, body) ->
         if error
-          msg.reply "I got an error when talking to imgflip:", inspect(error)
+          p "I got an error when talking to imgflip:", inspect(error)
+          msg.reply "Hello I'm Nyan"
           return
 
         result = JSON.parse(body)
