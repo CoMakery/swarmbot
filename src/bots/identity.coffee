@@ -27,14 +27,14 @@ module.exports = (robot) ->
 
   robot.enter (msg) ->
     try
-      greet(msg, msg.message.user.name)
+      greet(msg, msg.message.user.name, true)
 
     catch error
 
   robot.respond /help\s*/i, (msg) ->
     p "help"
     try
-      greet(msg, msg.message.user.name)
+      greet(msg, msg.message.user.name, true)
     catch error
 
 
@@ -65,8 +65,11 @@ module.exports = (robot) ->
     slackUsername = msg.match[1]
     new UsersController().getInfo(msg, { slackUsername })
 
- greet = (msg, username) ->
-      p "msg", msg
+ greet = (msg, username, privateMessage) ->
+
+      msg.send "greeting you"
+
+      # p "msg", msg
       p "usr", username
       username = 'imgflip_hubot'
       password = 'imgflip_hubot'
@@ -75,35 +78,37 @@ module.exports = (robot) ->
 
       msg.http('https://api.imgflip.com/caption_image')
       .query
-          template_id: template_id,
+          template_id: 6624009,
           username: username,
           password: password,
-          text0: "hello " + msg.message.user.name,
-          text1: "I'm Nyan"
+          text0: "hello " + username,
+          text1: "Im Nyan"
       .post() (error, res, body) ->
         if error
           msg.reply "I got an error when talking to imgflip:", inspect(error)
           return
 
         result = JSON.parse(body)
+        p "result", result
         success = result.success
         errorMessage = result.error_message
 
         if not success
           msg.reply "Imgflip API request failed: #{errorMessage}"
+          p "FAIL"
           return
 
-      p "msg room result.data.url", result.data.url
-
-      robot.messageRoom username, result.data.url
-
-      # robot.messageRoom msg.message.user.name, "Hello I'm Nyan!"
-      robot.messageRoom username, "Type 'bounties' to see active bounties"
-      robot.messageRoom username, "Type 'register <my_bitcoin_address> to start getting bounties"
-      robot.messageRoom username, "Type 'proposals' to see proposals"
-      robot.messageRoom username, "Type 'propose <proposal_name> for <number> bucks' to create a new proposal"
-      robot.messageRoom username, "Type 'more commands' to see other suggested commands"
-
+        if (privateMessage)
+          robot.messageRoom username, result.data.url
+          # robot.messageRoom msg.message.user.name, "Hello I'm Nyan!"
+          robot.messageRoom username, "Type 'bounties' to see active bounties"
+          robot.messageRoom username, "Type 'register <my_bitcoin_address> to start getting bounties"
+          robot.messageRoom username, "Type 'proposals' to see proposals"
+          robot.messageRoom username, "Type 'propose <proposal_name> for <number> bucks' to create a new proposal"
+          robot.messageRoom username, "Type 'more commands' to see other suggested commands"
+        else
+          msg.send "yo"
+          msg.send result.data.url
   # Not sure, this may work in slack, not sure about
   #  robot.respond /register?.*/i, (msg) ->
   #    robot.reply 'some msg'?
