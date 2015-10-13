@@ -27,87 +27,12 @@ module.exports = (robot) ->
   robot.enter (msg) ->
     try
       greet(msg, msg.message.user.name, true, robot)
-
-      # username = 'imgflip_hubot'
-      # password = 'imgflip_hubot'
-      #
-      # p "greet"
-      #
-      # msg.http('https://api.imgflip.com/caption_image')
-      # .query
-      #     template_id: 6624009,
-      #     username: username,
-      #     password: password,
-      #     text0: "hello " + msg.message.user.name,
-      #     text1: "Im Nyan"
-      # .post() (error, res, body) ->
-      #   if error
-      #     p "I got an error when talking to imgflip:", inspect(error)
-      #     msg.reply "Hello I'm Nyan"
-      #     return
-      #
-      #   result = JSON.parse(body)
-      #   p "result", result
-      #   success = result.success
-      #   errorMessage = result.error_message
-      #
-      #   if not success
-      #     msg.reply "Imgflip API request failed: #{errorMessage}"
-      #     p "FAIL"
-      #     return
-      #
-      #   robot.messageRoom msg.message.user.name, result.data.url
-      #   # robot.messageRoom msg.message.user.name, "Hello I'm Nyan!"
-      #   robot.messageRoom msg.message.user.name, "Type 'bounties' to see active bounties"
-      #   robot.messageRoom msg.message.user.name, "Type 'register <my_bitcoin_address> to start getting bounties"
-      #   robot.messageRoom msg.message.user.name, "Type 'proposals' to see proposals"
-      #   robot.messageRoom msg.message.user.name, "Type 'propose <proposal_name> for <number> bucks' to create a new proposal"
-      #   robot.messageRoom msg.message.user.name, "Type 'more commands' to see other suggested commands"
-
     catch error
 
   robot.respond /help\s*/i, (msg) ->
-    p "help"
+    log "MATCH 'help' "
     try
       greet(msg, msg.message.user.name, true, robot)
-        #     # p "msg", msg
-        # # p "usr", username
-        # username = 'imgflip_hubot'
-        # password = 'imgflip_hubot'
-        #
-        # p "greet"
-        #
-        # msg.http('https://api.imgflip.com/caption_image')
-        # .query
-        #     template_id: 6624009,
-        #     username: username,
-        #     password: password,
-        #     text0: "hello " + msg.message.user.name,
-        #     text1: "Im Nyan"
-        # .post() (error, res, body) ->
-        #   if error
-        #     p "I got an error when talking to imgflip:", inspect(error)
-        #     msg.reply "Hello I'm Nyan"
-        #     return
-        #
-        #   result = JSON.parse(body)
-        #   p "result", result
-        #   success = result.success
-        #   errorMessage = result.error_message
-        #
-        #   if not success
-        #     msg.reply "Imgflip API request failed: #{errorMessage}"
-        #     p "FAIL"
-        #     return
-        #
-        #   robot.messageRoom msg.message.user.name, result.data.url
-        #   # robot.messageRoom msg.message.user.name, "Hello I'm Nyan!"
-        #   robot.messageRoom msg.message.user.name, "Type 'bounties' to see active bounties"
-        #   robot.messageRoom msg.message.user.name, "Type 'register <my_bitcoin_address> to start getting bounties"
-        #   robot.messageRoom msg.message.user.name, "Type 'proposals' to see proposals"
-        #   robot.messageRoom msg.message.user.name, "Type 'propose <proposal_name> for <number> bucks' to create a new proposal"
-        #   robot.messageRoom msg.message.user.name, "Type 'more commands' to see other suggested commands"
-
     catch error
 
 
@@ -140,14 +65,9 @@ module.exports = (robot) ->
 
 greet = (msg, username, privateMessage, robot) ->
 
-    # msg.send "greeting you"
-
-    # p "msg", msg
-    p "usr", username
     hubot_username = 'imgflip_hubot'
     hubot_password = 'imgflip_hubot'
 
-    p "greet"
 
     msg.http('https://api.imgflip.com/caption_image')
     .query
@@ -163,7 +83,6 @@ greet = (msg, username, privateMessage, robot) ->
         return
 
       result = JSON.parse(body)
-      p "result", result
       success = result.success
       errorMessage = result.error_message
 
@@ -183,8 +102,9 @@ greet = (msg, username, privateMessage, robot) ->
         # robot.messageRoom msg.message.user.name, "Hello I'm Nyan!"
         robot.messageRoom username, helpMessage
       else
-        msg.send helpMessage
         msg.send result.data.url
+        msg.send helpMessage
+
   # Not sure, this may work in slack, not sure about
   #  robot.respond /register?.*/i, (msg) ->
   #    robot.reply 'some msg'?
