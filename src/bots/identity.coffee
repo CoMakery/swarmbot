@@ -38,7 +38,7 @@ module.exports = (robot) ->
           template_id: 6624009,
           username: username,
           password: password,
-          text0: "hello " + username,
+          text0: "hello " + msg.message.user.name,
           text1: "Im Nyan"
       .post() (error, res, body) ->
         if error
