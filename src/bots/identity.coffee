@@ -26,87 +26,87 @@ module.exports = (robot) ->
 
   robot.enter (msg) ->
     try
-      # greet(msg, msg.message.user.name, true, robot)
+      greet(msg, msg.message.user.name, true, robot)
 
-      username = 'imgflip_hubot'
-      password = 'imgflip_hubot'
-
-      p "greet"
-
-      msg.http('https://api.imgflip.com/caption_image')
-      .query
-          template_id: 6624009,
-          username: username,
-          password: password,
-          text0: "hello " + msg.message.user.name,
-          text1: "Im Nyan"
-      .post() (error, res, body) ->
-        if error
-          p "I got an error when talking to imgflip:", inspect(error)
-          msg.reply "Hello I'm Nyan"
-          return
-
-        result = JSON.parse(body)
-        p "result", result
-        success = result.success
-        errorMessage = result.error_message
-
-        if not success
-          msg.reply "Imgflip API request failed: #{errorMessage}"
-          p "FAIL"
-          return
-
-        robot.messageRoom msg.message.user.name, result.data.url
-        # robot.messageRoom msg.message.user.name, "Hello I'm Nyan!"
-        robot.messageRoom msg.message.user.name, "Type 'bounties' to see active bounties"
-        robot.messageRoom msg.message.user.name, "Type 'register <my_bitcoin_address> to start getting bounties"
-        robot.messageRoom msg.message.user.name, "Type 'proposals' to see proposals"
-        robot.messageRoom msg.message.user.name, "Type 'propose <proposal_name> for <number> bucks' to create a new proposal"
-        robot.messageRoom msg.message.user.name, "Type 'more commands' to see other suggested commands"
+      # username = 'imgflip_hubot'
+      # password = 'imgflip_hubot'
+      #
+      # p "greet"
+      #
+      # msg.http('https://api.imgflip.com/caption_image')
+      # .query
+      #     template_id: 6624009,
+      #     username: username,
+      #     password: password,
+      #     text0: "hello " + msg.message.user.name,
+      #     text1: "Im Nyan"
+      # .post() (error, res, body) ->
+      #   if error
+      #     p "I got an error when talking to imgflip:", inspect(error)
+      #     msg.reply "Hello I'm Nyan"
+      #     return
+      #
+      #   result = JSON.parse(body)
+      #   p "result", result
+      #   success = result.success
+      #   errorMessage = result.error_message
+      #
+      #   if not success
+      #     msg.reply "Imgflip API request failed: #{errorMessage}"
+      #     p "FAIL"
+      #     return
+      #
+      #   robot.messageRoom msg.message.user.name, result.data.url
+      #   # robot.messageRoom msg.message.user.name, "Hello I'm Nyan!"
+      #   robot.messageRoom msg.message.user.name, "Type 'bounties' to see active bounties"
+      #   robot.messageRoom msg.message.user.name, "Type 'register <my_bitcoin_address> to start getting bounties"
+      #   robot.messageRoom msg.message.user.name, "Type 'proposals' to see proposals"
+      #   robot.messageRoom msg.message.user.name, "Type 'propose <proposal_name> for <number> bucks' to create a new proposal"
+      #   robot.messageRoom msg.message.user.name, "Type 'more commands' to see other suggested commands"
 
     catch error
 
   robot.respond /help\s*/i, (msg) ->
     p "help"
     try
-      # greet(msg, msg.message.user.name, true, robot)
-            # p "msg", msg
-        # p "usr", username
-        username = 'imgflip_hubot'
-        password = 'imgflip_hubot'
-
-        p "greet"
-
-        msg.http('https://api.imgflip.com/caption_image')
-        .query
-            template_id: 6624009,
-            username: username,
-            password: password,
-            text0: "hello " + msg.message.user.name,
-            text1: "Im Nyan"
-        .post() (error, res, body) ->
-          if error
-            p "I got an error when talking to imgflip:", inspect(error)
-            msg.reply "Hello I'm Nyan"
-            return
-
-          result = JSON.parse(body)
-          p "result", result
-          success = result.success
-          errorMessage = result.error_message
-
-          if not success
-            msg.reply "Imgflip API request failed: #{errorMessage}"
-            p "FAIL"
-            return
-
-          robot.messageRoom msg.message.user.name, result.data.url
-          # robot.messageRoom msg.message.user.name, "Hello I'm Nyan!"
-          robot.messageRoom msg.message.user.name, "Type 'bounties' to see active bounties"
-          robot.messageRoom msg.message.user.name, "Type 'register <my_bitcoin_address> to start getting bounties"
-          robot.messageRoom msg.message.user.name, "Type 'proposals' to see proposals"
-          robot.messageRoom msg.message.user.name, "Type 'propose <proposal_name> for <number> bucks' to create a new proposal"
-          robot.messageRoom msg.message.user.name, "Type 'more commands' to see other suggested commands"
+      greet(msg, msg.message.user.name, true, robot)
+        #     # p "msg", msg
+        # # p "usr", username
+        # username = 'imgflip_hubot'
+        # password = 'imgflip_hubot'
+        #
+        # p "greet"
+        #
+        # msg.http('https://api.imgflip.com/caption_image')
+        # .query
+        #     template_id: 6624009,
+        #     username: username,
+        #     password: password,
+        #     text0: "hello " + msg.message.user.name,
+        #     text1: "Im Nyan"
+        # .post() (error, res, body) ->
+        #   if error
+        #     p "I got an error when talking to imgflip:", inspect(error)
+        #     msg.reply "Hello I'm Nyan"
+        #     return
+        #
+        #   result = JSON.parse(body)
+        #   p "result", result
+        #   success = result.success
+        #   errorMessage = result.error_message
+        #
+        #   if not success
+        #     msg.reply "Imgflip API request failed: #{errorMessage}"
+        #     p "FAIL"
+        #     return
+        #
+        #   robot.messageRoom msg.message.user.name, result.data.url
+        #   # robot.messageRoom msg.message.user.name, "Hello I'm Nyan!"
+        #   robot.messageRoom msg.message.user.name, "Type 'bounties' to see active bounties"
+        #   robot.messageRoom msg.message.user.name, "Type 'register <my_bitcoin_address> to start getting bounties"
+        #   robot.messageRoom msg.message.user.name, "Type 'proposals' to see proposals"
+        #   robot.messageRoom msg.message.user.name, "Type 'propose <proposal_name> for <number> bucks' to create a new proposal"
+        #   robot.messageRoom msg.message.user.name, "Type 'more commands' to see other suggested commands"
 
     catch error
 
@@ -144,16 +144,16 @@ greet = (msg, username, privateMessage, robot) ->
 
     # p "msg", msg
     p "usr", username
-    username = 'imgflip_hubot'
-    password = 'imgflip_hubot'
+    hubot_username = 'imgflip_hubot'
+    hubot_password = 'imgflip_hubot'
 
     p "greet"
 
     msg.http('https://api.imgflip.com/caption_image')
     .query
         template_id: 6624009,
-        username: username,
-        password: password,
+        username: hubot_username,
+        password: hubot_password,
         text0: "hello " + username,
         text1: "Im Nyan"
     .post() (error, res, body) ->
@@ -172,16 +172,18 @@ greet = (msg, username, privateMessage, robot) ->
         p "FAIL"
         return
 
+      helpMessage = "Type 'bounties' to see active bounties\n"
+      helpMessage += "Type 'register <my_bitcoin_address> to start getting bounties\n"
+      helpMessage += "Type 'proposals' to see proposals\n"
+      helpMessage += "Type 'propose <proposal_name> for <number> bucks' to create a new proposal\n"
+      helpMessage += "Type 'more commands' to see other suggested commands\n"
+
       if (privateMessage)
         robot.messageRoom username, result.data.url
         # robot.messageRoom msg.message.user.name, "Hello I'm Nyan!"
-        robot.messageRoom username, "Type 'bounties' to see active bounties"
-        robot.messageRoom username, "Type 'register <my_bitcoin_address> to start getting bounties"
-        robot.messageRoom username, "Type 'proposals' to see proposals"
-        robot.messageRoom username, "Type 'propose <proposal_name> for <number> bucks' to create a new proposal"
-        robot.messageRoom username, "Type 'more commands' to see other suggested commands"
+        robot.messageRoom username, helpMessage
       else
-        msg.send "yo"
+        msg.send helpMessage
         msg.send result.data.url
   # Not sure, this may work in slack, not sure about
   #  robot.respond /register?.*/i, (msg) ->
