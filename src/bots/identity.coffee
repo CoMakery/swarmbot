@@ -27,7 +27,7 @@ module.exports = (robot) ->
   robot.enter (msg) ->
     try
       # greet(msg, msg.message.user.name, true, robot)
-      p "usr", username
+
       username = 'imgflip_hubot'
       password = 'imgflip_hubot'
 
@@ -56,13 +56,13 @@ module.exports = (robot) ->
           p "FAIL"
           return
 
-        robot.messageRoom username, result.data.url
+        robot.messageRoom msg.message.user.name, result.data.url
         # robot.messageRoom msg.message.user.name, "Hello I'm Nyan!"
-        robot.messageRoom username, "Type 'bounties' to see active bounties"
-        robot.messageRoom username, "Type 'register <my_bitcoin_address> to start getting bounties"
-        robot.messageRoom username, "Type 'proposals' to see proposals"
-        robot.messageRoom username, "Type 'propose <proposal_name> for <number> bucks' to create a new proposal"
-        robot.messageRoom username, "Type 'more commands' to see other suggested commands"
+        robot.messageRoom msg.message.user.name, "Type 'bounties' to see active bounties"
+        robot.messageRoom msg.message.user.name, "Type 'register <my_bitcoin_address> to start getting bounties"
+        robot.messageRoom msg.message.user.name, "Type 'proposals' to see proposals"
+        robot.messageRoom msg.message.user.name, "Type 'propose <proposal_name> for <number> bucks' to create a new proposal"
+        robot.messageRoom msg.message.user.name, "Type 'more commands' to see other suggested commands"
 
     catch error
 
@@ -71,7 +71,7 @@ module.exports = (robot) ->
     try
       # greet(msg, msg.message.user.name, true, robot)
             # p "msg", msg
-        p "usr", username
+        # p "usr", username
         username = 'imgflip_hubot'
         password = 'imgflip_hubot'
 
@@ -82,7 +82,7 @@ module.exports = (robot) ->
             template_id: 6624009,
             username: username,
             password: password,
-            text0: "hello " + username,
+            text0: "hello " + msg.message.user.name,
             text1: "Im Nyan"
         .post() (error, res, body) ->
           if error
@@ -100,13 +100,13 @@ module.exports = (robot) ->
             p "FAIL"
             return
 
-          robot.messageRoom username, result.data.url
+          robot.messageRoom msg.message.user.name, result.data.url
           # robot.messageRoom msg.message.user.name, "Hello I'm Nyan!"
-          robot.messageRoom username, "Type 'bounties' to see active bounties"
-          robot.messageRoom username, "Type 'register <my_bitcoin_address> to start getting bounties"
-          robot.messageRoom username, "Type 'proposals' to see proposals"
-          robot.messageRoom username, "Type 'propose <proposal_name> for <number> bucks' to create a new proposal"
-          robot.messageRoom username, "Type 'more commands' to see other suggested commands"
+          robot.messageRoom msg.message.user.name, "Type 'bounties' to see active bounties"
+          robot.messageRoom msg.message.user.name, "Type 'register <my_bitcoin_address> to start getting bounties"
+          robot.messageRoom msg.message.user.name, "Type 'proposals' to see proposals"
+          robot.messageRoom msg.message.user.name, "Type 'propose <proposal_name> for <number> bucks' to create a new proposal"
+          robot.messageRoom msg.message.user.name, "Type 'more commands' to see other suggested commands"
 
     catch error
 
