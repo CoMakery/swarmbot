@@ -64,7 +64,7 @@ class AdminController extends ApplicationController
       if @currentUser().canUpdate(dco)
           dco.set('project_contract', constitutionLink)
           @msg.send "Project constitution successfully set"
-          
+
 
   stats: (@msg) ->
 
@@ -75,6 +75,9 @@ class AdminController extends ApplicationController
 
     usersRef.orderByChild("last_active_on_slack").startAt(Date.now() - (1000*60*60*24*30)).once 'value', (snapshot) =>
        @msg.send "There are #{snapshot.numChildren()} users active in the last month."
+
+    usersRef.once 'value', (snapshot) =>
+       @msg.send "There are #{snapshot.numChildren()} users total."
 
 
 
