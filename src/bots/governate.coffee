@@ -37,6 +37,9 @@ module.exports = (robot) ->
 
   robot.respond /propose\s+(.+)(?:for\s+([\d.]+))?.*$/i, (msg) ->
     [all, proposalName, amount, community] = msg.match
+    #TODO: move to a utility class or Firebase model
+    strippedProposalName =  proposalName.replace(/[.\[\]!()$#]/g,"")
+    proposalName = strippedProposalName
     log "MATCH 'propose' : #{all}"
     if amount == undefined
       amount = 0
