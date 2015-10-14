@@ -55,6 +55,18 @@ class AdminController extends ApplicationController
           @msg.send "Coin name successfully updated to " + coinName
 
 
+  constitute: (@msg, { contractLink, dcoKey }) ->
+
+    @community = dcoKey
+    @getDco()
+    .then (dco) -> dco.fetch()
+    .then (dco) =>
+      if @currentUser().canUpdate(dco)
+
+          dco.set('project_contract', contractLink)
+          @msg.send "Project constitution successfully set"
+
+
   stats: (@msg) ->
 
     usersRef = swarmbot.firebase().child('users')
