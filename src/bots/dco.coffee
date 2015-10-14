@@ -68,6 +68,11 @@ module.exports = (robot) ->
     dcoKey = msg.match[1]
     new DcosController().create(msg, { dcoKey })
 
+  robot.respond /dao me (.+)$/i, (msg) ->
+    log "MATCH 'dao me' : #{msg.match[0]}"
+    dcoKey = msg.match[1]
+    new DcosController().create(msg, { dcoKey })
+
   robot.respond /create (\d+) of asset for (.+)$/i, (msg) ->
     [all, amount, dcoKey] = msg.match
     log "MATCH 'create asset' : #{all}"
