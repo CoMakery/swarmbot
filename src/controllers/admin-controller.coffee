@@ -64,7 +64,7 @@ class AdminController extends ApplicationController
       if @currentUser().canUpdate(dco)
           dco.set('project_contract', constitutionLink)
           @msg.send "Project constitution successfully set"
-
+          
 
   stats: (@msg) ->
 
