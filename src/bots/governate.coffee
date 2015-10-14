@@ -35,7 +35,7 @@ module.exports = (robot) ->
     else
       new ProposalsController().listApproved(msg, { community })
 
-  robot.respond /propose\s+(.+)\s+for\s+(.+)\s+bucks$/i, (msg) ->
+  robot.respond /propose\s+(.+)(?:for\s+([\d.]+))?.*$/i, (msg) ->
     [all, proposalName, amount, community] = msg.match
     log "MATCH 'propose' : #{all}"
     if amount == undefined
