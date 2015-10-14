@@ -82,6 +82,15 @@ module.exports = (robot) ->
     log "MATCH 'i'd like' : #{msg.match[0]}"
     new ProposalsController().swarmbotSuggestion(msg, { suggestion })
 
+  robot.respond /submit \s+(.+)for $/i, (msg) ->
+    # solution = msg.match[1]
+    # log "MATCH 'solution : #{msg.match[0]}"
+    #Step 1: ^
+    #Step 2: please provide a link to the solution
+    #Step 3: Please provide any additional notes that will help evaluate your solution
+    #Step 4: PM owner of solution letting them know that there is something to be evaluated
+    #new ProposalsController().solution(msg, { suggestion })
+
 
   # robot.respond /award (.+) bounty to (.+)$/i, (msg) ->
   #   [all, bountyName, awardee] = msg.match
