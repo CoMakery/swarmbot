@@ -33,7 +33,7 @@ module.exports = (robot) ->
     # msg.send "Data about your community: X Members; X open propsals; Y bounties claimed"
 
     #TODO: This should pull from wizard or some other repo where all the comamnds live
-    msg.send "Admin commands work for owner only:\naward <bounty name> to <username>\nset budget <budget amount>\nset currency name <currency_name>"
+    msg.send "Admin commands work for owner only:\naward <bounty name> to <username>\sstats\nset budget <budget amount>\nset coin name <currency_name>"
 
   robot.respond /award\s+(.+)\s+to\s+(.+?)(?:\s+in (.+))?\s*$/i, (msg) ->
     [all, proposalName, awardee, dcoKey] = msg.match
@@ -43,6 +43,10 @@ module.exports = (robot) ->
   robot.respond /set coin name\s+(.+)\s*$/i, (msg) ->
     [all, coinName, dcoKey] = msg.match
     new AdminController().setCoinName(msg, { coinName, dcoKey })
+
+  robot.respond /stats$/i, (msg) ->
+    [all] = msg.match
+    new AdminController().stats(msg)
 
   #
   #   log "MATCH 'create asset' : #{all}"

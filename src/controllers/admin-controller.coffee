@@ -55,5 +55,17 @@ class AdminController extends ApplicationController
           @msg.send "Coin name successfully updated to " + coinName
 
 
+  stats: (@msg) ->
+
+    usersRef = swarmbot.firebase().child('users')
+
+    usersRef.orderByChild("last_active_on_slack").startAt(Date.now() - (1000*60*60*24*7)).once 'value', (snapshot) =>
+       @msg.send "There are #{snapshot.numChildren()} users active in the last week."
+
+    usersRef.orderByChild("last_active_on_slack").startAt(Date.now() - (1000*60*60*24*30)).once 'value', (snapshot) =>
+       @msg.send "There are #{snapshot.numChildren()} users active in the last month."
+
+
+
 
 module.exports = AdminController
