@@ -37,7 +37,16 @@ module.exports = (robot) ->
     log "MATCH 'award' : #{pjson msg.match}"
     new ProposalsController().award(msg, { proposalName, awardee, dcoKey })
 
-  robot.respond /settings$/i, (msg) ->
-    [all] = msg.match
-    log "MATCH 'settings' : #{pjson msg.match}"
-    msg.send "Set currency <currency>
+  # robot.respond /set currency name\s+(.+)\s*$/i, (msg) ->
+  #   [all, currencyName] = msg.match
+  #   currentUser = msg.robot.whose msg
+  #   if currentUser == dcoCreateStatus.project_owner
+  #     swarmbot.firebase().child('projects/' + dcoCreateStatus.dcoKey).update({currency_name : answer})
+  #
+  #   log "MATCH 'create asset' : #{all}"
+  #   new DcosController().issueAsset(msg, { dcoKey, amount })
+  #
+  # robot.respond /settings$/i, (msg) ->
+  #   [all] = msg.match
+  #   log "MATCH 'settings' : #{pjson msg.match}"
+  #   msg.send "Set currency <currency>
