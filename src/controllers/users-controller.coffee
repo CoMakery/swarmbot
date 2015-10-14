@@ -18,9 +18,13 @@ class UsersController extends ApplicationController
 
       # quickfix, set to silent register, now that it is automated
 
+      if slackUsername && !user.get('slack_username')
+              user.set "account_created", Date.now()
+              user.set "slack_username", slackUsername
+
       if slackUsername
-        user.set "slack_username", slackUsername
-        user.set "last_active_on_slack", Date.now()
+              user.set "last_active_on_slack", Date.now()
+
 
       if process.env.HUBOT_DEFAULT_COMMUNITY && !user.get('current_dco')
         user.set "current_dco", process.env.HUBOT_DEFAULT_COMMUNITY
