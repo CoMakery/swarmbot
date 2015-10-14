@@ -55,15 +55,14 @@ class AdminController extends ApplicationController
           @msg.send "Coin name successfully updated to " + coinName
 
 
-  constitute: (@msg, { contractLink, dcoKey }) ->
+  constitute: (@msg, { constitutionLink, dcoKey }) ->
 
     @community = dcoKey
     @getDco()
     .then (dco) -> dco.fetch()
     .then (dco) =>
       if @currentUser().canUpdate(dco)
-
-          dco.set('project_contract', contractLink)
+          dco.set('project_contract', constitutionLink)
           @msg.send "Project constitution successfully set"
 
 
