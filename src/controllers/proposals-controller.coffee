@@ -53,6 +53,7 @@ class ProposalsController extends ApplicationController
           "#{k} : #{v}" unless v instanceof Object
         @msg.send msgs.join("\n")
 
+
   award: (@msg, { proposalName, awardee, dcoKey }) ->
     @community = dcoKey
     @getDco()
@@ -125,6 +126,7 @@ class ProposalsController extends ApplicationController
           @msg.send "Rating failed: #{error}"
           p "#{error}" # TODO: re-throw exception to show stacktrace
     .error(@_showError)
+
 
   swarmbotSuggestion: (@msg, { suggestion }) ->
     DCO.find(swarmbot.feedbackDcokey)

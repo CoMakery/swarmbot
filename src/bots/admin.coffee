@@ -24,11 +24,14 @@
 swarmbot = require '../models/swarmbot'
 Proposal = require '../models/proposal'
 DCO = require '../models/dco'
-ProposalsController = require '../controllers/proposals-controller'
+AdminController = require '../controllers/admin-controller'
 
 module.exports = (robot) ->
 
-  robot.respond /admin commands$/i, (msg) ->
+  robot.respond /admin$/i, (msg) ->
+
+    # msg.send "Data about your community: X Members; X open propsals; Y bounties claimed"
+
     #TODO: This should pull from wizard or some other repo where all the comamnds live
     msg.send "Admin commands work for owner only:\naward <bounty name> to <username>\nset budget <budget amount>\nset currency name <currency_name>"
 
@@ -37,11 +40,10 @@ module.exports = (robot) ->
     log "MATCH 'award' : #{pjson msg.match}"
     new ProposalsController().award(msg, { proposalName, awardee, dcoKey })
 
-  # robot.respond /set currency name\s+(.+)\s*$/i, (msg) ->
-  #   [all, currencyName] = msg.match
-  #   currentUser = msg.robot.whose msg
-  #   if currentUser == dcoCreateStatus.project_owner
-  #     swarmbot.firebase().child('projects/' + dcoCreateStatus.dcoKey).update({currency_name : answer})
+  robot.respond /set coin name\s+(.+)\s*$/i, (msg) ->
+    [all, coinName, dcoKey] = msg.match
+    new AdminController().setCoinName(msg, { coinName, dcoKey })
+
   #
   #   log "MATCH 'create asset' : #{all}"
   #   new DcosController().issueAsset(msg, { dcoKey, amount })
