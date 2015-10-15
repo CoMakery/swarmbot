@@ -1,6 +1,7 @@
 { log, p, pjson } = require 'lightsaber'
+ZorkView = require '../zork-view'
 
-class ShowView
+class ShowView extends ZorkView
   constructor: (@proposal) ->
     @menu = {
       1: { text: "Vote Up", command: 'voteUp' }
@@ -13,12 +14,10 @@ class ShowView
     }
 
   render: ->
-    lines = for i, menuItem of @menu
-      "#{i}: #{menuItem.text}"
 
     """
     *Proposal: #{@proposal.get('id')}*
-    #{lines.join("\n")}
+    #{@renderMenu()}
 
     To take an action, simply enter the number or letter at the beginning of the line.
     """

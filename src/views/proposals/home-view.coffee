@@ -1,6 +1,7 @@
 { log, p, pjson } = require 'lightsaber'
+ZorkView = require '../zork-view'
 
-class HomeView
+class HomeView extends ZorkView
   constructor: (@dco, @proposals) ->
     @menu = {}
 
@@ -14,11 +15,9 @@ class HomeView
     @menu[i++] = { text: "More commands", transition: 'more' }
 
   render: ->
-    lines = for i, menuItem of @menu
-      "#{i}: #{menuItem.text}"
     """
     *#{if @proposals.isEmpty() then 'No proposals' else 'Proposals'} in #{@dco.get 'id'}*
-    #{lines.join("\n")}
+    #{@renderMenu()}
 
     To take an action, simply enter the number or letter at the beginning of the line.
     """

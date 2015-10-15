@@ -3,6 +3,7 @@ User = require './models/user'
 ProposalsStateController = require './controllers/proposals-state-controller'
 GeneralStateController = require './controllers/general-state-controller'
 DcosStateController = require './controllers/dcos-state-controller'
+UsersStateController = require './controllers/users-state-controller'
 
 class Router
   route: (msg) ->
@@ -17,6 +18,8 @@ class Router
           new GeneralStateController(@, msg).process()
         when 'dcosSet'
           new DcosStateController(@, msg).process()
+        when 'myAccount', 'usersBitcoinAddress'
+          new UsersStateController(@, msg).process()
         else
           console.error "Unexpected user state #{user.current} -- resetting to default state"
           user.set('state', 'home').then => @route msg

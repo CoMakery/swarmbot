@@ -32,7 +32,7 @@ class User extends FirebaseModel
   onafterevent: (event, from, to, data) ->
     p "// Transition #{from} -> #{to} // Event #{event} // Data: #{data} //"
     @set('state', to)
-    # also set data here
+    # TODO: stat: user entering what state
 
   StateMachine.create
     target: @prototype
@@ -66,6 +66,10 @@ class User extends FirebaseModel
 
       { name: 'setDco', from: 'moreCommands', to: 'dcosSet' }
       { name: 'exit', from: 'dcosSet', to: 'home' }
+
+      { name: 'myAccount', from: 'moreCommands', to: 'myAccount' }
+      { name: 'exit', from: 'myAccount', to: 'home' }
+
     ]
 
 module.exports = User
