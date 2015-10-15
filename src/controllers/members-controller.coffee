@@ -59,7 +59,7 @@ class MembersController extends ApplicationController
   #   @getDco().then (dco) =>
   #     user = @currentUser()
   #
-  #     Bounty.find(proposalName, parent: dco).fetch().then (proposal) =>
+  #     Bounty.find(proposalName, parent: dco).then (proposal) =>
   #       unless proposal.exists()
   #         return @msg.send "Could not find the proposal '#{proposal.get('id')}'. Please check that it exists."
   #

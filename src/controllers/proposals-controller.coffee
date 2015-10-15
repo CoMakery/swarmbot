@@ -11,6 +11,18 @@ ProposalCollection = require '../collections/proposal-collection'
 
 class ProposalsController extends ApplicationController
 
+  list: (@msg, { @community }) ->
+    @getDco().then (dco)=>
+      dco.fetch().then (dco) =>
+        proposals = new ProposalCollection(dco.snapshot.child('proposals'), parent: dco)
+        if proposals.isEmpty()
+          return @msg.send "There are no proposals to display in #{dco.get('id')}."
+
+        proposals.sortByReputationScore()
+        messages = proposals.map @_proposalMessage
+        @msg.send messages.join("\n")
+
+    .error(@_showError)
 
   listApproved: (@msg, { @community }) ->
     @getDco().then (dco)=>
@@ -87,7 +99,7 @@ class ProposalsController extends ApplicationController
     @getDco().then (dco) ->
       user = @currentUser()
 
-      Proposal.find(proposalName, parent: dco).fetch().then (proposal) =>
+      Proposal.find(proposalName, parent: dco).then (proposal) =>
         unless proposal.exists()
           return @msg.send "Could not find the proposal '#{proposal.get('id')}'. Please verify that it exists."
 
