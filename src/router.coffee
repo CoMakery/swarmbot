@@ -18,7 +18,7 @@ class Router
           new GeneralStateController(@, msg).process()
         when 'dcosSet'
           new DcosStateController(@, msg).process()
-        when 'myAccount', 'usersBitcoinAddress'
+        when 'myAccount', 'setBtc'
           new UsersStateController(@, msg).process()
         else
           console.error "Unexpected user state #{user.current} -- resetting to default state"

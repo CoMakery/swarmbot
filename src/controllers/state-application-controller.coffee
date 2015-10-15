@@ -29,6 +29,8 @@ class ApplicationController
       @[action.command]()
 
     if action.transition?
+      unless @currentUser[action.transition]
+        throw new Error "Requested state transition is undefined! Event '#{action.transition}' from state '#{@currentUser.current}'"
       @currentUser[action.transition]()
       @redirect()
 

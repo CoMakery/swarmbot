@@ -70,6 +70,9 @@ class User extends FirebaseModel
       { name: 'myAccount', from: 'moreCommands', to: 'myAccount' }
       { name: 'exit', from: 'myAccount', to: 'home' }
 
+      { name: 'setBtc', from: 'myAccount', to: 'setBtc' }
+      { name: 'exit', from: 'setBtc', to: 'myAccount' }
+
     ]
 
 module.exports = User
