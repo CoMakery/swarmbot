@@ -1,5 +1,5 @@
 { log, p, pjson } = require 'lightsaber'
-ApplicationController = require './application-controller'
+ApplicationController = require './state-application-controller'
 MoreCommandsView = require '../views/general/more-commands-view'
 
 class GeneralStateController extends ApplicationController
@@ -9,7 +9,7 @@ class GeneralStateController extends ApplicationController
     moreCommands: 'moreCommands'
 
   moreCommands: ->
-    view = new MoreCommandsView 
+    view = new MoreCommandsView
     @currentUser.set 'menu', view.menu
     @msg.send view.render()
 

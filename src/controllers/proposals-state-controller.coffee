@@ -1,5 +1,5 @@
 { log, p, pjson } = require 'lightsaber'
-ApplicationController = require './application-controller'
+ApplicationController = require './state-application-controller'
 ProposalCollection = require '../collections/proposal-collection'
 Proposal = require '../models/proposal'
 HomeView = require '../views/proposals/home-view'
