@@ -16,8 +16,6 @@ class ProposalsController extends ApplicationController
     @getDco().then (dco)=>
       dco.fetch().then (dco) =>
         proposals = new ProposalCollection(dco.snapshot.child('proposals'), parent: dco)
-        if proposals.isEmpty()
-          return @msg.send "There are no approved proposals for #{dco.get('id')}.\nList all proposals and rate your favorites!"
 
         proposals.filter (proposal) ->
           proposal.ratings().size() > 0 &&
@@ -26,6 +24,11 @@ class ProposalsController extends ApplicationController
 
         proposals.sortByReputationScore()
         messages = proposals.map @_proposalMessage
+
+        if messages.length == 0
+          return @msg.send "There are no approved bounties for #{dco.get('id')}.\n Type 'proposals' to see what needs to be approved!"
+
+
         @msg.send messages.join("\n")
 
     .error(@_showError)
@@ -37,6 +40,7 @@ class ProposalsController extends ApplicationController
         msgs = for k, v of proposal.attributes
           "#{k} : #{v}" unless v instanceof Object
         @msg.send msgs.join("\n")
+
 
   award: (@msg, { proposalName, awardee, dcoKey }) ->
     @community = dcoKey
@@ -98,11 +102,19 @@ class ProposalsController extends ApplicationController
           replies = for message in messages
             "Rating saved to #{message}"
           p replies.join "\n"
-          @msg.send "You rated '#{proposal.get('id')}' #{rating}%"
+
+          if rating > 50
+            @msg.send "You upvoted '#{proposal.get('id')}'"
+          else if rating < 50
+            @msg.send "You downvoted '#{proposal.get('id')}'"
+          else
+            @msg.send "You rated '#{proposal.get('id')}' #{rating}%"
+
         .catch (error) =>
           @msg.send "Rating failed: #{error}"
           p "#{error}" # TODO: re-throw exception to show stacktrace
     .error(@_showError)
+
 
   swarmbotSuggestion: (@msg, { suggestion }) ->
     DCO.find(swarmbot.feedbackDcokey)
@@ -111,6 +123,15 @@ class ProposalsController extends ApplicationController
         @create @msg, { proposalName: suggestion, amount: 0, community: swarmbot.feedbackDcokey }
       else
         @msg.send "The community '#{swarmbot.feedbackDcokey}' does not exist. Please ask your amazing swarmbot admin to create it!"
+
+  _proposalMessage: (proposal) ->
+    text = "Proposal #{proposal.get('id')}"
+    if (proposal.get('amount') && proposal.get('amount') > 0)
+      text += " Reward $#{proposal.get('amount')}"
+    score = proposal.ratings().score()
+    text += " Rating: #{score}%" unless isNaN(score)
+    text += " (awarded)" if proposal.get('awarded')?
+    text
 
   _coloredCoinTxnUrl: (txnId) ->
     url = ["http://coloredcoins.org/explorer"]

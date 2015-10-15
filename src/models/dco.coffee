@@ -28,6 +28,22 @@ class DCO extends FirebaseModel
       else
         Promise.reject(Promise.OperationalError("The community '#{dco.get('id')}' does not exist."))
 
+  #TODO: Get review from @dukedorje
+  # createSolution: ({ name, username, proposal }) ->
+  #   @fetchIfNeeded().then (dco)->
+  #     if dco.exists()
+  #       solution = new Solution({submitter: username },
+  #         parent: proposal
+  #         snapshot: dco.snapshot.child(Solution::urlRoot).child(name))
+  #
+  #       if solution.exists()
+  #         Promise.reject(Promise.OperationalError("Proposal '#{name}' already exists within #{dco.get('id')}."))
+  #       else
+  #         proposal.save()
+  #         #I tend to think this should be push instead of update, should we update firebase model?
+  #     else
+  #       Promise.reject(Promise.OperationalError("The community '#{dco.get('id')}' does not exist."))
+
   memberIds: ->
     keys @get('members')
 
@@ -37,6 +53,7 @@ class DCO extends FirebaseModel
   hasMember: (user) ->
     contains @memberIds(), user.get('id')
 
+
   addMember: (user) ->
     userId = user.get('id')
     present = (indexOf(@memberIds(), userId) != -1)
@@ -45,7 +62,7 @@ class DCO extends FirebaseModel
       false
     else
       member = {}
-      member[userId] = new Date
+      member[userId] = { joined_at: new Date, bounties_claimed: {} }
       @firebase().child('members').update(member)
       # @attributes are now out of sync with firebase. Fetch here?
       user
