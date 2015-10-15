@@ -43,6 +43,10 @@ class ApplicationController
     stateData = @currentUser.get 'stateData'
     controllerMethod stateData
 
+  render: (view)->
+    @currentUser.set 'menu', view.menu
+    @msg.send view.render()
+
   getDco: ->
     @currentUser.fetchIfNeeded().bind(@).then (user) ->
       dcoId = user.get('current_dco')
@@ -54,15 +58,5 @@ class ApplicationController
 
   _showError: (error)->
     @msg.send error.message
-
-  # _userText: (user)->
-  #   if user?
-  #     info = ""
-  #     info += "real name: " + user.get('real_name')
-  #     info += ", slack username: " + user.get('slack_username')
-  #     info += ", default community: " + user.get('current_dco')
-  #     info += ", receiving address: " + user.get('btc_address')
-  #   else
-  #     "User not found"
 
 module.exports = ApplicationController

@@ -27,10 +27,7 @@ class ProposalsStateController extends ApplicationController
       proposals.sortByReputationScore()
       # messages = proposals.map(@_proposalMessage)[0...5]
 
-      view = new HomeView dco, proposals
-      @currentUser.set 'menu', view.menu
-      @msg.send view.render()
-
+      @render(new HomeView(dco, proposals))
     .error(@_showError)
 
   index: ->
@@ -40,19 +37,14 @@ class ProposalsStateController extends ApplicationController
       proposals = new ProposalCollection(dco.snapshot.child('proposals'), parent: dco)
       proposals.sortByReputationScore()
 
-      view = new IndexView(proposals)
-      @currentUser.set 'menu', view.menu
-      @msg.send view.render()
+      @render(new IndexView(proposals))
 
   show: (params) ->
     proposalId = params.id ? throw new Error "show requires an id"
     @getDco()
     .then (dco) => Proposal.find proposalId, parent: dco
     .then (proposal) =>
-      # @msg.send @_proposalMessage proposal
-      view = new ShowView(proposal)
-      @currentUser.set 'menu', view.menu
-      @msg.send view.render()
+      @render(new ShowView(proposal))
 
   voteUp: ->
     # TODO: record the vote
@@ -76,15 +68,12 @@ class ProposalsStateController extends ApplicationController
           dco.createProposal data
         .then =>
           @msg.send "Proposal created!"
+          @execute transition: 'exit'
 
     data ?= {}
     @currentUser.set 'stateData', data
 
-    # view here. create menu.
-    view = new CreateView(data)
-    @currentUser.set('menu', view.menu)
-
-    @msg.send view.render()
+    @render(new CreateView(data))
 
   # TODO: move to solutions controller
   solutionsCreate: (data)->
@@ -108,10 +97,6 @@ class ProposalsStateController extends ApplicationController
     data ?= {}
     @currentUser.set 'stateData', data
 
-    # view here. create menu.
-    view = new CreateSolutionView(data)
-    @currentUser.set('menu', view.menu)
-
-    @msg.send view.render()
+    @render(new CreateSolutionView(data))
 
 module.exports = ProposalsStateController
