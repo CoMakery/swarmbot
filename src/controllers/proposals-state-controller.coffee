@@ -2,7 +2,6 @@
 ApplicationController = require './state-application-controller'
 ProposalCollection = require '../collections/proposal-collection'
 Proposal = require '../models/proposal'
-HomeView = require '../views/proposals/home-view'
 ShowView = require '../views/proposals/show-view'
 IndexView = require '../views/proposals/index-view'
 CreateView = require '../views/proposals/create-view'
@@ -16,19 +15,6 @@ class ProposalsStateController extends ApplicationController
     proposalsShow: 'show'
     proposalsCreate: 'create'
     solutionsCreate: 'solutionsCreate'
-
-  home: ->
-    @getDco()
-    .then (dco) => dco.fetch()
-    .then (dco) =>
-      proposals = new ProposalCollection(dco.snapshot.child('proposals'), parent: dco)
-      # if proposals.isEmpty()
-      #   return @msg.send "There are no proposals to display in #{dco.get('id')}."
-      proposals.sortByReputationScore()
-      # messages = proposals.map(@_proposalMessage)[0...5]
-
-      @render(new HomeView(dco, proposals))
-    .error(@_showError)
 
   index: ->
     @getDco()
@@ -49,12 +35,12 @@ class ProposalsStateController extends ApplicationController
   voteUp: ->
     # TODO: record the vote
     @msg.send "Your vote has been recorded.\n" # Not
-    @stateAction()
+    @redirect()
 
   voteDown: ->
     # TODO: record the vote
     @msg.send "Your vote has been recorded.\n" # Not
-    @stateAction()
+    @redirect()
 
   create: ->
     if @input?

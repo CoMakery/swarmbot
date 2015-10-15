@@ -42,36 +42,36 @@ class User extends FirebaseModel
 
     events: [
       # { name: 'index', from: 'home', to: 'proposalsIndex' }
-      { name: 'show', from: 'home', to: 'proposalsShow' }
-      { name: 'exit', from: 'proposalsShow', to: 'home' }
-      # { name: 'exit', from: 'proposalsIndex', to: 'home' }
+      { name: 'show', from: 'general#home', to: 'proposals#show' }
+      { name: 'exit', from: 'proposals#show', to: 'general#home' }
+      # { name: 'exit', from: 'proposalsIndex', to: 'general#home' }
 
-      { name: 'create', from: 'home', to: 'proposalsCreate' }
-      { name: 'exit', from: 'proposalsCreate', to: 'home' }
+      { name: 'create', from: 'general#home', to: 'proposals#create' }
+      { name: 'exit', from: 'proposals#create', to: 'general#home' }
 
-      # { name: 'create', from: 'proposalsIndex', to: 'proposalsCreate' }
-      # { name: 'show', from: 'proposalsIndex', to: 'proposalsShow' }
+      # { name: 'create', from: 'proposalsIndex', to: 'proposals#create' }
+      # { name: 'show', from: 'proposalsIndex', to: 'proposals#show' }
 
-      { name: 'createSolution', from: 'proposalsShow', to: 'solutionsCreate' }
-      { name: 'exit', from: 'solutionsCreate', to: 'proposalsShow' }
+      { name: 'createSolution', from: 'proposals#show', to: 'solutions#create' }
+      { name: 'exit', from: 'solutions#create', to: 'proposals#show' }
 
-      { name: 'solutions', from: 'proposalsShow', to: 'solutionsIndex' }
-      { name: 'exit', from: 'solutionsIndex', to: 'proposalsShow' }
+      { name: 'solutions', from: 'proposals#show', to: 'solutions#index' }
+      { name: 'exit', from: 'solutions#index', to: 'proposals#show' }
 
-      { name: 'show', from: 'solutionsIndex', to: 'solutionsShow' }
-      { name: 'exit', from: 'solutionsShow', to: 'solutionsIndex' }
+      { name: 'show', from: 'solutions#index', to: 'solutions#show' }
+      { name: 'exit', from: 'solutions#show', to: 'solutions#index' }
 
-      { name: 'more', from: 'home', to: 'moreCommands' }
-      { name: 'exit', from: 'moreCommands', to: 'home' }
+      { name: 'more', from: 'general#home', to: 'general#more' }
+      { name: 'exit', from: 'general#more', to: 'general#home' }
 
-      { name: 'setDco', from: 'moreCommands', to: 'dcosSet' }
-      { name: 'exit', from: 'dcosSet', to: 'home' }
+      { name: 'setDco', from: 'general#more', to: 'dcos#set' }
+      { name: 'exit', from: 'dcos#set', to: 'general#home' }
 
-      { name: 'myAccount', from: 'moreCommands', to: 'myAccount' }
-      { name: 'exit', from: 'myAccount', to: 'home' }
+      { name: 'myAccount', from: 'general#more', to: 'users#myAccount' }
+      { name: 'exit', from: 'users#myAccount', to: 'general#home' }
 
-      { name: 'setBtc', from: 'myAccount', to: 'setBtc' }
-      { name: 'exit', from: 'setBtc', to: 'myAccount' }
+      { name: 'setBtc', from: 'users#myAccount', to: 'users#setBtc' }
+      { name: 'exit', from: 'users#setBtc', to: 'users#myAccount' }
 
     ]
 

@@ -8,42 +8,22 @@ class ApplicationController
   constructor: (@router, @msg) ->
     @currentUser = @msg.currentUser
 
-  # ENTRY POINT
-  process: ->
-    @input = @msg.match[1]
-    lastMenuItems = @currentUser.get('menu')
-    action = lastMenuItems?[@input?.toLowerCase()]
-    if action?
-      # specific action of entered command
-      @execute(action)
-    else if @stateActions[@currentUser.current]?
-      # default action of this state
-      @stateAction()
-    else
-      throw new Error("Action for state '#{@currentUser.current}' not defined.")
+  execute: (menuAction) ->
+    @currentUser.set 'stateData', menuAction.data if menuAction.data
 
-  execute: (action) ->
-    @currentUser.set 'stateData', action.data if action.data
+    if menuAction.command?
+      @[menuAction.command]()
 
-    if action.command?
-      @[action.command]()
-
-    if action.transition?
-      unless @currentUser[action.transition]
-        throw new Error "Requested state transition is undefined! Event '#{action.transition}' from state '#{@currentUser.current}'"
-      @currentUser[action.transition]()
-      @redirect()
+    if menuAction.transition?
+      if @currentUser[menuAction.transition]
+        @currentUser[menuAction.transition]()
+        @redirect()
+      else
+        throw new Error "Requested state transition is undefined! Event '#{menuAction.transition}' from state '#{@currentUser.current}'"
 
   redirect: ->
     @msg.match = [] # call default action in the next state
     @router.route(@msg)
-
-  stateAction: ->
-    userState = @currentUser.current
-    controllerMethodName = @stateActions[userState]
-    controllerMethod = @[controllerMethodName].bind @
-    stateData = @currentUser.get 'stateData'
-    controllerMethod stateData
 
   render: (view)->
     @currentUser.set 'menu', view.menu
