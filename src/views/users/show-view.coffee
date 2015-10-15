@@ -10,7 +10,7 @@ class CreateView extends ZorkView
       text: "Set bitcoin address"
       transition: 'update'
       data: {}
-    @menu[i++] = { text: "Exit", transition: 'exit' }
+    @menu.x = { text: "Exit", transition: 'exit' }
 
   render: ->
     @userText(@user) + "\n\n" + @renderMenu()
@@ -18,10 +18,10 @@ class CreateView extends ZorkView
   userText: (user)->
     if user?
       info = [
-        "Real name: " + user.get('real_name')
+        "Real name: " + (user.get('real_name') ? '[not set]')
         "Username: " + user.get('slack_username')
-        "Default community: " + user.get('current_dco')
-        "Bitcoin address: " + user.get('btc_address')
+        "Current community: " + user.get('current_dco')
+        "Bitcoin address: " + (user.get('btc_address') ? '[not set]')
       ].join("\n")
     else
       "User not found"
