@@ -1,4 +1,5 @@
 { log, p, pjson } = require 'lightsaber'
+{ isEmpty } = require 'lodash'
 ZorkView = require '../zork-view'
 
 class ShowView extends ZorkView
@@ -14,9 +15,13 @@ class ShowView extends ZorkView
     }
 
   render: ->
-
+    description = if isEmpty @proposal.get('description')
+      ''
+    else
+      "_#{@proposal.get('description')}_\n"
     """
     *Proposal: #{@proposal.get('id')}*
+    #{description}
     #{@renderMenu()}
 
     To take an action, simply enter the number or letter at the beginning of the line.

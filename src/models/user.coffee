@@ -64,8 +64,8 @@ class User extends FirebaseModel
       { name: 'more', from: 'general#home', to: 'general#more' }
       { name: 'exit', from: 'general#more', to: 'general#home' }
 
-      { name: 'setDco', from: 'general#more', to: 'dcos#set' }
-      { name: 'exit', from: 'dcos#set', to: 'general#home' }
+      { name: 'setDco', from: 'general#more', to: 'users#setDco' }
+      { name: 'exit', from: 'users#setDco', to: 'general#home' }
 
       { name: 'myAccount', from: 'general#more', to: 'users#myAccount' }
       { name: 'exit', from: 'users#myAccount', to: 'general#home' }

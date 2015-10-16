@@ -5,6 +5,7 @@ ApplicationController = require './state-application-controller'
 DcoCollection = require '../collections/dco-collection'
 ShowView = require '../views/users/show-view'
 BtcView = require '../views/users/btc-view'
+SetDcoView = require '../views/users/set-dco-view'
 
 class UsersStateController extends ApplicationController
 
@@ -14,12 +15,14 @@ class UsersStateController extends ApplicationController
     setBtc: 'setBtc'
     dcosSet: 'setDco'
 
+  # choose DCO
   setDco: ->
     DcoCollection.create().then (dcos) =>
       view = new SetDcoView dcos
       @currentUser.set 'menu', view.menu
       @msg.send view.render()
 
+  # set DCO
   setDcoTo: ->
     if dcoId = @currentUser.get('stateData')?.id
       @currentUser.setDcoTo(dcoId).then =>

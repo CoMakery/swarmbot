@@ -9,7 +9,7 @@ class BtcView extends ZorkView
 
   render: ->
     str = ""
-    str += "'#{@data.address}' is an invalid bitcoin address.  #{@error.message}.\n" if @error?
+    str += "'#{@data.address}' is an invalid bitcoin address.\n" if @error?
 
     str += "Please enter the bitcoin address you wish to use. (#{@renderMenu()})"
     str
