@@ -2,7 +2,9 @@
 Promise = require 'bluebird'
 swarmbot = require '../models/swarmbot'
 FirebaseModel = require './firebase-model'
+Solution = require './solution'
 RatingCollection = require '../collections/rating-collection'
+SolutionCollection = require '../collections/solution-collection'
 { Reputation, Claim } = require 'trust-exchange'
 
 class Proposal extends FirebaseModel
@@ -18,6 +20,14 @@ class Proposal extends FirebaseModel
     attributes[user.get 'id'] = 1
     @firebase().child('votes').update attributes, cb
 
+  createSolution: (attrs)->
+    # id & link
+    solution = new Solution(attrs, {parent: @})
+    solution.save()
+
+  solutions: ->
+    @_solutions ?= new SolutionCollection @snapshot.child('solutions'), parent: @
+
   # getReputationScore: ->
   #   return Promise.resolve(null) unless @get('id')?
   #   Reputation.score @get('id'),
@@ -25,9 +35,6 @@ class Proposal extends FirebaseModel
   #   .then (score) =>
   #     @attributes.reputationScore = score if score?
   #     @
-
-  # TODO implement:
-  # createSolution: (attributes) ->
 
   ratings: ->
     @_ratings ?= new RatingCollection @snapshot.child('ratings'), parent: @

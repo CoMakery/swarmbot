@@ -5,6 +5,7 @@ controllers =
   general:   require './controllers/general-state-controller'
   dcos:      require './controllers/dcos-state-controller'
   users:     require './controllers/users-state-controller'
+  solutions: require './controllers/solutions-state-controller'
 
 class Router
   route: (msg) ->

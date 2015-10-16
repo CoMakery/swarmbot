@@ -7,7 +7,7 @@ RatingCollection = require '../collections/rating-collection'
 
 class Solution extends FirebaseModel
   hasParent: true
-  urlRoot: "proposals/solutions"
+  urlRoot: "solutions"
   @find: (id, { parent }) ->
     new Solution({id: id}, parent: parent)
 

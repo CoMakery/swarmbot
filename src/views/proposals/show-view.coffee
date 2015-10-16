@@ -4,17 +4,25 @@ ZorkView = require '../zork-view'
 
 class ShowView extends ZorkView
   constructor: (@proposal) ->
-    @menu = {
-      1:
-        text: "Vote Up"
-        command: 'upvote'
-        data: { proposalId: @proposal.get('id') }
-      2:
-        text: "Submit Solution",
-        transition: 'createSolution'
-        data: { proposalId: @proposal.get('id') }
-      x: { text: "Exit", transition: 'exit' }
-    }
+    @menu = {}
+    i = 1
+
+    @menu[i++] =
+      text: "Vote Up"
+      command: 'upvote'
+      data: { proposalId: @proposal.get('id') }
+
+    # solutions
+    @menu[i++] =
+      text: "Solutions",
+      transition: 'solutions'
+      data: { proposalId: @proposal.get('id') }
+
+    @menu[i++] =
+      text: "Submit Solution",
+      transition: 'createSolution'
+      data: { proposalId: @proposal.get('id') }
+    @menu.x = { text: "Exit", transition: 'exit' }
 
   render: ->
     description = if isEmpty @proposal.get('description')

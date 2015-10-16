@@ -5,7 +5,6 @@ Proposal = require '../models/proposal'
 ShowView = require '../views/proposals/show-view'
 IndexView = require '../views/proposals/index-view'
 CreateView = require '../views/proposals/create-view'
-CreateSolutionView = require '../views/solutions/create-view'
 
 class ProposalsStateController extends ApplicationController
 
@@ -55,28 +54,5 @@ class ProposalsStateController extends ApplicationController
 
     @render(new CreateView(data))
 
-  # TODO: move to solutions controller
-  solutionsCreate: (data)->
-    if @input?
-      if not data.id?
-        data.id = @input
-      else if not data.link?
-        data.link = @input
-        @getDco()
-        .then (dco) =>
-          proposal = Proposal.find data.proposalId, parent: dco
-        .then (proposal) =>
-        # TODO:
-        #   proposal.createSolution data
-        # .then (solution) =>
-          @msg.send "Your solution has been submitted and will be reviewed!"
-          # go back to proposals show
-          @currentUser.set 'stateData', id: data.proposalId
-          @execute transition: 'exit'
-
-    data ?= {}
-    @currentUser.set 'stateData', data
-
-    @render(new CreateSolutionView(data))
 
 module.exports = ProposalsStateController
