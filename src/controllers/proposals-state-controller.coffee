@@ -25,15 +25,17 @@ class ProposalsStateController extends ApplicationController
     .then (proposal) =>
       @render(new ShowView(proposal))
 
-  voteUp: ->
-    # TODO: record the vote
-    @msg.send "Your vote has been recorded.\n" # Not
-    @redirect()
-
-  voteDown: ->
-    # TODO: record the vote
-    @msg.send "Your vote has been recorded.\n" # Not
-    @redirect()
+  upvote: (params) ->
+    @getDco().then (dco) ->
+      Proposal.find(params.proposalId, parent: dco)
+      .then (proposal) =>
+        unless proposal.exists()
+          throw new Error "Could not find the proposal '#{params.proposalId}'. Please verify that it exists."
+        attributes = {}
+        attributes[@currentUser.get 'id'] = 1
+        proposal.firebase().child('votes').update attributes, =>
+          @msg.send "Your vote has been recorded.\n" # Not
+          @redirect()
 
   create: ->
     if @input?

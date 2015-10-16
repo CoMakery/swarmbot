@@ -5,9 +5,11 @@ ZorkView = require '../zork-view'
 class ShowView extends ZorkView
   constructor: (@proposal) ->
     @menu = {
-      1: { text: "Vote Up", command: 'voteUp' }
-      2: { text: "Vote Down", command: 'voteDown' }
-      3:
+      1:
+        text: "Vote Up"
+        command: 'upvote'
+        data: { proposalId: @proposal.get('id') }
+      2:
         text: "Submit Solution",
         transition: 'createSolution'
         data: { proposalId: @proposal.get('id') }

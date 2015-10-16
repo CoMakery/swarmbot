@@ -9,12 +9,11 @@ class ApplicationController
     @currentUser = @msg.currentUser
 
   execute: (menuAction) ->
-    @currentUser.set 'stateData', menuAction.data if menuAction.data
-
     if menuAction.command?
-      @[menuAction.command]()
+      @[menuAction.command](menuAction.data)
 
     if menuAction.transition?
+      @currentUser.set 'stateData', menuAction.data if menuAction.data
       if @currentUser[menuAction.transition]
         @currentUser[menuAction.transition]()
         @redirect()
