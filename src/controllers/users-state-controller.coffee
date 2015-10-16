@@ -9,12 +9,6 @@ SetDcoView = require '../views/users/set-dco-view'
 
 class UsersStateController extends ApplicationController
 
-  # map of state name -> controller action
-  stateActions:
-    myAccount: 'myAccount'
-    setBtc: 'setBtc'
-    dcosSet: 'setDco'
-
   # choose DCO
   setDco: ->
     DcoCollection.create().then (dcos) =>

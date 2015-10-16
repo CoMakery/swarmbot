@@ -8,13 +8,6 @@ CreateView = require '../views/proposals/create-view'
 CreateSolutionView = require '../views/solutions/create-view'
 
 class ProposalsStateController extends ApplicationController
-  # map of state name -> controller action
-  stateActions:
-    home: 'home'
-    # proposalsIndex: 'index'
-    proposalsShow: 'show'
-    proposalsCreate: 'create'
-    solutionsCreate: 'solutionsCreate'
 
   index: ->
     @getDco()
