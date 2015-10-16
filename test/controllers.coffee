@@ -32,7 +32,7 @@ describe 'controllers', ->
 
   context 'ProposalsStateController', ->
     context "state: proposals", ->
-      it "calls show from the 1 command and transitions state", ->
+      xit "calls show from the 1 command and transitions state", ->
         router = {route: ->}
         user = new User
           id: 'x'
@@ -55,11 +55,11 @@ describe 'controllers', ->
         msg = { match: [ 'swarmbot 1', '1' ], currentUser: @user }
         @controller = new ApplicationController router, msg
 
-      it "gets the community if it's the user's current community", ->
+      xit "gets the community if it's the user's current community", ->
         @user.attributes.current_dco = 'zzz'
         @controller.getDco().then((dco)-> dco.get('id')).should.eventually.equal 'zzz'
 
-      it "sets the community to the default community otherwise", ->
+      xit "sets the community to the default community otherwise", ->
         @user.attributes.current_dco = null
         @controller.getDco()
         .then((dco)-> dco.get('id')).should.eventually.equal swarmbot.feedbackDcokey
