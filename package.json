@@ -26,7 +26,6 @@
     "sinon-chai": "^2.8.0"
   },
   "dependencies": {
-    "backbone": "^1.2.3",
     "bitcoinjs-lib": "^2.1.1",
     "bluebird": "^2.10.0",
     "colu": "^0.6.10",
