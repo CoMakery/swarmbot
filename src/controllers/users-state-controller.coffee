@@ -9,6 +9,13 @@ SetDcoView = require '../views/users/set-dco-view'
 
 class UsersStateController extends ApplicationController
 
+  # TODO:
+  # consider switching to just users#edit and users#update controller actions:
+  #
+  # edit  # read the state and render setBtc or setDco tempalate
+  # update # read the state and update the right field from the input
+
+
   # choose DCO
   setDco: ->
     DcoCollection.create().then (dcos) =>
