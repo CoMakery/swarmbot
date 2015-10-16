@@ -31,11 +31,10 @@ class ProposalsStateController extends ApplicationController
       .then (proposal) =>
         unless proposal.exists()
           throw new Error "Could not find the proposal '#{params.proposalId}'. Please verify that it exists."
-        attributes = {}
-        attributes[@currentUser.get 'id'] = 1
-        proposal.firebase().child('votes').update attributes, =>
-          @msg.send "Your vote has been recorded.\n" # Not
-          @redirect()
+        proposal.upvote @currentUser
+      .then =>
+        @msg.send "Your vote has been recorded.\n" # Not
+        @redirect()
 
   create: ->
     if @input?

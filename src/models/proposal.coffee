@@ -13,6 +13,11 @@ class Proposal extends FirebaseModel
     proposal = new Proposal({id: id}, parent: parent)
     proposal.fetch()
 
+  upvote: Promise.promisify (user, cb) ->
+    attributes = {}
+    attributes[user.get 'id'] = 1
+    @firebase().child('votes').update attributes, cb
+
   # getReputationScore: ->
   #   return Promise.resolve(null) unless @get('id')?
   #   Reputation.score @get('id'),
