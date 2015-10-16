@@ -14,14 +14,9 @@ class Router
       p "state: #{user.current}"
       [controllerName, action] = user.current.split('#')
 
-      unless controllers[controllerName]?
-        console.error "Unexpected user state #{user.current} -- resetting to default state"
-        user.set('state', 'general#home').then => @route(msg)
-        return
-
-      controller = new controllers[controllerName](@, msg)
-
-      unless controller[action]
+      controllerClass = controllers[controllerName]
+      controller = new controllerClass(@, msg) if controllerClass?
+      unless controller and controller[action]
         console.error "Unexpected user state #{user.current} -- resetting to default state"
         user.set('state', 'general#home').then => @route(msg)
         return
