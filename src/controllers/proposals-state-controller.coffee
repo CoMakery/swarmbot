@@ -46,7 +46,7 @@ class ProposalsStateController extends ApplicationController
         return @getDco()
         .then (dco) => p 888, dco.createProposal data
         .then => p 999, @execute transition: 'exit'
-        .then => p 1000; "Proposal created!"
+        # .then => "Proposal created!"
     data ?= {}
     @currentUser.set 'stateData', data
     # promise.resolve @render new CreateView data

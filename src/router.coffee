@@ -20,8 +20,7 @@ class Router
       unless controller and controller[action]
         console.error "Unexpected user state #{user.current} --
           resetting to default state"
-        user.set('state', 'general#home').then => @route(msg)
-        return
+        return user.set('state', 'general#home').then => @route(msg)
 
       controller.input = msg.match[1]
       lastMenuItems = user.get('menu')
