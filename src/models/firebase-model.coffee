@@ -7,12 +7,17 @@ class FirebaseModel
 
   @find: (id, options={}) ->
     new @(id: id, options)
-      .fetch()
+      .fetchIfNeeded()
 
   constructor: (@attributes={}, options={}) ->
     @hasParent = @hasParent || false
     @parent = options.parent
+
+
     @snapshot = options.snapshot
+    if @parent?.snapshot? and @attributes.id
+      @snapshot ?= @parent.snapshot.child(@urlRoot).child(@attributes.id)
+
     @parseSnapshot() if @snapshot?
 
   firebase: ->

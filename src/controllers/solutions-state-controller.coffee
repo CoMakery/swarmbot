@@ -1,10 +1,31 @@
 { log, p, pjson } = require 'lightsaber'
 ApplicationController = require './state-application-controller'
 Proposal = require '../models/proposal'
+Solution = require '../models/solution'
 DcoCollection = require '../collections/dco-collection'
+IndexView = require '../views/solutions/index-view'
+ShowView = require '../views/solutions/show-view'
 CreateView = require '../views/solutions/create-view'
 
 class SolutionsStateController extends ApplicationController
+  index: (params)->
+    @getDco()
+    .then (dco)=>
+      Proposal.find(params.proposalId, parent: dco)
+    .then (proposal) =>
+      @render new IndexView(proposal)
+
+  show: (params) ->
+    p 'params', params
+    # TODO: Is there a way to do this where we don't have to query the whole DCO every time?
+    @getDco()
+    .then (dco)=>
+      Proposal.find params.proposalId, parent: dco
+    .then (proposal)=>
+      Solution.find params.id, parent: proposal
+    .then (solution)=>
+      @render new ShowView(solution)
+
   create: (data)->
 
     if @input?
@@ -18,7 +39,7 @@ class SolutionsStateController extends ApplicationController
         .then (solution) =>
           @msg.send "Your solution has been submitted and will be reviewed!"
           # go back to proposals#show
-          @execute transition: 'exit', data: {id: data.proposalId}
+          @execute transition: 'exit', data: {proposalId: data.proposalId}
 
     # data ?= {}
     @currentUser.set 'stateData', data

@@ -12,7 +12,6 @@ class ShowView extends ZorkView
       command: 'upvote'
       data: { proposalId: @proposal.get('id') }
 
-    # solutions
     @menu[i++] =
       text: "Solutions",
       transition: 'solutions'
