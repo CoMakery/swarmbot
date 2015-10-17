@@ -36,23 +36,20 @@ class ProposalsStateController extends ApplicationController
         @redirect()
 
   create: ->
+    # promise = new Promise
     if @input?
       data = @currentUser.get('stateData') ? {}
       if not data.id?
         data.id = @input
       else if not data.description?
         data.description = @input
-        @getDco()
-        .then (dco) =>
-          dco.createProposal data
-        .then =>
-          @msg.send "Proposal created!"
-          @execute transition: 'exit'
-
+        return @getDco()
+        .then (dco) => p 888, dco.createProposal data
+        .then => p 999, @execute transition: 'exit'
+        .then => p 1000; "Proposal created!"
     data ?= {}
     @currentUser.set 'stateData', data
-
-    @render(new CreateView(data))
-
+    # promise.resolve @render new CreateView data
+    @render new CreateView data
 
 module.exports = ProposalsStateController
