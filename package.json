@@ -21,6 +21,7 @@
     "coffee-script": "^1.9.3",
     "hubot-test-helper": "^0.0.7",
     "mocha": "^2.2.5",
+    "nock": "^2.15.0",
     "sinon": "^1.16.1",
     "sinon-as-promised": "^4.0.0",
     "sinon-chai": "^2.8.0"

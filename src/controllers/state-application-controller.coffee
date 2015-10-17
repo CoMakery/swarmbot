@@ -5,7 +5,7 @@ DCO = require '../models/dco'
 swarmbot = require '../models/swarmbot'
 
 class ApplicationController
-  constructor: (@router, @msg) ->
+  constructor: (@router, @msg, @transaction) ->
     @currentUser = @msg.currentUser
 
   execute: (menuAction) ->
@@ -22,11 +22,12 @@ class ApplicationController
 
   redirect: ->
     @msg.match = [] # call default action in the next state
-    @router.route(@msg)
+    @router.route @msg, @transaction
 
   render: (view)->
     @currentUser.set 'menu', view.menu
-    @msg.send view.render()
+    @transaction.respond view.render()
+    # p 111, @msg
 
   getDco: ->
     @currentUser.fetchIfNeeded().bind(@).then (user) ->
