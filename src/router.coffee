@@ -31,7 +31,10 @@ class Router
         controller.execute(menuAction)
       else if controller[action]?
         # default action for this state
-        controller[action]( user.get('stateData') )
+        p 222
+        r = controller[action]( user.get('stateData') )
+        p 444, r
+        return r
       else
         throw new Error("Action for state '#{user.current}' not defined.")
 

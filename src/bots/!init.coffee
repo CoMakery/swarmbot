@@ -30,8 +30,7 @@ InitBot = (robot) ->
   # State-based message routing
   robot.respond /(.*)/, (msg) ->
     transaction = new Transaction
-    transaction.input msg
-    transaction.route()
+    transaction.respondTo msg
 
   robot.router.post '/hubot/chatsecrets/:room', (req, res) ->
     p "HTTP webhook received", req, res

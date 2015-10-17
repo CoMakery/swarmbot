@@ -1,11 +1,13 @@
 {log, p, pjson} = require 'lightsaber'
 chai = require 'chai'
+chaiAsPromised = require("chai-as-promised")
 chai.should()
+chai.use(chaiAsPromised);
 # sinon = require 'sinon'
 # Helper = require 'hubot-test-helper'
 
 swarmbot = require '../src/models/swarmbot'
-Router = require '../src/router'
+Transaction = require '../src/transaction'
 
 # sinon.stub(swarmbot, 'colu').returns
 #   on: ->
@@ -31,8 +33,8 @@ describe 'swarmbot', ->
     it "shows help upon request", ->
       msg =
         match: [null, "help"]
-      transaction = new Router.Transaction msg
-      transaction.response.should.eventually.match ///
+      transaction = new Transaction
+      transaction.respondTo(msg).should.eventually.match ///
         \*Proposals in Jill Land\*
         1: awesome emoticons
         2: dinner at 5

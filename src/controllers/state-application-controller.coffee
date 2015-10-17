@@ -10,23 +10,26 @@ class ApplicationController
 
   execute: (menuAction) ->
     if menuAction.command?
-      @[menuAction.command](menuAction.data)
+      promise = @[menuAction.command](menuAction.data)
 
+    promise ?= Promise.resolve()
     if menuAction.transition?
-      @currentUser.set 'stateData', menuAction.data if menuAction.data
-      if @currentUser[menuAction.transition]
-        @currentUser[menuAction.transition]()
-        @redirect()
-      else
-        throw new Error "Requested state transition is undefined! Event '#{menuAction.transition}' from state '#{@currentUser.current}'"
+      promise.then =>
+        @currentUser.set 'stateData', menuAction.data if menuAction.data
+        if @currentUser[menuAction.transition]
+          @currentUser[menuAction.transition]()
+          @redirect()
+        else
+          throw new Error "Requested state transition is undefined! Event '#{menuAction.transition}' from state '#{@currentUser.current}'"
 
   redirect: ->
     @msg.match = [] # call default action in the next state
-    @router.route @msg, @transaction
+    @router.route @msg
 
-  render: (view)->
+  render: (view) ->
     @currentUser.set 'menu', view.menu
-    @transaction.respond view.render()
+    p 333, view.render()
+    view.render()
     # p 111, @msg
 
   getDco: ->
