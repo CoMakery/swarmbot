@@ -3,36 +3,25 @@ chai = require 'chai'
 chaiAsPromised = require("chai-as-promised")
 chai.should()
 chai.use(chaiAsPromised);
-# sinon = require 'sinon'
-# Helper = require 'hubot-test-helper'
 
-swarmbot = require '../src/models/swarmbot'
 Transaction = require '../src/transaction'
-
-# sinon.stub(swarmbot, 'colu').returns
-#   on: ->
-#   init: ->
-#   sendAsset: ->
-#   issueAsset: ->
-
-# call this only after stubbing:
-# helper = new Helper '../src/bots'
-
-# process.env.EXPRESS_PORT = 8901  # don't conflict with hubot console port 8080
-# process.env.FIREBASE_URL = 'https://dazzle-staging.firebaseio-demo.com/'
 
 nock = require 'nock'
 #  = require('nock').back
 # nockBack.fixtures = "#{__dirname}/fixtures/"
 # nockBack.setMode 'record'
-
 nock.disableNetConnect()  # disable real http requests
+
+# process.env.EXPRESS_PORT = 8901  # don't conflict with hubot console port 8080
+process.env.FIREBASE_URL = 'https://firebase.example.com/'
 
 describe 'swarmbot', ->
   context 'home', ->
     it "shows help upon request", ->
       msg =
         match: [null, "help"]
+        robot:
+          whose: (msg) -> "user:1234"
       transaction = new Transaction
       transaction.respondTo(msg).should.eventually.match ///
         \*Proposals in Jill Land\*
