@@ -1,3 +1,4 @@
+debug = require('debug')('app')
 {log, p, pjson} = require 'lightsaber'
 StateMachine = require 'javascript-state-machine'
 Promise = require 'bluebird'
@@ -6,6 +7,7 @@ swarmbot = require './swarmbot'
 
 class User extends FirebaseModel
   urlRoot: 'users'
+  initialState: 'general#home'
 
   @findBySlackUsername: Promise.promisify (slackUsername, cb)->
     swarmbot.firebase().child('users') # TODO: use urlRoot here
@@ -26,11 +28,11 @@ class User extends FirebaseModel
 
   fetch: ->
     super().then =>
-      @current = @get('state') || 'home'
+      @current = @get('state') || @initialState
       @
 
   onafterevent: (event, from, to, data) ->
-    p "// Transition #{from} -> #{to} // Event #{event} // Data: #{data} //"
+    debug "// Transition #{from} -> #{to} // Event #{event} // Data: #{data} //"
     @set('state', to)
     # TODO: stat: user entering what state
 
@@ -38,7 +40,6 @@ class User extends FirebaseModel
     target: @prototype
     error: (event, from, to, args, errorCode, errorMessage) ->
       console.error "state machine error! event: #{event} // #{from} -> #{to} // args: #{pjson args} // error: #{errorCode}  #{errorMessage}"
-      @set('state', 'home')
 
     events: [
       # { name: 'index', from: 'home', to: 'proposalsIndex' }

@@ -1,4 +1,5 @@
 { log, p, pjson } = require 'lightsaber'
+debug = require('debug')('app')
 User = require './models/user'
 controllers =
   proposals: require './controllers/proposals-state-controller'
@@ -12,7 +13,7 @@ class App
     @setCurrentUser msg
     msg.currentUser.fetch()
     .then (user) =>
-      p "state: #{user.current}"
+      debug "state: #{user.current}"
       [controllerName, action] = user.current.split('#')
 
       controllerClass = controllers[controllerName]

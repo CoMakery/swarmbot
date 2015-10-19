@@ -1,3 +1,4 @@
+debug = require('debug')('app')
 { log, p, pjson } = require 'lightsaber'
 User = require '../models/user'
 Promise = require 'bluebird'
@@ -19,7 +20,7 @@ class ApplicationController
         @currentUser.set 'stateData', menuAction.data if menuAction.data
         if @currentUser[menuAction.transition]
           @currentUser[menuAction.transition]()
-          p 'redirecting...'
+          debug 'redirecting...'
           @redirect()
         else
           throw new Error "Requested state transition is undefined! Event '#{menuAction.transition}' from state '#{@currentUser.current}'"
