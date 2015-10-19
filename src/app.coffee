@@ -7,8 +7,8 @@ controllers =
   users:     require './controllers/users-state-controller'
   solutions: require './controllers/solutions-state-controller'
 
-class Router
-  route: (msg, transaction) ->
+class App
+  @route: (msg) ->
     @setCurrentUser msg
     msg.currentUser.fetch()
     .then (user) =>
@@ -16,7 +16,7 @@ class Router
       [controllerName, action] = user.current.split('#')
 
       controllerClass = controllers[controllerName]
-      controller = new controllerClass(@, msg, transaction) if controllerClass?
+      controller = new controllerClass(msg) if controllerClass?
       unless controller and controller[action]
         console.error "Unexpected user state #{user.current} --
           resetting to default state"
@@ -30,14 +30,11 @@ class Router
         controller.execute(menuAction)
       else if controller[action]?
         # default action for this state
-        p 222
-        r = controller[action]( user.get('stateData') )
-        p 444, r
-        return r
+        controller[action]( user.get('stateData') )
       else
         throw new Error("Action for state '#{user.current}' not defined.")
 
-  setCurrentUser: (msg) ->
+  @setCurrentUser: (msg) ->
     msg.currentUser ?= new User id: msg.robot.whose(msg)
 
-module.exports = Router
+module.exports = App

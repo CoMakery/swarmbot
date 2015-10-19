@@ -10,8 +10,8 @@
 Promise = require 'bluebird'
 trustExchange = require('trust-exchange').instance
 swarmbot = require '../models/swarmbot'
-Transaction = require '../transaction'
 User = require '../models/user'
+global.App = require '../app'
 
 # Promise.longStackTraces() # only in development mode. decreases performance 5x
 
@@ -29,8 +29,7 @@ InitBot = (robot) ->
 
   # State-based message routing
   robot.respond /(.*)/, (msg) ->
-    transaction = new Transaction
-    transaction.respondTo msg
+    App.route(msg).then (response) -> msg.send response
 
   robot.router.post '/hubot/chatsecrets/:room', (req, res) ->
     p "HTTP webhook received", req, res

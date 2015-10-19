@@ -44,8 +44,8 @@ class ProposalsStateController extends ApplicationController
       else if not data.description?
         data.description = @input
         return @getDco()
-        .then (dco) => p 888, dco.createProposal data
-        .then => p 999, @execute transition: 'exit'
+        .then (dco) => dco.createProposal data
+        .then => @execute transition: 'exit'
         # .then => "Proposal created!"
     data ?= {}
     @currentUser.set 'stateData', data

@@ -4,7 +4,7 @@ chaiAsPromised = require("chai-as-promised")
 chai.should()
 chai.use(chaiAsPromised);
 
-Transaction = require '../src/transaction'
+App = require '../app'
 
 nock = require 'nock'
 #  = require('nock').back
@@ -22,8 +22,7 @@ describe 'swarmbot', ->
         match: [null, "help"]
         robot:
           whose: (msg) -> "user:1234"
-      transaction = new Transaction
-      transaction.respondTo(msg).should.eventually.match ///
+      App.route(msg).should.eventually.match ///
         \*Proposals in Jill Land\*
         1: awesome emoticons
         2: dinner at 5
