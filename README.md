@@ -3,7 +3,7 @@
 Latest build: [![Circle CI](https://circleci.com/gh/citizencode/swarmbot/tree/master.svg?style=svg)](https://circleci.com/gh/citizencode/swarmbot/tree/master)
 
 
-
+![faq](https://cloud.githubusercontent.com/assets/589191/10590874/00e4781e-7668-11e5-92e8-af0738408ef9.png)
 
 ## Project Vision
 
