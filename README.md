@@ -2,15 +2,8 @@
 
 Latest build: [![Circle CI](https://circleci.com/gh/citizencode/swarmbot/tree/master.svg?style=svg)](https://circleci.com/gh/citizencode/swarmbot/tree/master)
 
-## Current Implementation Status
 
-This project is in very early stages, and not ready for production use.
-It is being actively developed by [Citizen Code](http://citizencode.io/).
-We welcome [feature requests and pull requests](https://github.com/citizencode/swarmbot/issues).
 
-The Swarmbot is based on [Hubot](http://hubot.github.com).
-It is configured by default to run with the Hubot Slack adaptor,
-but is easily configured to work anywhere Hubot works.
 
 ## Project Vision
 
@@ -93,6 +86,7 @@ decentralized-marketplace for 1000 (Ratings: 90%)
 
 BTC registered
 
+```
 
 
 
