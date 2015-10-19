@@ -3,25 +3,10 @@ chai = require 'chai'
 chaiAsPromised = require("chai-as-promised")
 chai.should()
 chai.use(chaiAsPromised);
-
+FirebaseServer = require('firebase-server')
 App = require '../src/app'
 DCO = require '../src/models/dco'
 
-nock = require 'nock'
-#  = require('nock').back
-# nockBack.fixtures = "#{__dirname}/fixtures/"
-# nockBack.setMode 'record'
-# nock.disableNetConnect()  # disable real http requests
-
-mockery = require('mockery')
-originalWebsocket = require('faye-websocket')
-_ = require('lodash')
-
-Firebase = require 'firebase'
-FirebaseServer = require('firebase-server')
-
-
-# process.env.EXPRESS_PORT = 8901  # don't conflict with hubot console port 8080
 process.env.FIREBASE_URL = 'ws://127.0.1:5000'
 
 describe 'swarmbot', ->
@@ -29,7 +14,7 @@ describe 'swarmbot', ->
     @firebaseServer = new FirebaseServer 5000, '127.0.1'
 
   after ->
-    console.log @firebaseServer.getData()
+    p @firebaseServer.getData()
     @firebaseServer.close()
 
   context 'home', ->
