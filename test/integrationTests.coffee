@@ -5,7 +5,7 @@ chai.should()
 chai.use(chaiAsPromised);
 debug = require('debug')('test')
 FirebaseServer = require('firebase-server')
-App = require '../src/app'
+global.App = require '../src/app'
 DCO = require '../src/models/dco'
 User = require '../src/models/user'
 
@@ -23,20 +23,35 @@ describe 'swarmbot', ->
     @firebaseServer.close()
 
   context 'home', ->
-    it "shows the default community, with no proposals", ->
-      userId = "slack:1234"
-      msg =
-        match: [null, "help"]
-        robot:
-          whose: (msg) -> userId
+    context 'with no proposals', ->
+      it "shows the default community", ->
+        userId = "slack:1234"
+        msg =
+          match: [null, "help"]
+          robot:
+            whose: (msg) -> userId
 
-      App.route(msg)
-      .then (reply) ->
-        reply.should.match /\*No proposals in swarmbot-lovers\*/
-        reply.should.match /1: Create a proposal/
-        reply.should.match /2: More commands/
+        App.route(msg)
+        .then (reply) ->
+          reply.should.match /\*No proposals in swarmbot-lovers\*/
+          reply.should.match /1: Create a proposal/
+          reply.should.match /2: More commands/
 
-    it "shows the user's current community, with proposals", ->
+      it "allows the user to create a proposal within the current community", ->
+        dcoId = 'Your Great Community'
+        userId = "slack:1234"
+        @user = new User(id: userId, current_dco: dcoId).save()
+        msg =
+          match: [null, "1"]
+          robot:
+            whose: (msg) -> userId
+        dco = new DCO(id: dcoId)
+        dco.save()
+        .then -> App.route(msg)
+        .then (reply) ->
+          reply.should.match /What is the name of your proposal\? \('x' to exit\)/
+
+    xit "shows the user's current community, with proposals", ->
       dcoId = 'Your Great Community'
       userId = "slack:1234"
       @user = new User(id: userId, current_dco: dcoId).save()
