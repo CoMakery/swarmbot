@@ -5,28 +5,32 @@ DCO = require '../models/dco'
 swarmbot = require '../models/swarmbot'
 
 class ApplicationController
-  constructor: (@router, @msg) ->
+  constructor: (@msg) ->
     @currentUser = @msg.currentUser
 
   execute: (menuAction) ->
+    promise = Promise.resolve()
     if menuAction.command?
-      @[menuAction.command](menuAction.data)
+      promise = promise.then =>
+        @[menuAction.command](menuAction.data)
 
     if menuAction.transition?
-      @currentUser.set 'stateData', menuAction.data if menuAction.data
-      if @currentUser[menuAction.transition]
-        @currentUser[menuAction.transition]()
-        @redirect()
-      else
-        throw new Error "Requested state transition is undefined! Event '#{menuAction.transition}' from state '#{@currentUser.current}'"
+      promise.then =>
+        @currentUser.set 'stateData', menuAction.data if menuAction.data
+        if @currentUser[menuAction.transition]
+          @currentUser[menuAction.transition]()
+          p 'redirecting...'
+          @redirect()
+        else
+          throw new Error "Requested state transition is undefined! Event '#{menuAction.transition}' from state '#{@currentUser.current}'"
 
   redirect: ->
     @msg.match = [] # call default action in the next state
-    @router.route(@msg)
+    App.route @msg
 
-  render: (view)->
+  render: (view) ->
     @currentUser.set 'menu', view.menu
-    @msg.send view.render()
+    view.render()
 
   getDco: ->
     @currentUser.fetchIfNeeded().bind(@).then (user) ->

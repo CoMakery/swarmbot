@@ -1,4 +1,3 @@
-
 class ZorkView
   renderMenu: ->
     lines = for i, menuItem of @menu

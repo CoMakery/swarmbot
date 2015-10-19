@@ -1,31 +1,34 @@
 {log, p, pjson} = require 'lightsaber'
 chai = require 'chai'
+chaiAsPromised = require("chai-as-promised")
 chai.should()
-sinon = require 'sinon'
-Helper = require 'hubot-test-helper'
-
-swarmbot = require '../src/models/swarmbot'
+chai.use(chaiAsPromised);
+FirebaseServer = require('firebase-server')
+App = require '../src/app'
 DCO = require '../src/models/dco'
-User = require '../src/models/user'
-UsersController = require '../src/controllers/users-controller'
 
-sinon.stub(swarmbot, 'colu').returns
-  on: ->
-  init: ->
-  sendAsset: ->
-  issueAsset: ->
-
-# call this only after stubbing:
-helper = new Helper '../src/bots'
-
-process.env.EXPRESS_PORT = 8901  # don't conflict with hubot console port 8080
-process.env.FIREBASE_URL = 'https://dazzle-staging.firebaseio-demo.com/'
+process.env.FIREBASE_URL = 'ws://127.0.1:5000'
 
 describe 'swarmbot', ->
+  before ->
+    @firebaseServer = new FirebaseServer 5000, '127.0.1'
 
-  beforeEach -> @room = helper.createRoom()
-  afterEach -> @room.destroy()
+  after ->
+    p @firebaseServer.getData()
+    @firebaseServer.close()
 
-  context 'help', ->
-    it "returns top-level help"
-    it "returns specific help based on user's state"
+  context 'home', ->
+
+    it "shows no proposals for the default dco", ->
+      userId = "slack:1234"
+      # @user = new User(id: userId).save()
+      # @dco = new DCO(id: "Test DCO").save()
+      msg =
+        match: [null, "help"]
+        robot:
+          whose: (msg) -> userId
+
+      reply = App.route(msg)
+      reply.should.eventually.match /\*No proposals in swarmbot-lovers\*/
+      reply.should.eventually.match /1: Create a proposal/
+      reply.should.eventually.match /2: More commands/

@@ -42,17 +42,11 @@ class ProposalsStateController extends ApplicationController
         data.id = @input
       else if not data.description?
         data.description = @input
-        @getDco()
-        .then (dco) =>
-          dco.createProposal data
-        .then =>
-          @msg.send "Proposal created!"
-          @execute transition: 'exit'
-
+        return @getDco()
+        .then (dco) => dco.createProposal data
+        .then => @execute transition: 'exit'
     data ?= {}
     @currentUser.set 'stateData', data
-
-    @render(new CreateView(data))
-
+    @render new CreateView data
 
 module.exports = ProposalsStateController

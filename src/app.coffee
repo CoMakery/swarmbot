@@ -7,8 +7,8 @@ controllers =
   users:     require './controllers/users-state-controller'
   solutions: require './controllers/solutions-state-controller'
 
-class Router
-  route: (msg) ->
+class App
+  @route: (msg) ->
     @setCurrentUser msg
     msg.currentUser.fetch()
     .then (user) =>
@@ -16,12 +16,11 @@ class Router
       [controllerName, action] = user.current.split('#')
 
       controllerClass = controllers[controllerName]
-      controller = new controllerClass(@, msg) if controllerClass?
+      controller = new controllerClass(msg) if controllerClass?
       unless controller and controller[action]
-        console.error "Unexpected user state #{user.current} -- 
+        console.error "Unexpected user state #{user.current} --
           resetting to default state"
-        user.set('state', 'general#home').then => @route(msg)
-        return
+        return user.set('state', 'general#home').then => @route(msg)
 
       controller.input = msg.match[1]
       lastMenuItems = user.get('menu')
@@ -35,8 +34,7 @@ class Router
       else
         throw new Error("Action for state '#{user.current}' not defined.")
 
-
-  setCurrentUser: (msg) ->
+  @setCurrentUser: (msg) ->
     msg.currentUser ?= new User id: msg.robot.whose(msg)
 
-module.exports = new Router()
+module.exports = App

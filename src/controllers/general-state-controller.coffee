@@ -17,12 +17,10 @@ class GeneralStateController extends ApplicationController
       proposals.sortByReputationScore()
       # messages = proposals.map(@_proposalMessage)[0...5]
 
-      @render(new HomeView(dco, proposals))
+      @render new HomeView dco, proposals
     .error(@_showError)
 
   more: ->
-    view = new MoreCommandsView
-    @currentUser.set 'menu', view.menu
-    @msg.send view.render()
+    @render new MoreCommandsView
 
 module.exports = GeneralStateController
