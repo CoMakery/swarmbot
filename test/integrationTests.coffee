@@ -79,7 +79,7 @@ describe 'swarmbot', ->
         reply.should.match /3: Create a proposal/
 
   context 'users#setDco', ->
-    it "shows the list of dcos", ->
+    xit "shows the list of dcos", ->
       i = 1
       dcosPromise = Promise.all [
         new DCO(id: "Community #{i++}").save()
