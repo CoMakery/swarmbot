@@ -2,6 +2,8 @@ controller# Swarmbot
 
 Latest build: [![Circle CI](https://circleci.com/gh/citizencode/swarmbot/tree/master.svg?style=svg)](https://circleci.com/gh/citizencode/swarmbot/tree/master)
 
+Issue board: [![Waffle](https://badge.waffle.io/citizencode/swarmbot.svg?label=ready&title=Ready)](http://waffle.io/citizencode/swarmbot)
+
 ## Current Implementation Status
 
 This project is in very early stages, and not ready for production use.
