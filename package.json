@@ -19,7 +19,6 @@
     "chai": "^3.2.0",
     "chai-as-promised": "^5.1.0",
     "coffee-script": "^1.9.3",
-    "debug": "^2.2.0",
     "firebase-server": "^0.3.1",
     "mocha": "^2.2.5"
   },
@@ -28,6 +27,7 @@
     "bluebird": "^2.10.0",
     "colu": "^0.6.10",
     "colu-access": "^0.2.5",
+    "debug": "^2.2.0",
     "firebase": "^2.2.9",
     "hubot": "^2.16.0",
     "hubot-redis-brain": "0.0.3",
