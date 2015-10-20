@@ -1,4 +1,5 @@
 {log, p, pjson} = require 'lightsaber'
+Promise = require 'bluebird'
 chai = require 'chai'
 chaiAsPromised = require("chai-as-promised")
 chai.should()
@@ -35,7 +36,7 @@ describe 'swarmbot', ->
   after ->
     @firebaseServer.close()
 
-  context 'home', ->
+  context 'general#home', ->
     context 'with no proposals', ->
       it "shows the default community", ->
         App.route message('help')
@@ -76,6 +77,23 @@ describe 'swarmbot', ->
         reply.should.match /[1-2]: Do Stuff/
         reply.should.match /[1-2]: Be Glorious/
         reply.should.match /3: Create a proposal/
+
+  context 'users#setDco', ->
+    it "shows the list of dcos", ->
+      i = 1
+      dcosPromise = Promise.all [
+        new DCO(id: "Community #{i++}").save()
+        new DCO(id: "Community #{i++}").save()
+        new DCO(id: "Community #{i++}").save()
+      ]
+
+      dcosPromise
+      .then (@dcos) => new User(id: userId, state: 'general#more').save()
+      .then (@user) => App.route message()
+      .then (reply) => App.route message('1')
+      .then (reply) =>
+        reply.should.match /\*Set Current Community\*/
+        reply.should.match /[1-3]: Community [1-3]/
 
 # TODO:
 # test if current dco does not exist, should default

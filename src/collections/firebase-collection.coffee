@@ -24,6 +24,7 @@ class FirebaseCollection
 
   get: (i) -> @models[i]
 
+  # TODO: Fetch this collection's path once, set all the models from the snapshot.child() nodes
   fetch: ->
     Promise.all( @map (model) -> model.fetch() )
     .then => @
