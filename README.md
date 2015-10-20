@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/citizencode/swarmbot.png?label=ready&title=Ready)](https://waffle.io/citizencode/swarmbot)
 # Swarmbot
 
 Latest build: [![Circle CI](https://circleci.com/gh/citizencode/swarmbot/tree/master.svg?style=svg)](https://circleci.com/gh/citizencode/swarmbot/tree/master)
