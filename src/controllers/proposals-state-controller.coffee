@@ -32,8 +32,7 @@ class ProposalsStateController extends ApplicationController
           throw new Error "Could not find the proposal '#{params.proposalId}'. Please verify that it exists."
         proposal.upvote @currentUser
       .then =>
-        @msg.send "Your vote has been recorded.\n" # Not
-        @redirect()
+        @redirect("Your vote has been recorded.\n")
 
   create: ->
     if @input?

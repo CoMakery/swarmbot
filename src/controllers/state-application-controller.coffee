@@ -25,9 +25,10 @@ class ApplicationController
         else
           throw new Error "Requested state transition is undefined! Event '#{menuAction.transition}' from state '#{@currentUser.current}'"
 
-  redirect: ->
+  redirect: (flashMessage)->
+    @msg.send flashMessage if flashMessage?
     @msg.match = [] # call default action in the next state
-    App.route @msg
+    App.route(@msg)
 
   render: (view) ->
     @currentUser.set 'menu', view.menu
