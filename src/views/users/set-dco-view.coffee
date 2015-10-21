@@ -15,7 +15,6 @@ class SetDcoView
       text: id
       data: { id }
       command: 'setDcoTo'
-      # transition: 'exit'
     }
 
   render: ->

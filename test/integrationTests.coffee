@@ -79,7 +79,7 @@ describe 'swarmbot', ->
         reply.should.match /3: Create a proposal/
 
   context 'users#setDco', ->
-    xit "shows the list of dcos", ->
+    it "shows the list of dcos and sets current dco", ->
       i = 1
       dcosPromise = Promise.all [
         new DCO(id: "Community #{i++}").save()
@@ -94,6 +94,12 @@ describe 'swarmbot', ->
       .then (reply) =>
         reply.should.match /\*Set Current Community\*/
         reply.should.match /[1-3]: Community [1-3]/
+      #   @message = message('1')
+      #   App.route @message
+      # .then (reply) =>
+      #   p reply, @message
+      #   @message.parts.length.should.eq 1
+
 
 # TODO:
 # test if current dco does not exist, should default

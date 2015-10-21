@@ -18,14 +18,14 @@ class UsersStateController extends ApplicationController
 
   # choose DCO
   setDco: ->
-    DcoCollection.create().then (dcos) =>
+    DcoCollection.all().then (dcos) =>
       view = new SetDcoView dcos
       @currentUser.set 'menu', view.menu
-      @msg.send view.render()
+      view.render()
 
   # set DCO
-  setDcoTo: ->
-    if dcoId = @currentUser.get('stateData')?.id
+  setDcoTo: (params)->
+    if dcoId = params.id
       @currentUser.setDcoTo(dcoId).then =>
         @msg.send "Community set to #{dcoId}"
         @currentUser.exit()

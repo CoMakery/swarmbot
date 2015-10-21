@@ -5,9 +5,9 @@ swarmbot = require '../models/swarmbot'
 
 class FirebaseCollection
 
-  @create: Promise.promisify (cb) ->
+  @all: Promise.promisify (cb) ->
     swarmbot.firebase().child(@::model::urlRoot).once 'value', (snapshot) =>
-      cb null, new @ snapshot
+      cb null, new @(snapshot)
 
   constructor: (modelsOrSnapshot, options={})->
     throw new Error("Collection requires a model.") unless @model?
