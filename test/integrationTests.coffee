@@ -101,7 +101,6 @@ describe 'swarmbot', ->
 
   context 'proposals#show', ->
     context 'setBounty', ->
-      it "doesn't show setBounty menu item for non-progenitor"
       it "shows setBounty item for progenitors", ->
         proposalId = 'Be Amazing'
         new User(id: userId, state: 'proposals#show', stateData: {id: proposalId}).save()
@@ -111,7 +110,11 @@ describe 'swarmbot', ->
         .then (reply) =>
           reply.should.match /\d: Set Bounty/
 
-
-
-# TODO:
-# test if current dco does not exist, should default
+      it "doesn't show setBounty menu item for non-progenitor", ->
+        proposalId = 'Be Amazing'
+        new User(id: userId, state: 'proposals#show', stateData: {id: proposalId}).save()
+        .then (@user) => new DCO(id: 'my dco', project_owner: 'someoneElse').save()
+        .then (@dco) => @dco.createProposal(id: proposalId)
+        .then (@proposal) => App.route message()
+        .then (reply) =>
+          reply.should.not.match /\d: Set Bounty/
