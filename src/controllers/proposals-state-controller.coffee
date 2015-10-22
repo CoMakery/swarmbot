@@ -19,8 +19,8 @@ class ProposalsStateController extends ApplicationController
 
   show: (params) ->
     proposalId = params.id ? throw new Error "show requires an id"
-    @getDco()
-    .then (dco) => Proposal.find proposalId, parent: dco
+    promise = @getDco()
+    .then (dco) => Proposal.find(proposalId, parent: dco)
     .then (proposal) =>
       @render(new ShowView(proposal))
 

@@ -18,13 +18,13 @@
   "devDependencies": {
     "chai": "^3.2.0",
     "chai-as-promised": "^5.1.0",
-    "coffee-script": "^1.9.3",
     "firebase-server": "^0.3.1",
     "mocha": "^2.2.5"
   },
   "dependencies": {
     "bitcoinjs-lib": "^2.1.1",
     "bluebird": "^2.10.0",
+    "coffee-script": "^1.10.0",
     "colu": "^0.6.10",
     "colu-access": "^0.2.5",
     "debug": "^2.2.0",
