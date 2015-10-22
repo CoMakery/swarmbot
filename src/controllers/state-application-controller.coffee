@@ -16,7 +16,7 @@ class ApplicationController
         @[menuAction.command](menuAction.data)
 
     if menuAction.transition?
-      promise.then =>
+      promise = promise.then =>
         @currentUser.set 'stateData', menuAction.data if menuAction.data
         if @currentUser[menuAction.transition]
           @currentUser[menuAction.transition]()
@@ -24,6 +24,8 @@ class ApplicationController
           @redirect()
         else
           throw new Error "Requested state transition is undefined! Event '#{menuAction.transition}' from state '#{@currentUser.current}'"
+
+    promise
 
   redirect: (flashMessage)->
     @msg.send flashMessage if flashMessage?

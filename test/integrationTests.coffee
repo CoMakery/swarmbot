@@ -94,11 +94,10 @@ describe 'swarmbot', ->
       .then (reply) =>
         reply.should.match /\*Set Current Community\*/
         reply.should.match /[1-3]: Community [1-3]/
-      #   @message = message('1')
-      #   App.route @message
-      # .then (reply) =>
-      #   p reply, @message
-      #   @message.parts.length.should.eq 1
+        @message = message('1')
+        App.route @message
+      .then (reply) =>
+        @message.parts.length.should.eq 1
 
 
 # TODO:
