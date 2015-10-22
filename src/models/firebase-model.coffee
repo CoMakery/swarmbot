@@ -45,9 +45,8 @@ class FirebaseModel
     else
       @fetch()
 
-  # TODO: should return the model instance
   save: Promise.promisify (cb) ->
-    @firebase().update @attributes, => cb(null, @)
+    @firebase().update @attributes, (error)=> cb error, @
 
   exists: ->
     @snapshot.exists()
