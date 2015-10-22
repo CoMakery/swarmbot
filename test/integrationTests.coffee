@@ -97,7 +97,21 @@ describe 'swarmbot', ->
         @message = message('1')
         App.route @message
       .then (reply) =>
-        @message.parts.length.should.eq 1
+        @message.parts[0].should.match /Community set to Community \d/
+
+  context 'proposals#show', ->
+    context 'setBounty', ->
+      it "doesn't show setBounty menu item for non-progenitor"
+      it "shows setBounty item for progenitors", ->
+        proposalId = 'Be Amazing'
+        new User(id: userId, state: 'proposals#show', stateData: {id: proposalId}).save()
+        .then (@user) => new DCO(id: 'my dco', project_owner: @user.get('id')).save()
+        .then (@dco) => @dco.createProposal(id: proposalId)
+        .then (@proposal) => App.route message()
+        .then (reply) =>
+          p reply
+          reply.should.match /\d: Set Bounty/
+
 
 
 # TODO:

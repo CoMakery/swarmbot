@@ -28,7 +28,7 @@ class ApplicationController
     promise
 
   redirect: (flashMessage)->
-    @msg.send flashMessage if flashMessage?
+    @msg.send flashMessage + "\n" if flashMessage?
     @msg.match = [] # call default action in the next state
     App.route(@msg)
 

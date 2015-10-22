@@ -13,7 +13,7 @@ class ShowView extends ZorkView
       data: { proposalId: @proposal.get('id') }
 
     @menu[i++] =
-      text: "Solutions",
+      text: "View All Solutions",
       transition: 'solutions'
       data: { proposalId: @proposal.get('id') }
 

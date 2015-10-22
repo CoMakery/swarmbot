@@ -18,6 +18,7 @@ class IndexView extends ZorkView
   render: ->
     """
     *#{if @proposal.solutions().isEmpty() then 'No solutions' else 'Solutions'} for #{@proposal.get 'id'}*
+
     #{@renderMenu()}
 
     To take an action, simply enter the number or letter at the beginning of the line.
