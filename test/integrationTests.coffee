@@ -146,4 +146,5 @@ describe 'swarmbot', ->
           @message = message '1000x'
           App.route @message
         .then (reply) =>
-          @message.parts[0].should.match /Please enter only numbers/
+          @message.parts[0].should.match /please enter only numbers/i
+          reply.should.match /Enter the bounty amount/

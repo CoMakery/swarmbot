@@ -54,12 +54,16 @@ class ProposalsStateController extends ApplicationController
   edit: (params) ->
     if @input?
       if not params.bounty?
-        params.bounty = @input
-        return @getDco()
-        .then (dco) -> Proposal.find params.proposalId, parent: dco
-        .then (proposal) -> proposal.set 'amount', params.bounty
-        .then => @msg.send "Bounty amount set to #{params.bounty}"
-        .then => @execute transition: 'exit', data: { id: params.proposalId }
+        if @input.match /^\d+$/
+          params.bounty = @input
+          return @getDco()
+          .then (dco) -> Proposal.find params.proposalId, parent: dco
+          .then (proposal) -> proposal.set 'amount', params.bounty
+          .then =>
+            @msg.send "Bounty amount set to #{params.bounty}\n"
+            @execute transition: 'exit', data: { id: params.proposalId }
+        else
+          @msg.send "For a bounty amount, please enter only numbers\n"
 
     params ?= {}
     @currentUser.set 'stateData', params
