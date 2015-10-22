@@ -1,10 +1,19 @@
 language: node_js
 node_js:
-  - '4.1'
-  - '4.0'
-  - '0.10'
-  - '0.11'
-  - '0.12'
+- '4.1'
+- '4.0'
+- '0.10'
+- '0.11'
+- '0.12'
 notifications:
   slack:
     secure: uJUVpwF6PjT6ry00CSoJOU6sR7jWaB7bqdb03ICitT4Wsisl8XHwHv66vmdiLeNex7NWqwrxG1F912cAORWXTPz5mGMXHZ/ZKKDlYvjEPBnbuPpTnsf1djADamUWE+PPuIKnfDiPjUN1DDoH6VVfnLskes37N/YvOZfjiZ+k4GPm4zAkhY+AZjefx77IAtRdFq3X5sfNkeNutxML5hdIFRkHFLlSPlB/fwOK9f4zgjQgsUZQ7GDlusUIWPsv0W97bgTZy0HGqkgkjxu2VaKWxmhYb8fVNpGE44TNbKwXY2uZcOMpdrAwmlZ7lZ6vQxenwS6fcydPK2y3bxdwpnZCTbxAuiECrWcQotvkj2dH+HYhVmAjAxg0bFEQ9Q2b8FWNZS6y8bdEK5meyo2fBmRE1gULhMVh/M4W6aYZE9ZT373lVN+xFZ1CRE+qhTI1ndOwTnorWNKZTHYoBFM8rso3H0/7+XoE7Z9d7uctWbJ2ntfepNLHxXV0L1puITkMedjzEFj6e2OeeLu0ffoPhgoRI8StAz+8b1gDHMJozJ8aIZCL46rDOmKbfH/ihCOrt22PGJix5FeC/MnsB0UnsWqovjT8t+D6112mjBl/vGFMNIfileookVr9z6IdfqrCk65Xdequ3NaQ+AaTWbGBtFe57w2W2NF7lKIBWB60Tq+TS98=
+deploy:
+  provider: heroku
+  api_key:
+    secure: sY/96zvVJTPscyckSCslYblHjQXkEzNyKTrtuKPTrgbUgF8AytC2+UTHbVVZg606OQ6B878IGJndm0HMgt9A4ra1OxeexD5wA1wtbafvu2P+B34W3lAkT0gtT/PGAAlc9RDkYDbweMFWdSljkKX+si+jSMcYHe1N0N2p247eZr42noy2CiopqTBDf6ecuw7v6zqq+OUTmbt6wtcMKn8ykUnu+wiwpGlpNIAjiDmvV6AYb1rRNmao6cRdNa/cNLLyP2bUzzOC8hTdk7mmENICE5Ie9rtrZy89XUD63ubg7XxIQQX4Ij9MWzc8NSr+0QHuWfzMajn2tYVU6YWGTvHRAaUnedAPHL6Wr+dyYCqeTWW22UUyembIBVguiircJFxGCkGJdRIcWhMuta2rmI7v6t6itd4eNQrgPBnckWU2yI2mUFbHHRPxV2WywYyp8iS6FDHWhBY9VupJBtEsm8ZOKbPcrpT7T2/wc60X3H6oeEP6KtHGl6TTRNmB7LhmJ+PFurS3dwJstDwyeZ0NjpvompCChU1lK1EbAQIlJqlLz77oz8Mrr/RsEyttDCR+cmPAN/Aum4iq2aWPWYTYD7oNuHK91XPwsY2b1CvF1OMieLKecZxIw94DQwr4g5mv8Nm+lqRmQs7Ne+BKRhz9eExllUga4Sic7rvbE5SLzw2SSPM=
+  app:
+    master: bounty-bot
+    dev: swarmbot-production
+  on:
+    repo: citizencode/swarmbot
