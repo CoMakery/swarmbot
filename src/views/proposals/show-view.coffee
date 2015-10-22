@@ -31,10 +31,12 @@ class ShowView extends ZorkView
     @menu.x = { text: "Exit", transition: 'exit' }
 
   render: ->
-    description = if isEmpty @proposal.get('description')
-      ''
-    else
-      "_#{@proposal.get('description')}_\n"
+    description = ''
+    if not isEmpty @proposal.get('description')
+      description += "_#{@proposal.get('description')}_\n"
+    if amount = @proposal.get 'amount'
+      description += "Bounty: #{amount}\n"
+
     """
     *Proposal: #{@proposal.get('id')}*
     #{description}
