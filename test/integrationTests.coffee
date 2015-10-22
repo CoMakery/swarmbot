@@ -109,7 +109,6 @@ describe 'swarmbot', ->
         .then (@dco) => @dco.createProposal(id: proposalId)
         .then (@proposal) => App.route message()
         .then (reply) =>
-          p reply
           reply.should.match /\d: Set Bounty/
 
 

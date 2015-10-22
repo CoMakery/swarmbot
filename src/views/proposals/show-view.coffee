@@ -21,6 +21,12 @@ class ShowView extends ZorkView
       text: "Submit Solution",
       transition: 'createSolution'
       data: { proposalId: @proposal.get('id') }
+
+    @menu[i++] =
+      text: "Set Bounty",
+      transition: 'setBounty'
+      data: { proposalId: @proposal.get('id') }
+
     @menu.x = { text: "Exit", transition: 'exit' }
 
   render: ->
