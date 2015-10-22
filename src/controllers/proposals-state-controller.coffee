@@ -59,7 +59,8 @@ class ProposalsStateController extends ApplicationController
         .then (dco) -> Proposal.find params.proposalId, parent: dco
         .then (proposal) -> proposal.set 'amount', params.bounty
         .then => @msg.send "Bounty amount set to #{params.bounty}"
-        # .then => @execute transition: 'exit'
+        .then => @execute transition: 'exit', data: { id: params.proposalId }
+
     params ?= {}
     @currentUser.set 'stateData', params
     @render new EditView params

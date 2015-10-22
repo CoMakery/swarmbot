@@ -135,3 +135,15 @@ describe 'swarmbot', ->
           reply.should.match /Proposal: Be Amazing/
           @proposal.fetch()
         .then (proposal) => proposal.get('amount').should.eq '1000'
+
+      it "doesn't set the bounty if you enter non-numbers", ->
+        user()
+        .then (@user) => dco()
+        .then (@dco) => proposal(@dco)
+        .then (@proposal) => App.route message()
+        .then (reply) => App.route message('4') # Set Bounty
+        .then (reply) =>
+          @message = message '1000x'
+          App.route @message
+        .then (reply) =>
+          @message.parts[0].should.match /Please enter only numbers/

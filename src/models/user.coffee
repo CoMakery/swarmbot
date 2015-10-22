@@ -42,18 +42,14 @@ class User extends FirebaseModel
       console.error "state machine error! event: #{event} // #{from} -> #{to} // args: #{pjson args} // error: #{errorCode}  #{errorMessage}"
 
     events: [
-      # { name: 'index', from: 'home', to: 'proposalsIndex' }
       { name: 'show', from: 'general#home', to: 'proposals#show' }
       { name: 'exit', from: 'proposals#show', to: 'general#home' }
-      # { name: 'exit', from: 'proposalsIndex', to: 'general#home' }
 
       { name: 'create', from: 'general#home', to: 'proposals#create' }
       { name: 'exit', from: 'proposals#create', to: 'general#home' }
 
       { name: 'setBounty', from: 'proposals#show', to: 'proposals#edit' }
-
-      # { name: 'create', from: 'proposalsIndex', to: 'proposals#create' }
-      # { name: 'show', from: 'proposalsIndex', to: 'proposals#show' }
+      { name: 'exit', from: 'proposals#edit', to: 'proposals#show' }
 
       { name: 'createSolution', from: 'proposals#show', to: 'solutions#create' }
 
