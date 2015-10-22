@@ -1,6 +1,6 @@
 controller# Swarmbot
 
-Latest build: [![Circle CI](https://circleci.com/gh/citizencode/swarmbot/tree/master.svg?style=svg)](https://circleci.com/gh/citizencode/swarmbot/tree/master)
+Latest build: [![Travis CI](https://travis-ci.org/citizencode/swarmbot.svg?branch=master)](https://travis-ci.org/citizencode/swarmbot)
 
 Issue board: [![Waffle](https://badge.waffle.io/citizencode/swarmbot.svg?label=ready&title=Ready)](http://waffle.io/citizencode/swarmbot)
 
