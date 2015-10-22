@@ -3,7 +3,7 @@
 ZorkView = require '../zork-view'
 
 class ShowView extends ZorkView
-  constructor: (@proposal) ->
+  constructor: (@proposal, { canSetBounty }) ->
     @menu = {}
     i = 1
 
@@ -22,10 +22,11 @@ class ShowView extends ZorkView
       transition: 'createSolution'
       data: { proposalId: @proposal.get('id') }
 
-    @menu[i++] =
-      text: "Set Bounty",
-      transition: 'setBounty'
-      data: { proposalId: @proposal.get('id') }
+    if canSetBounty
+      @menu[i++] =
+        text: "Set Bounty",
+        transition: 'setBounty'
+        data: { proposalId: @proposal.get('id') }
 
     @menu.x = { text: "Exit", transition: 'exit' }
 

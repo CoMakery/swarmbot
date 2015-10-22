@@ -81,13 +81,11 @@ describe 'swarmbot', ->
   context 'users#setDco', ->
     it "shows the list of dcos and sets current dco", ->
       i = 1
-      dcosPromise = Promise.all [
+      Promise.all [
         new DCO(id: "Community #{i++}").save()
         new DCO(id: "Community #{i++}").save()
         new DCO(id: "Community #{i++}").save()
       ]
-
-      dcosPromise
       .then (@dcos) => new User(id: userId, state: 'general#more').save()
       .then (@user) => App.route message()
       .then (reply) => App.route message('1')
@@ -101,20 +99,16 @@ describe 'swarmbot', ->
 
   context 'proposals#show', ->
     context 'setBounty', ->
-      it "shows setBounty item for progenitors", ->
+      it "shows setBounty item only for progenitors", ->
         proposalId = 'Be Amazing'
-        new User(id: userId, state: 'proposals#show', stateData: {id: proposalId}).save()
-        .then (@user) => new DCO(id: 'my dco', project_owner: @user.get('id')).save()
+        dcoId = 'my dco'
+        new User(id: userId, state: 'proposals#show', stateData: {id: proposalId}, current_dco: dcoId).save()
+        .then (@user) => new DCO(id: dcoId, project_owner: @user.get('id')).save()
         .then (@dco) => @dco.createProposal(id: proposalId)
         .then (@proposal) => App.route message()
         .then (reply) =>
           reply.should.match /\d: Set Bounty/
-
-      it "doesn't show setBounty menu item for non-progenitor", ->
-        proposalId = 'Be Amazing'
-        new User(id: userId, state: 'proposals#show', stateData: {id: proposalId}).save()
-        .then (@user) => new DCO(id: 'my dco', project_owner: 'someoneElse').save()
-        .then (@dco) => @dco.createProposal(id: proposalId)
-        .then (@proposal) => App.route message()
+          @dco.set 'project_owner', 'someoneElse'
+        .then (@dco) => App.route message()
         .then (reply) =>
           reply.should.not.match /\d: Set Bounty/

@@ -22,7 +22,8 @@ class ProposalsStateController extends ApplicationController
     promise = @getDco()
     .then (dco) => Proposal.find(proposalId, parent: dco)
     .then (proposal) =>
-      @render(new ShowView(proposal))
+      canSetBounty = (proposal.parent.get('project_owner') == @currentUser.get('id'))
+      @render(new ShowView(proposal, { canSetBounty }))
 
   upvote: (params) ->
     @getDco().then (dco) ->
