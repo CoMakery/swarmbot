@@ -14,8 +14,6 @@ The Swarmbot is based on [Hubot](http://hubot.github.com).
 It is configured by default to run with the Hubot Slack adaptor,
 but is easily configured to work anywhere Hubot works.
 
-![faq](https://cloud.githubusercontent.com/assets/589191/10590874/00e4781e-7668-11e5-92e8-af0738408ef9.png)
-
 ## Project Vision
 
 Swarmbot is a bot designed to help automate the creation of community
