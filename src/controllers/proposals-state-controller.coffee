@@ -51,18 +51,17 @@ class ProposalsStateController extends ApplicationController
     @currentUser.set 'stateData', data
     @render new CreateView data
 
-  edit: (params)->
-    amount = @input
-    if amount?
-      # validate that it is a number
-      @getDco()
-      .then (dco) ->
-        Proposal.find params.proposalId, parent: dco
-      .then (proposal) ->
-        proposal.set 'amount', amount
-      .then ->
-        @msg.send "Bounty amount set to #{amount}"
-
-      @render new EditView params
+  edit: (params) ->
+    if @input?
+      if not params.bounty?
+        params.bounty = @input
+        return @getDco()
+        .then (dco) -> Proposal.find params.proposalId, parent: dco
+        .then (proposal) -> proposal.set 'amount', params.bounty
+        .then => @msg.send "Bounty amount set to #{params.bounty}"
+        # .then => @execute transition: 'exit'
+    params ?= {}
+    @currentUser.set 'stateData', params
+    @render new EditView params
 
 module.exports = ProposalsStateController

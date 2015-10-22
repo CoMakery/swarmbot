@@ -132,4 +132,6 @@ describe 'swarmbot', ->
           App.route @message
         .then (reply) =>
           @message.parts[0].should.match /Bounty amount set to 1000/
-          @proposal.fetch().then (proposal)=> proposal.get('amount').should.eq 1000
+          reply.should.match /Proposal: Be Amazing/
+          @proposal.fetch()
+        .then (proposal) => proposal.get('amount').should.eq '1000'
