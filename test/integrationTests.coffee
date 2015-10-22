@@ -105,11 +105,13 @@ describe 'swarmbot', ->
         new User(id: userId, state: 'proposals#show', stateData: {id: proposalId}, current_dco: dcoId).save()
       dco = ->
         new DCO(id: dcoId, project_owner: userId).save()
+      proposal = (dco) ->
+        dco.createProposal(id: proposalId)
 
       it "shows setBounty item only for progenitors", ->
         user()
         .then (@user) => dco()
-        .then (@dco) => @dco.createProposal(id: proposalId)
+        .then (@dco) => proposal(@dco)
         .then (@proposal) => App.route message()
         .then (reply) =>
           reply.should.match /\d: Set Bounty/
@@ -121,10 +123,13 @@ describe 'swarmbot', ->
       it "sets the bounty", ->
         user()
         .then (@user) => dco()
-        .then (@dco) => App.route message()
+        .then (@dco) => proposal(@dco)
+        .then (@proposal) => App.route message()
         .then (reply) => App.route message('4') # Set Bounty
         .then (reply) =>
           reply.should.match /Enter the bounty amount/
-          App.route message '1000'
+          @message = message '1000'
+          App.route @message
         .then (reply) =>
-          reply.should.match /Bounty amount set to 1000/ 
+          @message.parts[0].should.match /Bounty amount set to 1000/
+          @proposal.fetch().then (proposal)=> proposal.get('amount').should.eq 1000

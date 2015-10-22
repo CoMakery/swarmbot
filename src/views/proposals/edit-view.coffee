@@ -1,7 +1,7 @@
 { log, p, pjson } = require 'lightsaber'
 
 class EditView
-  constructor: ->
+  constructor: (@data) ->
     @menu = {
       x: { text: "Exit", transition: 'exit' }
     }
