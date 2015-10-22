@@ -99,11 +99,16 @@ describe 'swarmbot', ->
 
   context 'proposals#show', ->
     context 'setBounty', ->
-      it "shows setBounty item only for progenitors", ->
-        proposalId = 'Be Amazing'
-        dcoId = 'my dco'
+      proposalId = 'Be Amazing'
+      dcoId = 'my dco'
+      user = ->
         new User(id: userId, state: 'proposals#show', stateData: {id: proposalId}, current_dco: dcoId).save()
-        .then (@user) => new DCO(id: dcoId, project_owner: @user.get('id')).save()
+      dco = ->
+        new DCO(id: dcoId, project_owner: userId).save()
+
+      it "shows setBounty item only for progenitors", ->
+        user()
+        .then (@user) => dco()
         .then (@dco) => @dco.createProposal(id: proposalId)
         .then (@proposal) => App.route message()
         .then (reply) =>
@@ -112,3 +117,11 @@ describe 'swarmbot', ->
         .then (@dco) => App.route message()
         .then (reply) =>
           reply.should.not.match /\d: Set Bounty/
+
+      it "sets the bounty", ->
+        user()
+        .then (@user) => dco()
+        .then (@dco) => App.route message()
+        .then (reply) => App.route message('4') # Set Bounty
+        .then (reply) =>
+          reply.should.match /Enter bounty amount/ # or something
