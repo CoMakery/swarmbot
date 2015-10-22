@@ -50,6 +50,8 @@ class User extends FirebaseModel
       { name: 'create', from: 'general#home', to: 'proposals#create' }
       { name: 'exit', from: 'proposals#create', to: 'general#home' }
 
+      { name: 'setBounty', from: 'proposals#show', to: 'proposals#edit' }
+
       # { name: 'create', from: 'proposalsIndex', to: 'proposals#create' }
       # { name: 'show', from: 'proposalsIndex', to: 'proposals#show' }
 

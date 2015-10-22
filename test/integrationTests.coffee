@@ -124,4 +124,7 @@ describe 'swarmbot', ->
         .then (@dco) => App.route message()
         .then (reply) => App.route message('4') # Set Bounty
         .then (reply) =>
-          reply.should.match /Enter bounty amount/ # or something
+          reply.should.match /Enter the bounty amount/
+          App.route message '1000'
+        .then (reply) =>
+          reply.should.match /Bounty amount set to 1000/ 

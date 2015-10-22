@@ -5,6 +5,7 @@ Proposal = require '../models/proposal'
 ShowView = require '../views/proposals/show-view'
 IndexView = require '../views/proposals/index-view'
 CreateView = require '../views/proposals/create-view'
+EditView = require '../views/proposals/edit-view'
 
 class ProposalsStateController extends ApplicationController
 
@@ -49,5 +50,8 @@ class ProposalsStateController extends ApplicationController
     data ?= {}
     @currentUser.set 'stateData', data
     @render new CreateView data
+
+  edit: ->
+    @render new EditView
 
 module.exports = ProposalsStateController
