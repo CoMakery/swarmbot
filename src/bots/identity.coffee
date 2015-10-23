@@ -24,39 +24,16 @@ inspect = require('util').inspect
 
 module.exports = (robot) ->
 
-  robot.enter (msg) ->
-    try
-      greet(msg, msg.message.user.name, true, robot)
-    catch error
+  # robot.enter (msg) ->
+  #   try
+  #     greet(msg, msg.message.user.name, true, robot)
+  #   catch error
 
-  robot.respond /help\s*/i, (msg) ->
-    log "MATCH 'help' "
-    try
-      greet(msg, msg.message.user.name, true, robot)
-    catch error
-
-
-  # Generic auto register
-  robot.respond /\s*/i, (msg) ->
-    new UsersController().register(msg)
-
-  # Deprecate register me now that we have auto-registration
-  # robot.respond /register me$/i, (msg) ->
-  #   new UsersController().register(msg)
-
-  robot.respond /register <?(\w+)>?$/i, (msg) ->
-    log "MATCH 'register' : #{msg.match[0]}"
-    btcAddress = msg.match[1]
-    new UsersController().registerBtc(msg, { btcAddress })
-
-  robot.respond /set community\s+(.+)\s*$/i, (msg) ->
-    log "MATCH 'set community' : #{msg.match[0]}"
-    community = msg.match[1]
-    new UsersController().setCommunity(msg, { community })
-
-  robot.respond /unset community\s*$/i, (msg) ->
-    log "MATCH 'unset community' : #{msg.match[0]}"
-    new UsersController().unsetCommunity(msg)
+  # robot.respond /help\s*/i, (msg) ->
+  #   log "MATCH 'help' "
+  #   try
+  #     greet(msg, msg.message.user.name, true, robot)
+  #   catch error
 
   robot.respond /about (.*)\s*$/i, (msg) ->
     log "MATCH 'about' : #{msg.match[0]}"
@@ -67,7 +44,6 @@ greet = (msg, username, privateMessage, robot) ->
 
   hubot_username = 'imgflip_hubot'
   hubot_password = 'imgflip_hubot'
-
 
   msg.http('https://api.imgflip.com/caption_image')
   .query

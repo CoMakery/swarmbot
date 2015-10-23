@@ -29,17 +29,11 @@
 #   hubot rate <dco_name> - Tells you how much the community's assets are trading at on any given day.
 
 {log, p, pjson} = require 'lightsaber'
-ResponseMessage = require './helpers/response_message'
-UserNormalizer  = require './helpers/user_normalizer'
 DcosController = require '../controllers/dcos-controller'
 swarmbot        = require '../models/swarmbot'
 DCO = require '../models/dco'
 
 module.exports = (robot) ->
-  robot.respond /list communities$/i, (msg) ->
-    log "MATCH 'list communities' : #{msg.match[0]}"
-    new DcosController().list(msg)
-
   robot.respond /my communities$/i, (msg) ->
     log "MATCH 'my communities' : #{msg.match[0]}"
     new DcosController().listMine(msg)
@@ -59,9 +53,7 @@ module.exports = (robot) ->
     dcoKey = msg.match[1]
     new DcosController().join(msg, { dcoKey })
 
-  robot.respond /how many communities\??$/i, (msg) ->
-    log "MATCH 'how many communities?' : #{msg.match[0]}"
-    new DcosController().count(msg)
+
 
   robot.respond /create community (.+)$/i, (msg) ->
     log "MATCH 'create community' : #{msg.match[0]}"

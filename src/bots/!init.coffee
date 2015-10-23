@@ -12,6 +12,7 @@ trustExchange = require('trust-exchange').instance
 swarmbot = require '../models/swarmbot'
 User = require '../models/user'
 global.App = require '../app'
+UsersController = require '../controllers/users-controller'
 
 # Promise.longStackTraces() # only in development mode. decreases performance 5x
 
@@ -40,8 +41,11 @@ InitBot = (robot) ->
     p pjson msg
     msg.send 'check the logs'
 
-module.exports = InitBot
+  # Generic auto register
+  robot.respond /.*/, (msg) ->
+    new UsersController().register(msg)
 
+module.exports = InitBot
 
 # On the msg object:
 # robot: [Object]

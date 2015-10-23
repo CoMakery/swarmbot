@@ -6,8 +6,8 @@
 
 # Hidden Commands:
 
-#   hubot x marks the what
-#   hubot hello
+#  hubot x marks the what
+#  hubot hello
 #  hubot fork me
 
 # Not in use:

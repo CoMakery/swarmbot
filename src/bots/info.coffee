@@ -30,24 +30,11 @@ module.exports = (robot) ->
   robot.respond /hello$/i, (msg) ->
     msg.send msg.random ["hello my friend", "hey buddy", "maybe it's time to swarm it?", "hi", "hello, it's good to see you, figuratively speaking"]
 
-  robot.respond /tag (.+) = (.+)$/i, (msg) ->
-    msg.match.shift()
-    [dcoKey, tag] = msg.match
-    # write tag to trust exchange
-
   robot.respond /fork me$/i, (msg) ->
     msg.send "https://github.com/citizencode/swarmbot"
 
   robot.respond /nyan$/i, (msg) ->
     msg.send "https://www.youtube.com/watch?v=QH2-TGUlwu4"
-
-  robot.respond /more commands$/i, (msg) ->
-    #TODO: This should pull from wizard or some other repo where all the comamnds live
-    msg.send "More commands:\ncreate community <community name>\nlist communities\njoin <community name>\nhow many communities?\nfork me\nabout me\nadmin commands"
-
-  robot.respond /admin commands$/i, (msg) ->
-    #TODO: This should pull from wizard or some other repo where all the comamnds live
-    msg.send "Admin commands work for owner only:\naward <bounty name> bounty to <username>"
 
   robot.respond /space kitty say$/i, (msg) ->
     authenticateUser(msg)
