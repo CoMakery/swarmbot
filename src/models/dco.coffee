@@ -28,22 +28,6 @@ class DCO extends FirebaseModel
       else
         Promise.reject(Promise.OperationalError("The community '#{dco.get('id')}' does not exist."))
 
-  #TODO: Get review from @dukedorje
-  # createSolution: ({ name, username, proposal }) ->
-  #   @fetchIfNeeded().then (dco)->
-  #     if dco.exists()
-  #       solution = new Solution({submitter: username },
-  #         parent: proposal
-  #         snapshot: dco.snapshot.child(Solution::urlRoot).child(name))
-  #
-  #       if solution.exists()
-  #         Promise.reject(Promise.OperationalError("Proposal '#{name}' already exists within #{dco.get('id')}."))
-  #       else
-  #         proposal.save()
-  #         #I tend to think this should be push instead of update, should we update firebase model?
-  #     else
-  #       Promise.reject(Promise.OperationalError("The community '#{dco.get('id')}' does not exist."))
-
   memberIds: ->
     keys @get('members')
 
@@ -52,7 +36,6 @@ class DCO extends FirebaseModel
 
   hasMember: (user) ->
     contains @memberIds(), user.get('id')
-
 
   addMember: (user) ->
     userId = user.get('id')
@@ -91,42 +74,6 @@ class DCO extends FirebaseModel
 
       return
 
-    # @dcoRef.on 'value', (snapshot) ->
-    #     assetId = snapshot.val().coluAssetId
-    #     fromAddress = snapshot.val().coluAssetAddress
-    #     toAddress = awardeeAddress
-    #     # p "awardee", awardeeAddress
-    #     # p "asset id", assetId
-    #     amountRef.on 'value', (snapshot) ->
-    #       amount = snapshot.val()
-    #       # p "proposal amount", amount
-    #       colu = swarmbot.colu()
-    #       # colu.on 'connect', ->
-    #         #colu.hdwallet.getAddress()
-    #       p args =
-    #         from: [ fromAddress ]
-    #         to: [
-    #           {
-    #             address: toAddress
-    #             assetId: assetId
-    #             amount: amount
-    #           }
-    #           ]
-    #       colu.sendAsset args, (err, body) ->
-    #         p "we made it", body
-    #         if err
-    #           p "err:", err
-    #           return console.error "Error: #{err}"
-    #         console.log 'Body: ', body
-    #           # cb null, "proposal successfully awarded"
-    #       # if colu.needToDiscover
-    #       # colu.init()
-
-
-  # getProposal: ({proposalName}) ->
-  #   proposalRef = @dcoRef.child "bounties/#{proposalName}"
-  #   new Proposal {proposalRef}
-
   sendAsset: ({amount, recipient}, cb) ->
     p "username", recipient.get('id')
     recipient.fetch().then (user) ->
@@ -137,79 +84,5 @@ class DCO extends FirebaseModel
         # @sendAssetToAddress amount, sendeeAddress
       else
         cb "user must register before receiving assets"
-
-  # sendAssetToAddress: ({amount, sendeeAddress}, cb) ->
-  #   @dcoRef.on 'value', (snapshot) ->
-  #
-  #       assetId = snapshot.val().coluAssetId
-  #       fromAddress = snapshot.val().coluAssetAddress
-  #       toAddress = sendeeAddress
-  #       # p "awardee", awardeeAddress
-  #       # p "asset id", assetId
-  #       amountRef.on 'value', (snapshot) ->
-  #         amount = snapshot.val()
-  #         # p "proposal amount", amount
-  #         colu = swarmbot.colu()
-  #         # colu.on 'connect', ->
-  #           #colu.hdwallet.getAddress()
-  #         p args =
-  #           from: [ fromAddress ]
-  #           to: [
-  #             {
-  #               address: toAddress
-  #               assetId: assetId
-  #               amount: amount
-  #             }
-  #             ]
-  #         colu.sendAsset args, (err, body) ->
-  #           p "we made it", body
-  #           if err
-  #             p "err:", err
-  #             return console.error "Error: #{err}"
-  #           console.log 'Body: ', body
-  #             # cb null, "proposal successfully awarded"
-  #         # if colu.needToDiscover
-  #         # colu.init()
-
-  # pledge: ({email, name}) ->
-  #
-	# 	# Store new pledge data
-	# 	ref = $firebase(new Firebase(firebaseUrl+'/pledges/'))
-	# 	ref.$push(pledgeData)
-  #
-	# 	# Create new user
-	# 	.then (storedPledgeData)->
-	# 		passphrase = User.generatePassphrase(6)
-	# 		encodedPassphrase = User.encodePassword passphrase
-	# 		userData =
-	# 			first_name: pledgeData.firstName
-	# 			last_name: pledgeData.lastName
-	# 			email: pledgeData.email
-	# 			organization: pledgeData.organization
-	# 			temporaryPassword: encodedPassphrase
-	# 			signupRequired: true
-	# 		User.create pledgeData.email, passphrase, userData
-	# 		.then (userData)->
-	# 			# Send user email with one-time password
-	# 			userCreatedNotification(passphrase)
-	# 			# Once user is created send email notification with pledge data to User
-	# 			pledgeToUserNotification()
-	# 			# Once user is created send email notification with pledge data to Admin
-	# 			pledgeToAdminNotification(storedPledgeData)
-	# 			# Send Swarm dividend to user
-	# 			User.getSwarmDividend(userData.uid)
-	# 			# Resolve or reject user create promise
-	# 			createUserDefer.resolve()
-	# 		.then null, (reason)->
-	# 			if reason.code == 'EMAIL_TAKEN'
-	# 				pledgeToUserNotification()
-	# 				pledgeToAdminNotification(storedPledgeData)
-	# 				User.getUidByEmail(pledgeData.email)
-	# 				.then (uid)->
-	# 					User.getSwarmDividend(uid)
-	# 					notifyUserCreatedDefer.resolve()
-	# 				createUserDefer.resolve()
-	# 			else
-	# 				createUserDefer.reject reason
 
 module.exports = DCO

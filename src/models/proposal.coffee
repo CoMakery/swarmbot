@@ -28,14 +28,6 @@ class Proposal extends FirebaseModel
   solutions: ->
     @_solutions ?= new SolutionCollection @snapshot.child('solutions'), parent: @
 
-  # getReputationScore: ->
-  #   return Promise.resolve(null) unless @get('id')?
-  #   Reputation.score @get('id'),
-  #     firebase: path: @firebasePath()
-  #   .then (score) =>
-  #     @attributes.reputationScore = score if score?
-  #     @
-
   ratings: ->
     @_ratings ?= new RatingCollection @snapshot.child('ratings'), parent: @
 
