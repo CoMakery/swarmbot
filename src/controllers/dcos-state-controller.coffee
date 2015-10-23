@@ -1,5 +1,5 @@
 { log, p, pjson } = require 'lightsaber'
-ApplicationController = require './state-application-controller'
+ApplicationController = require './application-state-controller'
 DcoCollection = require '../collections/dco-collection'
 
 class DcosStateController extends ApplicationController

@@ -1,7 +1,7 @@
 
 { log, p, pjson } = require 'lightsaber'
 { address } = require 'bitcoinjs-lib'
-ApplicationController = require './state-application-controller'
+ApplicationController = require './application-state-controller'
 DcoCollection = require '../collections/dco-collection'
 ShowView = require '../views/users/show-view'
 BtcView = require '../views/users/btc-view'

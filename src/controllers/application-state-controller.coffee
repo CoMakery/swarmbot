@@ -5,7 +5,7 @@ Promise = require 'bluebird'
 DCO = require '../models/dco'
 swarmbot = require '../models/swarmbot'
 
-class ApplicationController
+class ApplicationStateController
   constructor: (@msg) ->
     @currentUser = @msg.currentUser
 
@@ -48,4 +48,4 @@ class ApplicationController
   _showError: (error)->
     @msg.send error.message
 
-module.exports = ApplicationController
+module.exports = ApplicationStateController
