@@ -5,9 +5,6 @@ DCO = require '../models/dco'
 DcoCollection = require '../collections/dco-collection'
 
 class DcosController extends ApplicationController
-  list: (@msg) ->
-    DcoCollection.create().then (dcos) =>
-      @msg.send @textList dcos
 
   listMine: (@msg) ->
     DcoCollection.create().then (allDcos) =>
@@ -72,10 +69,6 @@ class DcosController extends ApplicationController
         @msg.reply "You are already a member of #{dco.get('id')}!"
 
     .error(@_showError)
-
-  count: (msg) ->
-    swarmbot.firebase().child('projects').once 'value', (snapshot)=>
-      msg.send "There are currently #{snapshot.numChildren()} communities."
 
   create: (@msg, { dcoKey }) ->
     owner = @currentUser().get('id')

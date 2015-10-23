@@ -45,3 +45,11 @@ module.exports = (robot) ->
     suggestion = msg.match[1]
     log "MATCH 'i'd like' : #{msg.match[0]}"
     new ProposalsController().swarmbotSuggestion(msg, { suggestion })
+
+
+  robot.respond /bounties$/i, (msg) ->
+    new ProposalsController().listApproved(msg, { })
+
+  robot.respond /proposals$/i, (msg) ->
+    new ProposalsController().list(msg, { })
+    msg.send "type 'upvote <proposal_name>' if you think it should be approved"

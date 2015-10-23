@@ -42,27 +42,6 @@ class UsersController extends ApplicationController
         user.set "slack_id", slackId
         # @msg.send "registered slack id"
 
-  registerBtc: (@msg, { btcAddress }) ->
-    try
-      address.fromBase58Check(btcAddress)
-    catch error
-      p error.message
-      return @msg.send "'#{btcAddress}' is an invalid bitcoin address.  #{error.message}"
-
-    user = @currentUser()
-    user.set "btc_address", btcAddress
-    @msg.send "BTC address #{btcAddress} registered."
-
-  setCommunity: (@msg, { community }) ->
-    user = @currentUser()
-    user.setDco community
-    @msg.send "Your current community is now '#{community}'."
-
-  unsetCommunity: (@msg) ->
-    user = @currentUser()
-    user.setDco null
-    @msg.send "Your current community has been unset."
-
   getInfo: (@msg, { slackUsername }) ->
     userPromise = if slackUsername == 'me'
       @currentUser().fetch()

@@ -45,14 +45,6 @@ class ProposalsController extends ApplicationController
 
     .error(@_showError)
 
-  show: (@msg, { proposalName, @community }) ->
-    @getDco().then (dco) =>
-      proposal = new Proposal({id: proposalName}, parent: dco)
-      proposal.fetch().then (proposal) =>
-        msgs = for k, v of proposal.attributes
-          "#{k} : #{v}" unless v instanceof Object
-        @msg.send msgs.join("\n")
-
 
   award: (@msg, { proposalName, awardee, dcoKey }) ->
     @community = dcoKey
@@ -84,49 +76,6 @@ class ProposalsController extends ApplicationController
         p "#{@currentUser().get('id')} trying to award bounty within dco #{dco.get('id')}"
         # @msg.send "Sorry, you don't have sufficient trust in this community to award this proposal."
         @msg.send "Sorry, you must be the progenitor of this DCO to award proposals."
-
-  create: (@msg, { proposalName, amount, @community }) ->
-    @getDco()
-    .then (@dco) =>
-      @dco.createProposal({ name: proposalName, amount })
-    .then =>
-      @msg.send "Proposal '#{proposalName}' created in community '#{@dco.get('id')}'"
-
-    .error(@_showError)
-
-  #TODO: possibly incorporate some gatekeeping here (i.e. only members of a DCO can vote on the output)
-  rate: (@msg, { @community, proposalName, rating }) ->
-    @getDco().then (dco) ->
-      user = @currentUser()
-
-      Proposal.find(proposalName, parent: dco).then (proposal) =>
-        unless proposal.exists()
-          return @msg.send "Could not find the proposal '#{proposal.get('id')}'. Please verify that it exists."
-
-        claim = Claim.put {
-          source: user.get('id')
-          target: proposal.get('id')
-          value: rating * 0.01  # convert to percentage
-        }, {
-          firebase: path: "projects/#{dco.get('id')}/proposals/#{proposalName}/ratings"
-        }
-        claim.then (messages) =>
-          replies = for message in messages
-            "Rating saved to #{message}"
-          p replies.join "\n"
-
-          if rating > 50
-            @msg.send "You upvoted '#{proposal.get('id')}'"
-          else if rating < 50
-            @msg.send "You downvoted '#{proposal.get('id')}'"
-          else
-            @msg.send "You rated '#{proposal.get('id')}' #{rating}%"
-
-        .catch (error) =>
-          @msg.send "Rating failed: #{error}"
-          p "#{error}" # TODO: re-throw exception to show stacktrace
-    .error(@_showError)
-
 
   swarmbotSuggestion: (@msg, { suggestion }) ->
     DCO.find(swarmbot.feedbackDcokey)
