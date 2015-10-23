@@ -2,6 +2,7 @@
 #   Informational and help related commands
 #
 # Commands:
+# hubot award <bounty name> to <username>
 
 # Hidden Commands:
 

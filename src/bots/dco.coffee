@@ -2,15 +2,14 @@
 #   Create a community
 #
 # Commands:
+#   hubot create community <community name>
+#   hubot list communities
+#   hubot join <community name>
 #
 
 # Hidden Commands:
-#   hubot list communities
 #   hubot my communities
 #   hubot find community <start of community name>
-#   hubot create community <community name>
-#   hubot join <community name>
-#   hubot how many communities?
 #   hubot list members [of <community name>]
 
 # Available but not displayed in help
