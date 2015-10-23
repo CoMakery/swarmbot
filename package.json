@@ -14,7 +14,7 @@
     "dev": "bin/hubot --name s",
     "lint": "coffeelint --quiet src test",
     "start": "bin/hubot --adapter slack",
-    "test": "mocha"
+    "test": "mocha && npm run lint"
   },
   "devDependencies": {
     "chai": "^3.2.0",
