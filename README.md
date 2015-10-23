@@ -4,6 +4,8 @@ Latest build: [![Travis CI](https://travis-ci.org/citizencode/swarmbot.svg?branc
 
 Issue board: [![Waffle](https://badge.waffle.io/citizencode/swarmbot.svg?label=ready&title=Ready)](http://waffle.io/citizencode/swarmbot)
 
+Issue board: [![Waffle](https://badge.waffle.io/citizencode/swarmbot.svg?label=on%20deck&title=On%20Deck)](http://waffle.io/citizencode/swarmbot)
+
 ## Current Implementation Status
 
 This project is in very early stages, and not ready for production use.
@@ -38,7 +40,7 @@ In more detail:
 
 ## For Example
 
-~~This transcript is intended to give a concrete idea of the things you can do with Swarmbot.  Note that the functionality shown below is a work in progress.  Comments and feature requests are welcome.~~
+~~This transcript is intended to give a concrete idea of the things you can do with Swarmbot.  Note that the functionality shown below is a work in progress.  ~~
 
 Transcript for new functionality coming soon.
 
