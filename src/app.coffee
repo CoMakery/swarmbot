@@ -23,10 +23,11 @@ class App
       for [pattern, cb] in @responses
         if match = input.match pattern
           msg.match = msg.message.match(pattern)
-          return cb(msg)
+          return new Promise (resolve) =>
+            cb(msg)
+            resolve('')
 
     # otherwise do Zork MVC routing:
-
     @setCurrentUser msg
     msg.currentUser.fetch()
     .then (user) =>

@@ -23,19 +23,19 @@ Instagram = require('instagram-node-lib')
 
 module.exports = (robot) ->
 
-  robot.respond /x marks the what$/i, (msg) ->
+  App.respond /x marks the what$/i, (msg) ->
     msg.send "https://www.youtube.com/watch?v=SFY-Kg1OqAk"
 
-  robot.respond /hello$/i, (msg) ->
+  App.respond /hello$/i, (msg) ->
     msg.send msg.random ["hello my friend", "hey buddy", "maybe it's time to swarm it?", "hi", "hello, it's good to see you, figuratively speaking"]
 
-  robot.respond /fork me$/i, (msg) ->
+  App.respond /fork me$/i, (msg) ->
     msg.send "https://github.com/citizencode/swarmbot"
 
-  robot.respond /nyan$/i, (msg) ->
+  App.respond /nyan$/i, (msg) ->
     msg.send "https://www.youtube.com/watch?v=QH2-TGUlwu4"
 
-  robot.respond /space kitty say$/i, (msg) ->
+  App.respond /space kitty say$/i, (msg) ->
     authenticateUser(msg)
     count = 1
     Instagram.tags.recent

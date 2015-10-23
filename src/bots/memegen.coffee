@@ -39,7 +39,7 @@ module.exports = (robot) ->
     setupResponder robot, meme
 
 setupResponder = (robot, meme) ->
-  robot.respond meme.regex, (msg) ->
+  App.respond meme.regex, (msg) ->
     generateMeme msg, meme.template_id, msg.match[1], msg.match[2]
 
 generateMeme = (msg, template_id, text0, text1) ->

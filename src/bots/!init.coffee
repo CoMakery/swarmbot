@@ -26,7 +26,7 @@ trustExchange.configure
 
 InitBot = (robot) ->
   App.robot = robot
-  
+
   throw new Error if robot.whose? || robot.currentUser?
   robot.whose = (msg) -> "slack:#{msg.message.user.id}"
 
@@ -34,18 +34,18 @@ InitBot = (robot) ->
 
   # State-based message routing
   robot.respond /(.*)/, (msg) ->
+    autoRegisterUser msg
     App.route(msg).then (response) -> msg.send response
 
   robot.router.post '/hubot/chatsecrets/:room', (req, res) ->
     p "HTTP webhook received", req, res
 
-  robot.respond /what data\?$/i, (msg) ->
+  App.respond /what data\?$/i, (msg) ->
     p pjson msg
     msg.send 'check the logs'
 
   # Generic auto register
-  robot.respond /.*/, (msg) ->
-    new UsersController().register(msg)
+  autoRegisterUser = (msg) -> new UsersController().register(msg)
 
 module.exports = InitBot
 

@@ -28,13 +28,13 @@ module.exports = (robot) ->
   #     greet(msg, msg.message.user.name, true, robot)
   #   catch error
 
-  # robot.respond /help\s*/i, (msg) ->
+  # App.respond /help\s*/i, (msg) ->
   #   log "MATCH 'help' "
   #   try
   #     greet(msg, msg.message.user.name, true, robot)
   #   catch error
 
-  robot.respond /about (.*)\s*$/i, (msg) ->
+  App.respond /about (.*)\s*$/i, (msg) ->
     log "MATCH 'about' : #{msg.match[0]}"
     slackUsername = msg.match[1]
     new UsersController().getInfo(msg, { slackUsername })
@@ -81,10 +81,10 @@ greet = (msg, username, privateMessage, robot) ->
       msg.send helpMessage
 
 # Not sure, this may work in slack, not sure about
-#  robot.respond /register?.*/i, (msg) ->
+#  App.respond /register?.*/i, (msg) ->
 #    robot.reply 'some msg'?
 
-# robot.respond /register email (.+)$/i, (msg) ->
+# App.respond /register email (.+)$/i, (msg) ->
 #   msg.match.shift()
 #   [emailAddress] = msg.match
 #   activeUser = robot.whose msg

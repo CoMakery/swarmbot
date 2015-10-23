@@ -39,16 +39,16 @@ module.exports = (robot) ->
     log "MATCH 'i'd like' : #{pjson msg.match}"
     new ProposalsController().swarmbotSuggestion(msg, { suggestion })
 
-  robot.respond /:\+1:\s+(.+)\s*$/i, (msg) ->
+  App.respond /:\+1:\s+(.+)\s*$/i, (msg) ->
     [all, proposalName] = msg.match
     rating = 95
     community = undefined
     log "MATCH 'upvote' : #{all}"
     new ProposalsController().rate(msg, { community, proposalName, rating })
 
-  robot.respond /bounties$/i, (msg) ->
+  App.respond /bounties$/i, (msg) ->
     new ProposalsController().listApproved(msg, { })
 
-  robot.respond /proposals$/i, (msg) ->
+  App.respond /proposals$/i, (msg) ->
     new ProposalsController().list(msg, { })
     msg.send "type 'upvote <proposal_name>' if you think it should be approved"
