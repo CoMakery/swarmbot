@@ -11,7 +11,8 @@ swarmbot = require '../src/models/swarmbot'
 DCO = require '../src/models/dco'
 User = require '../src/models/user'
 
-process.env.FIREBASE_URL = 'ws://127.0.1:5000'
+MOCK_FIREBASE_ADDRESS = '127.0.1' # strange host name needed by testing framework
+process.env.FIREBASE_URL = "ws://#{MOCK_FIREBASE_ADDRESS}:5000"
 
 userId = "slack:1234"
 message = (input) ->
@@ -24,7 +25,7 @@ message = (input) ->
 
 describe 'swarmbot', ->
   before ->
-    @firebaseServer = new FirebaseServer 5000, '127.0.1', {}
+    @firebaseServer = new FirebaseServer 5000, MOCK_FIREBASE_ADDRESS, {}
 
   beforeEach (done) ->
     swarmbot.firebase().remove done
@@ -39,7 +40,7 @@ describe 'swarmbot', ->
   context 'general#home', ->
     context 'with no proposals', ->
       it "shows the default community", ->
-        App.route message('help')
+        App.route message('')
         .then (reply) ->
           reply.should.match /\*No proposals in swarmbot-lovers\*/
           reply.should.match /1: Create a proposal/

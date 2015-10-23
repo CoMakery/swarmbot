@@ -4,4 +4,6 @@ class ZorkView
       "#{i}: #{menuItem.text}"
     lines.join("\n")
 
+  bold: (text) -> "*#{text}*"
+
 module.exports = ZorkView

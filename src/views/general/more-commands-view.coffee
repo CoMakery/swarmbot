@@ -7,6 +7,7 @@ class MoreCommandsView extends ZorkView
     @menu = {}
     @menu[i++] = { text: "Set community", transition: 'setDco' }
     @menu[i++] = { text: "My account", transition: 'myAccount' }
+    @menu[i++] = { text: "Advanced commands", command: 'advanced' }
     @menu.x    = { text: "Exit", transition: 'exit' }
 
   render: ->

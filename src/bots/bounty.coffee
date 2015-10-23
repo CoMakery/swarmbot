@@ -3,7 +3,6 @@
 #
 # Commands:
 #   hubot I'd like <suggested improvement for swarmbot>
-#   hubot upvote <proposal name>
 
 # Hidden Commands:
 #   hubot create proposal <proposal name> for <number of coins> [in <community>]
@@ -34,18 +33,18 @@ DCO = require '../models/dco'
 ProposalsController = require '../controllers/proposals-controller'
 
 module.exports = (robot) ->
+
+  App.respond /i(?:[’']d| would) like\s+(.+)$/i, (msg) ->
+    suggestion = msg.match[1]
+    log "MATCH 'i'd like' : #{pjson msg.match}"
+    new ProposalsController().swarmbotSuggestion(msg, { suggestion })
+
   robot.respond /:\+1:\s+(.+)\s*$/i, (msg) ->
     [all, proposalName] = msg.match
     rating = 95
     community = undefined
     log "MATCH 'upvote' : #{all}"
     new ProposalsController().rate(msg, { community, proposalName, rating })
-
-  robot.respond /i(?:[’']d| would) like\s+(.+)$/i, (msg) ->
-    suggestion = msg.match[1]
-    log "MATCH 'i'd like' : #{msg.match[0]}"
-    new ProposalsController().swarmbotSuggestion(msg, { suggestion })
-
 
   robot.respond /bounties$/i, (msg) ->
     new ProposalsController().listApproved(msg, { })

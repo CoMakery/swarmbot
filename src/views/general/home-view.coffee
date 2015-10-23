@@ -15,8 +15,10 @@ class HomeView extends ZorkView
     @menu[i++] = { text: "More commands", transition: 'more' }
 
   render: ->
+    headline = if @proposals.isEmpty() then 'No proposals' else 'Proposals'
+    headline += " in #{@dco.get 'id'}"
     """
-    *#{if @proposals.isEmpty() then 'No proposals' else 'Proposals'} in #{@dco.get 'id'}*
+    #{@bold headline}
     #{@renderMenu()}
 
     To take an action, simply enter the number or letter at the beginning of the line.

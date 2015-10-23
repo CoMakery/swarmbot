@@ -25,6 +25,8 @@ trustExchange.configure
     firebase: swarmbot.firebase()
 
 InitBot = (robot) ->
+  App.robot = robot
+  
   throw new Error if robot.whose? || robot.currentUser?
   robot.whose = (msg) -> "slack:#{msg.message.user.id}"
 

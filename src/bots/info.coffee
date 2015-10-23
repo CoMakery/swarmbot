@@ -3,7 +3,6 @@
 #
 # Commands:
 #  hubot space kitty say
-#  hubot more commands
 
 # Hidden Commands:
 

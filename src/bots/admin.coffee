@@ -2,7 +2,6 @@
 #   Informational and help related commands
 #
 # Commands:
-#  hubot admin commands
 
 # Hidden Commands:
 
@@ -25,6 +24,7 @@ swarmbot = require '../models/swarmbot'
 Proposal = require '../models/proposal'
 DCO = require '../models/dco'
 AdminController = require '../controllers/admin-controller'
+ProposalsController = require '../controllers/proposals-controller'
 
 module.exports = (robot) ->
 

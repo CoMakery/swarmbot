@@ -1,4 +1,5 @@
 { log, p, pjson } = require 'lightsaber'
+Promise = require 'bluebird'
 debug = require('debug')('app')
 User = require './models/user'
 controllers =
@@ -9,7 +10,23 @@ controllers =
   solutions: require './controllers/solutions-state-controller'
 
 class App
+  App.responses = []
+
+  @respond: (pattern, cb) ->
+    @responses.push [pattern, cb]
+
   @route: (msg) ->
+
+    # old commands:
+
+    if input = msg.match[1]
+      for [pattern, cb] in @responses
+        if match = input.match pattern
+          msg.match = msg.message.match(pattern)
+          return cb(msg)
+
+    # otherwise do Zork MVC routing:
+
     @setCurrentUser msg
     msg.currentUser.fetch()
     .then (user) =>

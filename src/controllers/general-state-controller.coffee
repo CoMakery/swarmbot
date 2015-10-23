@@ -4,6 +4,7 @@ ProposalCollection = require '../collections/proposal-collection'
 Proposal = require '../models/proposal'
 HomeView = require '../views/general/home-view'
 MoreCommandsView = require '../views/general/more-commands-view'
+AdvancedCommandsView = require '../views/general/advanced-commands-view'
 
 class GeneralStateController extends ApplicationController
 
@@ -20,7 +21,9 @@ class GeneralStateController extends ApplicationController
       @render new HomeView dco, proposals
     .error(@_showError)
 
-  more: ->
-    @render new MoreCommandsView
+  more: -> @render new MoreCommandsView
+
+  advanced: ->
+    @render new AdvancedCommandsView @msg.robot
 
 module.exports = GeneralStateController

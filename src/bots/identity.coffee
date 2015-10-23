@@ -2,7 +2,6 @@
 #   User / account managemnet
 #
 # Commands:
-#   hubot register <btc_address>
 
 # Hidden Commands:
 
