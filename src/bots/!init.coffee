@@ -27,6 +27,8 @@ InitBot = (robot) ->
   throw new Error if robot.whose? || robot.currentUser?
   robot.whose = (msg) -> "slack:#{msg.message.user.id}"
 
+  robot.pm = (msg, text) -> robot.messageRoom msg.message.user.name, text
+
   # State-based message routing
   robot.respond /(.*)/, (msg) ->
     App.route(msg).then (response) -> msg.send response

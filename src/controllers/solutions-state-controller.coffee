@@ -16,7 +16,6 @@ class SolutionsStateController extends ApplicationController
       @render new IndexView(proposal)
 
   show: (params) ->
-    p 'params', params
     # TODO: Is there a way to do this where we don't have to query the whole DCO every time?
     @getDco()
     .then (dco)=>
@@ -33,15 +32,13 @@ class SolutionsStateController extends ApplicationController
         data.id = @input
       else if not data.link?
         data.link = @input
-        @getDco()
+        return @getDco()
         .then (dco) => Proposal.find data.proposalId, parent: dco
         .then (proposal) => proposal.createSolution data
         .then (solution) =>
-          @msg.send "Your solution has been submitted and will be reviewed!"
-          # go back to proposals#show
-          @execute transition: 'exit', data: {proposalId: data.proposalId}
+          @msg.send "Your solution has been submitted and will be reviewed!\n"
+          @execute transition: 'exit', data: { proposalId: data.proposalId }
 
-    # data ?= {}
     @currentUser.set 'stateData', data
 
     @render(new CreateView(data))
