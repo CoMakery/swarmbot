@@ -21,11 +21,11 @@ MembersController = require '../controllers/members-controller'
 module.exports = (robot) ->
 
   robot.respond /bounties$/i, (msg) ->
-      new ProposalsController().listApproved(msg, { })
+    new ProposalsController().listApproved(msg, { })
 
   robot.respond /proposals$/i, (msg) ->
-      new ProposalsController().list(msg, { })
-      msg.send "type 'upvote <proposal_name>' if you think it should be approved"
+    new ProposalsController().list(msg, { })
+    msg.send "type 'upvote <proposal_name>' if you think it should be approved"
 
   robot.respond /list\s+(all)?\s*proposals(?: in (.+))?\s*$/i, (msg) ->
     [all, showAll, community] = msg.match

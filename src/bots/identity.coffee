@@ -65,59 +65,59 @@ module.exports = (robot) ->
 
 greet = (msg, username, privateMessage, robot) ->
 
-    hubot_username = 'imgflip_hubot'
-    hubot_password = 'imgflip_hubot'
+  hubot_username = 'imgflip_hubot'
+  hubot_password = 'imgflip_hubot'
 
 
-    msg.http('https://api.imgflip.com/caption_image')
-    .query
-        template_id: 6624009,
-        username: hubot_username,
-        password: hubot_password,
-        text0: "hello " + username,
-        text1: "Im Nyan"
-    .post() (error, res, body) ->
-      if error
-        p "I got an error when talking to imgflip:", inspect(error)
-        msg.reply "Hello I'm Nyan"
-        return
+  msg.http('https://api.imgflip.com/caption_image')
+  .query
+    template_id: 6624009,
+    username: hubot_username,
+    password: hubot_password,
+    text0: "hello " + username,
+    text1: "Im Nyan"
+  .post() (error, res, body) ->
+    if error
+      p "I got an error when talking to imgflip:", inspect(error)
+      msg.reply "Hello I'm Nyan"
+      return
 
-      result = JSON.parse(body)
-      success = result.success
-      errorMessage = result.error_message
+    result = JSON.parse(body)
+    success = result.success
+    errorMessage = result.error_message
 
-      if not success
-        msg.reply "Imgflip API request failed: #{errorMessage}"
-        p "FAIL"
-        return
+    if not success
+      msg.reply "Imgflip API request failed: #{errorMessage}"
+      p "FAIL"
+      return
 
-      helpMessage = "Type 'bounties' to see active bounties\n"
-      helpMessage += "Type 'register <my_bitcoin_address> to start getting bounties\n"
-      helpMessage += "Type 'proposals' to see proposals\n"
-      helpMessage += "Type 'propose <proposal_name> for <number> bucks' to create a new proposal\n"
-      helpMessage += "Type 'more commands' to see other suggested commands\n"
+    helpMessage = "Type 'bounties' to see active bounties\n"
+    helpMessage += "Type 'register <my_bitcoin_address> to start getting bounties\n"
+    helpMessage += "Type 'proposals' to see proposals\n"
+    helpMessage += "Type 'propose <proposal_name> for <number> bucks' to create a new proposal\n"
+    helpMessage += "Type 'more commands' to see other suggested commands\n"
 
-      if (privateMessage)
-        robot.messageRoom username, result.data.url
-        # robot.messageRoom msg.message.user.name, "Hello I'm Nyan!"
-        robot.messageRoom username, helpMessage
-      else
-        msg.send result.data.url
-        msg.send helpMessage
+    if (privateMessage)
+      robot.messageRoom username, result.data.url
+      # robot.messageRoom msg.message.user.name, "Hello I'm Nyan!"
+      robot.messageRoom username, helpMessage
+    else
+      msg.send result.data.url
+      msg.send helpMessage
 
-  # Not sure, this may work in slack, not sure about
-  #  robot.respond /register?.*/i, (msg) ->
-  #    robot.reply 'some msg'?
+# Not sure, this may work in slack, not sure about
+#  robot.respond /register?.*/i, (msg) ->
+#    robot.reply 'some msg'?
 
-  # robot.respond /register email (.+)$/i, (msg) ->
-  #   msg.match.shift()
-  #   [emailAddress] = msg.match
-  #   activeUser = robot.whose msg
-  #   user = User.find activeUser
-  #   user.register "email_address", emailAddress
+# robot.respond /register email (.+)$/i, (msg) ->
+#   msg.match.shift()
+#   [emailAddress] = msg.match
+#   activeUser = robot.whose msg
+#   user = User.find activeUser
+#   user.register "email_address", emailAddress
 
-    #TODO: would  be nice to send out an outbound email notification that then allows them to setup a BTC wallet
-    # something like the Mandril usage we have in the Swarm API
-    # https://swarm-rome.herokuapp.com/messages/send-template
+  #TODO: would  be nice to send out an outbound email notification that then allows them to setup a BTC wallet
+  # something like the Mandril usage we have in the Swarm API
+  # https://swarm-rome.herokuapp.com/messages/send-template
 
-    # msg.send "Email registered"
+  # msg.send "Email registered"

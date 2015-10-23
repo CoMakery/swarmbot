@@ -28,7 +28,7 @@ class ResponseMessage
     message = "Currencies:\n"
 
     for currency in currencies
-        message += "`#{currency.name}` #{currency.unites} coins"
+      message += "`#{currency.name}` #{currency.unites} coins"
 
     message
 

@@ -56,11 +56,11 @@ generateMeme = (msg, template_id, text0, text1) ->
 
   msg.http('https://api.imgflip.com/caption_image')
   .query
-      template_id: template_id,
-      username: username,
-      password: password,
-      text0: text0,
-      text1: text1
+    template_id: template_id,
+    username: username,
+    password: password,
+    text0: text0,
+    text1: text1
   .post() (error, res, body) ->
     if error
       msg.reply "I got an error when talking to imgflip:", inspect(error)

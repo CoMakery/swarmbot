@@ -56,7 +56,7 @@ module.exports = (robot) ->
       name: 'spacekittysay'
       count: count
       complete: (data) ->
-       for item in data
+        for item in data
           msg.send item['images']['standard_resolution']['url']
 
 authenticateUser = (msg) ->

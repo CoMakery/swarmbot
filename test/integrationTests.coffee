@@ -3,7 +3,7 @@ Promise = require 'bluebird'
 chai = require 'chai'
 chaiAsPromised = require("chai-as-promised")
 chai.should()
-chai.use(chaiAsPromised);
+chai.use(chaiAsPromised)
 debug = require('debug')('test')
 FirebaseServer = require('firebase-server')
 global.App = require '../src/app'
