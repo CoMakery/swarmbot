@@ -12,12 +12,14 @@
   "scripts": {
     "colu": "colu",
     "dev": "bin/hubot --name s",
+    "lint": "coffeelint --quiet src test",
     "start": "bin/hubot --adapter slack",
     "test": "mocha"
   },
   "devDependencies": {
     "chai": "^3.2.0",
     "chai-as-promised": "^5.1.0",
+    "coffeelint": "^1.13.0",
     "firebase-server": "^0.3.1",
     "mocha": "^2.2.5"
   },
