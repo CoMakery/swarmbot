@@ -2,8 +2,6 @@ controller# Swarmbot
 
 Latest build: [![Travis CI](https://travis-ci.org/citizencode/swarmbot.svg?branch=master)](https://travis-ci.org/citizencode/swarmbot)
 
-Issue board: [![Waffle](https://badge.waffle.io/citizencode/swarmbot.svg?label=ready&title=Ready)](http://waffle.io/citizencode/swarmbot)
-
 Issue board: [![Waffle](https://badge.waffle.io/citizencode/swarmbot.svg?label=on%20deck&title=On%20Deck)](http://waffle.io/citizencode/swarmbot)
 
 ## Current Implementation Status
@@ -40,7 +38,7 @@ In more detail:
 
 ## For Example
 
-~~This transcript is intended to give a concrete idea of the things you can do with Swarmbot.  Note that the functionality shown below is a work in progress.  ~~
+~~This transcript is intended to give a concrete idea of the things you can do with Swarmbot.  Note that the functionality shown below is a work in progress.~~
 
 Transcript for new functionality coming soon.
 
