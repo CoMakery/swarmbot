@@ -1,4 +1,4 @@
-controller# Swarmbot
+# Swarmbot
 
 Latest build: [![Travis CI](https://travis-ci.org/citizencode/swarmbot.svg?branch=master)](https://travis-ci.org/citizencode/swarmbot)
 
