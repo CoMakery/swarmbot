@@ -4,16 +4,6 @@ Latest build: [![Travis CI](https://travis-ci.org/citizencode/swarmbot.svg?branc
 
 Issue board: [![Waffle](https://badge.waffle.io/citizencode/swarmbot.svg?label=on%20deck&title=On%20Deck)](http://waffle.io/citizencode/swarmbot)
 
-## Current Implementation Status
-
-This project is in very early stages, and not ready for production use.
-It is being actively developed by [Citizen Code](http://citizencode.io/).
-We welcome [feature requests and pull requests](https://github.com/citizencode/swarmbot/issues).
-
-The Swarmbot is based on [Hubot](http://hubot.github.com).
-It is configured by default to run with the Hubot Slack adaptor,
-but is easily configured to work anywhere Hubot works.
-
 ## Project Vision
 
 Swarmbot is a bot designed to help automate the creation of community
@@ -35,6 +25,16 @@ In more detail:
 1. Community representatives votes on whether or not to award the bounty to this
    community member
 1. If the bounty work is approved, the member is payed in community coins
+
+## Current Implementation Status
+
+This project is in very early stages, and not ready for production use.
+It is being actively developed by [Citizen Code](http://citizencode.io/).
+We welcome [feature requests and pull requests](https://github.com/citizencode/swarmbot/issues).
+
+The Swarmbot is based on [Hubot](http://hubot.github.com).
+It is configured by default to run with the Hubot Slack adaptor,
+but is easily configured to work anywhere Hubot works.
 
 ## For Example
 
