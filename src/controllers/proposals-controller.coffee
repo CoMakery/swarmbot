@@ -77,6 +77,14 @@ class ProposalsController extends ApplicationController
         # @msg.send "Sorry, you don't have sufficient trust in this community to award this proposal."
         @msg.send "Sorry, you must be the progenitor of this DCO to award proposals."
 
+  create: (@msg, { proposalName, amount, @community }) ->
+    @getDco()
+    .then (@dco) =>
+      @dco.createProposal({ name: proposalName, amount })
+    .then =>
+      @msg.send "Proposal '#{proposalName}' created in community '#{@dco.get('id')}'"
+    .error(@_showError)
+
   swarmbotSuggestion: (@msg, { suggestion }) ->
     DCO.find(swarmbot.feedbackDcokey)
     .then (dco) =>
