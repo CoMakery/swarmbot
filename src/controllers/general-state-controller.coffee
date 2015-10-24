@@ -24,6 +24,7 @@ class GeneralStateController extends ApplicationController
   more: -> @render new MoreCommandsView
 
   advanced: ->
-    @render new AdvancedCommandsView @msg.robot
+    view = new AdvancedCommandsView @msg.robot
+    view.render()
 
 module.exports = GeneralStateController
