@@ -80,7 +80,7 @@ class ProposalsController extends ApplicationController
   create: (@msg, { proposalName, amount, @community }) ->
     @getDco()
     .then (@dco) =>
-      @dco.createProposal({ name: proposalName, amount })
+      @dco.createProposal({ id: proposalName, amount })
     .then =>
       @msg.send "Proposal '#{proposalName}' created in community '#{@dco.get('id')}'"
     .error(@_showError)
