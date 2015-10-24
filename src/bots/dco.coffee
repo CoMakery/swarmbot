@@ -3,7 +3,6 @@
 #
 # Commands:
 #   hubot create community <community name>
-#   hubot list communities
 #   hubot join <community name>
 #
 
@@ -11,6 +10,7 @@
 #   hubot my communities
 #   hubot find community <start of community name>
 #   hubot list members [of <community name>]
+#   hubot list communities
 
 # Available but not displayed in help
 #   hubot create <number> of asset for <community name>
