@@ -26,20 +26,24 @@ class SolutionsStateController extends ApplicationController
       @render new ShowView(solution)
 
   create: (data)->
-
     if @input?
       if not data.id?
         data.id = @input
       else if not data.link?
         data.link = @input
         return @getDco()
-        .then (dco) => Proposal.find data.proposalId, parent: dco
-        .then (proposal) => proposal.createSolution data
-        .then (solution) =>
-          @msg.send "Your solution has been submitted and will be reviewed!\n"
-          @execute transition: 'exit', data: { proposalId: data.proposalId }
+          .then (@dco) => Proposal.find data.proposalId, parent: @dco
+          .then (@proposal) => @proposal.createSolution data
+          .then (solution) =>
+            # Notify Progenitor
+            userId = @dco.get('project_owner')
+            @msg.robot.messageRoom userId, "*Solution for #{@proposal.get('id')}*\n #{solution.get('id')}\n#{solution.get('link')}"
+
+            @msg.send "Your solution has been submitted and will be reviewed!\n"
+            @execute transition: 'exit', data: { proposalId: data.proposalId }
 
     @currentUser.set 'stateData', data
+    .then =>
+      @render new CreateView data
 
-    @render(new CreateView(data))
 module.exports = SolutionsStateController
