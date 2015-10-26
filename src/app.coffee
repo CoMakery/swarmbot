@@ -10,16 +10,16 @@ controllers =
   solutions: require './controllers/solutions-state-controller'
 
 class App
-  App.responses = []
 
   @respond: (pattern, cb) ->
+    @responses ?= []
     @responses.push [pattern, cb]
 
   @route: (msg) ->
 
     # old commands:
 
-    if input = msg.match[1]
+    if @responses? and input = msg.match[1]
       for [pattern, cb] in @responses
         if match = input.match pattern
           msg.match = msg.message.match(pattern)
