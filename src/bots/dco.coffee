@@ -73,7 +73,10 @@ module.exports = (robot) ->
   # What to do here? Current method will only work for single user.
   # Ideally, state machine stored on the user instance determines what question is
   # being answered.
-  App.respond /(yes$|no$|we\s+.*\s*)/i, (msg) ->
+  #
+  # NOTE that here we use robot.respond to allow other actions to execute,
+  # even when this matches:
+  robot.respond /(yes$|no$|we\s+.*\s*)/i, (msg) ->
     log "MATCH 'yes|no|we' : #{msg.match[0]}"
     currentUser = msg.robot.whose msg
 
