@@ -2,6 +2,7 @@
 ApplicationController = require './application-state-controller'
 Proposal = require '../models/proposal'
 Solution = require '../models/solution'
+User = require '../models/user'
 DcoCollection = require '../collections/dco-collection'
 IndexView = require '../views/solutions/index-view'
 ShowView = require '../views/solutions/show-view'
@@ -36,8 +37,10 @@ class SolutionsStateController extends ApplicationController
           .then (@proposal) => @proposal.createSolution data
           .then (solution) =>
             # Notify Progenitor
-            userId = @dco.get('project_owner')
-            @msg.robot.messageRoom userId, "*Solution for #{@proposal.get('id')}*\n #{solution.get('id')}\n#{solution.get('link')}"
+            User.find @dco.get('project_owner')
+            .then (owner)=>
+              @msg.robot.messageRoom owner.get('slack_username'),
+                "*New Solution Submitted for #{@proposal.get('id')}*\n #{solution.get('id')}\n#{solution.get('link')}"
 
             @msg.send "Your solution has been submitted and will be reviewed!\n"
             @execute transition: 'exit', data: { proposalId: data.proposalId }
