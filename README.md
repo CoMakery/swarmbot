@@ -40,7 +40,7 @@ but is easily configured to work anywhere Hubot works.
 
 ### View All Proposals & Choose Proposal
 
-![](https://cdn.rawgit.com/citizencode/swarmbot/46feaa44597a47c160cafd3c8dc37fa077f4c336/doc/examples-2015-10/choose-proposal.png)
+![](https://cdn.rawgit.com/citizencode/swarmbot/e8e0e7b7f21346f69cac7882eb29613778098a39/doc/examples-2015-10/choose-proposal.png)
 
 ### Upvote a Proposal
 
