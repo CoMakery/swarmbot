@@ -3,16 +3,20 @@ ZorkView = require '../zork-view'
 
 class HomeView extends ZorkView
   constructor: (@dco, @proposals) ->
-    @menu = {}
+    @orderedMenu = []
 
     # TODO: top 5 proposals only
     i = 1
     for proposal in @proposals.all()
-      @menu[i++] = @proposalMenuItem proposal
+      @orderedMenu.push [i++, @proposalMenuItem proposal]
 
-    # @menu[i++] = { text: "More", transition: 'index' }
-    @menu[i++] = { text: "Create a proposal", transition: 'create' }
-    @menu[i++] = { text: "More commands", transition: 'more' }
+    @orderedMenu.push [null, { text: "\n*Actions:*" }]
+    @orderedMenu.push [i++, { text: "Create a proposal", transition: 'create' }]
+    @orderedMenu.push [i++, { text: "More commands", transition: 'more' }]
+
+    @menu = {}
+    for [key, menuItem] in @orderedMenu
+      @menu[key] = menuItem if key?
 
   render: ->
     headline = if @proposals.isEmpty() then 'No proposals' else 'Proposals'

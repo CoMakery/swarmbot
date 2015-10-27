@@ -1,8 +1,15 @@
 class ZorkView
   renderMenu: ->
-    lines = for i, menuItem of @menu
-      "#{i}: #{menuItem.text}"
-    lines.join("\n")
+    if @orderedMenu?
+      lines = for [key, menuItem] in @orderedMenu
+        item = menuItem.text
+        item = "#{key}: #{item}" if key?
+        item
+      lines.join("\n")
+    else
+      lines = for key, menuItem of @menu
+        "#{key}: #{menuItem.text}"
+      lines.join("\n")
 
   bold: (text) -> "*#{text}*"
 
