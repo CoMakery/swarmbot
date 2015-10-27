@@ -14,7 +14,7 @@ User = require '../models/user'
 global.App = require '../app'
 UsersController = require '../controllers/users-controller'
 
-# Promise.longStackTraces() # only in development mode. decreases performance 5x
+Promise.longStackTraces() if process.env.NODE_ENV is 'development' # decreases performance 5x
 
 if process.env.FIREBASE_SECRET?
   swarmbot.firebase().authWithCustomToken process.env.FIREBASE_SECRET, (error) ->
