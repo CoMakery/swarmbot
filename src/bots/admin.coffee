@@ -2,7 +2,7 @@
 #   Informational and help related commands
 #
 # Commands:
-# hubot award <bounty name> to <username>
+# hubot award <proposal name> to <username>
 
 # Hidden Commands:
 
@@ -33,7 +33,7 @@ module.exports = (robot) ->
 
     # msg.send "Data about your community: X Members; X open propsals; Y bounties claimed"
     #TODO: This should pull from wizard or some other repo where all the comamnds live
-    msg.send "Admin commands work for owner only:\naward <bounty name> to <username>\nstats\nset coin name <currency_name>"
+    msg.send "Admin commands work for owner only:\naward <proposal name> to <username>\nstats\nset coin name <currency_name>"
     #TODO: add: set budget <budget amount>
 
   App.respond /award\s+(.+)\s+to\s+(.+?)(?:\s+in (.+))?\s*$/i, (msg) ->
