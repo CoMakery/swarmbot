@@ -25,7 +25,7 @@
   },
   "dependencies": {
     "bitcoinjs-lib": "^2.1.1",
-    "bluebird": "^2.10.0",
+    "bluebird": "^3.0.0",
     "coffee-script": "^1.10.0",
     "colu": "^0.6.10",
     "colu-access": "^0.2.5",
