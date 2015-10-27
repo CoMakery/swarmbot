@@ -40,32 +40,32 @@ but is easily configured to work anywhere Hubot works.
 
 ### View All Proposals & Choose Proposal
 
-![](//cdn.rawgit.com/citizencode/swarmbot/46feaa44597a47c160cafd3c8dc37fa077f4c336/doc/examples-2015-10/choose-proposal.png)
+![](https://cdn.rawgit.com/citizencode/swarmbot/46feaa44597a47c160cafd3c8dc37fa077f4c336/doc/examples-2015-10/choose-proposal.png)
 
 ### Upvote a Proposal
 
-![](//cdn.rawgit.com/citizencode/swarmbot/46feaa44597a47c160cafd3c8dc37fa077f4c336/doc/examples-2015-10/proposal-upvote.png)
+![](https://cdn.rawgit.com/citizencode/swarmbot/46feaa44597a47c160cafd3c8dc37fa077f4c336/doc/examples-2015-10/proposal-upvote.png)
 
 ### Set a Bounty on a Proposal
 
-![](//cdn.rawgit.com/citizencode/swarmbot/46feaa44597a47c160cafd3c8dc37fa077f4c336/doc/examples-2015-10/set-bounty-1.png)
-![](//cdn.rawgit.com/citizencode/swarmbot/46feaa44597a47c160cafd3c8dc37fa077f4c336/doc/examples-2015-10/set-bounty-2.png)
+![](https://cdn.rawgit.com/citizencode/swarmbot/46feaa44597a47c160cafd3c8dc37fa077f4c336/doc/examples-2015-10/set-bounty-1.png)
+![](https://cdn.rawgit.com/citizencode/swarmbot/46feaa44597a47c160cafd3c8dc37fa077f4c336/doc/examples-2015-10/set-bounty-2.png)
 
 ### Create a Solution to a Proposal
 
-![](//cdn.rawgit.com/citizencode/swarmbot/46feaa44597a47c160cafd3c8dc37fa077f4c336/doc/examples-2015-10/solution-create.png)
+![](https://cdn.rawgit.com/citizencode/swarmbot/46feaa44597a47c160cafd3c8dc37fa077f4c336/doc/examples-2015-10/solution-create.png)
 
 ### The Community Creator Receives Notification of New Solutions
 
-![](//cdn.rawgit.com/citizencode/swarmbot/46feaa44597a47c160cafd3c8dc37fa077f4c336/doc/examples-2015-10/notification-of-solution.png)
+![](https://cdn.rawgit.com/citizencode/swarmbot/46feaa44597a47c160cafd3c8dc37fa077f4c336/doc/examples-2015-10/notification-of-solution.png)
 
 ### Set Payment Address
 
-![](//cdn.rawgit.com/citizencode/swarmbot/46feaa44597a47c160cafd3c8dc37fa077f4c336/doc/examples-2015-10/bitcoin-set.png)
+![](https://cdn.rawgit.com/citizencode/swarmbot/46feaa44597a47c160cafd3c8dc37fa077f4c336/doc/examples-2015-10/bitcoin-set.png)
 
 ### Request a Feature
 
-![](//cdn.rawgit.com/citizencode/swarmbot/46feaa44597a47c160cafd3c8dc37fa077f4c336/doc/examples-2015-10/feature-request.png)
+![](https://cdn.rawgit.com/citizencode/swarmbot/46feaa44597a47c160cafd3c8dc37fa077f4c336/doc/examples-2015-10/feature-request.png)
 
 ## Development
 
