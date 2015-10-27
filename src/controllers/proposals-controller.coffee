@@ -59,10 +59,14 @@ class ProposalsController extends ApplicationController
             proposal = new Proposal({id: proposalName}, parent: dco)
 
             proposal.fetch().then (proposal) =>
-              if proposal.get('awarded')
+              if not proposal.exists()
+                @msg.send "Proposal '#{proposal.get('id')}' does not exist. Did you misspell it?"
+              else if proposal.get('awarded')
                 @msg.send "This proposal has already been awarded."
+              else if not proposal.get('amount') or proposal.get('amount') is '0'
+                @msg.send "This proposal does not have a bounty associated with it.  If you'd like to award it, first add a bounty."
               else
-                @msg.send 'Initiating transaction.'
+                @msg.send 'Initiating transaction...'
                 proposal.awardTo(awardeeAddress).then (body)=>
                   p "award #{proposal.get('id')} to #{awardee} :", body
                   @msg.send "Awarded proposal to #{awardee}.\n#{@_coloredCoinTxnUrl(body.txid)}"
