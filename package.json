@@ -41,6 +41,9 @@
     "lodash": "^3.10.0",
     "trust-exchange": "citizencode/trust-exchange"
   },
+  "engines": {
+    "node": "4.2.1"
+  },
   "repository": {
     "type": "git",
     "url": "git@github.com:citizencode/swarmbot.git"
