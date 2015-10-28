@@ -35,7 +35,9 @@ class SolutionsStateController extends ApplicationController
         data.link = @input
         return @getDco()
           .then (@dco) => Proposal.find data.proposalId, parent: @dco
-          .then (@proposal) => @proposal.createSolution data
+          .then (@proposal) =>
+            data.userId = @currentUser.get 'id'
+            @proposal.createSolution data
           .then (solution) =>
             # Notify Progenitor
             User.find @dco.get('project_owner')
