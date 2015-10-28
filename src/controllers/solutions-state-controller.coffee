@@ -7,6 +7,7 @@ DcoCollection = require '../collections/dco-collection'
 IndexView = require '../views/solutions/index-view'
 ShowView = require '../views/solutions/show-view'
 CreateView = require '../views/solutions/create-view'
+SendRewardView = require '../views/solutions/send-reward-view'
 
 class SolutionsStateController extends ApplicationController
   index: (params)->
@@ -48,5 +49,14 @@ class SolutionsStateController extends ApplicationController
     @currentUser.set 'stateData', data
     .then =>
       @render new CreateView data
+
+  sendReward: (data) ->
+    @getDco()
+    .then (dco) => Proposal.find data.proposalId, parent: dco
+    .then (proposal) => Solution.find data.solutionId, parent: proposal
+    .then (solution) => User.find solution.get('userId')
+    .then (solutionCreator) =>
+      recipientUsername = solutionCreator.get 'slack_username'
+      @render new SendRewardView {data, recipientUsername}
 
 module.exports = SolutionsStateController

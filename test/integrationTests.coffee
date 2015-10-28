@@ -149,3 +149,31 @@ describe 'swarmbot', ->
         .then (reply) =>
           @message.parts[0].should.match /please enter only numbers/i
           reply.should.match /Enter the bounty amount/
+
+  context 'solutions#sendReward', ->
+    proposalId = 'Be Amazing'
+    solutionId = 'Self Love'
+    solutionCreatorId = "slack:4388"
+    dcoId = 'my dco'
+    admin = ->
+      new User
+        id: userId
+        state: 'solutions#show'
+        stateData: {id: solutionId, proposalId}
+        current_dco: dcoId
+      .save()
+    solutionCreator = -> (new User id: solutionCreatorId, slack_username: 'noah').save()
+    dco = -> new DCO(id: dcoId, project_owner: userId).save()
+    proposal = (dco) -> dco.createProposal(id: proposalId)
+    solution = (proposal) -> proposal.createSolution id: solutionId, userId: solutionCreatorId
+
+    it "allows the progenitor to send a reward for a solution", ->
+      admin()
+      .then => solutionCreator()
+      .then (@solutionCreator) => dco()
+      .then (@dco) => proposal @dco
+      .then (@proposal) => solution @proposal
+      .then (@solution) => App.route message ''
+      .then => App.route message('2') # Send Reward
+      .then (reply) =>
+        reply.should.match /Enter reward amount to send to noah for the solution 'Self Love'/

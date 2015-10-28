@@ -10,7 +10,14 @@ class ShowView extends ZorkView
     @menu[i++] =
       text: "Vote Up"
       command: 'upvote'
-      data: { id: @solution.get('id'), proposalId: @solution.parent.get('id') }
+      data: { solutionId: @solution.get('id'), proposalId: @solution.parent.get('id') }
+
+    @menu[i++] =
+      text: "Send Reward"
+      command: 'sendReward'
+      data:
+        solutionId: @solution.get('id')
+        proposalId: @solution.parent.get('id')
 
     @menu.x = { text: "Exit", transition: 'exit' }
 
@@ -18,7 +25,7 @@ class ShowView extends ZorkView
     """
     *Solution: #{@solution.get('id')}*
     #{@solution.get('link')}
-    
+
     #{@renderMenu()}
 
     To take an action, simply enter the number or letter at the beginning of the line.

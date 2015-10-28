@@ -9,7 +9,6 @@ class Solution extends FirebaseModel
   hasParent: true
   urlRoot: "solutions"
   @find: (id, { parent }) ->
-    new Solution({id: id}, parent: parent)
-
+    new Solution({id}, {parent})
 
 module.exports = Solution
