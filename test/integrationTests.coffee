@@ -167,7 +167,7 @@ describe 'swarmbot', ->
     proposal = (dco) -> dco.createProposal(id: proposalId)
     solution = (proposal) -> proposal.createSolution id: solutionId, userId: solutionCreatorId
 
-    it "allows the progenitor to send a reward for a solution", ->
+    xit "allows the progenitor to send a reward for a solution", ->
       admin()
       .then => solutionCreator()
       .then (@solutionCreator) => dco()
