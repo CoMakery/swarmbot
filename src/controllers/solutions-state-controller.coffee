@@ -1,6 +1,7 @@
 { log, p, pjson } = require 'lightsaber'
 debug = require('debug')('app')
 { isEmpty } = require 'lodash'
+Promise = require 'bluebird'
 ApplicationController = require './application-state-controller'
 Proposal = require '../models/proposal'
 Solution = require '../models/solution'
@@ -55,23 +56,30 @@ class SolutionsStateController extends ApplicationController
       @render new CreateView data
 
   sendReward: (data) ->
-    if @input?
+    if @input? and @input.match /^\d+$/
       rewardAmount = @input
       @getDco()
       .then (@dco) => Proposal.find(data.proposalId, parent: @dco)
       .then (@proposal) => Solution.find(data.solutionId, parent: @proposal)
       .then (@solution) => User.find @solution.get 'userId'
       .then (@recipient) =>
+        unless @recipient.get('btc_address')?
+          throw Promise.OperationalError("This user doesn't have a registered Bitcoin address!")
         @msg.send 'Initiating transaction...'
         @proposal.awardTo(@recipient.get('btc_address'), rewardAmount)
       .then (body) =>
         @msg.send 'Reward sent!'
         debug "Reward #{@proposal.get('id')}/#{@solution.get('id')} to #{@recipient.get('slack_username')} :", body
         @msg.send "Awarded proposal to #{@recipient.get('slack_username')}.\n#{@_coloredCoinTxUrl(body.txid)}"
+      .error (error) =>
+        @msg.send error.message
+      .then =>
         @execute transition: 'exit'
-      .catch (error)=>
+      .catch (error) =>
         @msg.send "Error awarding '#{@proposal?.get('id')}' to #{@recipient?.get('slack_username')}. Unable to complete the transaction.\n #{error.message}"
+        @execute transition: 'exit'
         throw error
+
     else
       @getDco()
       .then (dco) => Proposal.find data.proposalId, parent: dco
