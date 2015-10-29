@@ -54,9 +54,23 @@ class SolutionsStateController extends ApplicationController
       @render new CreateView data
 
   sendReward: (data) ->
-    if @input?  # the entered reward amount
-      @msg.send 'Sending reward!'
-      @execute transition: 'exit'
+    if @input?
+      rewardAmount = @input
+      @getDco()
+      .then (@dco) => Proposal.find(data.proposalId, parent: @dco)
+      .then (@proposal) => Solution.find(data.solutionId, parent: @proposal)
+      .then (@solution) => User.find @solution.get 'userId'
+      .then (@recipient) =>
+        @msg.send 'Initiating transaction...'
+        @proposal.awardTo(@recipient.get('btc_address'), rewardAmount)
+      .then (body) =>
+        @msg.send 'Reward sent!'
+        p "Reward #{@proposal.get('id')}/#{@solution.get('id')} to #{@recipient.get('slack_username')} :", body
+        @msg.send "Awarded proposal to #{@recipient.get('slack_username')}.\n#{@_coloredCoinTxUrl(body.txid)}"
+        @execute transition: 'exit'
+      .catch (error)=>
+        @msg.send "Error awarding '#{@proposal?.get('id')}' to #{@recipient?.get('slack_username')}. Unable to complete the transaction.\n #{error.message}"
+        throw error
     else
       @getDco()
       .then (dco) => Proposal.find data.proposalId, parent: dco
@@ -65,5 +79,12 @@ class SolutionsStateController extends ApplicationController
       .then (solutionCreator) =>
         recipientUsername = solutionCreator.get 'slack_username'
         @render new SendRewardView {data, recipientUsername}
+
+  _coloredCoinTxUrl: (txId) ->
+    url = ["http://coloredcoins.org/explorer"]
+    url.push 'testnet' if process.env.COLU_NETWORK == 'testnet'
+    url.push "tx/#{txId}"
+
+    url.join('/')
 
 module.exports = SolutionsStateController

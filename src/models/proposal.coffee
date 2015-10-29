@@ -11,10 +11,6 @@ class Proposal extends FirebaseModel
   hasParent: true
   urlRoot: "proposals"
 
-  @find: (id, { parent }) ->
-    proposal = new Proposal({id: id}, parent: parent)
-    proposal.fetch()
-
   upvote: Promise.promisify (user, cb) ->
     attributes = {}
     attributes[user.get 'id'] = 1
@@ -31,7 +27,7 @@ class Proposal extends FirebaseModel
   ratings: ->
     @_ratings ?= new RatingCollection @snapshot.child('ratings'), parent: @
 
-  awardTo: Promise.promisify (btcAddress, cb) ->
+  awardTo: Promise.promisify (btcAddress, amount, cb) ->
     colu = swarmbot.colu()
     dco = @parent
     args =
@@ -39,7 +35,7 @@ class Proposal extends FirebaseModel
       to: [{
         address: btcAddress
         assetId: dco.get('coluAssetId')
-        amount: @get('amount')
+        amount: amount
       }]
       metadata:
         community: dco.get('id')
