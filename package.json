@@ -22,7 +22,8 @@
     "chai-as-promised": "^5.1.0",
     "coffeelint": "^1.13.0",
     "firebase-server": "^0.5.0",
-    "mocha": "^2.2.5"
+    "mocha": "^2.2.5",
+    "sinon": "^1.17.2"
   },
   "dependencies": {
     "bitcoinjs-lib": "^2.1.1",

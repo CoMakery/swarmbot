@@ -1,4 +1,5 @@
 { log, p, pjson } = require 'lightsaber'
+debug = require('debug')('app')
 { isEmpty } = require 'lodash'
 ApplicationController = require './application-state-controller'
 Proposal = require '../models/proposal'
@@ -65,7 +66,7 @@ class SolutionsStateController extends ApplicationController
         @proposal.awardTo(@recipient.get('btc_address'), rewardAmount)
       .then (body) =>
         @msg.send 'Reward sent!'
-        p "Reward #{@proposal.get('id')}/#{@solution.get('id')} to #{@recipient.get('slack_username')} :", body
+        debug "Reward #{@proposal.get('id')}/#{@solution.get('id')} to #{@recipient.get('slack_username')} :", body
         @msg.send "Awarded proposal to #{@recipient.get('slack_username')}.\n#{@_coloredCoinTxUrl(body.txid)}"
         @execute transition: 'exit'
       .catch (error)=>

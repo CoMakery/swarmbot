@@ -6,6 +6,10 @@ chai.should()
 chai.use(chaiAsPromised)
 debug = require('debug')('test')
 FirebaseServer = require('firebase-server')
+sinon = require 'sinon'
+# require('sinon-as-promised')(Promise)
+# require 'sinon-chai'
+
 global.App = require '../src/app'
 swarmbot = require '../src/models/swarmbot'
 DCO = require '../src/models/dco'
@@ -13,6 +17,14 @@ User = require '../src/models/user'
 
 MOCK_FIREBASE_ADDRESS = '127.0.1' # strange host name needed by testing framework
 process.env.FIREBASE_URL = "ws://#{MOCK_FIREBASE_ADDRESS}:5000"
+
+
+sinon.stub(swarmbot, 'colu').returns
+  on: ->
+  init: ->
+  sendAsset: (x, cb)-> cb(null, {txid: 1234})
+  issueAsset: ->
+
 
 userId = "slack:1234"
 message = (input) ->
@@ -181,4 +193,4 @@ describe 'swarmbot', ->
         @message = message('1000') # Reward amount
         App.route @message
       .then (reply) =>
-        @message.parts[0].should.match /Sending reward!/
+        @message.parts[0].should.match /Initiating transaction/
