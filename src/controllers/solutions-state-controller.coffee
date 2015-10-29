@@ -1,4 +1,5 @@
 { log, p, pjson } = require 'lightsaber'
+{ isEmpty } = require 'lodash'
 ApplicationController = require './application-state-controller'
 Proposal = require '../models/proposal'
 Solution = require '../models/solution'
@@ -17,13 +18,13 @@ class SolutionsStateController extends ApplicationController
     .then (proposal) =>
       @render new IndexView(proposal)
 
-  show: (params) ->
+  show: (data) ->
     # TODO: Is there a way to do this where we don't have to query the whole DCO every time?
     @getDco()
     .then (dco)=>
-      Proposal.find params.proposalId, parent: dco
+      Proposal.find data.proposalId, parent: dco
     .then (proposal)=>
-      Solution.find params.id, parent: proposal
+      Solution.find data.solutionId, parent: proposal
     .then (solution)=>
       @render new ShowView(solution)
 
@@ -53,12 +54,16 @@ class SolutionsStateController extends ApplicationController
       @render new CreateView data
 
   sendReward: (data) ->
-    @getDco()
-    .then (dco) => Proposal.find data.proposalId, parent: dco
-    .then (proposal) => Solution.find data.solutionId, parent: proposal
-    .then (solution) => User.find solution.get('userId')
-    .then (solutionCreator) =>
-      recipientUsername = solutionCreator.get 'slack_username'
-      @render new SendRewardView {data, recipientUsername}
+    if @input?  # the entered reward amount
+      @msg.send 'Sending reward!'
+      @execute transition: 'exit'
+    else
+      @getDco()
+      .then (dco) => Proposal.find data.proposalId, parent: dco
+      .then (proposal) => Solution.find data.solutionId, parent: proposal
+      .then (solution) => User.find solution.get('userId')
+      .then (solutionCreator) =>
+        recipientUsername = solutionCreator.get 'slack_username'
+        @render new SendRewardView {data, recipientUsername}
 
 module.exports = SolutionsStateController

@@ -12,9 +12,10 @@
   "scripts": {
     "colu": "colu",
     "dev": "bin/hubot --name s",
+    "fulltest": "mocha  && npm run lint",
     "lint": "coffeelint --quiet src test",
     "start": "bin/hubot --adapter slack",
-    "test": "mocha && npm run lint"
+    "test": "mocha"
   },
   "devDependencies": {
     "chai": "^3.2.0",

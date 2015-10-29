@@ -14,7 +14,7 @@ class ShowView extends ZorkView
 
     @menu[i++] =
       text: "Send Reward"
-      command: 'sendReward'
+      transition: 'sendReward'
       data:
         solutionId: @solution.get('id')
         proposalId: @solution.parent.get('id')

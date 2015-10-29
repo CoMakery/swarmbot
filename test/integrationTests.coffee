@@ -32,7 +32,7 @@ describe 'swarmbot', ->
 
   afterEach ->
     debug 'FB data:'
-    debug pjson @firebaseServer.getData()
+    debug pjson @firebaseServer.getValue()
 
   after ->
     @firebaseServer.close()
@@ -159,7 +159,7 @@ describe 'swarmbot', ->
       new User
         id: userId
         state: 'solutions#show'
-        stateData: {id: solutionId, proposalId}
+        stateData: {solutionId, proposalId}
         current_dco: dcoId
       .save()
     solutionCreator = -> (new User id: solutionCreatorId, slack_username: 'noah').save()
@@ -174,6 +174,11 @@ describe 'swarmbot', ->
       .then (@dco) => proposal @dco
       .then (@proposal) => solution @proposal
       .then (@solution) => App.route message ''
-      .then => App.route message('2') # Send Reward
+      .then (reply) => App.route message('2') # Send Reward
       .then (reply) =>
         reply.should.match /Enter reward amount to send to noah for the solution 'Self Love'/
+      .then =>
+        @message = message('1000') # Reward amount
+        App.route @message
+      .then (reply) =>
+        @message.parts[0].should.match /Sending reward!/
