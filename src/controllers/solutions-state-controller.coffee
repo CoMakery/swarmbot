@@ -83,8 +83,7 @@ class SolutionsStateController extends ApplicationController
   _coloredCoinTxUrl: (txId) ->
     url = ["http://coloredcoins.org/explorer"]
     url.push 'testnet' if process.env.COLU_NETWORK == 'testnet'
-    url.push "tx/#{txId}"
-
+    url.push 'tx', txId
     url.join('/')
 
 module.exports = SolutionsStateController
