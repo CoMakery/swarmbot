@@ -64,7 +64,7 @@ class DcosController extends ApplicationController
         @msg.reply "Great, you've joined the DCO"
         # TODO: Membership coin as well as bounty coin
         # dco.sendAsset { amount: 1, recipient: user }
-        user.setDco dco.get('id')
+        user.setDcoTo dco.get('id')
       else
         @msg.reply "You are already a member of #{dco.get('id')}!"
 
@@ -78,7 +78,7 @@ class DcosController extends ApplicationController
 
       dco.set 'project_owner', owner
       dco.save()
-      @currentUser().setDco dco.get('id')
+      @currentUser().setDcoTo dco.get('id')
 
       dco.issueAsset { amount: 100000000 }
       dcoCreateStatus = {stage: 1, dcoKey: dcoKey, project_owner: owner}
