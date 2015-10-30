@@ -41,6 +41,9 @@ class Proposal extends FirebaseModel
           community: dco.get('id')
           proposal:  @get('id')
 
-      colu.sendAsset args, cb
+      try
+        colu.sendAsset args, cb
+      catch error
+        cb(error)
 
 module.exports = Proposal
