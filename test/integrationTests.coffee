@@ -19,7 +19,7 @@ MOCK_FIREBASE_ADDRESS = '127.0.1' # strange host name needed by testing framewor
 process.env.FIREBASE_URL = "ws://#{MOCK_FIREBASE_ADDRESS}:5000"
 
 
-sinon.stub(swarmbot, 'colu').returns
+sinon.stub(swarmbot, 'colu').returns Promise.resolve
   on: ->
   init: ->
   sendAsset: (x, cb)-> cb(null, {txid: 1234})

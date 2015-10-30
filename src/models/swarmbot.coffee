@@ -1,4 +1,5 @@
 { json, log, p, pjson } = require 'lightsaber'
+Promise = require 'bluebird'
 
 Firebase = require 'firebase'
 Colu = require 'colu'
@@ -10,7 +11,7 @@ class Swarmbot
     @_firebase ?= new Firebase process.env.FIREBASE_URL
 
   colu: ->
-    return @_colu if @_colu?
+    return Promise.resolve(@_colu) if @_colu?
 
     coluParams =
       network: process.env.COLU_NETWORK
@@ -22,7 +23,10 @@ class Swarmbot
       coluParams.redisPort = process.env.REDIS_PORT
 
     @_colu = new Colu coluParams
+    promise = new Promise (resolve) =>
+      @_colu.on 'connect', =>
+        resolve @_colu
     @_colu.init()
-    @_colu
+    promise
 
 module.exports = new Swarmbot
