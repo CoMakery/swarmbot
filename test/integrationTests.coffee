@@ -31,6 +31,7 @@ message = (input) ->
   match: [null, input]
   robot:
     whose: (msg) -> userId
+    messageRoom: ->
   send: (reply) ->
     @parts ?= []
     @parts.push reply

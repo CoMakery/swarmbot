@@ -70,7 +70,11 @@ class SolutionsStateController extends ApplicationController
       .then (body) =>
         @msg.send 'Reward sent!'
         debug "Reward #{@proposal.get('id')}/#{@solution.get('id')} to #{@recipient.get('slack_username')} :", body
-        @msg.send "Awarded proposal to #{@recipient.get('slack_username')}.\n#{@_coloredCoinTxUrl(body.txid)}"
+        txUrl = @_coloredCoinTxUrl(body.txid)
+        @msg.send "Awarded proposal to #{@recipient.get('slack_username')}.\n#{txUrl}"
+        # PM message
+        @msg.robot.messageRoom @recipient.get('slack_username'),
+          "Congratulations! You have received #{rewardAmount} community coins for your solution '#{@solution.get('id')}'\n#{@_coloredCoinTxUrl(body.txid)}"
       .error (error) =>
         @msg.send error.message
       .then =>
