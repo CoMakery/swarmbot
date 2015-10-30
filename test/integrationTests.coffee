@@ -174,12 +174,17 @@ describe 'swarmbot', ->
         stateData: {solutionId, proposalId}
         current_dco: dcoId
       .save()
-    solutionCreator = -> (new User id: solutionCreatorId, slack_username: 'noah').save()
+    solutionCreator = ->
+      new User
+        id: solutionCreatorId
+        slack_username: 'noah'
+        btc_address: 'abc123'
+      .save()
     dco = -> new DCO(id: dcoId, project_owner: userId).save()
     proposal = (dco) -> dco.createProposal(id: proposalId)
     solution = (proposal) -> proposal.createSolution id: solutionId, userId: solutionCreatorId
 
-    xit "allows the progenitor to send a reward for a solution", ->
+    it "allows the progenitor to send a reward for a solution", ->
       admin()
       .then => solutionCreator()
       .then (@solutionCreator) => dco()
