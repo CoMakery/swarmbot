@@ -3,10 +3,10 @@
 class EditView
   constructor: (@data) ->
     @menu = {
-      x: { text: "Exit", transition: 'exit' }
+      b: { text: "Back", transition: 'exit' }
     }
 
   render: ->
-    "Enter the bounty amount ('x' to exit)"
+    "Enter the bounty amount ('b' to go back)"
 
 module.exports = EditView

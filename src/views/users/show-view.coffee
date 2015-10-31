@@ -7,7 +7,7 @@ class CreateView extends ZorkView
     @menu = {}
 
     @menu[i++] = { text: "Set bitcoin address", transition: 'setBtc' }
-    @menu.x = { text: "Exit", transition: 'exit' }
+    @menu.b = { text: "Back", transition: 'exit' }
 
   render: ->
     @userText(@user) + "\n\n" + @renderMenu()

@@ -31,7 +31,7 @@ class HomeView extends ZorkView
   proposalMenuItem: (proposal) ->
     {
       text: @proposalMessage(proposal)
-      data: { id: proposal.get('id') }
+      data: { proposalId: proposal.get('id') }
       transition: 'show'
     }
 

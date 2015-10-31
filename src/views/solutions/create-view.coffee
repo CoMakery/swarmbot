@@ -3,14 +3,14 @@
 class CreateView
   constructor: (@data) ->
     @menu = {
-      x: { text: "Exit", transition: 'exit', data: {proposalId: @data.proposalId} }
+      b: { text: "Back", transition: 'exit', data: {proposalId: @data.proposalId} }
     }
 
   render: ->
     if !@data.id?
-      "What is the name of your solution? ('x' to exit)"
+      "What is the name of your solution? ('b' to go back)"
     else if !@data.link?
-      "Please enter a link to your solution. ('x' to exit)"
+      "Please enter a link to your solution. ('b' to go back)"
     else
       ''
 

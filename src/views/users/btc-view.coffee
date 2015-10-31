@@ -5,7 +5,7 @@ class BtcView extends ZorkView
   constructor: (@data, @error) ->
     i = 1
     @menu = {}
-    @menu.x = { text: "Exit", transition: 'exit' }
+    @menu.b = { text: "Back", transition: 'exit' }
 
   render: ->
     str = ""

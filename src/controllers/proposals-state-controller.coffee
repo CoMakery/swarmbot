@@ -18,20 +18,20 @@ class ProposalsStateController extends ApplicationController
 
       @render(new IndexView(proposals))
 
-  show: (params) ->
-    proposalId = params.id ? throw new Error "show requires an id"
+  show: (data) ->
+    proposalId = data.proposalId ? throw new Error "show requires an id"
     promise = @getDco()
     .then (dco) => Proposal.find(proposalId, parent: dco)
     .then (proposal) =>
       canSetBounty = (proposal.parent.get('project_owner') == @currentUser.get('id'))
       @render(new ShowView(proposal, { canSetBounty }))
 
-  upvote: (params) ->
+  upvote: (data) ->
     @getDco().then (dco) ->
-      Proposal.find(params.proposalId, parent: dco)
+      Proposal.find(data.proposalId, parent: dco)
       .then (proposal) =>
         unless proposal.exists()
-          throw new Error "Could not find the proposal '#{params.proposalId}'. Please verify that it exists."
+          throw new Error "Could not find the proposal '#{data.proposalId}'. Please verify that it exists."
         proposal.upvote @currentUser
       .then =>
         @redirect "Your vote has been recorded."
@@ -51,22 +51,22 @@ class ProposalsStateController extends ApplicationController
     @currentUser.set 'stateData', data
     @render new CreateView data
 
-  edit: (params) ->
+  edit: (data) ->
     if @input?
-      if not params.bounty?
+      if not data.bounty?
         if @input.match /^\d+$/
-          params.bounty = @input
+          data.bounty = @input
           return @getDco()
-          .then (dco) -> Proposal.find params.proposalId, parent: dco
-          .then (proposal) -> proposal.set 'amount', params.bounty
+          .then (dco) -> Proposal.find data.proposalId, parent: dco
+          .then (proposal) -> proposal.set 'amount', data.bounty
           .then =>
-            @msg.send "Bounty amount set to #{params.bounty}\n"
-            @execute transition: 'exit', data: { id: params.proposalId }
+            @msg.send "Bounty amount set to #{data.bounty}\n"
+            @execute transition: 'exit'
         else
           @msg.send "For a bounty amount, please enter only numbers\n"
 
-    params ?= {}
-    @currentUser.set 'stateData', params
-    @render new EditView params
+    data ?= {}
+    @currentUser.set 'stateData', data
+    @render new EditView data
 
 module.exports = ProposalsStateController

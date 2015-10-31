@@ -28,7 +28,7 @@ class ShowView extends ZorkView
         transition: 'setBounty'
         data: { proposalId: @proposal.get('id') }
 
-    @menu.x = { text: "Exit", transition: 'exit' }
+    @menu.b = { text: "Back", transition: 'exit' }
 
   render: ->
     description = ''

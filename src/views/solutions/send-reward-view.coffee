@@ -3,11 +3,11 @@
 class SendRewardView
   constructor: ({@data, @recipientUsername}) ->
     @menu =
-      x:
-        text: "Exit"
+      b:
+        text: "Back"
         transition: 'exit'
 
   render: ->
-    "Enter reward amount to send to #{@recipientUsername} for the solution '#{@data.solutionId}' ('x' to exit)"
+    "Enter reward amount to send to #{@recipientUsername} for the solution '#{@data.solutionId}' ('b' to go back)"
 
 module.exports = SendRewardView

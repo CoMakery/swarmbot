@@ -7,7 +7,7 @@ class SetDcoView
     @menu = {}
     for dco in dcos.all()
       @menu[i++] = @dcoMenuItem dco
-    @menu.x = { text: "Exit", transition: 'exit' }
+    @menu.b = { text: "Back", transition: 'exit' }
 
   dcoMenuItem: (dco) ->
     id = dco.get 'id'

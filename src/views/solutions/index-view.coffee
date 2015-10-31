@@ -13,7 +13,7 @@ class IndexView extends ZorkView
         data: { solutionId: solution.get('id'), proposalId: solution.parent.get('id') }
 
     @menu[i++] = { text: "Submit a solution", transition: 'create' }
-    @menu.x = { text: "Exit", transition: 'exit', data: {id: @proposal.get('id')} }
+    @menu.b = { text: "Back", transition: 'exit', data: {proposalId: @proposal.get('id')} }
 
   render: ->
     """

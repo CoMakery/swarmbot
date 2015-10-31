@@ -18,19 +18,17 @@ class Swarmbot
       privateSeed: process.env.COLU_PRIVATE_SEED
       apiKey: process.env.COLU_MAINNET_APIKEY
     if process.env.REDISTOGO_URL
-      [_, host, port] = process.env.REDISTOGO_URL.match /redis:\/\/(.+:.+@.+):(\d+)/
-      process.env.REDIS_HOST = host
-      process.env.REDIS_PORT = port
+      coluParams.redisUrl = process.env.REDISTOGO_URL
     if process.env.REDIS_HOST
       coluParams.redisHost = process.env.REDIS_HOST
     if process.env.REDIS_PORT
       coluParams.redisPort = process.env.REDIS_PORT
 
     @_colu = new Colu coluParams
-    promise = new Promise (resolve) =>
+    return new Promise (resolve) =>
       @_colu.on 'connect', =>
         resolve @_colu
-    @_colu.init()
+      @_colu.init()
     promise
 
 module.exports = new Swarmbot
