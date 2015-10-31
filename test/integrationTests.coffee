@@ -116,7 +116,7 @@ describe 'swarmbot', ->
       proposalId = 'Be Amazing'
       dcoId = 'my dco'
       user = ->
-        new User(id: userId, state: 'proposals#show', stateData: {id: proposalId}, current_dco: dcoId).save()
+        new User(id: userId, state: 'proposals#show', stateData: {proposalId: proposalId}, current_dco: dcoId).save()
       dco = ->
         new DCO(id: dcoId, project_owner: userId).save()
       proposal = (dco) ->
