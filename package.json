@@ -39,8 +39,7 @@
     "instagram-node-lib": "0.1.1",
     "javascript-state-machine": "^2.3.5",
     "lightsaber": "^0.4.1",
-    "lodash": "^3.10.0",
-    "trust-exchange": "citizencode/trust-exchange"
+    "lodash": "^3.10.0"
   },
   "engines": {
     "node": "4.2.1",

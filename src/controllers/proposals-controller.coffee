@@ -1,5 +1,4 @@
 {log, p, pjson} = require 'lightsaber'
-{ Reputation, Claim } = require 'trust-exchange'
 ApplicationController = require './application-controller'
 Promise = require 'bluebird'
 DCO = require '../models/dco'

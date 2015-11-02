@@ -26,7 +26,6 @@
 
 {log, p, pjson} = require 'lightsaber'
 { values } = require 'lodash'
-{ Claim } = require 'trust-exchange'
 swarmbot = require '../models/swarmbot'
 Proposal = require '../models/proposal'
 DCO = require '../models/dco'

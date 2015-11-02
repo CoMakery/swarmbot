@@ -8,7 +8,6 @@
 
 { json, log, p, pjson } = require 'lightsaber'
 Promise = require 'bluebird'
-trustExchange = require('trust-exchange').instance
 swarmbot = require '../models/swarmbot'
 User = require '../models/user'
 global.App = require '../app'
@@ -19,10 +18,6 @@ Promise.longStackTraces() if process.env.NODE_ENV is 'development' # decreases p
 if process.env.FIREBASE_SECRET?
   swarmbot.firebase().authWithCustomToken process.env.FIREBASE_SECRET, (error) ->
     p error
-
-trustExchange.configure
-  adaptors:
-    firebase: swarmbot.firebase()
 
 InitBot = (robot) ->
   App.robot = robot

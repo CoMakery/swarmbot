@@ -5,7 +5,6 @@ FirebaseModel = require './firebase-model'
 Solution = require './solution'
 RatingCollection = require '../collections/rating-collection'
 SolutionCollection = require '../collections/solution-collection'
-{ Reputation, Claim } = require 'trust-exchange'
 
 class Proposal extends FirebaseModel
   hasParent: true
