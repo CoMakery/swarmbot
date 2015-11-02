@@ -29,6 +29,5 @@ class Swarmbot
       @_colu.on 'connect', =>
         resolve @_colu
       @_colu.init()
-    promise
 
 module.exports = new Swarmbot
