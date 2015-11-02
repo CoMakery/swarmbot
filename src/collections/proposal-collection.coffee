@@ -7,7 +7,7 @@ class ProposalCollection extends FirebaseCollection
   model: Proposal
 
   getReputationScores: ->
-    @map (p) -> p.getReputationScore()
+    @map (p) -> p.getReputationScore()  # method seems to not exist. bug: https://github.com/citizencode/swarmbot/issues/116
 
   sortByReputationScore: ->
     @models = sortByOrder @models, [
