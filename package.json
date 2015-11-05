@@ -42,7 +42,7 @@
     "lodash": "^3.10.0"
   },
   "engines": {
-    "node": "4.2.1",
+    "node": "4.2.x",
     "npm": "3.x"
   },
   "repository": {
