@@ -33,9 +33,8 @@ InitBot = (robot) ->
   robot.respond /(.*)/, (msg) ->
     autoRegisterUser msg
     if robot.isPublic msg
-      robot.pmReply msg, "Let's take this offline.  I PM'd you :smile:"
-    else
-      App.route(msg).then (response) -> msg.send response
+      msg.reply "Let's take this offline.  I PM'd you :smile:"
+    App.route(msg).then (response) -> robot.pmReply msg, response
 
   robot.router.post '/hubot/chatsecrets/:room', (req, res) ->
     p "HTTP webhook received", req, res
