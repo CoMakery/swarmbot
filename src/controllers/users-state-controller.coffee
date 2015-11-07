@@ -1,6 +1,9 @@
 
 { log, p, pjson } = require 'lightsaber'
 { address } = require 'bitcoinjs-lib'
+{ filter, any } = require 'lodash'
+
+swarmbot = require '../models/swarmbot'
 ApplicationController = require './application-state-controller'
 DcoCollection = require '../collections/dco-collection'
 ShowView = require '../views/users/show-view'
@@ -32,6 +35,18 @@ class UsersStateController extends ApplicationController
 
   myAccount: ->
     # show current user data
+    if userAddress = @currentUser.get('btc_address')
+      colu = swarmbot.colu().then (colu) ->
+
+        colu.getTransactions (err, txs) ->
+          p err if err
+          # p txs[0]
+          myTxs = filter txs, (tx) ->
+            tx['colored'] is true and
+            any tx['vout'], (vout) ->
+              any vout['scriptPubKey']['addresses'], (address) ->
+                address == userAddress
+
     @render(new ShowView @currentUser)
 
   setBtc: ->
