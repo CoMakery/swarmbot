@@ -74,9 +74,14 @@ describe 'swarmbot', ->
           @message = message('A description')
           App.route @message
         .then (reply) =>
+          reply.should.match /Please enter an image URL for your proposal/
+          @message = message('A description')
+          App.route @message
+        .then (reply) =>
           @message.parts.length.should.eq 1
           @message.parts[0].should.match /Proposal created/
           reply.should.match /\*Proposals in Your Great Community\*/
+        # TODO check that proposal exists with those attributes
 
     it "shows the user's current community, with proposals", ->
       dcoId = 'Your Great Community'

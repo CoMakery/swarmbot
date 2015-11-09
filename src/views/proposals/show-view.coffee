@@ -36,6 +36,8 @@ class ShowView extends ZorkView
       description += "_#{@proposal.get('description')}_\n"
     if amount = @proposal.get 'amount'
       description += "Bounty: #{amount}\n"
+    if imageUrl = @proposal.get 'imageUrl'
+      description += "Image: #{imageUrl}\n"
 
     """
     *Proposal: #{@proposal.get('id')}*

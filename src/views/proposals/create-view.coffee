@@ -11,6 +11,8 @@ class CreateView
       "What is the name of your proposal? ('b' to go back)"
     else if !@data.description?
       "Please enter a brief description of your proposal. ('b' to go back)"
+    else if !@data.imageUrl?
+      'Please enter an image URL for your proposal (enter "n" for none)'
     else
       ''
 

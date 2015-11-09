@@ -36,20 +36,21 @@ class ProposalsStateController extends ApplicationController
       .then =>
         @redirect "Your vote has been recorded."
 
-  create: ->
+  create: (data) ->
+    data ?= {}
     if @input?
-      data = @currentUser.get('stateData') ? {}
       if not data.id?
         data.id = @input
       else if not data.description?
         data.description = @input
+      else if not data.imageUrl?
+        data.imageUrl = @input
         return @getDco()
         .then (dco) => dco.createProposal data
         .then => @msg.send "Proposal created!\n"
         .then => @execute transition: 'exit'
-    data ?= {}
     @currentUser.set 'stateData', data
-    @render new CreateView data
+    .then => @render new CreateView data
 
   edit: (data) ->
     if @input?
