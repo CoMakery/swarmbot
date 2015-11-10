@@ -27,14 +27,14 @@ class ProposalsStateController extends ApplicationController
       @render(new ShowView(proposal, { canSetBounty }))
 
   upvote: (data) ->
-    @getDco().then (dco) ->
+    @getDco().then (dco) =>
       Proposal.find(data.proposalId, parent: dco)
-      .then (proposal) =>
-        unless proposal.exists()
-          throw new Error "Could not find the proposal '#{data.proposalId}'. Please verify that it exists."
-        proposal.upvote @currentUser
-      .then =>
-        @redirect "Your vote has been recorded."
+    .then (proposal) =>
+      unless proposal.exists()
+        throw new Error "Could not find the proposal '#{data.proposalId}'. Please verify that it exists."
+      proposal.upvote @currentUser
+    .then =>
+      @redirect "Your vote has been recorded."
 
   create: (data) ->
     data ?= {}

@@ -8,4 +8,9 @@ class Solution extends FirebaseModel
   hasParent: true
   urlRoot: "solutions"
 
+  upvote: Promise.promisify (user, cb) ->
+    attributes = {}
+    attributes[user.get 'id'] = 1
+    @firebase().child('votes').update attributes, cb
+
 module.exports = Solution
