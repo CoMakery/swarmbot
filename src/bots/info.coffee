@@ -1,22 +1,8 @@
-# Description:
-#   Informational and help related commands
-#
 # Commands:
 #  hubot space kitty say
 
-# Hidden Commands:
-
-#   hubot x marks the what
-#   hubot hello
-#  hubot fork me
-
-# Not in use:
-#   hubot tag <community name> <tag>
-#   hubot info <community name>
-
 # Propz:
 #   raysrashmi for https://github.com/raysrashmi/hubot-instagram
-#
 
 {log, p, pjson} = require 'lightsaber'
 Instagram = require('instagram-node-lib')

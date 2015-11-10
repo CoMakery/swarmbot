@@ -1,17 +1,4 @@
-# Description:
-#   User / account managemnet
-#
 # Commands:
-
-# Hidden Commands:
-
-#   hubot set community <current community>
-#   hubot unset community
-#   hubot about me
-#   hubot about <slack username>
-
-# Not in use:
-#   hubot register email <email>
 
 { p, log } = require 'lightsaber'
 { values } = require 'lodash'
@@ -22,17 +9,6 @@ DCO = require '../models/dco'
 inspect = require('util').inspect
 
 module.exports = (robot) ->
-
-  # robot.enter (msg) ->
-  #   try
-  #     greet(msg, msg.message.user.name, true, robot)
-  #   catch error
-
-  # App.respond /help\s*/i, (msg) ->
-  #   log "MATCH 'help' "
-  #   try
-  #     greet(msg, msg.message.user.name, true, robot)
-  #   catch error
 
   App.respond /about (.*)\s*$/i, (msg) ->
     log "MATCH 'about' : #{msg.match[0]}"
@@ -79,20 +55,3 @@ greet = (msg, username, privateMessage, robot) ->
     else
       msg.send result.data.url
       msg.send helpMessage
-
-# Not sure, this may work in slack, not sure about
-#  App.respond /register?.*/i, (msg) ->
-#    robot.reply 'some msg'?
-
-# App.respond /register email (.+)$/i, (msg) ->
-#   msg.match.shift()
-#   [emailAddress] = msg.match
-#   activeUser = robot.whose msg
-#   user = User.find activeUser
-#   user.register "email_address", emailAddress
-
-  #TODO: would  be nice to send out an outbound email notification that then allows them to setup a BTC wallet
-  # something like the Mandril usage we have in the Swarm API
-  # https://swarm-rome.herokuapp.com/messages/send-template
-
-  # msg.send "Email registered"

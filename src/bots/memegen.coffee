@@ -1,9 +1,6 @@
 # Description:
 #   Generates memes via the Imgflip Meme Generator API
 #
-# Dependencies:
-#   None
-#
 # Configuration:
 #   IMGFLIP_API_USERNAME [optional, overrides default imgflip_hubot account]
 #   IMGFLIP_API_PASSWORD [optional, overrides default imgflip_hubot account]
@@ -11,10 +8,6 @@
 # Commands:
 #   hubot grumpy cat <text> - Grumpy Cat with text on the bottom
 #   hubot Yo dawg <text> so <text> - Yo Dawg Heard You (Xzibit)
-#
-# Author:
-#   fractastical, dylanwenzlau
-
 
 inspect = require('util').inspect
 

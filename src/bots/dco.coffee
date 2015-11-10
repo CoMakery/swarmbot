@@ -1,31 +1,7 @@
-# Description:
-#   Create a community
-#
 # Commands:
 #   hubot create community <community name>
 #   hubot join <community name>
 #
-
-# Hidden Commands:
-#   hubot my communities
-#   hubot find community <start of community name>
-#   hubot list members [of <community name>]
-#   hubot list communities
-
-# Available but not displayed in help
-#   hubot create <number> of asset for <community name>
-
-# DCO Interface Ideas
-#   hubot tag <dco_name> <tag>
-#   hubot list dco <dco pattern>
-#   hubot select <dco_name> (you must be the creator)
-#   hubot set statement of intent <statement_of_intent>
-#   hubot send asset to <user_name>
-#   hubot create constitution (creates a fork of the Citizen Code constitution)
-#   hubot file dco (dynamically creates an LLC)
-#   hubot open for membership for $XYZ - allow users to join membership in your DCO for a set price in USD
-#   hubot open for membership for xyzBTC - allow users to join membership in your DCO) for a set price in BTC
-#   hubot rate <dco_name> - Tells you how much the community's assets are trading at on any given day.
 
 {log, p, pjson} = require 'lightsaber'
 DcosController = require '../controllers/dcos-controller'

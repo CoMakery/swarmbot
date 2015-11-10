@@ -1,6 +1,3 @@
-# Description:
-#   Create a bounty
-#
 # Commands:
 #   hubot I'd like <suggested improvement for swarmbot>
 
@@ -9,20 +6,6 @@
 #   hubot rate <proposal name> <value>% [in <community name]
 #   hubot award proposal <proposal name> to <slack username> [in <community>]
 #   hubot show proposal <proposal name> [in <community name>]
-
-
-# Not in use:
-#   hubot list bounties [in <community name>]
-#   hubot (<bounty_name>) bounty add me - add me to the bounty
-#   hubot get balance - get your current balance
-#   hubot (<bounty_name>) bounty add (me|<user>) - add me or <user> to bounty
-#   hubot (<bounty_name>) bounty add (me|<user>) - add me or <user> to bounty
-#   hubot (<bounty_name>) bounty remove (me|<user>) - remove me or <user> from bounty
-#   hubot (<bounty_name>) bounty (empty|clear) - clear bounty list
-#   hubot (delete|remove) <bounty_name> bounty - delete bounty called <bounty_name>
-#   hubot (<bounty_name>) bounty -1 - remove me from the bounty
-#   hubot (<bounty_name>) bounty count - list the current size of the bounty
-#   hubot (<bounty_name>) bounty (list|show) - list the people in the bounty
 
 {log, p, pjson} = require 'lightsaber'
 { values } = require 'lodash'

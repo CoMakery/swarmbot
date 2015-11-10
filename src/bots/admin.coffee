@@ -4,20 +4,6 @@
 # Commands:
 # hubot award <proposal name> to <username>
 
-# Hidden Commands:
-
-#  hubot x marks the what
-#  hubot hello
-#  hubot fork me
-
-# Not in use:
-#   hubot tag <community name> <tag>
-#   hubot info <community name>
-
-# Propz:
-#   raysrashmi for https://github.com/raysrashmi/hubot-instagram
-#
-
 {log, p, pjson} = require 'lightsaber'
 { values } = require 'lodash'
 swarmbot = require '../models/swarmbot'
