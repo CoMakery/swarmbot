@@ -10,20 +10,24 @@ class FirebaseModel
       .fetchIfNeeded()
 
   constructor: (@attributes={}, options={}) ->
+    throw new Error "please pass name, not id in attributes" if @attributes.id?
+    throw new Error "please pass name in attributes" unless @attributes.name?
     @hasParent = @hasParent || false
     @parent = options.parent
     @snapshot = options.snapshot
     if @parent?.snapshot? and @attributes.id
-      @snapshot ?= @parent.snapshot.child(@urlRoot).child(@attributes.id)
+      @snapshot ?= @parent.snapshot.child(@urlRoot).child(@key())
 
     @parseSnapshot() if @snapshot?
+
+  key: -> @attributes.name.replace(/[\s.#$\[\]]+/g, '-').replace(/(^-+|-+$)/g, '')
 
   firebase: ->
     swarmbot.firebase().child(@firebasePath())
 
   firebasePath: ->
     parentPath = if @hasParent then @parent.firebasePath() else ''
-    [ parentPath, @urlRoot, @get('id') ].join '/'
+    [ parentPath, @urlRoot, @key() ].join '/'
 
   get: (attr) ->
     @attributes[attr]

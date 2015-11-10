@@ -69,7 +69,7 @@ describe 'swarmbot', ->
         .then -> App.route message('1')
         .then (reply) ->
           reply.should.match /What is the name of your proposal/
-          App.route message('A Proposal')
+          App.route message('A Proposal.')
         .then (reply) =>
           reply.should.match /Please enter a brief description of your proposal/
           @message = message('A description')

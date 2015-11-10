@@ -16,7 +16,7 @@ class DCO extends FirebaseModel
       cb(null, bounties)
 
   createProposal: (attributes) ->
-    @fetchIfNeeded().then (dco)->
+    @fetchIfNeeded().then (dco) ->
       if dco.exists()
         proposal = new Proposal attributes,
           parent: dco
@@ -66,11 +66,8 @@ class DCO extends FirebaseModel
           return console.error(err)
         dcos = swarmbot.firebase().child('projects')
         console.log 'AssetId: ', body.assetId
-
         dcos.child(dcoKey).update { coluAssetId: body.assetId, coluAssetAddress: body.issueAddress }
-
         console.log 'Body: ', body
-
         return
 
   sendAsset: ({amount, recipient}, cb) ->
