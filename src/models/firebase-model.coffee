@@ -10,6 +10,7 @@ class FirebaseModel
       .fetchIfNeeded()
 
   constructor: (@attributes={}, options={}) ->
+    throw new Error "urlRoot must be set." unless @urlRoot
     throw new Error "please pass name, not id in attributes" if @attributes.id?
     throw new Error "please pass name in attributes" unless @attributes.name?
     @hasParent = @hasParent || false
@@ -37,7 +38,7 @@ class FirebaseModel
     @save()
 
   fetch: Promise.promisify (cb) ->
-    throw new Error "No id attribute is set, cannot fetch" unless @.get('id')
+    throw new Error "No name attribute is set, cannot fetch" unless @get('name')
     @firebase().once 'value', (@snapshot) =>
       @parseSnapshot()
       cb(null, @)
