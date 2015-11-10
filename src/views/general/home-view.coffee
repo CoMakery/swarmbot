@@ -23,7 +23,7 @@ class HomeView extends ZorkView
     headline = if @proposals.isEmpty() then 'No proposals' else 'Proposals'
     headline += " in #{@dco.get 'id'}"
     """
-    #{@bold headline}
+    [Home] #{@bold headline}
     #{@renderMenu()}
 
     To take an action, simply enter the number or letter at the beginning of the line.
