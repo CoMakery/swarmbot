@@ -57,7 +57,8 @@ describe 'swarmbot', ->
         .then (reply) ->
           reply.should.match /\*No proposals in swarmbot-lovers\*/
           reply.should.match /1: Create a proposal/
-          reply.should.match /2: More commands/
+          reply.should.match /2: Cap table/
+          reply.should.match /3: More commands/
 
       it "allows the user to create a proposal within the current community", ->
         dcoId = 'Your Great Community'
