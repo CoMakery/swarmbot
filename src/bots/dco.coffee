@@ -28,8 +28,6 @@ module.exports = (robot) ->
     dcoKey = msg.match[1]
     new DcosController().join(msg, { dcoKey })
 
-
-
   App.respond /create community (.+)$/i, (msg) ->
     log "MATCH 'create community' : #{msg.match[0]}"
     dcoKey = msg.match[1]

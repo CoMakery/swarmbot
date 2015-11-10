@@ -33,7 +33,7 @@ class ApplicationStateController
     App.route(@msg)
 
   render: (view) ->
-    @currentUser.set 'menu', view.menu
+    @currentUser.set 'menu', view.menu if view.menu
     view.render()
 
   getDco: ->
