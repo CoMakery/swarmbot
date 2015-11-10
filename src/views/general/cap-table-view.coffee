@@ -9,9 +9,10 @@ class CapTableView extends ZorkView
   render: ->
     amounts = []
     names = []
-    for {address, amount} in @capTable
-      amounts.push amount
-      names.push address
+    for {name, address, amount} in @capTable
+      if amount < 99000000
+        amounts.push amount
+        names.push name or address
 
     total = sum amounts
     amounts = (amount * 100 / total for amount in amounts)

@@ -20,6 +20,17 @@ class User extends FirebaseModel
         cb(null, new User({}, snapshot: snapshot.child(userId)))
     , cb # error
 
+  @findBy: Promise.promisify (attrName, attrValue, cb) ->
+    swarmbot.firebase().child('users')
+      .orderByChild(attrName)
+      .equalTo(attrValue)
+      .limitToFirst(1)
+      .once 'value', (snapshot)->
+        return cb(new Promise.OperationalError("Cannot find a user with #{attrName} equal to #{attrValue}.")) unless snapshot.val()
+        userId = Object.keys(snapshot.val())[0]
+        cb(null, new User({}, snapshot: snapshot.child(userId)))
+    , cb # error
+
   setDcoTo: (dcoKey) ->
     @set "current_dco", dcoKey
 
