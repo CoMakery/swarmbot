@@ -79,7 +79,7 @@ class DCO extends FirebaseModel
       recipientAddress = user.get('btc_address')
       if recipientAddress?
         p "address", recipientAddress
-        # TODO: Doesn't work, awaiting feedback from @harlan
+        # FIXME: Doesn't work
         # @sendAssetToAddress amount, sendeeAddress
       else
         cb "user must register before receiving assets"
