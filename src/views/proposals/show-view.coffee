@@ -40,7 +40,7 @@ class ShowView extends ZorkView
       description += "Image: #{imageUrl}\n"
 
     """
-    *Proposal: #{@proposal.key()}*
+    *Proposal: #{@proposal.get 'name'}*
     #{description}
     #{@renderMenu()}
 

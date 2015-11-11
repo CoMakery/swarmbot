@@ -10,13 +10,17 @@ class ShowView extends ZorkView
     @menu[i++] =
       text: "Vote Up"
       command: 'upvote'
-      data: { solutionId: @solution.key(), proposalId: @solution.parent.key() }
+      data:
+        solutionId: @solution.key()
+        solutionName: @solution.get('name')
+        proposalId: @solution.parent.key() 
 
     @menu[i++] =
       text: "Send Reward"
       transition: 'sendReward'
       data:
         solutionId: @solution.key()
+        solutionName: @solution.get('name')
         proposalId: @solution.parent.key()
 
     @menu.b = { text: "Back", transition: 'exit' }
