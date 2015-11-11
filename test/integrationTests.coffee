@@ -83,6 +83,29 @@ describe 'swarmbot', ->
       .then (reply) =>
         @message.parts[0].should.match /Community set to Community \d/
 
+  context 'general#home', ->
+    userId = 'Me'
+    dcoId = 'First Distributed Federation'
+    user = ->
+      new User(name: userId, state: 'general#home', current_dco: dcoId).save()
+    dco = ->
+      new DCO(name: dcoId, project_owner: userId).save()
+    it "shows the list of proposals in order of votes", ->
+      user()
+      .then (@user) => dco()
+      .then (@dco) => @dco.createProposal(name: 'A1')
+      .then (@proposalA) => @dco.createProposal(name: 'B2')
+      .then (@proposalB) => App.route message()
+      .then (reply) =>
+        reply.should.match /1: A1\n2: B2/
+        @proposalB.upvote(@user)
+      .then => @proposalB.fetch()
+      .then (@proposalB) =>
+        App.route message('h')
+      .then (reply) =>
+        reply.should.match /1: B2\n2: A1/
+
+
   context 'proposals#show', ->
     context 'setBounty', ->
       proposalId = 'Be Amazing'

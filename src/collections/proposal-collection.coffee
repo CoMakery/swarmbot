@@ -6,13 +6,10 @@ Proposal = require '../models/proposal'
 class ProposalCollection extends FirebaseCollection
   model: Proposal
 
-  getReputationScores: ->
-    @map (p) -> p.getReputationScore()  # method seems to not exist. bug: https://github.com/citizencode/swarmbot/issues/116
-
-  sortByReputationScore: ->
+  sortByVotes: ->
     @models = sortByOrder @models, [
-        (p) -> isNaN(p.ratings().score())
-        (p) -> p.ratings().score()
+        (p) -> isNaN(p.get('totalVotes'))
+        (p) -> p.get('totalVotes')
       ],
       ['asc', 'desc']
     @
