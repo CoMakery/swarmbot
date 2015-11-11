@@ -21,7 +21,7 @@ class HomeView extends ZorkView
 
   render: ->
     headline = if @proposals.isEmpty() then 'No proposals' else 'Proposals'
-    headline += " in #{@dco.get 'id'}"
+    headline += " in #{@dco.get 'name'}"
     """
     [Home] #{@bold headline}
     #{@renderMenu()}
@@ -32,13 +32,13 @@ class HomeView extends ZorkView
   proposalMenuItem: (proposal) ->
     {
       text: @proposalMessage(proposal)
-      data: { proposalId: proposal.get('id') }
+      data: { proposalId: proposal.key() }
       transition: 'show'
     }
 
   proposalMessage: (proposal) ->
-    text = "#{proposal.get('id')}"
-    text += " (Bounty: #{proposal.get('amount')})" if proposal.get('amount')?
+    text = "#{proposal.get 'name'}"
+    text += " (Bounty: #{proposal.get 'amount'})" if proposal.get('amount')?
     # score = proposal.ratings().score()
     # text += " Rating: #{score}%" unless isNaN(score)
     # text += " (awarded)" if proposal.get('awarded')?

@@ -32,21 +32,21 @@ class SolutionsStateController extends ApplicationController
 
   create: (data)->
     if @input?
-      if not data.id?
-        data.id = @input
+      if not data.name?
+        data.name = @input
       else if not data.link?
         data.link = @input
         return @getDco()
           .then (@dco) => Proposal.find data.proposalId, parent: @dco
           .then (@proposal) =>
-            data.userId = @currentUser.get 'id'
+            data.userId = @currentUser.key()
             @proposal.createSolution data
           .then (solution) =>
             # Notify Progenitor
             User.find @dco.get('project_owner')
             .then (owner)=>
               @msg.robot.messageRoom owner.get('slack_username'),
-                "*New Solution Submitted for #{@proposal.get('id')}*\n #{solution.get('id')}\n#{solution.get('link')}"
+                "*New Solution Submitted for #{@proposal.key()}*\n #{solution.key()}\n#{solution.get('link')}"
 
             @msg.send "Your solution has been submitted and will be reviewed!\n"
             @execute transition: 'exit', data: { proposalId: data.proposalId }
@@ -69,18 +69,18 @@ class SolutionsStateController extends ApplicationController
         @proposal.awardTo(@recipient.get('btc_address'), rewardAmount)
       .then (body) =>
         @msg.send 'Reward sent!'
-        debug "Reward #{@proposal.get('id')}/#{@solution.get('id')} to #{@recipient.get('slack_username')} :", body
+        debug "Reward #{@proposal.key()}/#{@solution.key()} to #{@recipient.get('slack_username')} :", body
         txUrl = @_coloredCoinTxUrl(body.txid)
         @msg.send "Awarded proposal to #{@recipient.get('slack_username')}.\n#{txUrl}"
         # PM message
         @msg.robot.messageRoom @recipient.get('slack_username'),
-          "Congratulations! You have received #{rewardAmount} community coins for your solution '#{@solution.get('id')}'\n#{@_coloredCoinTxUrl(body.txid)}"
+          "Congratulations! You have received #{rewardAmount} community coins for your solution '#{@solution.key()}'\n#{@_coloredCoinTxUrl(body.txid)}"
       .error (error) =>
         @msg.send error.message
       .then =>
         @execute transition: 'exit'
       .catch (error) =>
-        @msg.send "Error awarding '#{@proposal?.get('id')}' to #{@recipient?.get('slack_username')}. Unable to complete the transaction.\n #{error.message}"
+        @msg.send "Error awarding '#{@proposal?.key()}' to #{@recipient?.get('slack_username')}. Unable to complete the transaction.\n #{error.message}"
         @execute transition: 'exit'
         throw error
 

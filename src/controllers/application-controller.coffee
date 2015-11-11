@@ -5,7 +5,7 @@ DCO = require '../models/dco'
 
 class ApplicationController
   currentUser: ->
-    @_currentUser ||= new User id: @msg.robot.whose(@msg)
+    @_currentUser ||= new User name: @msg.robot.whose(@msg)
 
   getDco: ()->
     if @community?

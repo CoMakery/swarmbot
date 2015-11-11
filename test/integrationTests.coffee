@@ -28,8 +28,8 @@ describe 'swarmbot', ->
 
       it "allows the user to create a proposal within the current community", ->
         dcoId = 'Your Great Community'
-        @user = new User(id: userId, current_dco: dcoId).save()
-        dco = new DCO(id: dcoId)
+        @user = new User(name: userId, current_dco: dcoId).save()
+        dco = new DCO(name: dcoId)
         dco.save()
         .then -> App.route message()
         .then -> App.route message('1')
@@ -52,11 +52,11 @@ describe 'swarmbot', ->
 
     it "shows the user's current community, with proposals", ->
       dcoId = 'Your Great Community'
-      @user = new User(id: userId, current_dco: dcoId).save()
-      dco = new DCO(id: dcoId)
+      @user = new User(name: userId, current_dco: dcoId).save()
+      dco = new DCO(name: dcoId)
       dco.save()
-      .then -> dco.createProposal id: 'Do Stuff'
-      .then -> dco.createProposal id: 'Be Glorious'
+      .then -> dco.createProposal name: 'Do Stuff'
+      .then -> dco.createProposal name: 'Be Glorious'
       .then -> App.route message('1')
       .then (reply) ->
         reply.should.match /\*Proposals in Your Great Community\*/
@@ -65,14 +65,14 @@ describe 'swarmbot', ->
         reply.should.match /3: Create a proposal/
 
   context 'users#setDco', ->
-    it "shows the list of dcos and sets current dco", ->
+    it "shows the list of name:  and sets current dco", ->
       i = 1
       Promise.all [
-        new DCO(id: "Community #{i++}").save()
-        new DCO(id: "Community #{i++}").save()
-        new DCO(id: "Community #{i++}").save()
+        new DCO(name: "Community #{i++}").save()
+        new DCO(name: "Community #{i++}").save()
+        new DCO(name: "Community #{i++}").save()
       ]
-      .then (@dcos) => new User(id: userId, state: 'general#more').save()
+      .then (@dcos) => new User(name: userId, state: 'general#more').save()
       .then (@user) => App.route message()
       .then (reply) => App.route message('1')
       .then (reply) =>
@@ -88,11 +88,11 @@ describe 'swarmbot', ->
       proposalId = 'Be Amazing'
       dcoId = 'my dco'
       user = ->
-        new User(id: userId, state: 'proposals#show', stateData: {proposalId: proposalId}, current_dco: dcoId).save()
+        new User(name: userId, state: 'proposals#show', stateData: {proposalId: proposalId}, current_dco: dcoId).save()
       dco = ->
-        new DCO(id: dcoId, project_owner: userId).save()
+        new DCO(name: dcoId, project_owner: userId).save()
       proposal = (dco) ->
-        dco.createProposal(id: proposalId)
+        dco.createProposal(name: proposalId)
 
       it "shows setBounty item only for progenitors", ->
         user()
@@ -142,20 +142,20 @@ describe 'swarmbot', ->
     dcoId = 'my dco'
     admin = ->
       new User
-        id: userId
+        name: userId
         state: 'solutions#show'
         stateData: {solutionId, proposalId}
         current_dco: dcoId
       .save()
     solutionCreator = ->
       new User
-        id: solutionCreatorId
+        name: solutionCreatorId
         slack_username: 'noah'
         btc_address: 'abc123'
       .save()
-    dco = -> new DCO(id: dcoId, project_owner: userId).save()
-    proposal = (dco) -> dco.createProposal(id: proposalId)
-    solution = (proposal) -> proposal.createSolution id: solutionId, userId: solutionCreatorId
+    dco = -> new DCO(name: dcoId, project_owner: userId).save()
+    proposal = (dco) -> dco.createProposal(name: proposalId)
+    solution = (proposal) -> proposal.createSolution name: solutionId, userId: solutionCreatorId
 
     it "allows the progenitor to send a reward for a solution", ->
       admin()

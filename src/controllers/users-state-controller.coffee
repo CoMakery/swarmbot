@@ -25,10 +25,9 @@ class UsersStateController extends ApplicationController
 
   # set DCO
   setDcoTo: (params)->
-    dcoId = params.id
-    @currentUser.setDcoTo(dcoId).then =>
+    @currentUser.setDcoTo(params.id).then =>
       @currentUser.exit()
-      @redirect("Community set to #{dcoId}")
+      @redirect "Community set to #{params.name}"
 
   myAccount: ->
     # show current user data

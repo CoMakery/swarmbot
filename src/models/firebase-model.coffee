@@ -5,23 +5,27 @@ swarmbot = require './swarmbot'
 
 class FirebaseModel
 
-  @find: (id, options={}) ->
-    new @(id: id, options)
+  @find: (name, options={}) ->
+    new @ {name}, options
       .fetchIfNeeded()
 
   constructor: (@attributes={}, options={}) ->
     throw new Error "urlRoot must be set." unless @urlRoot
     throw new Error "please pass name, not id in attributes" if @attributes.id?
-    throw new Error "please pass name in attributes" unless @attributes.name?
+    throw new Error "@attributes must contain 'name'; got #{pjson @attributes}" unless @attributes.name?
     @hasParent = @hasParent || false
     @parent = options.parent
-    @snapshot = options.snapshot
-    if @parent?.snapshot? and @attributes.id
-      @snapshot ?= @parent.snapshot.child(@urlRoot).child(@key())
-
+    @snapshot = if options.snapshot
+      options.snapshot
+    else if @parent?.snapshot?
+      @parent.snapshot.child(@urlRoot).child(@key())
     @parseSnapshot() if @snapshot?
 
-  key: -> @attributes.name.replace(/[\s.#$\[\]]+/g, '-').replace(/(^-+|-+$)/g, '')
+  # Firebase-safe key
+  # if .name is 'strange .#$[] chars!'
+  # .key will be 'strange-chars!'
+  key: ->
+    @attributes.name.replace(/[-\s.#$\[\]]+/g, '-').replace(/(^-+|-+$)/g, '')
 
   firebase: ->
     swarmbot.firebase().child(@firebasePath())

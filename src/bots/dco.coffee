@@ -30,8 +30,8 @@ module.exports = (robot) ->
 
   App.respond /create community (.+)$/i, (msg) ->
     log "MATCH 'create community' : #{msg.match[0]}"
-    dcoKey = msg.match[1]
-    new DcosController().create(msg, { dcoKey })
+    dcoName = msg.match[1]
+    new DcosController().create(msg, { dcoName })
 
   App.respond /dao me (.+)$/i, (msg) ->
     log "MATCH 'dao me' : #{msg.match[0]}"

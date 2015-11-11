@@ -10,10 +10,9 @@ class SetDcoView
     @menu.b = { text: "Back", transition: 'exit' }
 
   dcoMenuItem: (dco) ->
-    id = dco.get 'id'
     {
-      text: id
-      data: { id }
+      text: dco.get 'name'
+      data: {id: dco.key(), name: dco.get('name')}
       command: 'setDcoTo'
     }
 

@@ -18,7 +18,7 @@ class GeneralStateController extends ApplicationController
     .then (dco) =>
       proposals = new ProposalCollection(dco.snapshot.child('proposals'), parent: dco)
       # if proposals.isEmpty()
-      #   return @msg.send "There are no proposals to display in #{dco.get('id')}."
+      #   return @msg.send "There are no proposals to display in #{dco.key()}."
       proposals.sortByReputationScore()
       # messages = proposals.map(@_proposalMessage)[0...5]
 

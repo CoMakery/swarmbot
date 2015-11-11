@@ -15,7 +15,7 @@ class ProposalsController extends ApplicationController
       dco.fetch().then (dco) =>
         proposals = new ProposalCollection(dco.snapshot.child('proposals'), parent: dco)
         if proposals.isEmpty()
-          return @msg.send "There are no proposals to display in #{dco.get('id')}."
+          return @msg.send "There are no proposals to display in #{dco.key()}."
 
         proposals.sortByReputationScore()
         messages = proposals.map @_proposalMessage
@@ -37,7 +37,7 @@ class ProposalsController extends ApplicationController
         messages = proposals.map @_proposalMessage
 
         if messages.length == 0
-          return @msg.send "There are no approved bounties for #{dco.get('id')}.\n Type 'proposals' to see what needs to be approved!"
+          return @msg.send "There are no approved bounties for #{dco.key()}.\n Type 'proposals' to see what needs to be approved!"
 
 
         @msg.send messages.join("\n")
@@ -59,7 +59,7 @@ class ProposalsController extends ApplicationController
 
             proposal.fetch().then (proposal) =>
               if not proposal.exists()
-                @msg.send "Proposal '#{proposal.get('id')}' does not exist. Did you misspell it?"
+                @msg.send "Proposal '#{proposal.key()}' does not exist. Did you misspell it?"
               else if proposal.get('awarded')
                 @msg.send "This proposal has already been awarded."
               else if not proposal.get('amount') or proposal.get('amount') is '0'
@@ -67,16 +67,16 @@ class ProposalsController extends ApplicationController
               else
                 @msg.send 'Initiating transaction...'
                 proposal.awardTo(awardeeAddress).then (body)=>
-                  p "award #{proposal.get('id')} to #{awardee} :", body
+                  p "award #{proposal.key()} to #{awardee} :", body
                   @msg.send "Awarded proposal to #{awardee}.\n#{@_coloredCoinTxnUrl(body.txid)}"
-                  proposal.set('awarded', user.get('id'))
+                  proposal.set('awarded', user.key())
                 .catch (error)=>
-                  @msg.send "Error awarding '#{proposal.get('id')}' to #{awardee}. Unable to complete the transaction.\n #{error.message}"
+                  @msg.send "Error awarding '#{proposal.key()}' to #{awardee}. Unable to complete the transaction.\n #{error.message}"
                   throw error
           else
             @msg.send "#{user.get('slack_username')} must register a BTC address to receive this award!"
       else
-        p "#{@currentUser().get('id')} trying to award bounty within dco #{dco.get('id')}"
+        p "#{@currentUser().key()} trying to award bounty within dco #{dco.key()}"
         # @msg.send "Sorry, you don't have sufficient trust in this community to award this proposal."
         @msg.send "Sorry, you must be the progenitor of this DCO to award proposals."
 
@@ -85,7 +85,7 @@ class ProposalsController extends ApplicationController
     .then (@dco) =>
       @dco.createProposal({ id: proposalName, amount })
     .then =>
-      @msg.send "Proposal '#{proposalName}' created in community '#{@dco.get('id')}'"
+      @msg.send "Proposal '#{proposalName}' created in community '#{@dco.key()}'"
     .error(@_showError)
 
   swarmbotSuggestion: (@msg, { suggestion }) ->
@@ -97,7 +97,7 @@ class ProposalsController extends ApplicationController
         @msg.send "The community '#{swarmbot.feedbackDcokey}' does not exist. Please ask your amazing swarmbot admin to create it!"
 
   _proposalMessage: (proposal) ->
-    text = "Proposal #{proposal.get('id')}"
+    text = "Proposal #{proposal.key()}"
     if (proposal.get('amount') && proposal.get('amount') > 0)
       text += " Reward $#{proposal.get('amount')}"
     score = proposal.ratings().score()

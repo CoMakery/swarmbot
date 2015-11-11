@@ -23,7 +23,7 @@ class ProposalsStateController extends ApplicationController
     promise = @getDco()
     .then (dco) => Proposal.find(proposalId, parent: dco)
     .then (proposal) =>
-      canSetBounty = (proposal.parent.get('project_owner') == @currentUser.get('id'))
+      canSetBounty = (proposal.parent.get('project_owner') == @currentUser.key())
       @render(new ShowView(proposal, { canSetBounty }))
 
   upvote: (data) ->
@@ -39,8 +39,8 @@ class ProposalsStateController extends ApplicationController
   create: (data) ->
     data ?= {}
     if @input?
-      if not data.id?
-        data.id = @input
+      if not data.name?
+        data.name = @input
       else if not data.description?
         data.description = @input
       else if not data.imageUrl?

@@ -7,7 +7,7 @@ class CreateView
     }
 
   render: ->
-    if !@data.id?
+    if !@data.name?
       "What is the name of your proposal? ('b' to go back)"
     else if !@data.description?
       "Please enter a brief description of your proposal. ('b' to go back)"

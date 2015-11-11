@@ -35,7 +35,7 @@ class User extends FirebaseModel
     @set "current_dco", dcoKey
 
   canUpdate: (dco) ->
-    dco.get('project_owner') == @get('id')
+    dco.get('project_owner') == @key()
 
   fetch: ->
     super().then =>
