@@ -1,3 +1,4 @@
+debug = require('debug')('app')
 { log, p, pjson } = require 'lightsaber'
 { map } = require 'lodash'
 Promise = require 'bluebird'
@@ -48,7 +49,7 @@ class GeneralStateController extends ApplicationController
                 holder
 
             .then (holders) =>
-              p holders
+              debug holders
               resolve @render new CapTableView {capTable: holders}
 
   advanced: ->
