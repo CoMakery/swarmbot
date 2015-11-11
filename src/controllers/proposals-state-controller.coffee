@@ -20,7 +20,7 @@ class ProposalsStateController extends ApplicationController
 
   show: (data) ->
     proposalId = data.proposalId ? throw new Error "show requires an id"
-    promise = @getDco()
+    @getDco()
     .then (dco) => Proposal.find(proposalId, parent: dco)
     .then (proposal) =>
       canSetBounty = (proposal.parent.get('project_owner') == @currentUser.key())
