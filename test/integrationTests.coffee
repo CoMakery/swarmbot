@@ -1,30 +1,9 @@
 {log, p, pjson} = require 'lightsaber'
 Promise = require 'bluebird'
-chai = require 'chai'
-chaiAsPromised = require("chai-as-promised")
-chai.should()
-chai.use(chaiAsPromised)
-debug = require('debug')('test')
-FirebaseServer = require('firebase-server')
-sinon = require 'sinon'
-# require('sinon-as-promised')(Promise)
-# require 'sinon-chai'
-
+require './testHelper'
 global.App = require '../src/app'
-swarmbot = require '../src/models/swarmbot'
 DCO = require '../src/models/dco'
 User = require '../src/models/user'
-
-MOCK_FIREBASE_ADDRESS = '127.0.1' # strange host name needed by testing framework
-process.env.FIREBASE_URL = "ws://#{MOCK_FIREBASE_ADDRESS}:5000"
-
-
-sinon.stub(swarmbot, 'colu').returns Promise.resolve
-  on: ->
-  init: ->
-  sendAsset: (x, cb)-> cb(null, {txid: 1234})
-  issueAsset: ->
-
 
 userId = "slack:1234"
 message = (input) ->
@@ -37,19 +16,6 @@ message = (input) ->
     @parts.push reply
 
 describe 'swarmbot', ->
-  before ->
-    @firebaseServer = new FirebaseServer 5000, MOCK_FIREBASE_ADDRESS, {}
-
-  beforeEach (done) ->
-    swarmbot.firebase().remove done
-
-  afterEach ->
-    debug 'FB data:'
-    debug pjson @firebaseServer.getValue()
-
-  after ->
-    @firebaseServer.close()
-
   context 'general#home', ->
     context 'with no proposals', ->
       it "shows the default community", ->
@@ -62,14 +28,14 @@ describe 'swarmbot', ->
 
       it "allows the user to create a proposal within the current community", ->
         dcoId = 'Your Great Community'
-        @user = new User(id: userId, current_dco: dcoId).save()
-        dco = new DCO(id: dcoId)
+        @user = new User(name: userId, current_dco: dcoId).save()
+        dco = new DCO(name: dcoId)
         dco.save()
         .then -> App.route message()
         .then -> App.route message('1')
         .then (reply) ->
           reply.should.match /What is the name of your proposal/
-          App.route message('A Proposal')
+          App.route message('A Proposal.')
         .then (reply) =>
           reply.should.match /Please enter a brief description of your proposal/
           @message = message('A description')
@@ -86,11 +52,11 @@ describe 'swarmbot', ->
 
     it "shows the user's current community, with proposals", ->
       dcoId = 'Your Great Community'
-      @user = new User(id: userId, current_dco: dcoId).save()
-      dco = new DCO(id: dcoId)
+      @user = new User(name: userId, current_dco: dcoId).save()
+      dco = new DCO(name: dcoId)
       dco.save()
-      .then -> dco.createProposal id: 'Do Stuff'
-      .then -> dco.createProposal id: 'Be Glorious'
+      .then -> dco.createProposal name: 'Do Stuff'
+      .then -> dco.createProposal name: 'Be Glorious'
       .then -> App.route message('1')
       .then (reply) ->
         reply.should.match /\*Proposals in Your Great Community\*/
@@ -99,14 +65,14 @@ describe 'swarmbot', ->
         reply.should.match /3: Create a proposal/
 
   context 'users#setDco', ->
-    it "shows the list of dcos and sets current dco", ->
+    it "shows the list of name:  and sets current dco", ->
       i = 1
       Promise.all [
-        new DCO(id: "Community #{i++}").save()
-        new DCO(id: "Community #{i++}").save()
-        new DCO(id: "Community #{i++}").save()
+        new DCO(name: "Community #{i++}").save()
+        new DCO(name: "Community #{i++}").save()
+        new DCO(name: "Community #{i++}").save()
       ]
-      .then (@dcos) => new User(id: userId, state: 'general#more').save()
+      .then (@dcos) => new User(name: userId, state: 'general#more').save()
       .then (@user) => App.route message()
       .then (reply) => App.route message('1')
       .then (reply) =>
@@ -122,11 +88,11 @@ describe 'swarmbot', ->
       proposalId = 'Be Amazing'
       dcoId = 'my dco'
       user = ->
-        new User(id: userId, state: 'proposals#show', stateData: {proposalId: proposalId}, current_dco: dcoId).save()
+        new User(name: userId, state: 'proposals#show', stateData: {proposalId: proposalId}, current_dco: dcoId).save()
       dco = ->
-        new DCO(id: dcoId, project_owner: userId).save()
+        new DCO(name: dcoId, project_owner: userId).save()
       proposal = (dco) ->
-        dco.createProposal(id: proposalId)
+        dco.createProposal(name: proposalId)
 
       it "shows setBounty item only for progenitors", ->
         user()
@@ -176,20 +142,20 @@ describe 'swarmbot', ->
     dcoId = 'my dco'
     admin = ->
       new User
-        id: userId
+        name: userId
         state: 'solutions#show'
         stateData: {solutionId, proposalId}
         current_dco: dcoId
       .save()
     solutionCreator = ->
       new User
-        id: solutionCreatorId
+        name: solutionCreatorId
         slack_username: 'noah'
         btc_address: 'abc123'
       .save()
-    dco = -> new DCO(id: dcoId, project_owner: userId).save()
-    proposal = (dco) -> dco.createProposal(id: proposalId)
-    solution = (proposal) -> proposal.createSolution id: solutionId, userId: solutionCreatorId
+    dco = -> new DCO(name: dcoId, project_owner: userId).save()
+    proposal = (dco) -> dco.createProposal(name: proposalId)
+    solution = (proposal) -> proposal.createSolution name: solutionId, userId: solutionCreatorId
 
     it "allows the progenitor to send a reward for a solution", ->
       admin()

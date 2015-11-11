@@ -8,6 +8,8 @@ class SendRewardView
         transition: 'exit'
 
   render: ->
-    "Enter reward amount to send to #{@recipientUsername} for the solution '#{@data.solutionId}' ('b' to go back)"
+    "Enter reward amount to send to #{@recipientUsername}
+      for the solution '#{@data.solutionName}' 
+      ('b' to go back)"
 
 module.exports = SendRewardView

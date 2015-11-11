@@ -1,6 +1,6 @@
 Promise = require 'bluebird'
 {log, p, pjson} = require 'lightsaber'
-{ assign, partition, sortByOrder, forEach, map, filter } = require 'lodash'
+{ partition, sortByOrder, forEach, map, filter } = require 'lodash'
 swarmbot = require '../models/swarmbot'
 
 class FirebaseCollection
@@ -17,8 +17,10 @@ class FirebaseCollection
       @models = modelsOrSnapshot
     else
       @snapshot = modelsOrSnapshot
-      @models = for id, data of @snapshot.val()
-        new @model assign(data, id: id), { parent: @parent, snapshot: @snapshot.child(id) }
+      @models = for key, data of @snapshot.val()
+        new @model data,
+          parent: @parent,
+          snapshot: @snapshot.child(key)
 
   all: -> @models
 

@@ -10,7 +10,7 @@ class Solution extends FirebaseModel
 
   upvote: Promise.promisify (user, cb) ->
     attributes = {}
-    attributes[user.get 'id'] = 1
+    attributes[user.key()] = 1
     @firebase().child('votes').update attributes, cb
 
 module.exports = Solution

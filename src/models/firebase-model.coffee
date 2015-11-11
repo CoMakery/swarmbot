@@ -5,25 +5,34 @@ swarmbot = require './swarmbot'
 
 class FirebaseModel
 
-  @find: (id, options={}) ->
-    new @(id: id, options)
+  @find: (name, options={}) ->
+    new @ {name}, options
       .fetchIfNeeded()
 
   constructor: (@attributes={}, options={}) ->
+    throw new Error "urlRoot must be set." unless @urlRoot
+    throw new Error "please pass name, not id in attributes" if @attributes.id?
+    throw new Error "@attributes must contain 'name'; got #{pjson @attributes}" unless @attributes.name?
     @hasParent = @hasParent || false
     @parent = options.parent
-    @snapshot = options.snapshot
-    if @parent?.snapshot? and @attributes.id
-      @snapshot ?= @parent.snapshot.child(@urlRoot).child(@attributes.id)
-
+    @snapshot = if options.snapshot
+      options.snapshot
+    else if @parent?.snapshot?
+      @parent.snapshot.child(@urlRoot).child(@key())
     @parseSnapshot() if @snapshot?
+
+  # Firebase-safe key
+  # if .name is 'strange .#$[] chars!'
+  # .key will be 'strange-chars!'
+  key: ->
+    @attributes.name.replace(/[-\s.#$\[\]]+/g, '-').replace(/(^-+|-+$)/g, '')
 
   firebase: ->
     swarmbot.firebase().child(@firebasePath())
 
   firebasePath: ->
     parentPath = if @hasParent then @parent.firebasePath() else ''
-    [ parentPath, @urlRoot, @get('id') ].join '/'
+    [ parentPath, @urlRoot, @key() ].join '/'
 
   get: (attr) ->
     @attributes[attr]
@@ -33,7 +42,7 @@ class FirebaseModel
     @save()
 
   fetch: Promise.promisify (cb) ->
-    throw new Error "No id attribute is set, cannot fetch" unless @.get('id')
+    throw new Error "No name attribute is set, cannot fetch" unless @get('name')
     @firebase().once 'value', (@snapshot) =>
       @parseSnapshot()
       cb(null, @)

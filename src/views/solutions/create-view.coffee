@@ -7,7 +7,7 @@ class CreateView
     }
 
   render: ->
-    if !@data.id?
+    if !@data.name?
       "What is the name of your solution? ('b' to go back)"
     else if !@data.link?
       "Please enter a link to your solution. ('b' to go back)"

@@ -8,16 +8,16 @@ class IndexView extends ZorkView
 
     @proposal.solutions().each (solution) =>
       @menu[i++] =
-        text: solution.get 'id'
+        text: solution.key()
         transition: 'show'
-        data: { solutionId: solution.get('id'), proposalId: solution.parent.get('id') }
+        data: { solutionId: solution.key(), proposalId: solution.parent.key() }
 
     @menu[i++] = { text: "Submit a solution", transition: 'create' }
-    @menu.b = { text: "Back", transition: 'exit', data: {proposalId: @proposal.get('id')} }
+    @menu.b = { text: "Back", transition: 'exit', data: {proposalId: @proposal.key()} }
 
   render: ->
     """
-    *#{if @proposal.solutions().isEmpty() then 'No solutions' else 'Solutions'} for #{@proposal.get 'id'}*
+    *#{if @proposal.solutions().isEmpty() then 'No solutions' else 'Solutions'} for #{@proposal.key()}*
 
     #{@renderMenu()}
 

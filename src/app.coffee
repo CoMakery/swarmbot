@@ -54,6 +54,6 @@ class App
         throw new Error("Action for state '#{user.current}' not defined.")
 
   @setCurrentUser: (msg) ->
-    msg.currentUser ?= new User id: msg.robot.whose(msg)
+    msg.currentUser ?= new User name: msg.robot.whose(msg)
 
 module.exports = App

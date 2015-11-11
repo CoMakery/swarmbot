@@ -16,29 +16,29 @@ class DCO extends FirebaseModel
       cb(null, bounties)
 
   createProposal: (attributes) ->
-    @fetchIfNeeded().then (dco)->
+    @fetchIfNeeded().then (dco) ->
       if dco.exists()
         proposal = new Proposal attributes,
           parent: dco
-          snapshot: dco.snapshot.child(Proposal::urlRoot).child(attributes.id)
+          # snapshot: dco.snapshot.child(Proposal::urlRoot).child(attributes.id)
         if proposal.exists()
-          Promise.reject(Promise.OperationalError("Proposal '#{attributes.id}' already exists within #{dco.get('id')}."))
+          Promise.reject(Promise.OperationalError("Proposal '#{attributes.name}' already exists within #{dco.key()}."))
         else
           proposal.save()
       else
-        Promise.reject(Promise.OperationalError("The community '#{dco.get('id')}' does not exist."))
+        Promise.reject(Promise.OperationalError("The community '#{dco.key()}' does not exist."))
 
   memberIds: ->
     keys @get('members')
 
   members: ->
-    new UserCollection(map @memberIds(), (id) -> new User({id: id}))
+    new UserCollection(map @memberIds(), (key) -> new User({name: key}))
 
   hasMember: (user) ->
-    contains @memberIds(), user.get('id')
+    contains @memberIds(), user.key()
 
   addMember: (user) ->
-    userId = user.get('id')
+    userId = user.key()
     present = (indexOf(@memberIds(), userId) != -1)
 
     if present
@@ -51,7 +51,7 @@ class DCO extends FirebaseModel
       user
 
   issueAsset: ({ amount }, cb) ->
-    dcoKey = @get('id')
+    dcoKey = @key()
     issuer = dcoKey
     asset =
       amount: amount
@@ -66,15 +66,12 @@ class DCO extends FirebaseModel
           return console.error(err)
         dcos = swarmbot.firebase().child('projects')
         console.log 'AssetId: ', body.assetId
-
         dcos.child(dcoKey).update { coluAssetId: body.assetId, coluAssetAddress: body.issueAddress }
-
         console.log 'Body: ', body
-
         return
 
   sendAsset: ({amount, recipient}, cb) ->
-    p "username", recipient.get('id')
+    p "username", recipient.key()
     recipient.fetch().then (user) ->
       recipientAddress = user.get('btc_address')
       if recipientAddress?

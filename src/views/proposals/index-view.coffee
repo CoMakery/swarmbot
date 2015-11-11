@@ -23,12 +23,12 @@
 #   proposalMenuItem: (proposal) ->
 #     {
 #       text: @proposalMessage(proposal)
-#       data: { id: proposal.get('id') }
+#       data: { id: proposal.key() }
 #       transition: 'show'
 #     }
 #
 #   proposalMessage: (proposal) ->
-#     text = "#{proposal.get('id')}"
+#     text = "#{proposal.key()}"
 #     # text += " Reward #{proposal.get('amount')}" if proposal.get('amount')?
 #     score = proposal.ratings().score()
 #     text += " Rating: #{score}%" unless isNaN(score)

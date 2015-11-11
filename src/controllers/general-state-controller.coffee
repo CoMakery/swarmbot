@@ -1,3 +1,4 @@
+debug = require('debug')('app')
 { log, p, pjson } = require 'lightsaber'
 { map } = require 'lodash'
 Promise = require 'bluebird'
@@ -18,7 +19,7 @@ class GeneralStateController extends ApplicationController
     .then (dco) =>
       proposals = new ProposalCollection(dco.snapshot.child('proposals'), parent: dco)
       # if proposals.isEmpty()
-      #   return @msg.send "There are no proposals to display in #{dco.get('id')}."
+      #   return @msg.send "There are no proposals to display in #{dco.key()}."
       proposals.sortByReputationScore()
       # messages = proposals.map(@_proposalMessage)[0...5]
 
@@ -48,7 +49,7 @@ class GeneralStateController extends ApplicationController
                 holder
 
             .then (holders) =>
-              p holders
+              debug holders
               resolve @render new CapTableView {capTable: holders}
 
   advanced: ->

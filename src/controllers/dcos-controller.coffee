@@ -12,7 +12,7 @@ class DcosController extends ApplicationController
       @msg.send @textList myDcos
 
   textList: (dcos) ->
-    dcoNames = dcos.map (dco) -> dco.get('id')
+    dcoNames = dcos.map (dco) -> dco.key()
     dcoNames.join "\n"
 
   listMembers: (@msg, { dcoKey }) ->
@@ -41,7 +41,7 @@ class DcosController extends ApplicationController
     @getDco()
     .then (dco) -> dco.fetch()
     .then (dco) ->
-      return @msg.send "The community '#{dco.get('id')}' does not exist." unless dco.exists()
+      return @msg.send "The community '#{dco.key()}' does not exist." unless dco.exists()
       return @msg.send "You are already a member of this community." if dco.hasMember(@currentUser())
 
       @msg.send [
@@ -58,30 +58,30 @@ class DcosController extends ApplicationController
     @getDco()
     .then (dco)-> dco.fetch()
     .then (dco)->
-      return @msg.send "The community '#{dco.get('id')}' does not exist." unless dco.exists()
+      return @msg.send "The community '#{dco.key()}' does not exist." unless dco.exists()
       user = @currentUser()
       if dco.addMember user
         @msg.reply "Great, you've joined the DCO"
         # TODO: Membership coin as well as bounty coin
         # dco.sendAsset { amount: 1, recipient: user }
-        user.setDcoTo dco.get('id')
+        user.setDcoTo dco.key()
       else
-        @msg.reply "You are already a member of #{dco.get('id')}!"
+        @msg.reply "You are already a member of #{dco.key()}!"
 
     .error(@_showError)
 
-  create: (@msg, { dcoKey }) ->
-    owner = @currentUser().get('id')
-    DCO.find(dcoKey).then (dco) =>
+  create: (@msg, { dcoName }) ->
+    owner = @currentUser().key()
+    DCO.find(dcoName).then (dco) =>
       if dco.exists()
-        return @msg.send "Community '#{dcoKey}' already exists!"
+        return @msg.send "Community '#{dcoName}' already exists!"
 
       dco.set 'project_owner', owner
       dco.save()
-      @currentUser().setDcoTo dco.get('id')
+      @currentUser().setDcoTo dco.key()
 
       dco.issueAsset { amount: 100000000 }
-      dcoCreateStatus = {stage: 1, dcoKey: dcoKey, project_owner: owner}
+      dcoCreateStatus = {stage: 1, dcoName: dcoName, project_owner: owner}
       p "dcoCreateStatus", dcoCreateStatus
       @msg.robot.brain.set "dcoCreateStatus_" + owner, dcoCreateStatus
       @msg.send "Community created. Please provide a statement of intent starting with 'We'"

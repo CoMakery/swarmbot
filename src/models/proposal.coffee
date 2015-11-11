@@ -12,7 +12,7 @@ class Proposal extends FirebaseModel
 
   upvote: Promise.promisify (user, cb) ->
     attributes = {}
-    attributes[user.get 'id'] = 1
+    attributes[user.key()] = 1
     @firebase().child('votes').update attributes, cb
 
   createSolution: (attrs)->
@@ -37,8 +37,8 @@ class Proposal extends FirebaseModel
           amount: amount
         }]
         metadata:
-          community: dco.get('id')
-          proposal:  @get('id')
+          community: dco.key()
+          proposal:  @key()
 
       try
         colu.sendAsset args, cb

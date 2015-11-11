@@ -10,23 +10,23 @@ class ShowView extends ZorkView
     @menu[i++] =
       text: "Vote Up"
       command: 'upvote'
-      data: { proposalId: @proposal.get('id') }
+      data: { proposalId: @proposal.key() }
 
     @menu[i++] =
       text: "View All Solutions",
       transition: 'solutions'
-      data: { proposalId: @proposal.get('id') }
+      data: { proposalId: @proposal.key() }
 
     @menu[i++] =
       text: "Submit Solution",
       transition: 'createSolution'
-      data: { proposalId: @proposal.get('id') }
+      data: { proposalId: @proposal.key() }
 
     if canSetBounty
       @menu[i++] =
         text: "Set Bounty",
         transition: 'setBounty'
-        data: { proposalId: @proposal.get('id') }
+        data: { proposalId: @proposal.key() }
 
     @menu.b = { text: "Back", transition: 'exit' }
 
@@ -40,7 +40,7 @@ class ShowView extends ZorkView
       description += "Image: #{imageUrl}\n"
 
     """
-    *Proposal: #{@proposal.get('id')}*
+    *Proposal: #{@proposal.get 'name'}*
     #{description}
     #{@renderMenu()}
 
