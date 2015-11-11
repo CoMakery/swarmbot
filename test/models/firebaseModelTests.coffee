@@ -1,18 +1,11 @@
 {log, p, pjson} = require 'lightsaber'
-chai = require 'chai'
-chai.should()
-FirebaseServer = require('firebase-server')
 FirebaseModel = require '../../src/models/firebase-model'
-
-MOCK_FIREBASE_ADDRESS = '127.0.1' # strange host name needed by testing framework
-process.env.FIREBASE_URL = "ws://#{MOCK_FIREBASE_ADDRESS}:5000"
+require '../testHelper'
 
 class SomeModel extends FirebaseModel
   urlRoot: 'fakemodel'
 
 describe 'SomeModel', ->
-  before ->
-    @firebaseServer = new FirebaseServer 5000, MOCK_FIREBASE_ADDRESS, {}
 
   # describe '#safeId', ->
   #   it "escapes special characters", ->
