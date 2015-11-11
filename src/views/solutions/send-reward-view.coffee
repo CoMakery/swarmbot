@@ -9,7 +9,7 @@ class SendRewardView
 
   render: ->
     "Enter reward amount to send to #{@recipientUsername}
-      for the solution '#{@data.solutionName}' 
+      for the solution '#{@data.solutionName}'
       ('b' to go back)"
 
 module.exports = SendRewardView

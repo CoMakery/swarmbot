@@ -13,7 +13,7 @@ class ShowView extends ZorkView
       data:
         solutionId: @solution.key()
         solutionName: @solution.get('name')
-        proposalId: @solution.parent.key() 
+        proposalId: @solution.parent.key()
 
     @menu[i++] =
       text: "Send Reward"
