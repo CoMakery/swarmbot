@@ -26,7 +26,7 @@
     "sinon": "^1.17.2"
   },
   "dependencies": {
-    "airbrake": "node-airbrake/harlantwood#patch-1",
+    "airbrake": "citizencode/node-airbrake#patch-1",
     "bitcoinjs-lib": "^2.1.1",
     "bluebird": "^3.0.5",
     "coffee-script": "^1.10.0",
