@@ -12,7 +12,7 @@ class FirebaseModel
   constructor: (@attributes={}, options={}) ->
     throw new Error "urlRoot must be set." unless @urlRoot
     throw new Error "please pass name, not id in attributes" if @attributes.id?
-    throw new Error "@attributes must contain 'name'; got #{pjson @attributes}" unless @attributes.name?
+    throw new Error "@attributes must contain 'name'; got #{pjson @attributes}" if !@attributes.name? and !options.snapshot?
     @hasParent = @hasParent || false
     @parent = options.parent
     @snapshot = if options.snapshot
