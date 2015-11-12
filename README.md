@@ -79,6 +79,6 @@ If you wish to load environment variables from a local `.env` file:
 
     env `cat .env` npm run dev
 
-## Social Contract License
+## License
 
-Swarmbot is the first implementation of the [Social Contract License](https://github.com/fractastical/distributed-governance/blob/master/social_contract_license.md).
+Swarmbot is being developed under the experimental [Peer Production Royalty Token License](https://github.com/citizencode/swarmbot/blob/master/license.md).
