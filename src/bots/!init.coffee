@@ -27,6 +27,7 @@ if process.env.FIREBASE_SECRET?
 
 InitBot = (robot) ->
   App.robot = robot
+  robot.router.use(App.airbrake.expressHandler()) if App.airbrake
 
   robot.whose = (msg) -> "slack:#{msg.message.user.id}"
 

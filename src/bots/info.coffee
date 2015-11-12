@@ -13,12 +13,15 @@ module.exports = (robot) ->
     throw new Error('I am a test exception')
 
   App.respond /airbrake notify!$/i, (msg) ->
-    err = new Error('Hi through Airbrake')
-    App.airbrake.notify err, (err, url) ->
-      if (err)
-        throw err
-      else
-        p "Delivered to #{url}"
+    if App.airbrake
+      err = new Error('Hi through Airbrake')
+      App.airbrake.notify err, (err, url) ->
+        if (err)
+          throw err
+        else
+          msg.send "Delivered to #{url}"
+    else
+      msg.send "No airbrake configured"
 
   App.respond /x marks the what$/i, (msg) ->
     msg.send "https://www.youtube.com/watch?v=SFY-Kg1OqAk"
