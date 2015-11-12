@@ -6,12 +6,18 @@
 # Commands:
 #
 
+if process.env.AIRBRAKE_API_KEY
+  airbrake = require('airbrake').createClient(process.env.AIRBRAKE_API_KEY)
+  airbrake.handleExceptions()
+
 { json, log, p, pjson } = require 'lightsaber'
 Promise = require 'bluebird'
 swarmbot = require '../models/swarmbot'
 User = require '../models/user'
 global.App = require '../app'
 UsersController = require '../controllers/users-controller'
+
+App.airbrake = airbrake
 
 Promise.longStackTraces() if process.env.NODE_ENV is 'development' # decreases performance 5x
 
