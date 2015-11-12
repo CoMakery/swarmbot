@@ -78,7 +78,11 @@ class DcosController extends ApplicationController
 
       dco.set 'project_owner', owner
       dco.save()
-      @currentUser().setDcoTo dco.key()
+
+      user = @currentUser()
+      user.setDcoTo dco.key()
+      user.set 'state', 'general#home' # ignore the state machine, go directly to home.
+      user.save()
 
       dco.issueAsset { amount: 100000000 }
       dcoCreateStatus = {stage: 1, dcoName: dcoName, project_owner: owner}
