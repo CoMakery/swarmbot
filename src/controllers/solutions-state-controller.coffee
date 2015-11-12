@@ -78,10 +78,10 @@ class SolutionsStateController extends ApplicationController
       .error (error) =>
         @msg.send error.message
       .then =>
-        @execute transition: 'exit'
+        @execute transition: 'exit', data: data
       .catch (error) =>
         @msg.send "Error awarding '#{@proposal?.key()}' to #{@recipient?.get('slack_username')}. Unable to complete the transaction.\n #{error.message}"
-        @execute transition: 'exit'
+        @execute transition: 'exit', data: data
         throw error
 
     else

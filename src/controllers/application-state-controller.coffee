@@ -17,7 +17,7 @@ class ApplicationStateController
 
     if menuAction.transition?
       promise = promise.then =>
-        @currentUser.set 'stateData', menuAction.data if menuAction.data
+        @currentUser.set 'stateData', menuAction.data or {}
         if @currentUser[menuAction.transition]
           @currentUser[menuAction.transition]()
           debug 'redirecting...'

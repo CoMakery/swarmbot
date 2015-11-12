@@ -23,7 +23,7 @@ class ShowView extends ZorkView
         solutionName: @solution.get('name')
         proposalId: @solution.parent.key()
 
-    @menu.b = { text: "Back", transition: 'exit' }
+    @menu.b = { text: "Back", transition: 'exit', data: { proposalId: @solution.parent.key() } }
 
   render: ->
     """

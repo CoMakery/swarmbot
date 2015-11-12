@@ -12,7 +12,7 @@ class IndexView extends ZorkView
         transition: 'show'
         data: { solutionId: solution.key(), proposalId: solution.parent.key() }
 
-    @menu[i++] = { text: "Submit a solution", transition: 'create' }
+    @menu[i++] = { text: "Submit a solution", transition: 'create', data: {proposalId: @proposal.key()} }
     @menu.b = { text: "Back", transition: 'exit', data: {proposalId: @proposal.key()} }
 
   render: ->

@@ -3,7 +3,7 @@
 class EditView
   constructor: (@data) ->
     @menu = {
-      b: { text: "Back", transition: 'exit' }
+      b: { text: "Back", transition: 'exit', data: {proposalId: @data.proposalId} }
     }
 
   render: ->

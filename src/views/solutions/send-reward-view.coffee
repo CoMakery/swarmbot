@@ -6,6 +6,7 @@ class SendRewardView
       b:
         text: "Back"
         transition: 'exit'
+        data: { proposalId: @data.proposalId, solutionId: @data.solutionId }
 
   render: ->
     "Enter reward amount to send to #{@recipientUsername}

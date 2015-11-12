@@ -62,7 +62,7 @@ class ProposalsStateController extends ApplicationController
           .then (proposal) -> proposal.set 'amount', data.bounty
           .then =>
             @msg.send "Bounty amount set to #{data.bounty}\n"
-            @execute transition: 'exit'
+            @execute transition: 'exit', data: {proposalId: data.proposalId}
         else
           @msg.send "For a bounty amount, please enter only numbers\n"
 

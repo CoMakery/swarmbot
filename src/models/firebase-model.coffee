@@ -10,11 +10,14 @@ class FirebaseModel
       .fetchIfNeeded()
 
   constructor: (@attributes={}, options={}) ->
-    throw new Error "urlRoot must be set." unless @urlRoot
-    throw new Error "please pass name, not id in attributes" if @attributes.id?
-    throw new Error "@attributes must contain 'name'; got #{pjson @attributes}" if !@attributes.name? and !options.snapshot?
     @hasParent = @hasParent || false
     @parent = options.parent
+
+    throw new Error "urlRoot must be set." unless @urlRoot
+    throw new Error "This model requires a parent." if @hasParent && !@parent
+    throw new Error "please pass name, not id in attributes" if @attributes.id?
+    throw new Error "@attributes must contain 'name'; got #{pjson @attributes}" if !@attributes.name? and !options.snapshot?
+
     @snapshot = if options.snapshot
       options.snapshot
     else if @parent?.snapshot?
