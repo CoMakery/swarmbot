@@ -27,6 +27,7 @@ class HomeView extends ZorkView
     [Home] #{@bold headline}
     #{@renderMenu()}
 
+    Meow! Rewards are granted by community admins for accepted solutions at their discretion.
     To take an action, simply enter the number or letter at the beginning of the line.
     """
 
@@ -39,7 +40,7 @@ class HomeView extends ZorkView
 
   proposalMessage: (proposal) ->
     text = "#{proposal.get 'name'}"
-    text += " (Bounty: #{proposal.get 'amount'})" if proposal.get('amount')?
+    text += " (Reward: #{proposal.get 'amount'})" if proposal.get('amount')?
     # score = proposal.ratings().score()
     # text += " Rating: #{score}%" unless isNaN(score)
     # text += " (awarded)" if proposal.get('awarded')?
