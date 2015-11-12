@@ -10,6 +10,7 @@ if process.env.AIRBRAKE_API_KEY
   airbrake = require('airbrake').createClient(process.env.AIRBRAKE_API_KEY)
   airbrake.handleExceptions()
 
+debug = require('debug')('app')
 { json, log, p, pjson } = require 'lightsaber'
 Promise = require 'bluebird'
 swarmbot = require '../models/swarmbot'
@@ -19,6 +20,16 @@ UsersController = require '../controllers/users-controller'
 
 App.airbrake = airbrake
 
+process.on 'unhandledRejection', (error, promise) ->
+  throw error unless App.airbrake
+  console.error 'Unhandled rejection: ' + (error and error.stack or error)
+  App.airbrake.notify error, (airbrakeNotifyError, url) ->
+    if airbrakeNotifyError
+      throw airbrakeNotifyError
+    else
+      debug "Delivered to #{url}"
+      throw error
+
 Promise.longStackTraces() if process.env.NODE_ENV is 'development' # decreases performance 5x
 
 if process.env.FIREBASE_SECRET?
@@ -27,7 +38,7 @@ if process.env.FIREBASE_SECRET?
 
 InitBot = (robot) ->
   App.robot = robot
-  robot.router.use(App.airbrake.expressHandler()) if App.airbrake
+  robot.router.use(App.airbrake.expressHandler()) if App.airbrake  # do we need this?
 
   robot.whose = (msg) -> "slack:#{msg.message.user.id}"
 

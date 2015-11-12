@@ -23,7 +23,7 @@ class App
       for [pattern, cb] in @responses
         if match = input.match pattern
           msg.match = msg.message.match(pattern)
-          return new Promise (resolve) =>
+          return new Promise (resolve, reject) =>
             cb(msg)
             resolve('')
 
