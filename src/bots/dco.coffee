@@ -82,7 +82,9 @@ module.exports = (robot) ->
         when 1
           log 'WE statement'
           if firstTwoLetters == "we" && currentUser == dcoCreateStatus.project_owner
-            swarmbot.firebase().child('projects/' + dcoCreateStatus.dcoName).update({project_statement : answer})
+            dco = new DCO name: dcoCreateStatus.dcoName
+            dco.set 'project_statement', answer
+            dco.save()
             dcoCreateStatus = {stage: 0}
             key = "dcoCreateStatus_" + currentUser
             robot.brain.set key, dcoCreateStatus
