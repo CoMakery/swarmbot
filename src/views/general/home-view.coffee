@@ -12,6 +12,7 @@ class HomeView extends ZorkView
 
     @orderedMenu.push [null, { text: "\n*Actions:*" }]
     @orderedMenu.push [i++, { text: "Create a proposal", transition: 'create' }]
+    @orderedMenu.push [i++, { text: "My balance", command: 'balance' }]
     @orderedMenu.push [i++, { text: "Cap table", command: 'capTable' }]
     @orderedMenu.push [i++, { text: "More commands", transition: 'more' }]
 

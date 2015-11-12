@@ -9,6 +9,20 @@ class FirebaseModel
     new @ {name}, options
       .fetchIfNeeded()
 
+  @findBy: Promise.promisify (attrName, attrValue, cb) ->
+    swarmbot.firebase().child(@::urlRoot)
+      .orderByChild(attrName)
+      .equalTo(attrValue)
+      .limitToFirst(1)
+      .once 'value', (snapshot)=>
+        if snapshot.val()
+          key = Object.keys(snapshot.val())[0]
+          cb(null, new @({}, snapshot: snapshot.child(key)))
+        else
+          cb(new Promise.OperationalError("Cannot find a model with #{attrName} equal to #{attrValue}."))
+    , cb # error
+
+
   constructor: (@attributes={}, options={}) ->
     @hasParent = @hasParent || false
     @parent = options.parent

@@ -5,10 +5,12 @@ Promise = require 'bluebird'
 ApplicationController = require './application-state-controller'
 ProposalCollection = require '../collections/proposal-collection'
 Proposal = require '../models/proposal'
+DCO = require '../models/dco'
 User = require '../models/user'
 HomeView = require '../views/general/home-view'
 MoreCommandsView = require '../views/general/more-commands-view'
 CapTableView = require '../views/general/cap-table-view'
+BalanceView = require '../views/general/balance-view'
 AdvancedCommandsView = require '../views/general/advanced-commands-view'
 
 class GeneralStateController extends ApplicationController
@@ -51,6 +53,24 @@ class GeneralStateController extends ApplicationController
             .then (holders) =>
               debug holders
               resolve @render new CapTableView {capTable: holders}
+
+  balance: ->
+    new Promise (resolve, reject) =>
+      @msg.http "https://testnet.explorer.coloredcoins.org/api/getaddressinfo?address=n3DQ2erSoMZtsbmcar1rZiTtHuouKKWKQ2"
+      .get() (error, res, body) =>
+        if error
+          reject(error)
+        else
+          data = JSON.parse body
+          Promise.map data.assets, (asset) ->
+            DCO.findBy 'coluAssetId', asset.assetId
+            .then (dco) =>
+              asset.name = dco.get('name')
+              asset
+            .catch =>
+              asset
+          .then (assets) =>
+            resolve @render new BalanceView assets: assets
 
   advanced: ->
     @render new AdvancedCommandsView @msg.robot
