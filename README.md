@@ -81,4 +81,4 @@ If you wish to load environment variables from a local `.env` file:
 
 ## License
 
-Swarmbot is being developed under the experimental [Peer Production Royalty Token License](https://github.com/citizencode/swarmbot/blob/master/license.md).
+Swarmbot is being developed under the experimental [Peer Production Royalty Token License](https://github.com/citizencode/swarmbot/blob/master/LICENSE.md).
