@@ -123,11 +123,11 @@ describe 'swarmbot', ->
         .then (@dco) => proposal(@dco)
         .then (@proposal) => App.route message()
         .then (reply) =>
-          reply.should.match /\d: Set Bounty/
+          reply.should.match /\d: Set Reward/
           @dco.set 'project_owner', 'someoneElse'
         .then (@dco) => App.route message()
         .then (reply) =>
-          reply.should.not.match /\d: Set Bounty/
+          reply.should.not.match /\d: Set Reward/
 
       it "sets the bounty", ->
         user()
