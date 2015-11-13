@@ -42,7 +42,7 @@ class FirebaseModel
   # if .name is 'strange .#$[] chars!'
   # .key will be 'strange-chars!'
   key: ->
-    @attributes.name.replace(/[-\s.#$\[\]]+/g, '-').replace(/(^-+|-+$)/g, '')
+    key = @attributes.name.replace(/[.#$\[\]]/g, '-')
 
   firebase: ->
     swarmbot.firebase().child(@firebasePath())

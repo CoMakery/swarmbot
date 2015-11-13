@@ -15,9 +15,9 @@ describe 'SomeModel', ->
 
   describe 'constructor', ->
     it "should have a friendly name and a kebab case ID", ->
-      model = new SomeModel name: 'i am a strange -.#$[]- name'
-      model.key().should.eq 'i-am-a-strange-name'
-      model.get('name').should.eq 'i am a strange -.#$[]- name'
+      model = new SomeModel name: 'i am a strange - .#$[] - name'
+      model.key().should.eq 'i am a strange - ----- - name'
+      model.get('name').should.eq 'i am a strange - .#$[] - name'
 
     it "should save and be fetchable by name", ->
       model = new SomeModel name: 'A Proper Name', description: 'something'
