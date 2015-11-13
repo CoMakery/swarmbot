@@ -39,8 +39,9 @@ class FirebaseModel
     @parseSnapshot() if @snapshot?
 
   # Firebase-safe key
-  # if .name is 'strange .#$[] chars!'
-  # .key will be 'strange-chars!'
+  # Converts illegal characters .#$[] to -
+  # if .name is  'strange .#$[] chars!'
+  # .key will be 'strange ----- chars!'
   key: ->
     key = @attributes.name.replace(/[.#$\[\]]/g, '-')
 
