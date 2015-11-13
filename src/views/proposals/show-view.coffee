@@ -35,7 +35,7 @@ class ShowView extends ZorkView
     if not isEmpty @proposal.get('description')
       description += "_#{@proposal.get('description')}_\n"
     if amount = @proposal.get 'amount'
-      description += "Bounty: #{amount}\n"
+      description += "Reward: #{amount}\n"
     if imageUrl = @proposal.get 'imageUrl'
       description += "Image: #{imageUrl}\n"
 
