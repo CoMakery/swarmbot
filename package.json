@@ -14,6 +14,7 @@
     "dev": "bin/hubot --name s",
     "fulltest": "npm test && npm run lint",
     "lint": "coffeelint --quiet src test",
+    "shipit": "npm run fulltest && git push origin head",
     "start": "bin/hubot --adapter slack",
     "test": "mocha"
   },
