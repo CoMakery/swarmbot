@@ -24,7 +24,7 @@ class ShowView extends ZorkView
 
     if canSetBounty
       @menu[i++] =
-        text: "Set Bounty",
+        text: "Set Reward",
         transition: 'setBounty'
         data: { proposalId: @proposal.key() }
 
