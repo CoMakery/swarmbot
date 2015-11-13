@@ -65,7 +65,10 @@ class SolutionsStateController extends ApplicationController
       .then (@recipient) =>
         unless @recipient.get('btc_address')?
           throw Promise.OperationalError("This user doesn't have a registered Bitcoin address!")
-        @msg.send 'Initiating transaction...'
+        @msg.send "Initiating transaction.
+          This will take some time to confirm in the blockchain.
+          We will private message both yourself and #{@recipient.get('slack_username')}
+          when the transaction is complete."
         @proposal.awardTo(@recipient.get('btc_address'), rewardAmount)
       .then (body) =>
         @msg.send 'Reward sent!'
