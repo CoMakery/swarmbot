@@ -4,6 +4,7 @@ debug = require('debug')('app')
 Promise = require 'bluebird'
 ApplicationController = require './application-state-controller'
 ProposalCollection = require '../collections/proposal-collection'
+swarmbot = require '../models/swarmbot'
 Proposal = require '../models/proposal'
 DCO = require '../models/dco'
 User = require '../models/user'
@@ -35,7 +36,7 @@ class GeneralStateController extends ApplicationController
     .then (dco) =>
       assetId = dco.get('coluAssetId')
       new Promise (resolve, reject) =>
-        @msg.http "https://testnet.explorer.coloredcoins.org/api/getassetinfowithtransactions?assetId=#{assetId}"
+        @msg.http "#{swarmbot.coluExplorerUrl()}/api/getassetinfowithtransactions?assetId=#{assetId}"
         .get() (error, res, body) =>
           if error
             reject error
@@ -56,7 +57,7 @@ class GeneralStateController extends ApplicationController
 
   balance: ->
     new Promise (resolve, reject) =>
-      @msg.http "https://testnet.explorer.coloredcoins.org/api/getaddressinfo?address=n3DQ2erSoMZtsbmcar1rZiTtHuouKKWKQ2"
+      @msg.http "#{swarmbot.coluExplorerUrl()}/api/getaddressinfo?address=#{@currentUser.get('btc_address')}"
       .get() (error, res, body) =>
         if error
           reject(error)

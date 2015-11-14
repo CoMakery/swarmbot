@@ -31,4 +31,8 @@ class Swarmbot
         resolve @_colu
       @_colu.init()
 
+  coluExplorerUrl: ->
+    testnet = if process.env.COLU_NETWORK == testnet then "testnet." else ""
+    "https://#{testnet}explorer.coloredcoins.org"
+
 module.exports = new Swarmbot
