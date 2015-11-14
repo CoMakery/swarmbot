@@ -79,6 +79,37 @@ If you wish to load environment variables from a local `.env` file:
 
     env `cat .env` npm run dev
 
+## Deploying
+
+### Heroku Deploy
+
+```sh
+heroku create
+heroku ps:type hobby  # will be available 24/7, but costs $
+heroku addons:create redistogo:nano
+heroku addons:create airbrake:free_heroku  # error reporting, recommended
+git push heroku master
+```
+
+### Set environment variables
+
+```sh
+HUBOT_SLACK_TOKEN  #your slack token, from Slack -> Integrations -> Hubot
+
+COLU_PRIVATE_SEED
+COLU_NETWORK (testnet|mainnet)
+COLU_MAINNET_APIKEY  # if on mainnet
+
+FIREBASE_URL
+FIREBASE_SECRET
+
+DEBUG=app  # for verbose debugging info in logs
+
+# optional:
+HUBOT_INSTAGRAM_ACCESS_KEY
+HUBOT_INSTAGRAM_CLIENT_KEY
+```
+
 ## License
 
 Swarmbot is being developed under the experimental [Peer Production Royalty Token License](https://github.com/citizencode/swarmbot/blob/master/LICENSE.md).
