@@ -1,0 +1,14 @@
+# #!/usr/bin/env coffee
+#
+# Colu = require('colu')
+# colu = new Colu
+#   network: process.env.COLU_NETWORK
+#   apiKey: process.env.COLU_MAINNET_APIKEY
+#   privateSeed: null
+#
+#
+# colu.on 'connect', ->
+#   privateSeed = colu.hdwallet.getPrivateSeed()
+#   console.log privateSeed
+#
+# console.log 2
