@@ -6,6 +6,7 @@
 
 {log, p, pjson} = require 'lightsaber'
 Instagram = require('instagram-node-lib')
+swarmbot = require '../models/swarmbot'
 
 module.exports = (robot) ->
 
@@ -44,6 +45,9 @@ module.exports = (robot) ->
       complete: (data) ->
         for item in data
           msg.send item['images']['standard_resolution']['url']
+
+  App.respond /colu/i, (msg) ->
+    swarmbot.colu()
 
 authenticateUser = (msg) ->
   config =
