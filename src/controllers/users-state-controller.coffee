@@ -1,11 +1,15 @@
 
 { log, p, pjson } = require 'lightsaber'
 { address } = require 'bitcoinjs-lib'
+Promise = require 'bluebird'
 ApplicationController = require './application-state-controller'
+swarmbot = require '../models/swarmbot'
+DCO = require '../models/dco'
 DcoCollection = require '../collections/dco-collection'
 ShowView = require '../views/users/show-view'
 BtcView = require '../views/users/btc-view'
 SetDcoView = require '../views/users/set-dco-view'
+BalanceView = require '../views/general/balance-view'
 
 class UsersStateController extends ApplicationController
 
@@ -45,5 +49,24 @@ class UsersStateController extends ApplicationController
         p error.message
 
     @render new BtcView({address: btcAddress}, error)
+
+  balance: ->
+    new Promise (resolve, reject) =>
+      @msg.http "#{swarmbot.coluExplorerUrl()}/api/getaddressinfo?address=#{@currentUser.get('btc_address')}"
+      .get() (error, res, body) =>
+        if error
+          reject(error)
+        else
+          data = JSON.parse body
+          Promise.map data.assets, (asset) ->
+            DCO.findBy 'coluAssetId', asset.assetId
+            .then (dco) =>
+              asset.name = dco.get('name')
+              asset
+            .catch =>
+              asset
+          .then (assets) =>
+            resolve @render new BalanceView assets: assets
+
 
 module.exports = UsersStateController

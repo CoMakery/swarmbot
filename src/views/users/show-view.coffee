@@ -7,6 +7,7 @@ class ShowView extends ZorkView
     @menu = {}
 
     @menu[i++] = { text: "Set bitcoin address", transition: 'setBtc' }
+    @menu[i++] = { text: "My balance", command: 'balance' }
     @menu.b = { text: "Back", transition: 'exit' }
 
   render: ->
