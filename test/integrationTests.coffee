@@ -22,9 +22,9 @@ describe 'swarmbot', ->
         App.route message('')
         .then (reply) ->
           reply.should.match /\*No proposals in swarmbot-lovers\*/
-          reply.should.match /: Create a proposal/
-          reply.should.match /: Cap table/
-          reply.should.match /: More commands/
+          reply.should.match /\d: Create a proposal/
+          reply.should.match /\d: Cap table/
+          reply.should.match /\d: Advanced commands/
 
       it "allows the user to create a proposal within the current community", ->
         dcoId = 'Your Great Community'
@@ -65,7 +65,7 @@ describe 'swarmbot', ->
         reply.should.match /3: Create a proposal/
 
   context 'users#setDco', ->
-    it "shows the list of name:  and sets current dco", ->
+    it "shows the list of name: and sets current dco", ->
       i = 1
       Promise.all [
         new DCO(name: "Community #{i++}").save()
