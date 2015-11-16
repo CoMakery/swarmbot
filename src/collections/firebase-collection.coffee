@@ -46,4 +46,12 @@ class FirebaseCollection
 
   size: -> @models.length
 
+  sortBy: (sortField) ->
+    @models = sortByOrder @models, [
+        (p) -> isNaN(p.get(sortField))
+        (p) -> p.get(sortField)
+      ],
+      ['asc', 'desc']
+    @
+
 module.exports = FirebaseCollection

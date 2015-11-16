@@ -6,7 +6,7 @@ class IndexView extends ZorkView
     @menu = {}
     i = 1
 
-    @proposal.solutions().sortByVotes().each (solution) =>
+    @proposal.solutions().sortBy('totalVotes').each (solution) =>
       @menu[i++] =
         text: solution.key()
         transition: 'show'

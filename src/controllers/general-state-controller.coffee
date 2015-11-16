@@ -21,7 +21,7 @@ class GeneralStateController extends ApplicationController
       proposals = new ProposalCollection(dco.snapshot.child('proposals'), parent: dco)
       # if proposals.isEmpty()
       #   return @msg.send "There are no proposals to display in #{dco.key()}."
-      proposals.sortByVotes()
+      proposals.sortBy 'totalVotes'
       # messages = proposals.map(@_proposalMessage)[0...5]
 
       @render new HomeView dco, proposals
