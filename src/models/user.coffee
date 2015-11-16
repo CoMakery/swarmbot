@@ -42,6 +42,8 @@ class User extends FirebaseModel
       throw new Error "State Machine Error! Event: #{event} // #{from} -> #{to} // args: #{pjson args} // error: #{errorCode}  #{errorMessage}"
 
     events: [
+      { name: 'exit', from: 'general#home', to: 'general#home' }
+
       { name: 'show', from: 'general#home', to: 'proposals#show' }
       { name: 'exit', from: 'proposals#show', to: 'general#home' }
 
