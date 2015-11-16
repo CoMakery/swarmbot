@@ -72,9 +72,8 @@ describe 'swarmbot', ->
         new DCO(name: "Community #{i++}").save()
         new DCO(name: "Community #{i++}").save()
       ]
-      .then (@dcos) => new User(name: userId, state: 'general#home').save()
+      .then (@dcos) => new User(name: userId, state: 'users#setDco').save()
       .then (@user) => App.route message()
-      .then (reply) => App.route message('1')
       .then (reply) =>
         reply.should.match /\*Set Current Community\*/
         reply.should.match /[1-3]: Community [1-3]/
