@@ -104,7 +104,6 @@ describe 'swarmbot', ->
       .then (reply) =>
         reply.should.match /1: B2\n2: A1/
 
-
   context 'proposals#show', ->
     context 'setBounty', ->
       proposalId = 'Be Amazing'
@@ -194,3 +193,31 @@ describe 'swarmbot', ->
         App.route @message
       .then (reply) =>
         @message.parts[0].should.match /Initiating transaction/
+
+  context 'solutions#index', ->
+    userId = 'Me'
+    dcoId = 'First Distributed Federation'
+    user = ->
+      new User
+        name: userId
+        state: 'solutions#index'
+        current_dco: dcoId
+        stateData: {proposalId: 'proposal' }
+      .save()
+    dco = ->
+      new DCO(name: dcoId, project_owner: userId).save()
+    it "shows the list of proposals in order of votes", ->
+      user()
+      .then (@user) => dco()
+      .then (@dco) => @dco.createProposal(name: 'proposal')
+      .then (@proposal) => @proposal.createSolution(name: 'solution A')
+      .then (@solutionA) => @proposal.createSolution(name: 'solution B')
+      .then (@solutionB) => App.route message()
+      .then (reply) =>
+        reply.should.match /1: solution A\n2: solution B/
+        @solutionB.upvote(@user)
+      .then => @solutionB.fetch()
+      .then (@solutionB) =>
+        App.route message('')
+      .then (reply) =>
+        reply.should.match /1: solution B\n2: solution A/
