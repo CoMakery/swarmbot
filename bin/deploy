@@ -1,0 +1,27 @@
+#!/usr/bin/env coffee
+
+# Usage: deploy herokuEnv herokuApp
+
+require 'shelljs/global'
+{ json, log, p, pjson } = require 'lightsaber'
+
+run = (cmd, options = {}) ->
+  continue_on_failure = options.continue_on_failure ? false
+  echo "==> #{cmd}"
+  code = exec(cmd).code
+  if code isnt 0
+    echo 'COMMAND FAILED'
+    exit(code) unless continue_on_failure
+  code
+
+[herokuEnv, herokuApp] = process.argv[-2...]
+
+# if herokuEnv is 'staging' ...
+#   run "npm version patch"
+#   git push origin --tags
+
+deployResult = run "git push --force git@heroku.com:#{herokuApp}.git HEAD:refs/heads/master", continue_on_failure: true
+if deployResult is 0
+  ref = process.env.CIRCLE_SHA1 or exec('git rev-parse head').output.trim()
+  run "heroku config:set GIT_REF=#{ref} --app #{herokuApp}"
+exit deployResult

@@ -11,6 +11,7 @@
   "description": "Bot for bounties",
   "scripts": {
     "colu": "colu",
+    "deploy": "bin/deploy",
     "deploy-staging": "npm run fulltest && git branch --force staging head && git push --force origin staging:staging",
     "deploy-production": "git fetch && git branch --force production origin/staging && git push --force origin production:production",
     "dev": "bin/hubot --name s",
@@ -27,6 +28,7 @@
     "coffeelint": "^1.13.0",
     "firebase-server": "^0.5.0",
     "mocha": "^2.2.5",
+    "shelljs": "^0.5.3",
     "sinon": "^1.17.2"
   },
   "dependencies": {
