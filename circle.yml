@@ -3,9 +3,11 @@ machine:
     version: 4
 
 deployment:
-  branch: master
-  commands:
-    - bin/deploy edge swarmbot-edge
-  branch: staging
-  commands:
-    - bin/deploy staging swarmbot-staging
+  edge:
+    branch: master
+    commands:
+      - bin/deploy edge swarmbot-edge
+  staging:
+    branch: staging
+    commands:
+      - bin/deploy staging swarmbot-staging
