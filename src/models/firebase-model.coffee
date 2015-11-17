@@ -14,7 +14,7 @@ class FirebaseModel
       .orderByChild(attrName)
       .equalTo(attrValue)
       .limitToFirst(1)
-      .once 'value', (snapshot)=>
+      .once 'value', (snapshot) =>
         if snapshot.val()
           key = Object.keys(snapshot.val())[0]
           cb(null, new @({}, snapshot: snapshot.child(key)))
@@ -39,13 +39,13 @@ class FirebaseModel
     @parseSnapshot() if @snapshot?
 
   # Firebase-safe key
-  # Converts illegal characters .#$[] to -
+  # Converts each illegal character: .#$[] to a single dash
   # if .name is  'strange .#$[] chars!'
   # .key will be 'strange ----- chars!'
   key: ->
     if not @attributes.name?
-      throw new Error "@attributes.name not found for #{pjson @}"
-      @fetch().then => throw new Error "before fetching, @attributes.name was not found for #{pjson @}"
+      @fetch().then => throw new Error "before fetching, @attributes.name was not found for #{pjson @attributes}"
+      throw new Error "@attributes.name not found, got #{pjson @attributes}"
     key = @attributes.name.replace(/[.#$\[\]]/g, '-')
 
   firebase: ->
