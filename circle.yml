@@ -3,7 +3,9 @@ machine:
     version: 4
   post:
     - npm install -g npm@3.3.12
-
+test:
+  override:
+    - npm run fulltest
 deployment:
   edge:
     branch: master
