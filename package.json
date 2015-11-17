@@ -11,6 +11,8 @@
   "description": "Bot for bounties",
   "scripts": {
     "colu": "colu",
+    "deploy-staging": "npm run fulltest && git branch --force staging head && git push --force origin staging:staging",
+    "deploy-production": "git fetch && git branch --force production origin/staging && git push --force origin production:production",
     "dev": "bin/hubot --name s",
     "fulltest": "npm test && npm run lint",
     "lint": "coffeelint --quiet src test",
@@ -44,8 +46,8 @@
     "lodash": "^3.10.0"
   },
   "engines": {
-    "node": "4.2.x",
-    "npm": "3.x"
+    "node": "4.2.2",
+    "npm": "2.14.11"
   },
   "repository": {
     "type": "git",
