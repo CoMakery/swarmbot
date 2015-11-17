@@ -1,7 +1,7 @@
 sudo: false
 language: node_js
 before_install:
-- npm install -g npm@latest
+- npm install -g npm@3.3.12
 node_js:
 - '0.10'
 - '0.12'
@@ -17,7 +17,6 @@ deploy:
   api_key:
     secure: kA245fO+j31ULQ7yKQHAoMqYER7tSvJXORFs/hzW2BPp7boJajQovZSrHjBnDnDb43KZZ7lKMkj0Jzq18noWXFmWVyaByrsYYpV4RfarPZxPHBlxeGQ5sR9W45paTBsUtQsdfc7exHrpllA+DPUT+1rYw8UuO8PPOI0k9pJzT4aeVRIq+nEdWcOjyB2w2VwxvPFABSU6YhpDLlWmhZ6yElvLytDYvSiyl83vlmVIpCRX8X/LxVLtAf4SCdcGD/ResfH/zZVIhOzNU3bI7qoyxfm3kNI0JZd7g4PGKSwW0Zr7UeOzm2+lYlfaGyW0/ykPl3npjuLbK9injM+DoF0aTV+8xLip5CYbFL/2BEGW11Ims1WkKIyoOLBS0ImghXH9zMey92Qjkocl5SD5O3elZr7+BdKHwi5yh+NFmKpVqQF0/6dbPKyTmulbKtvU4d4cpWWbhx3/fHatTffiZGceL+FuTiZs5qpDeeK5cfZGLdGjRmZvA8cpwOBwnU5ZBDzAR3/kOQVqwf4Gj8VjFAQwvjXMbPYxjJUfWBQ2/m/cX+fVXh5wB7zp/x1ZtSm2fThvuDSukuooICBDENUF6QFYGKFH27OHddxnAn0GOQWwQ6VmgwjNEWEerZNdKWzAYkUliMKGN2F8Kq1/WDLhgNoQzuiwE+wgHKf27oAlzdQAzyM=
   app:
-    master:
-      - swarmbot-edge
-      - swarmbot-staging
+    master: swarmbot-edge
+    # - swarmbot-staging
     # staging
