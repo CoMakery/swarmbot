@@ -43,6 +43,9 @@ class FirebaseModel
   # if .name is  'strange .#$[] chars!'
   # .key will be 'strange ----- chars!'
   key: ->
+    if not @attributes.name?
+      throw new Error "@attributes.name not found for #{pjson @}"
+      @fetch().then => throw new Error "before fetching, @attributes.name was not found for #{pjson @}"
     key = @attributes.name.replace(/[.#$\[\]]/g, '-')
 
   firebase: ->
