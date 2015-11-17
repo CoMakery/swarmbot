@@ -1,6 +1,8 @@
 machine:
   node:
     version: 4
+  post:
+    - npm install -g npm@3.3.12
 
 deployment:
   edge:
