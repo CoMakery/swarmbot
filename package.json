@@ -18,7 +18,8 @@
     "lint": "coffeelint --quiet src test",
     "shipit": "npm run fulltest && git push origin head",
     "start": "bin/hubot --adapter slack",
-    "test": "mocha"
+    "test": "mocha",
+    "wrap": "npm shrinkwrap"
   },
   "devDependencies": {
     "chai": "^3.2.0",
