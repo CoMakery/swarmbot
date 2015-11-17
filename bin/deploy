@@ -1,6 +1,7 @@
 #!/usr/bin/env coffee
-
+#
 # Usage: deploy herokuEnv herokuApp
+#
 
 require 'shelljs/global'
 { json, log, p, pjson } = require 'lightsaber'

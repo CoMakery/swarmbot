@@ -6,3 +6,6 @@ deployment:
   branch: master
   commands:
     - bin/deploy edge swarmbot-edge
+  branch: staging
+  commands:
+    - bin/deploy staging swarmbot-staging
