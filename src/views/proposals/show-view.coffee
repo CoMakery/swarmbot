@@ -39,12 +39,36 @@ class ShowView extends ZorkView
     if imageUrl = @proposal.get 'imageUrl'
       description += "Image: #{imageUrl}\n"
 
-    """
-    *Proposal: #{@proposal.get 'name'}*
-    #{description}
-    #{@renderMenu()}
+    fields = [
+      {
+        title: 'Actions'
+        value: @renderMenu()
+        short: true
+      }
+    ]
+    if amount = @proposal.get 'amount'
+      fields.push {
+        title: 'Reward'
+        value: amount
+        short: true
+      }
 
-    To take an action, simply enter the number or letter at the beginning of the line.
-    """
+    [
+      {
+        color: '#66BB66'
+        title: "Proposal: #{(@proposal.get 'name').toUpperCase()}"
+        text: @proposal.get('description')
+        thumb_url: @proposal.get 'imageUrl'
+        fallback: """
+          *Proposal: #{@proposal.get 'name'}*
+          #{description}
+          """
+      }
+      {
+        color: '#FB6'
+        fields: fields
+        fallback: @renderMenu()
+      }
+    ]
 
 module.exports = ShowView

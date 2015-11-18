@@ -11,7 +11,7 @@ if process.env.AIRBRAKE_API_KEY
   airbrake.handleExceptions()
 
 debug = require('debug')('app')
-{ json, log, p, pjson } = require 'lightsaber'
+{ json, log, p, pjson, type } = require 'lightsaber'
 Promise = require 'bluebird'
 swarmbot = require '../models/swarmbot'
 User = require '../models/user'
@@ -42,16 +42,28 @@ InitBot = (robot) ->
 
   robot.whose = (msg) -> "slack:#{msg.message.user.id}"
 
-  robot.pmReply = (msg, text) -> robot.messageRoom msg.message.user.name, text
+  robot.pmReply = (msg, textOrAttachments) ->
+    channel = msg.message.user.name
+    if type(textOrAttachments) is 'string'
+      robot.messageRoom channel, textOrAttachments
+    else if type(textOrAttachments) in ['array', 'object']
+      robot.adapter.customMessage
+        channel: channel
+        attachments: textOrAttachments
+    else
+      throw new Error "Unexpected type(textOrAttachments) -> #{type(textOrAttachments)}"
 
   robot.isPublic = (msg) -> msg.message.room isnt msg.message.user?.name
+
+  robot.slack = robot.adapter.client # TODO: Detect if this actually is a slack adapter.
 
   # State-based message routing
   robot.respond /(.*)/, (msg) ->
     autoRegisterUser msg
     if robot.isPublic msg
       msg.reply "Let's take this offline.  I PM'd you :smile:"
-    App.route(msg).then (response) -> robot.pmReply msg, response
+    App.route(msg).then (response) ->
+      robot.pmReply msg, response
 
   robot.router.post '/hubot/chatsecrets/:room', (req, res) ->
     p "HTTP webhook received", req, res
