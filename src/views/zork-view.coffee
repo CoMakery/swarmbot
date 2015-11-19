@@ -25,13 +25,13 @@ class ZorkView
   bold: (text) -> "*#{text}*"
 
   question: (text) ->
-    coloredMessage @QUESTION_COLOR, text
+    @coloredMessage @QUESTION_COLOR, text
 
   info: (text) ->
-    coloredMessage @INFO_COLOR, text
+    @coloredMessage @INFO_COLOR, text
 
   warning: (text) ->
-    coloredMessage @ERROR_COLOR, text
+    @coloredMessage @ERROR_COLOR, text
 
   coloredMessage: (color, text) ->
     {
