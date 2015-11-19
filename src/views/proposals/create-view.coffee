@@ -16,6 +16,6 @@ class CreateView extends ZorkView
       'Please enter an image URL for your proposal (enter "n" for none)'
     else
       ''
-    @question message if message 
+    @question message if message
 
 module.exports = CreateView
