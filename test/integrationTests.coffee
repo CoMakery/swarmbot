@@ -1,4 +1,4 @@
-{log, p, pjson} = require 'lightsaber'
+{log, p, pjson, json} = require 'lightsaber'
 Promise = require 'bluebird'
 require './testHelper'
 global.App = require '../src/app'
@@ -21,10 +21,10 @@ describe 'swarmbot', ->
       it "shows the default community", ->
         App.route message('')
         .then (reply) ->
-          reply.should.match /\*No proposals in swarmbot-lovers\*/
-          reply.should.match /\d: Create a proposal/
-          reply.should.match /\d: Cap table/
-          reply.should.match /\d: Advanced commands/
+          jreply = json reply
+          jreply.should.match /no proposals/
+          jreply.should.match /\d: cap table/
+          jreply.should.match /\d: advanced commands/
 
       it "allows the user to create a proposal within the current community", ->
         dcoId = 'Your Great Community'
@@ -47,7 +47,7 @@ describe 'swarmbot', ->
         .then (reply) =>
           @message.parts.length.should.eq 1
           @message.parts[0].should.match /Proposal created/
-          reply.should.match /\*Proposals in Your Great Community\*/
+          (json reply).should.match /View Current Proposals/
         # TODO check that proposal exists with those attributes
 
     it "shows the user's current community, with proposals", ->
@@ -59,10 +59,11 @@ describe 'swarmbot', ->
       .then -> dco.createProposal name: 'Be Glorious'
       .then -> App.route message('1')
       .then (reply) ->
-        reply.should.match /\*Proposals in Your Great Community\*/
-        reply.should.match /[1-2]: Do Stuff/
-        reply.should.match /[1-2]: Be Glorious/
-        reply.should.match /3: Create a proposal/
+        jreply = json reply
+        jreply.should.match /View Current Proposals/
+        jreply.should.match /[A-B]: do stuff/i
+        jreply.should.match /[A-B]: be glorious/i
+        jreply.should.match /\d: create a proposal/i
 
   context 'users#setDco', ->
     it "shows the list of name: and sets current dco", ->
@@ -96,13 +97,13 @@ describe 'swarmbot', ->
       .then (@proposalA) => @dco.createProposal(name: 'B2')
       .then (@proposalB) => App.route message()
       .then (reply) =>
-        reply.should.match /1: A1\n2: B2/
+        (json reply).should.match /.: a1\\n.: b2/i
         @proposalB.upvote(@user)
       .then => @proposalB.fetch()
       .then (@proposalB) =>
         App.route message('h')
       .then (reply) =>
-        reply.should.match /1: B2\n2: A1/
+        (json reply).should.match /.: b2\\n.: a1/i
 
   context 'proposals#show', ->
     context 'setBounty', ->
@@ -121,11 +122,11 @@ describe 'swarmbot', ->
         .then (@dco) => proposal(@dco)
         .then (@proposal) => App.route message()
         .then (reply) =>
-          reply.should.match /\d: Set Reward/
+          (json reply).should.match /\d: set reward/i
           @dco.set 'project_owner', 'someoneElse'
         .then (@dco) => App.route message()
         .then (reply) =>
-          reply.should.not.match /\d: Set Reward/
+          (json reply).should.not.match /\d: set reward/i
 
       it "sets the bounty", ->
         user()
@@ -139,7 +140,7 @@ describe 'swarmbot', ->
           App.route @message
         .then (reply) =>
           @message.parts[0].should.match /Bounty amount set to 1000/
-          reply.should.match /Proposal: Be Amazing/
+          (json reply).should.match /proposal: be amazing/i
           @proposal.fetch()
         .then (proposal) => proposal.get('amount').should.eq '1000'
 
@@ -214,10 +215,10 @@ describe 'swarmbot', ->
       .then (@solutionA) => @proposal.createSolution(name: 'solution B')
       .then (@solutionB) => App.route message()
       .then (reply) =>
-        reply.should.match /1: solution A\n2: solution B/
+        (json reply).should.match /.: solution a\\n.: solution b/i
         @solutionB.upvote(@user)
       .then => @solutionB.fetch()
       .then (@solutionB) =>
         App.route message('')
       .then (reply) =>
-        reply.should.match /1: solution B\n2: solution A/
+        (json reply).should.match /.: solution b\\n.: solution a/i
