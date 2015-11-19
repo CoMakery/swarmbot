@@ -1,6 +1,5 @@
 # Commands:
 #   hubot create community <community name>
-#   hubot join <community name>
 #
 
 {log, p, pjson} = require 'lightsaber'
