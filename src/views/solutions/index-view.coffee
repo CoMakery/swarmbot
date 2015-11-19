@@ -33,11 +33,11 @@ class IndexView extends ZorkView
 
     [
       {
-        color: '#33F'
+        color: @NAV_COLOR
         title: "community » #{(@proposal.parent.get 'name').toLowerCase()} » #{@proposal.get('name').toLowerCase()} » solutions"
       }
       {
-        color: '#66BB66'
+        color: @BODY_COLOR
         title: (@proposal.get 'name').toUpperCase()
         fields: [
           {
@@ -51,7 +51,7 @@ class IndexView extends ZorkView
         fallback: fallbackText
       }
       {
-        color: '#FB6'
+        color: @ACTION_COLOR
         fields: [
           {
             title: 'Actions'

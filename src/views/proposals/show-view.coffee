@@ -56,11 +56,11 @@ class ShowView extends ZorkView
 
     [
       {
-        color: '#33F'
+        color: @NAV_COLOR
         title: "community » #{(@proposal.parent.get 'name').toLowerCase()} » #{(@proposal.get 'name').toLowerCase()}"
       }
       {
-        color: '#66BB66'
+        color: @BODY_COLOR
         title: (@proposal.get 'name').toUpperCase()
         text: @proposal.get('description')
         thumb_url: @proposal.get 'imageUrl'
@@ -70,7 +70,7 @@ class ShowView extends ZorkView
           """
       }
       {
-        color: '#FB6'
+        color: @ACTION_COLOR
         fields: fields
         fallback: @renderMenu()
       }

@@ -1,6 +1,7 @@
 { log, p, pjson } = require 'lightsaber'
+ZorkView = require '../zork-view'
 
-class EditView
+class EditView extends ZorkView
   constructor: (@data) ->
     @menu = {
       b: { text: "Back", transition: 'exit', data: {proposalId: @data.proposalId} }

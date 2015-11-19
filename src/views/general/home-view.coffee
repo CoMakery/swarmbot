@@ -36,11 +36,11 @@ class HomeView extends ZorkView
 
     [
       {
-        color: '#33F'
+        color: @NAV_COLOR
         title: "community » #{(@dco.get 'name').toLowerCase()}"
       }
       {
-        color: '#FB6'
+        color: @ACTION_COLOR
         fields: [
           {
             title: 'View Current Proposals'

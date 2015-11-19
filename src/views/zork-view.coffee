@@ -1,5 +1,10 @@
 class ZorkView
   letters: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+  NAV_COLOR: '#549'
+  QUESTION_COLOR: '#0AE'
+  INFO_COLOR: '#BBB'
+  BODY_COLOR: '#6B6'
+  ACTION_COLOR: '#FB6'
 
   renderMenu: ->
     @renderMenuItems @menu
@@ -17,5 +22,11 @@ class ZorkView
     lines.join("\n")
 
   bold: (text) -> "*#{text}*"
+
+  question: (text) ->
+    {
+      color: @QUESTION_COLOR
+      text: text
+    }
 
 module.exports = ZorkView
