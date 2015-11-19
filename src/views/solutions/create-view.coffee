@@ -1,6 +1,7 @@
 { log, p, pjson } = require 'lightsaber'
+ZorkView = require '../zork-view'
 
-class CreateView
+class CreateView extends ZorkView
   constructor: (@data) ->
     @menu = {
       b: { text: "Back", transition: 'exit', data: {proposalId: @data.proposalId} }
@@ -8,9 +9,9 @@ class CreateView
 
   render: ->
     if !@data.name?
-      "What is the name of your solution? ('b' to go back)"
+      @question "What is the name of your solution? ('b' to go back)"
     else if !@data.link?
-      "Please enter a link to your solution. ('b' to go back)"
+      @question "Please enter a link to your solution. ('b' to go back)"
     else
       ''
 

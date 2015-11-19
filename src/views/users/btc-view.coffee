@@ -8,10 +8,11 @@ class BtcView extends ZorkView
     @menu.b = { text: "Back", transition: 'exit' }
 
   render: ->
-    str = ""
-    str += "'#{@data.address}' is an invalid bitcoin address.\n" if @error?
+    response = []
+    p @error
+    response.push @warning "'#{@data.address}' is an invalid bitcoin address." if @error?
+    response.push @question "Please enter the bitcoin address you wish to use. (#{@renderMenu()})"
 
-    str += "Please enter the bitcoin address you wish to use. (#{@renderMenu()})"
-    str
+    response
 
 module.exports = BtcView
