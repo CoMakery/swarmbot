@@ -6,6 +6,7 @@ ShowView = require '../views/proposals/show-view'
 IndexView = require '../views/proposals/index-view'
 CreateView = require '../views/proposals/create-view'
 EditView = require '../views/proposals/edit-view'
+ZorkView = require '../views/zork-view'
 
 class ProposalsStateController extends ApplicationController
 
@@ -34,7 +35,7 @@ class ProposalsStateController extends ApplicationController
         throw new Error "Could not find the proposal '#{data.proposalId}'. Please verify that it exists."
       proposal.upvote @currentUser
     .then =>
-      @redirect "Your vote has been recorded."
+      @redirect @info "Your vote has been recorded."
 
   create: (data) ->
     data ?= {}
@@ -47,7 +48,7 @@ class ProposalsStateController extends ApplicationController
         data.imageUrl = @input
         return @getDco()
         .then (dco) => dco.createProposal data
-        .then => @msg.send "Proposal created!\n"
+        .then => @msg.robot.pmReply @msg, @info "Proposal created!\n"
         .then => @execute transition: 'exit'
     @currentUser.set 'stateData', data
     .then => @render new CreateView data

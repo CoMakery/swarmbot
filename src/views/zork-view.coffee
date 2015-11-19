@@ -1,11 +1,10 @@
+{log, p, pjson, json} = require 'lightsaber'
+{extend} = require 'lodash'
+ZorkHelper = require '../helpers/zork-helper'
+
 class ZorkView
+
   letters: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-  NAV_COLOR: '#43B'
-  QUESTION_COLOR: '#0AE'
-  INFO_COLOR: '#BBB'
-  BODY_COLOR: '#6B6'
-  ACTION_COLOR: '#FB6'
-  ERROR_COLOR: '#C33'
 
   renderMenu: ->
     @renderMenuItems @menu
@@ -24,19 +23,6 @@ class ZorkView
 
   bold: (text) -> "*#{text}*"
 
-  question: (text) ->
-    @coloredMessage @QUESTION_COLOR, text
-
-  info: (text) ->
-    @coloredMessage @INFO_COLOR, text
-
-  warning: (text) ->
-    @coloredMessage @ERROR_COLOR, text
-
-  coloredMessage: (color, text) ->
-    {
-      color: color
-      text: text
-    }
+extend ZorkView::, ZorkHelper::
 
 module.exports = ZorkView

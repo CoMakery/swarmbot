@@ -11,6 +11,7 @@ message = (input) ->
   robot:
     whose: (msg) -> userId
     messageRoom: ->
+    # pmReply: ->
   send: (reply) ->
     @parts ?= []
     @parts.push reply
