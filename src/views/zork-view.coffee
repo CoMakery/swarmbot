@@ -1,4 +1,6 @@
 class ZorkView
+  letters: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+
   renderMenu: ->
     @renderMenuItems @menu
 

@@ -5,13 +5,12 @@ class HomeView extends ZorkView
   constructor: (@dco, @proposals) ->
     @orderedMenu = []
     @proposalItems = []
-    letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
     i = 0
     for proposal in @proposals.all()
-      @proposalItems.push [letters[i++], @proposalMenuItem proposal]
+      @proposalItems.push [@letters[i++], @proposalMenuItem proposal]
 
-    i = 0
-    @orderedMenu.push [i++, { text: "« back", transition: 'setDco' }]
+    i = 1
+    # @orderedMenu.push [i++, { text: "« back", transition: 'setDco' }]
     @orderedMenu.push [i++, { text: "create a proposal", transition: 'create' }]
     @orderedMenu.push [i++, { text: "set community", transition: 'setDco' }]
     @orderedMenu.push [i++, { text: "my account", transition: 'myAccount' }]

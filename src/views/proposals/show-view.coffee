@@ -57,7 +57,7 @@ class ShowView extends ZorkView
     [
       {
         color: '#33F'
-        title: "community » #{(@proposal.parent.get 'name').toLowerCase()} » proposal » #{(@proposal.get 'name').toLowerCase()}"
+        title: "community » #{(@proposal.parent.get 'name').toLowerCase()} » #{(@proposal.get 'name').toLowerCase()}"
       }
       {
         color: '#66BB66'
