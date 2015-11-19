@@ -16,7 +16,6 @@ class App
     @responses.push [pattern, cb]
 
   @route: (msg) ->
-
     # old commands:
 
     if @responses? and input = msg.match[1]

@@ -5,30 +5,31 @@ ZorkView = require '../zork-view'
 class ShowView extends ZorkView
   constructor: (@proposal, { canSetBounty }) ->
     @menu = {}
-    i = 1
+    i = 0
+
+    @menu[i++] = { text: "« back", transition: 'exit' }
 
     @menu[i++] =
-      text: "Vote Up"
+      text: "vote up"
       command: 'upvote'
       data: { proposalId: @proposal.key() }
 
     @menu[i++] =
-      text: "View All Solutions",
+      text: "view all solutions",
       transition: 'solutions'
       data: { proposalId: @proposal.key() }
 
     @menu[i++] =
-      text: "Submit Solution",
+      text: "submit solution",
       transition: 'createSolution'
       data: { proposalId: @proposal.key() }
 
     if canSetBounty
       @menu[i++] =
-        text: "Set Reward",
+        text: "set reward",
         transition: 'setBounty'
         data: { proposalId: @proposal.key() }
 
-    @menu.b = { text: "Back", transition: 'exit' }
 
   render: ->
     description = ''
@@ -55,8 +56,12 @@ class ShowView extends ZorkView
 
     [
       {
+        color: '#33F'
+        title: "community » #{(@proposal.parent.get 'name').toLowerCase()} » proposal » #{(@proposal.get 'name').toLowerCase()}"
+      }
+      {
         color: '#66BB66'
-        title: "Proposal: #{(@proposal.get 'name').toUpperCase()}"
+        title: (@proposal.get 'name').toUpperCase()
         text: @proposal.get('description')
         thumb_url: @proposal.get 'imageUrl'
         fallback: """
