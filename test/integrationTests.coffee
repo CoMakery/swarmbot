@@ -6,15 +6,25 @@ DCO = require '../src/models/dco'
 User = require '../src/models/user'
 
 userId = "slack:1234"
+
 message = (input) ->
-  match: [null, input]
-  robot:
-    whose: (msg) -> userId
-    messageRoom: ->
-    # pmReply: ->
-  send: (reply) ->
-    @parts ?= []
-    @parts.push reply
+  @parts = []
+  {
+    parts: @parts
+    match: [null, input]
+    send: (reply) =>
+      @parts.push reply
+    robot:
+      whose: (msg) -> userId
+      messageRoom: ->
+      pmReply: (msg, attachment) =>
+        reply = attachment.text
+        @parts.push reply
+  }
+
+# message().robot.pmReply = (reply) ->
+#   message.parts ?= []
+#   message.parts.push reply
 
 describe 'swarmbot', ->
   context 'general#home', ->

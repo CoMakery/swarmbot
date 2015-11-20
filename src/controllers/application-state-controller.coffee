@@ -9,6 +9,9 @@ ZorkHelper = require '../helpers/zork-helper'
 
 class ApplicationStateController
   constructor: (@msg) ->
+    @msg.info     = (text) => @msg.robot.pmReply @msg, ZorkHelper::info text
+    @msg.question = (text) => @msg.robot.pmReply @msg, ZorkHelper::question text
+    @msg.warning  = (text) => @msg.robot.pmReply @msg, ZorkHelper::warning text
     @currentUser = @msg.currentUser
 
   execute: (menuAction) ->
@@ -29,7 +32,7 @@ class ApplicationStateController
 
     promise
 
-  redirect: (flashMessage)->
+  redirect: (flashMessage) ->
     flashMessage += "\n" if type(flashMessage) is 'string' and not isEmpty flashMessage
     @msg.robot.pmReply @msg, flashMessage if flashMessage
     @msg.match = [] # call default action in the next state
@@ -51,6 +54,6 @@ class ApplicationStateController
   _showError: (error)->
     @msg.send error.message
 
-extend ApplicationStateController::, ZorkHelper::
+# extend ApplicationStateController::, ZorkHelper::
 
 module.exports = ApplicationStateController

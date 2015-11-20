@@ -48,7 +48,7 @@ class ProposalsStateController extends ApplicationController
         data.imageUrl = @input
         return @getDco()
         .then (dco) => dco.createProposal data
-        .then => @msg.robot.pmReply @msg, @info "Proposal created!\n"
+        .then => @msg.info "Proposal created!"
         .then => @execute transition: 'exit'
     @currentUser.set 'stateData', data
     .then => @render new CreateView data
