@@ -1,12 +1,17 @@
 debug = require('debug')('app')
-{ log, p, pjson } = require 'lightsaber'
+{ log, p, pjson, type } = require 'lightsaber'
+{ extend, isEmpty } = require 'lodash'
 User = require '../models/user'
 Promise = require 'bluebird'
 DCO = require '../models/dco'
 swarmbot = require '../models/swarmbot'
+ZorkHelper = require '../helpers/zork-helper'
 
 class ApplicationStateController
   constructor: (@msg) ->
+    @msg.info     = (text) => @msg.robot.pmReply @msg, ZorkHelper::info text
+    @msg.question = (text) => @msg.robot.pmReply @msg, ZorkHelper::question text
+    @msg.warning  = (text) => @msg.robot.pmReply @msg, ZorkHelper::warning text
     @currentUser = @msg.currentUser
 
   execute: (menuAction) ->
@@ -27,10 +32,13 @@ class ApplicationStateController
 
     promise
 
-  redirect: (flashMessage)->
-    @msg.send flashMessage + "\n" if flashMessage?
+  redirect: (flashMessage) ->
+    if type(flashMessage) is 'string' and not isEmpty flashMessage
+      flashMessage += "\n"
+
+    @msg.robot.pmReply @msg, flashMessage if flashMessage
     @msg.match = [] # call default action in the next state
-    App.route(@msg)
+    App.route @msg
 
   render: (view) ->
     @currentUser.set 'menu', view.menu if view.menu
