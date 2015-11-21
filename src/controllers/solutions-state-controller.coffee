@@ -48,7 +48,7 @@ class SolutionsStateController extends ApplicationController
               @msg.robot.messageRoom owner.get('slack_username'),
                 "*New Solution Submitted for #{@proposal.key()}*\n #{solution.key()}\n#{solution.get('link')}"
 
-            @msg.send "Your solution has been submitted and will be reviewed!\n"
+            @sendInfo "Your solution has been submitted and will be reviewed!"
             @execute transition: 'exit', data: { proposalId: data.proposalId }
 
     @currentUser.set 'stateData', data
@@ -65,25 +65,25 @@ class SolutionsStateController extends ApplicationController
       .then (@recipient) =>
         unless @recipient.get('btc_address')?
           throw Promise.OperationalError("This user doesn't have a registered Bitcoin address!")
-        @msg.send "Initiating transaction.
+        @sendInfo "Initiating transaction.
           This will take some time to confirm in the blockchain.
           We will private message both yourself and #{@recipient.get('slack_username')}
           when the transaction is complete."
         @proposal.awardTo(@recipient.get('btc_address'), rewardAmount)
       .then (body) =>
-        @msg.send 'Reward sent!'
+        @sendInfo 'Reward sent!'
         debug "Reward #{@proposal.key()}/#{@solution.key()} to #{@recipient.get('slack_username')} :", body
         txUrl = @_coloredCoinTxUrl(body.txid)
-        @msg.send "Awarded proposal to #{@recipient.get('slack_username')}.\n#{txUrl}"
+        @sendInfo "Awarded proposal to #{@recipient.get('slack_username')}.\n#{txUrl}"
         # PM message
         @msg.robot.messageRoom @recipient.get('slack_username'),
           "Congratulations! You have received #{rewardAmount} community coins for your solution '#{@solution.key()}'\n#{@_coloredCoinTxUrl(body.txid)}"
       .error (error) =>
-        @msg.send error.message
+        @sendWarning error.message
       .then =>
         @execute transition: 'exit', data: data
       .catch (error) =>
-        @msg.send "Error awarding '#{@proposal?.key()}' to #{@recipient?.get('slack_username')}. Unable to complete the transaction.\n #{error.message}"
+        @sendWarning "Error awarding '#{@proposal?.key()}' to #{@recipient?.get('slack_username')}. Unable to complete the transaction.\n #{error.message}"
         @execute transition: 'exit', data: data
         throw error
 

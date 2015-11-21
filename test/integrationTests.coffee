@@ -12,8 +12,7 @@ message = (input) ->
   {
     parts: @parts
     match: [null, input]
-    send: (reply) =>
-      @parts.push reply
+    send: (reply) => throw new Error "deprecated, use pmReply"
     robot:
       whose: (msg) -> userId
       messageRoom: ->
