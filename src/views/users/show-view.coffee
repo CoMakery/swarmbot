@@ -3,12 +3,12 @@ ZorkView = require '../zork-view'
 
 class ShowView extends ZorkView
   constructor: (@user) ->
-    i = 1
+    i = 0
     @menu = {}
 
-    @menu[i++] = { text: "Set bitcoin address", transition: 'setBtc' }
-    @menu[i++] = { text: "My balance", command: 'balance' }
-    @menu.b = { text: "Back", transition: 'exit' }
+    @menu[i++] = { text: "back", transition: 'exit' }
+    @menu[i++] = { text: "set bitcoin address", transition: 'setBtc' }
+    @menu[i++] = { text: "my balance", command: 'balance' }
 
   render: ->
     [
