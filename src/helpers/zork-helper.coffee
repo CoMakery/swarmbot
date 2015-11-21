@@ -1,7 +1,7 @@
 class ZorkHelper
   NAV_COLOR: '#43B'
   QUESTION_COLOR: '#0AE'
-  INFO_COLOR: '#444'  # BBB
+  INFO_COLOR: '#BBB'
   BODY_COLOR: '#6B6'
   ACTION_COLOR: '#FB6'
   ERROR_COLOR: '#C33'

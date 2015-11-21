@@ -9,10 +9,11 @@ ZorkHelper = require '../helpers/zork-helper'
 
 class ApplicationStateController
   constructor: (@msg) ->
-    @msg.info     = (text) => @msg.robot.pmReply @msg, ZorkHelper::info text
-    @msg.question = (text) => @msg.robot.pmReply @msg, ZorkHelper::question text
-    @msg.warning  = (text) => @msg.robot.pmReply @msg, ZorkHelper::warning text
     @currentUser = @msg.currentUser
+
+  sendInfo:     (text) => @msg.robot.pmReply @msg, ZorkHelper::info text
+  sendQuestion: (text) => @msg.robot.pmReply @msg, ZorkHelper::question text
+  sendWarning:  (text) => @msg.robot.pmReply @msg, ZorkHelper::warning text
 
   execute: (menuAction) ->
     promise = Promise.resolve()
@@ -36,7 +37,7 @@ class ApplicationStateController
     if type(flashMessage) is 'string' and not isEmpty flashMessage
       flashMessage += "\n"
 
-    @msg.robot.pmReply @msg, flashMessage if flashMessage
+    @sendInfo flashMessage if flashMessage
     @msg.match = [] # call default action in the next state
     App.route @msg
 
@@ -54,6 +55,6 @@ class ApplicationStateController
         Promise.reject(Promise.OperationalError("Please specify the community in the command."))
 
   _showError: (error)->
-    @msg.send error.message
+    @sendWarning error.message
 
 module.exports = ApplicationStateController
