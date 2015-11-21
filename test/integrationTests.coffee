@@ -82,8 +82,9 @@ describe 'swarmbot', ->
       .then (@dcos) => new User(name: userId, state: 'users#setDco').save()
       .then (@user) => App.route message()
       .then (reply) =>
-        reply.should.match /\*Set Current Community\*/
-        reply.should.match /[1-3]: Community [1-3]/
+        jreply = json(reply)
+        jreply.should.match /Set Current Community/
+        jreply.should.match /[1-3]: Community [1-3]/
         @message = message('1')
         App.route @message
       .then (reply) =>

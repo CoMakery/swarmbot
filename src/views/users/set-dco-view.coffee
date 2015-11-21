@@ -1,13 +1,14 @@
 { log, p, pjson } = require 'lightsaber'
+ZorkView = require '../zork-view'
 
-class SetDcoView
+class SetDcoView extends ZorkView
 
   constructor: (dcos) ->
-    i = 1
+    i = 0
     @menu = {}
+    @menu[i++] = { text: "back", transition: 'exit' }
     for dco in dcos.all()
       @menu[i++] = @dcoMenuItem dco
-    @menu.b = { text: "Back", transition: 'exit' }
 
   dcoMenuItem: (dco) ->
     {
@@ -17,13 +18,29 @@ class SetDcoView
     }
 
   render: ->
-    lines = for i, menuItem of @menu
-      "#{i}: #{menuItem.text}"
-    """
+    fallbackText = """
     *Set Current Community*
-    #{lines.join("\n")}
+    #{@renderMenu()}
 
     To take an action, simply enter the number or letter at the beginning of the line.
     """
+
+    [
+      {
+        color: @NAV_COLOR
+        title: "choose your community"
+      }
+      {
+        color: @ACTION_COLOR
+        fields: [
+          {
+            title: 'Actions'
+            value: @renderMenu()
+          }
+        ]
+        fallback: fallbackText
+      }
+    ]
+
 
 module.exports = SetDcoView
