@@ -12,7 +12,6 @@ class BtcView extends ZorkView
     p @error
     response.push @warning "'#{@data.address}' is an invalid bitcoin address." if @error?
     response.push @question "Please enter the bitcoin address you wish to use. (#{@renderMenu()})"
-
     response
 
 module.exports = BtcView

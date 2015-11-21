@@ -34,9 +34,6 @@ class ApplicationStateController
     promise
 
   redirect: (flashMessage) ->
-    if type(flashMessage) is 'string' and not isEmpty flashMessage
-      flashMessage += "\n"
-
     @sendInfo flashMessage if flashMessage
     @msg.match = [] # call default action in the next state
     App.route @msg

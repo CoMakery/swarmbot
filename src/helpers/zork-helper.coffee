@@ -1,19 +1,16 @@
 class ZorkHelper
+  ACTION_COLOR: '#FB6'
+  BODY_COLOR: '#6B6'
+  INFO_COLOR: '#BBB'
   NAV_COLOR: '#43B'
   QUESTION_COLOR: '#0AE'
-  INFO_COLOR: '#BBB'
-  BODY_COLOR: '#6B6'
-  ACTION_COLOR: '#FB6'
-  ERROR_COLOR: '#C33'
+  WARNING_COLOR: '#C33'
 
-  question: (text) ->
-    @coloredMessage @QUESTION_COLOR, text
-
-  info: (text) ->
-    @coloredMessage @INFO_COLOR, text
-
-  warning: (text) ->
-    @coloredMessage @ERROR_COLOR, text
+  action: (text) -> @coloredMessage @ACTION_COLOR, text
+  body: (text) -> @coloredMessage @BODY_COLOR, text
+  info: (text) -> @coloredMessage @INFO_COLOR, text
+  question: (text) -> @coloredMessage @QUESTION_COLOR, text
+  warning: (text) -> @coloredMessage @WARNING_COLOR, text
 
   coloredMessage: (color, text) ->
     {

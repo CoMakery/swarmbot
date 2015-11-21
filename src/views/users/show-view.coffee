@@ -11,17 +11,20 @@ class ShowView extends ZorkView
     @menu.b = { text: "Back", transition: 'exit' }
 
   render: ->
-    @userText(@user) + "\n\n" + @renderMenu()
+    [
+      @userText(@user)
+      @action @renderMenu()
+    ]
 
   userText: (user)->
     if user?
-      """
+      @body """
       Real name: #{(user.get('real_name') ? '[not set]')}
       Username: #{user.get('slack_username')}
       Current community: #{user.get('current_dco')}
       Bitcoin address: #{(user.get('btc_address') ? '[not set]')}
       """
     else
-      "User not found"
+      @warning "User not found"
 
 module.exports = ShowView

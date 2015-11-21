@@ -43,10 +43,10 @@ class UsersStateController extends ApplicationController
       try
         address.fromBase58Check(btcAddress)
         @currentUser.set "btc_address", btcAddress
-        @info "BTC address #{btcAddress} registered."
+        @sendInfo "BTC address #{btcAddress} registered."
         return @execute { transition: 'exit' }
       catch error
-        p error.message
+        console.error "exception thrown on bitcoin address entry: " + error.message
 
     @render new BtcView({address: btcAddress}, error)
 
