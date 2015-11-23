@@ -6,11 +6,11 @@ class ZorkHelper
   QUESTION_COLOR: '#0AE'
   WARNING_COLOR: '#C33'
 
-  action: (text) -> @coloredMessage @ACTION_COLOR, text
-  body: (text) -> @coloredMessage @BODY_COLOR, text
-  info: (text) -> @coloredMessage @INFO_COLOR, text
+  action:   (text) -> @coloredMessage @ACTION_COLOR, text
+  body:     (text) -> @coloredMessage @BODY_COLOR, text
+  info:     (text) -> @coloredMessage @INFO_COLOR, text
   question: (text) -> @coloredMessage @QUESTION_COLOR, text
-  warning: (text) -> @coloredMessage @WARNING_COLOR, text
+  warning:  (text) -> @coloredMessage @WARNING_COLOR, text
 
   coloredMessage: (color, text) ->
     {
