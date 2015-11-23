@@ -83,12 +83,12 @@ describe 'swarmbot', ->
       .then (@user) => App.route message()
       .then (reply) =>
         jreply = json(reply)
-        jreply.should.match /Set Current Community/
+        jreply.should.match /Set Current Project/
         jreply.should.match /[1-3]: Community [1-3]/
         @message = message('1')
         App.route @message
       .then (reply) =>
-        @message.parts[0].should.match /Community set to Community \d/
+        @message.parts[0].should.match /Project set to Community \d/
 
   context 'general#home', ->
     userId = 'Me'

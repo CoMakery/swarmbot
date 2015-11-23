@@ -49,7 +49,7 @@ class ApplicationStateController
       if dcoId?
         DCO.find dcoId
       else
-        Promise.reject(Promise.OperationalError("Please specify the community in the command."))
+        Promise.reject(Promise.OperationalError("Please specify the project in the command."))
 
   _showError: (error)->
     @sendWarning error.message

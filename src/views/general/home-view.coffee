@@ -12,7 +12,7 @@ class HomeView extends ZorkView
     i = 1
     # @orderedMenu.push [i++, { text: "« back", transition: 'setDco' }]
     @orderedMenu.push [i++, { text: "create a proposal", transition: 'create' }]
-    @orderedMenu.push [i++, { text: "set community", transition: 'setDco' }]
+    @orderedMenu.push [i++, { text: "set project", transition: 'setDco' }]
     @orderedMenu.push [i++, { text: "my account", transition: 'myAccount' }]
     @orderedMenu.push [i++, { text: "cap table", command: 'capTable' }]
     @orderedMenu.push [i++, { text: "advanced commands", command: 'advanced' }]
@@ -30,14 +30,14 @@ class HomeView extends ZorkView
     [Home] #{@bold headline}
     #{@renderMenu()}
 
-    Meow! Rewards are granted by community admins for accepted solutions at their discretion.
+    Meow! Rewards are granted by project admins for accepted solutions at their discretion.
     To take an action, simply enter the number or letter at the beginning of the line.
     """
 
     [
       {
         color: @NAV_COLOR
-        title: "community » #{(@dco.get 'name').toLowerCase()}"
+        title: "project » #{(@dco.get 'name').toLowerCase()}"
       }
       {
         color: @ACTION_COLOR
@@ -45,7 +45,7 @@ class HomeView extends ZorkView
           {
             title: 'View Current Proposals'
             value: if @proposalItems.length == 0
-                "There are no proposals in this community."
+                "There are no proposals in this project."
               else
                 @renderOrderedMenuItems(@proposalItems)
             short: true

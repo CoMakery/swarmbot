@@ -77,7 +77,7 @@ class SolutionsStateController extends ApplicationController
         @sendInfo "Awarded proposal to #{@recipient.get('slack_username')}.\n#{txUrl}"
         # PM message
         @msg.robot.messageRoom @recipient.get('slack_username'),
-          "Congratulations! You have received #{rewardAmount} community coins for your solution '#{@solution.key()}'\n#{@_coloredCoinTxUrl(body.txid)}"
+          "Congratulations! You have received #{rewardAmount} project coins for your solution '#{@solution.key()}'\n#{@_coloredCoinTxUrl(body.txid)}"
       .error (error) =>
         @sendWarning error.message
       .then =>

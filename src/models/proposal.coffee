@@ -39,7 +39,7 @@ class Proposal extends FirebaseModel
           amount: amount
         }]
         metadata:
-          community: dco.key()
+          project: dco.key()
           proposal:  @key()
 
       try

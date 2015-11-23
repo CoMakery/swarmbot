@@ -34,7 +34,7 @@ class IndexView extends ZorkView
     [
       {
         color: @NAV_COLOR
-        title: "community » #{(@proposal.parent.get 'name').toLowerCase()} » #{@proposal.get('name').toLowerCase()} » solutions"
+        title: "project » #{(@proposal.parent.get 'name').toLowerCase()} » #{@proposal.get('name').toLowerCase()} » solutions"
       }
       {
         color: @BODY_COLOR

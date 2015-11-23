@@ -26,7 +26,7 @@ class DCO extends FirebaseModel
         else
           proposal.save()
       else
-        Promise.reject(Promise.OperationalError("The community '#{dco.key()}' does not exist."))
+        Promise.reject(Promise.OperationalError("The project '#{dco.key()}' does not exist."))
 
   memberIds: ->
     keys @get('members')

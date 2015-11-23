@@ -19,7 +19,7 @@ class SetDcoView extends ZorkView
 
   render: ->
     fallbackText = """
-    *Set Current Community*
+    *Set Current Project*
     #{@renderMenu()}
 
     To take an action, simply enter the number or letter at the beginning of the line.
@@ -28,7 +28,7 @@ class SetDcoView extends ZorkView
     [
       {
         color: @NAV_COLOR
-        title: "choose your community"
+        title: "choose your project"
       }
       {
         color: @ACTION_COLOR
