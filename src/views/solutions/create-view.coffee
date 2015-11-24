@@ -4,14 +4,14 @@ ZorkView = require '../zork-view'
 class CreateView extends ZorkView
   constructor: (@data) ->
     @menu = {}
-    @menu[0] = { text: "Back", transition: 'exit', data: {proposalId: @data.proposalId} }
+    @menu[0] = { text: "back", transition: 'exit', data: {proposalId: @data.proposalId} }
 
 
   render: ->
     if !@data.name?
-      @question "What is the name of your solution? ('b' to go back)"
+      @question "What is the name of your solution? ('0' to go back)"
     else if !@data.link?
-      @question "Please enter a link to your solution. ('b' to go back)"
+      @question "Please enter a link to your solution. ('0' to go back)"
     else
       ''
 

@@ -7,7 +7,7 @@ class AdvancedCommandsView extends ZorkView
 
   constructor: (@robot) ->
     @menu = {}
-    @menu.b = { text: "Back", transition: 'exit' }
+    @menu[0] = { text: "back", transition: 'exit' }
 
   render: ->
     fallback = """
