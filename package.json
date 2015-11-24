@@ -29,10 +29,8 @@
     "coffeelint": "^1.13.0",
     "firebase-server": "^0.5.0",
     "mocha": "^2.2.5",
-    "rewire": "^2.5.0",
     "shelljs": "^0.5.3",
-    "sinon": "^1.17.2",
-    "sinon-as-promised": "^4.0.0"
+    "sinon": "^1.17.2"
   },
   "dependencies": {
     "airbrake": "^0.3.8",
