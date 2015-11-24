@@ -1,4 +1,5 @@
 { log, p, pjson } = require 'lightsaber'
+request = require 'request-promise'
 ApplicationController = require './application-state-controller'
 ProposalCollection = require '../collections/proposal-collection'
 Proposal = require '../models/proposal'
@@ -9,6 +10,8 @@ EditView = require '../views/proposals/edit-view'
 ZorkView = require '../views/zork-view'
 
 class ProposalsStateController extends ApplicationController
+
+  MAX_SLACK_IMAGE_SHOWN = Math.pow 2,16
 
   index: ->
     @getDco()
@@ -39,19 +42,35 @@ class ProposalsStateController extends ApplicationController
 
   create: (data) ->
     data ?= {}
+    errorMessage = null
     if @input?
       if not data.name?
         data.name = @input
       else if not data.description?
         data.description = @input
       else if not data.imageUrl?
-        data.imageUrl = @input unless @input == 'n'
-        return @getDco()
-        .then (dco) => dco.createProposal data
-        .then => @sendInfo "Proposal created!"
-        .then => @execute transition: 'exit'
+        if @input in ['n', 'N']
+          @createit(data)
+          return
+        else
+          request.head
+            uri: @input
+            resolveWithFullResponse: true
+          .then (response) =>
+            if response.headers['content-length'] < MAX_SLACK_IMAGE_SHOWN
+              data.imageUrl = @input
+              @createit(data)
+              return
+            else
+              errorMessage = "Sorry, that image is too large. Try one of less than half a megabyte..."
     @currentUser.set 'stateData', data
-    .then => @render new CreateView data
+    .then => @render new CreateView {data, errorMessage}
+
+  createit: (data) ->
+    return @getDco()
+    .then (dco) => dco.createProposal data
+    .then => @sendInfo "Proposal created!"
+    .then => @execute transition: 'exit'
 
   edit: (data) ->
     if @input?

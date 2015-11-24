@@ -47,7 +47,8 @@
     "instagram-node-lib": "0.1.1",
     "javascript-state-machine": "^2.3.5",
     "lightsaber": "^0.4.1",
-    "lodash": "^3.10.0"
+    "lodash": "^3.10.0",
+    "request-promise": "^1.0.2"
   },
   "engines": {
     "node": "4.2.2",
