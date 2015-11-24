@@ -22,7 +22,7 @@ run = (cmd, options = {}) ->
 #   git push origin --tags
 
 herokuRemote = "git@heroku.com:#{herokuApp}.git"
-deployResult = run "git fetch #{herokuRemote}"
+deployResult = run "git fetch --unshallow"       # Circle CI fetches git shallowly, which can cause failures pushing to heroku
 deployResult = run "git push --force #{herokuRemote} HEAD:refs/heads/master", continue_on_failure: true
 if deployResult is 0
   ref = process.env.CIRCLE_SHA1 or exec('git rev-parse head').output.trim()
