@@ -8,8 +8,8 @@ class BalanceView extends ZorkView
 
   render: ->
     if isEmpty @assets
-      "No rewards have been sent to this address. Try submitting a solution!"
+      @warning "No rewards have been sent to this address. Try submitting a solution!"
     else
-      ( "#{asset.balance} units of #{asset.name or asset.assetId}" for asset in @assets ).join("\n")
+      @body ( "#{asset.balance} units of #{asset.name or asset.assetId}" for asset in @assets ).join("\n")
 
 module.exports = BalanceView

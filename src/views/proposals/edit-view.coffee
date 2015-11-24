@@ -3,11 +3,10 @@ ZorkView = require '../zork-view'
 
 class EditView extends ZorkView
   constructor: (@data) ->
-    @menu = {
-      b: { text: "Back", transition: 'exit', data: {proposalId: @data.proposalId} }
-    }
+    @menu = {}
+    @menu[0] = { text: "Back", transition: 'exit', data: {proposalId: @data.proposalId} }
 
   render: ->
-    "Enter the bounty amount ('b' to go back)"
+    @question "Enter the bounty amount ('0' to go back)"
 
 module.exports = EditView

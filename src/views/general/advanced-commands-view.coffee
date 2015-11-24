@@ -10,11 +10,16 @@ class AdvancedCommandsView extends ZorkView
     @menu.b = { text: "Back", transition: 'exit' }
 
   render: ->
-    """
+    fallback = """
     #{@bold 'Advanced Commands'}
 
     #{@availableCommands()}
     """
+    [
+      color: @ACTION_COLOR
+      title: 'Advanced Commands'
+      text: @availableCommands()
+    ]
 
   availableCommands: ->
     cmds = @robot.helpCommands()

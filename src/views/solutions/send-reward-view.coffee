@@ -2,15 +2,15 @@
 
 class SendRewardView
   constructor: ({@data, @recipientUsername}) ->
-    @menu =
-      b:
-        text: "Back"
-        transition: 'exit'
-        data: { proposalId: @data.proposalId, solutionId: @data.solutionId }
+    @menu = {}
+    @menu[0] =
+      text: "back"
+      transition: 'exit'
+      data: { proposalId: @data.proposalId, solutionId: @data.solutionId }
 
   render: ->
-    "Enter reward amount to send to #{@recipientUsername}
+    @question "Enter reward amount to send to #{@recipientUsername}
       for the solution '#{@data.solutionName}'
-      ('b' to go back)"
+      ('0' to go back)"
 
 module.exports = SendRewardView

@@ -1,10 +1,11 @@
 # Commands:
-#   hubot create community <community name>
+#   hubot create project <project name>
 #
 
 {log, p, pjson} = require 'lightsaber'
 DcosController = require '../controllers/dcos-controller'
 swarmbot        = require '../models/swarmbot'
+ZorkHelper = require '../helpers/zork-helper'
 DCO = require '../models/dco'
 
 module.exports = (robot) ->
@@ -27,8 +28,8 @@ module.exports = (robot) ->
     dcoKey = msg.match[1]
     new DcosController().join(msg, { dcoKey })
 
-  App.respond /create community (.+)$/i, (msg) ->
-    log "MATCH 'create community' : #{msg.match[0]}"
+  App.respond /create project (.+)$/i, (msg) ->
+    log "MATCH 'create project' : #{msg.match[0]}"
     dcoName = msg.match[1]
     new DcosController().create(msg, { dcoName })
 
@@ -87,4 +88,4 @@ module.exports = (robot) ->
             dcoCreateStatus = {stage: 0}
             key = "dcoCreateStatus_" + currentUser
             robot.brain.set key, dcoCreateStatus
-            msg.send "The new statement of intent is: #{answer}"
+            msg.robot.pmReply msg, ZorkHelper::info "The new project description is: #{answer}"

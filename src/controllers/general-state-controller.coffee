@@ -49,7 +49,7 @@ class GeneralStateController extends ApplicationController
 
             .then (holders) =>
               debug holders
-              resolve @render new CapTableView {capTable: holders}
+              resolve @render new CapTableView {project: dco, capTable: holders}
 
   advanced: ->
     @render new AdvancedCommandsView @msg.robot

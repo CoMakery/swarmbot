@@ -3,6 +3,7 @@ ApplicationController = require './application-controller'
 swarmbot = require '../models/swarmbot'
 DCO = require '../models/dco'
 DcoCollection = require '../collections/dco-collection'
+ZorkHelper = require '../helpers/zork-helper'
 
 class DcosController extends ApplicationController
 
@@ -88,7 +89,10 @@ class DcosController extends ApplicationController
       dcoCreateStatus = {stage: 1, dcoName: dcoName, project_owner: owner}
       p "dcoCreateStatus", dcoCreateStatus
       @msg.robot.brain.set "dcoCreateStatus_" + owner, dcoCreateStatus
-      @msg.send "Community created. Please provide a statement of intent starting with 'We'"
+      @msg.robot.pmReply @msg, [
+        ZorkHelper::info "Project created."
+        ZorkHelper::question "Please provide a project description starting with 'We'"
+      ]
 
   issueAsset: (msg, { dcoKey, amount }) ->
     issuer = msg.robot.whose msg
