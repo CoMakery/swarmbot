@@ -17,6 +17,7 @@ swarmbot = require '../models/swarmbot'
 User = require '../models/user'
 global.App = require '../app'
 UsersController = require '../controllers/users-controller'
+ZorkHelper = require '../helpers/zork-helper'
 
 App.airbrake = airbrake
 
@@ -59,7 +60,6 @@ InitBot = (robot) ->
 
   # State-based message routing
   robot.respond /(.*)/, (msg) ->
-    autoRegisterUser msg
     if robot.isPublic msg
       msg.reply "Let's take this offline.  I PM'd you :smile:"
     App.route(msg).then (response) ->
@@ -72,8 +72,41 @@ InitBot = (robot) ->
     p pjson msg
     msg.send 'check the logs'
 
+  robot.enter (res) -> greet res
+
+  greet = (res) ->
+    # robot.pmReply (new GeneralStateController).welcome()
+    # robot.pmReply (new WelcomeView).render()
+
+    robot.pmReply res, [
+      ZorkHelper::body "
+        Hi there!  My name is Swarmbot, and I'm here to help you
+        create projects for things that you want to collaborate on,
+        and assign rewards to people who do them!
+        "
+      ZorkHelper::body """
+        You can create a new project by typing:
+        `create project <My Awesome Project>`
+        """
+      ZorkHelper::body "
+        Here is a list of projects others have already created
+        that you may like to collaborate on...
+        "
+      ]
+
+    currentUser = new User name: robot.whose(res)
+    currentUser.fetch()
+    .then (user) -> user.set('state', 'users#setDco')   # goes away if this is new home page
+    .then -> App.route res
+    .then (projects) -> robot.pmReply res, projects
+
+  App.respond /welcome me$/i, (msg) ->
+    greet msg
+
   # Generic auto register
   autoRegisterUser = (msg) -> new UsersController().register(msg)
+
+  robot.enter (res) -> autoRegisterUser msg
 
 module.exports = InitBot
 

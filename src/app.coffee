@@ -23,6 +23,7 @@ class App
         if match = input.match pattern
           msg.match = msg.message.match(pattern)
           return new Promise (resolve, reject) =>
+            debug "Command: `#{input}`, Matched: #{pattern}"
             cb(msg)
             resolve('')
 
@@ -41,12 +42,16 @@ class App
         return user.set('state', 'general#home').then => @route(msg)
 
       controller.input = msg.match[1]
+
       lastMenuItems = user.get('menu')
       menuAction = lastMenuItems?[controller.input?.toLowerCase()]
+
       if menuAction?
+        debug "Command: `#{controller.input}`, controllerName: #{controllerName}, menuAction: #{menuAction}"
         # specific menu action of entered command
         controller.execute(menuAction)
       else if controller[action]?
+        debug "Command: `#{controller.input}`, controllerName: #{controllerName}, action: #{action}"
         # default action for this state
         controller[action]( user.get('stateData') )
       else
