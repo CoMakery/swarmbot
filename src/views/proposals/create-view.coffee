@@ -10,7 +10,7 @@ class CreateView extends ZorkView
   render: ->
 
     errorAttachment = @warning(@errorMessage) if @errorMessage?
-    p 111, errorAttachment
+    # p 111, errorAttachment
 
     questionAttachment = if !@data.name?
         @question "What is the name of your proposal? ('0' to go back)"
@@ -25,7 +25,7 @@ class CreateView extends ZorkView
       errorAttachment
       questionAttachment
     ]
-    p 222, r
-    r
+    # p 222, r
+    # r
 
 module.exports = CreateView

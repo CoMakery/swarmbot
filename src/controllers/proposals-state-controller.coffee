@@ -57,6 +57,7 @@ class ProposalsStateController extends ApplicationController
             uri: @input
             resolveWithFullResponse: true
           .then (response) =>
+            p 222, response.headers
             if response.headers['content-length'] < MAX_SLACK_IMAGE_SHOWN
               data.imageUrl = @input
               @createit(data)

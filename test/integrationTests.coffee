@@ -4,8 +4,19 @@ require './testHelper'
 global.App = require '../src/app'
 DCO = require '../src/models/dco'
 User = require '../src/models/user'
+sinon = require 'sinon'
+require('sinon-as-promised')(Promise)
+rewire = require 'rewire'
+
+request = rewire 'request'  # rewire, not require!
 
 userId = "slack:1234"
+
+request.__set__
+  head:
+    sinon.stub()
+    .withArgs(uri: 'http://example.com/very-small.png', resolveWithFullResponse: true).returns {headers: {'content-length': Math.pow 2, 17}}
+    .withArgs(uri: 'http://example.com/tooo-large.png', resolveWithFullResponse: true).returns {headers: {'content-length': Math.pow 2, 15}}
 
 message = (input) ->
   @parts = []
@@ -48,7 +59,11 @@ describe 'swarmbot', ->
           App.route @message
         .then (reply) =>
           json(reply).should.match /Please enter an image URL for your proposal/
-          @message = message('A description')
+          @message = message('http://example.com/too-large.png')
+          App.route @message
+        .then (reply) =>
+          json(reply).should.match /Sorry, that image is too large.+Please enter an image URL for your proposal/
+          @message = message('http://example.com/very-small.png')
           App.route @message
         .then (reply) =>
           @message.parts.length.should.eq 1
