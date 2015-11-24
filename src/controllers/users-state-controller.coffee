@@ -10,6 +10,7 @@ ShowView = require '../views/users/show-view'
 BtcView = require '../views/users/btc-view'
 SetDcoView = require '../views/users/set-dco-view'
 BalanceView = require '../views/general/balance-view'
+WelcomeView = require '../views/general/welcome-view'
 
 class UsersStateController extends ApplicationController
 
@@ -19,6 +20,10 @@ class UsersStateController extends ApplicationController
   # edit  # read the state and render setBtc or setDco tempalate
   # update # read the state and update the right field from the input
 
+
+  welcome: ->
+    view = new WelcomeView {@currentUser}
+    view.render()
 
   # choose DCO
   setDco: ->

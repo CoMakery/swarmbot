@@ -16,6 +16,8 @@ class App
     @responses.push [pattern, cb]
 
   @route: (msg) ->
+    debug "in @route: msg.match?[1] => #{msg.match?[1]}"
+
     # old commands:
 
     if @responses? and input = msg.match[1]
@@ -47,12 +49,12 @@ class App
       menuAction = lastMenuItems?[controller.input?.toLowerCase()]
 
       if menuAction?
-        debug "Command: `#{controller.input}`, controllerName: #{controllerName}, menuAction: #{menuAction}"
         # specific menu action of entered command
+        debug "Command: #{controller.input}, controllerName: #{controllerName}, menuAction: #{menuAction}"
         controller.execute(menuAction)
       else if controller[action]?
-        debug "Command: `#{controller.input}`, controllerName: #{controllerName}, action: #{action}"
         # default action for this state
+        debug "Command: #{controller.input}, controllerName: #{controllerName}, action: #{action}"
         controller[action]( user.get('stateData') )
       else
         throw new Error("Action for state '#{user.current}' not defined.")

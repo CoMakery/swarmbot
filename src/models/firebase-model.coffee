@@ -1,4 +1,5 @@
-{log, p, pjson} = require 'lightsaber'
+debug = require('debug')('app')
+{log, p, json, pjson} = require 'lightsaber'
 Promise = require 'bluebird'
 { assign } = require 'lodash'
 swarmbot = require './swarmbot'
