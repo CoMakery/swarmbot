@@ -142,7 +142,7 @@ describe 'swarmbot', ->
         .then (@proposal) => App.route message()
         .then (reply) => App.route message('4') # Set Bounty
         .then (reply) =>
-          reply.should.match /Enter the bounty amount/
+          json(reply).should.match /Enter the bounty amount/
           @message = message '1000'
           App.route @message
         .then (reply) =>
@@ -162,7 +162,7 @@ describe 'swarmbot', ->
           App.route @message
         .then (reply) =>
           @message.parts[0].should.match /please enter only numbers/i
-          reply.should.match /Enter the bounty amount/
+          json(reply).should.match /Enter the bounty amount/
 
   context 'solutions#sendReward', ->
     proposalId = 'Be Amazing'
@@ -195,7 +195,7 @@ describe 'swarmbot', ->
       .then (@solution) => App.route message ''
       .then (reply) => App.route message('2') # Send Reward
       .then (reply) =>
-        reply.should.match /Enter reward amount to send to noah for the solution 'Self Love'/
+        json(reply).should.match /Enter reward amount to send to noah for the solution 'Self Love'/
       .then =>
         @message = message('1000') # Reward amount
         App.route @message

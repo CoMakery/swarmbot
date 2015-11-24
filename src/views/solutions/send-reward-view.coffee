@@ -1,6 +1,7 @@
 { log, p, pjson } = require 'lightsaber'
+ZorkView = require '../zork-view'
 
-class SendRewardView
+class SendRewardView extends ZorkView
   constructor: ({@data, @recipientUsername}) ->
     @menu = {}
     @menu[0] =
