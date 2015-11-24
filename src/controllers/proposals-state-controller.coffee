@@ -45,7 +45,7 @@ class ProposalsStateController extends ApplicationController
       else if not data.description?
         data.description = @input
       else if not data.imageUrl?
-        data.imageUrl = @input
+        data.imageUrl = @input unless @input == 'n'
         return @getDco()
         .then (dco) => dco.createProposal data
         .then => @sendInfo "Proposal created!"
