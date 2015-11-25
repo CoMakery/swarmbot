@@ -67,7 +67,7 @@ class ProposalsStateController extends ApplicationController
             .error (opError) =>
               @errorMessage = opError.message
 
-    result = Promise.resolve(done: false) unless result?.then
+    result = Promise.resolve(done: false) unless result?.then?
 
     result
     .then ({done}) =>

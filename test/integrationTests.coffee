@@ -8,11 +8,9 @@ nock = require 'nock'
 
 userId = "slack:1234"
 
-scope = nock('http://example.com')
-scope
+nock('http://example.com')
   .head '/too-large.png'
   .reply 200, '', { 'content-length': (Math.pow 2, 17) }
-scope
   .head '/very-small.png'
   .reply 200, '', { 'content-length': (Math.pow 2, 15) }
 
