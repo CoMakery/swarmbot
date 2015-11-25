@@ -10,7 +10,8 @@ class CreateView extends ZorkView
   render: ->
     errorAttachment = @warning(@errorMessage) if @errorMessage?
 
-    questionAttachment = if !@data.name?
+    questionAttachment = \
+      if !@data.name?
         @question "What is the name of your proposal? ('0' to go back)"
       else if !@data.description?
         @question "Please enter a brief description of your proposal. ('0' to go back)"
