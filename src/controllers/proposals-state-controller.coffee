@@ -1,5 +1,7 @@
 { log, p, pjson } = require 'lightsaber'
+debug = require('debug')('app')
 request = require 'request-promise'
+validator = require 'validator'
 Promise = require 'bluebird'
 ApplicationController = require './application-state-controller'
 ProposalCollection = require '../collections/proposal-collection'
@@ -12,7 +14,7 @@ ZorkView = require '../views/zork-view'
 
 class ProposalsStateController extends ApplicationController
 
-  MAX_SLACK_IMAGE_SHOWN = Math.pow 2,16
+  MAX_SLACK_IMAGE_SIZE = Math.pow 2,16
 
   index: ->
     @getDco()
@@ -42,11 +44,17 @@ class ProposalsStateController extends ApplicationController
       @redirect "Your vote has been recorded."
 
   isValidSlackImage: (uri) ->
+    if not validator.isURL(uri, require_protocol: true)
+      return Promise.reject(Promise.OperationalError("Sorry, that doesn't seem to be the address of an image..."))
+
     request.head
       uri: uri
       resolveWithFullResponse: true
-    .then (response) =>
-      if response.headers['content-length'] >= MAX_SLACK_IMAGE_SHOWN
+    .then (@response) => ; # needed to make promise a bluebird promise...
+    .error =>
+      Promise.reject(Promise.OperationalError("Sorry, that doesn't seem to be the address of an image..."))
+    .then =>
+      if @response.headers['content-length'] >= MAX_SLACK_IMAGE_SIZE
         Promise.reject(Promise.OperationalError("Sorry, that image is too large. Try one of less than half a megabyte..."))
 
   create: (data) ->
@@ -54,7 +62,9 @@ class ProposalsStateController extends ApplicationController
     result = \
       if @input?
         if not data.name?
-          data.name = @input
+          @getDco()
+          .then (dco) => dco.makeProposal name: @input  # throws op error if already exists
+          .then => data.name = @input
         else if not data.description?
           data.description = @input
         else if not data.imageUrl?
@@ -70,12 +80,14 @@ class ProposalsStateController extends ApplicationController
     result = Promise.resolve(done: false) unless result?.then?
 
     result
+    .error (opError) => @errorMessage = opError.message
     .then ({done}) =>
       if done
         @getDco()
         .then (dco) => dco.createProposal data
         .then => @sendInfo "Proposal created!"
         .then => @execute transition: 'exit'
+        .error (opError) => @errorMessage = opError.message
       else
         @currentUser.set 'stateData', data
         .then =>

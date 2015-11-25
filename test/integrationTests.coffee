@@ -8,11 +8,13 @@ nock = require 'nock'
 
 userId = "slack:1234"
 
-nock('http://example.com')
+nock 'http://example.com'
   .head '/too-large.png'
   .reply 200, '', { 'content-length': (Math.pow 2, 17) }
   .head '/very-small.png'
   .reply 200, '', { 'content-length': (Math.pow 2, 15) }
+  .head '/does-not-exist.png'
+  .reply 404, ''
 
 message = (input) ->
   @parts = []
@@ -55,6 +57,14 @@ describe 'swarmbot', ->
           App.route @message
         .then (reply) =>
           json(reply).should.match /Please enter an image URL for your proposal/
+          @message = message('this is not a valid URL...')
+          App.route @message
+        .then (reply) =>
+          json(reply).should.match /that doesn't seem to be the address of an image.+Please enter an image URL for your proposal/i
+          @message = message('http://example.com/does-not-exist.png')
+          App.route @message
+        .then (reply) =>
+          json(reply).should.match /that doesn't seem to be the address of an image.+Please enter an image URL for your proposal/
           @message = message('http://example.com/too-large.png')
           App.route @message
         .then (reply) =>

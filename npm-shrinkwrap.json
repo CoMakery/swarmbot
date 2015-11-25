@@ -2759,6 +2759,11 @@
       "from": "utils-merge@1.0.0",
       "resolved": "https://registry.npmjs.org/utils-merge/-/utils-merge-1.0.0.tgz"
     },
+    "validator": {
+      "version": "4.3.0",
+      "from": "validator@*",
+      "resolved": "https://registry.npmjs.org/validator/-/validator-4.3.0.tgz"
+    },
     "vary": {
       "version": "1.0.1",
       "from": "vary@>=1.0.1 <1.1.0",

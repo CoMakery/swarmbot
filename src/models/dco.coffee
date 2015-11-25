@@ -16,6 +16,9 @@ class DCO extends FirebaseModel
       cb(null, bounties)
 
   createProposal: (attributes) ->
+    @makeProposal(attributes).then (proposal) -> proposal.save()
+
+  makeProposal: (attributes) ->
     @fetchIfNeeded().then (dco) ->
       if dco.exists()
         proposal = new Proposal attributes,
@@ -24,7 +27,7 @@ class DCO extends FirebaseModel
         if proposal.exists()
           Promise.reject(Promise.OperationalError("Proposal '#{attributes.name}' already exists within #{dco.key()}."))
         else
-          proposal.save()
+          proposal
       else
         Promise.reject(Promise.OperationalError("The project '#{dco.key()}' does not exist."))
 
