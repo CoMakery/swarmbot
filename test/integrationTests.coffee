@@ -10,9 +10,9 @@ userId = "slack:1234"
 
 nock 'http://example.com'
   .head '/too-large.png'
-  .reply 200, '', { 'content-length': (Math.pow 2, 17) }
+  .reply 200, '', { 'content-length': (Math.pow 2, 17), 'content-type': 'image/jpg' }
   .head '/very-small.png'
-  .reply 200, '', { 'content-length': (Math.pow 2, 15) }
+  .reply 200, '', { 'content-length': (Math.pow 2, 15), 'content-type': 'image/jpg' }
   .head '/does-not-exist.png'
   .reply 404, ''
 
@@ -60,11 +60,11 @@ describe 'swarmbot', ->
           @message = message('this is not a valid URL...')
           App.route @message
         .then (reply) =>
-          json(reply).should.match /that doesn't seem to be the address of an image.+Please enter an image URL for your proposal/i
+          json(reply).should.match /that is not a valid URL.+Please enter an image URL for your proposal/i
           @message = message('http://example.com/does-not-exist.png')
           App.route @message
         .then (reply) =>
-          json(reply).should.match /that doesn't seem to be the address of an image.+Please enter an image URL for your proposal/
+          json(reply).should.match /that address doesn't seem to exist.+Please enter an image URL for your proposal/
           @message = message('http://example.com/too-large.png')
           App.route @message
         .then (reply) =>
@@ -72,8 +72,8 @@ describe 'swarmbot', ->
           @message = message('http://example.com/very-small.png')
           App.route @message
         .then (reply) =>
-          @message.parts.length.should.eq 1
-          @message.parts[0].should.match /Proposal created/
+          @message.parts.length.should.eq 2
+          @message.parts[1].should.match /Proposal created/
           (json reply).should.match /View Current Proposals/
         # TODO check that proposal exists with those attributes
 

@@ -45,16 +45,20 @@ class ProposalsStateController extends ApplicationController
 
   isValidSlackImage: (uri) ->
     if not validator.isURL(uri, require_protocol: true)
-      return Promise.reject(Promise.OperationalError("Sorry, that doesn't seem to be the address of an image..."))
+      return Promise.reject(Promise.OperationalError("Sorry, that is not a valid URL."))
 
+    @sendInfo "Fetching image..."
     request.head
       uri: uri
       resolveWithFullResponse: true
-    .then (@response) => ; # needed to make promise a bluebird promise...
-    .error =>
-      Promise.reject(Promise.OperationalError("Sorry, that doesn't seem to be the address of an image..."))
-    .then =>
-      if @response.headers['content-length'] >= MAX_SLACK_IMAGE_SIZE
+    .then (response) => response # needed to make promise a bluebird promise...
+    .error (error) =>
+      debug error.message
+      Promise.reject(Promise.OperationalError("Sorry, that address doesn't seem to exist."))
+    .then (response) =>
+      if not response.headers['content-type']?.startsWith 'image/'
+        Promise.reject(Promise.OperationalError("Sorry, that doesn't seem to be an image..."))
+      else if response.headers['content-length'] >= MAX_SLACK_IMAGE_SIZE
         Promise.reject(Promise.OperationalError("Sorry, that image is too large. Try one of less than half a megabyte..."))
 
   create: (data) ->
@@ -74,20 +78,20 @@ class ProposalsStateController extends ApplicationController
             @isValidSlackImage(@input).then =>
               data.imageUrl = @input
               done: true
-            .error (opError) =>
-              @errorMessage = opError.message
 
     result = Promise.resolve(done: false) unless result?.then?
 
     result
-    .error (opError) => @errorMessage = opError.message
-    .then ({done}) =>
+    .error (opError) =>
+      @errorMessage = opError.message
+    .then ({done})=>
       if done
         @getDco()
         .then (dco) => dco.createProposal data
         .then => @sendInfo "Proposal created!"
         .then => @execute transition: 'exit'
-        .error (opError) => @errorMessage = opError.message
+        .error (opError) =>
+          @render new CreateView {data, errorMessage: opError.message}
       else
         @currentUser.set 'stateData', data
         .then =>
