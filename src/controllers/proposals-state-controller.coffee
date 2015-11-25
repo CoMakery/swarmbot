@@ -1,4 +1,6 @@
 { log, p, pjson } = require 'lightsaber'
+request = require 'request-promise'
+Promise = require 'bluebird'
 ApplicationController = require './application-state-controller'
 ProposalCollection = require '../collections/proposal-collection'
 Proposal = require '../models/proposal'
@@ -9,6 +11,8 @@ EditView = require '../views/proposals/edit-view'
 ZorkView = require '../views/zork-view'
 
 class ProposalsStateController extends ApplicationController
+
+  MAX_SLACK_IMAGE_SHOWN = Math.pow 2,16
 
   index: ->
     @getDco()
@@ -37,21 +41,45 @@ class ProposalsStateController extends ApplicationController
     .then =>
       @redirect "Your vote has been recorded."
 
+  isValidSlackImage: (uri) ->
+    request.head
+      uri: uri
+      resolveWithFullResponse: true
+    .then (response) =>
+      if response.headers['content-length'] >= MAX_SLACK_IMAGE_SHOWN
+        Promise.reject(Promise.OperationalError("Sorry, that image is too large. Try one of less than half a megabyte..."))
+
   create: (data) ->
     data ?= {}
-    if @input?
-      if not data.name?
-        data.name = @input
-      else if not data.description?
-        data.description = @input
-      else if not data.imageUrl?
-        data.imageUrl = @input unless @input == 'n'
-        return @getDco()
+    result = \
+      if @input?
+        if not data.name?
+          data.name = @input
+        else if not data.description?
+          data.description = @input
+        else if not data.imageUrl?
+          if @input in ['n', 'N']
+            Promise.resolve(done: true)
+          else
+            @isValidSlackImage(@input).then =>
+              data.imageUrl = @input
+              done: true
+            .error (opError) =>
+              @errorMessage = opError.message
+
+    result = Promise.resolve(done: false) unless result?.then
+
+    result
+    .then ({done}) =>
+      if done
+        @getDco()
         .then (dco) => dco.createProposal data
         .then => @sendInfo "Proposal created!"
         .then => @execute transition: 'exit'
-    @currentUser.set 'stateData', data
-    .then => @render new CreateView data
+      else
+        @currentUser.set 'stateData', data
+        .then =>
+          @render new CreateView {data, @errorMessage}
 
   edit: (data) ->
     if @input?

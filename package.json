@@ -29,6 +29,7 @@
     "coffeelint": "^1.13.0",
     "firebase-server": "^0.5.0",
     "mocha": "^2.2.5",
+    "nock": "https://github.com/dukedorje/nock",
     "shelljs": "^0.5.3",
     "sinon": "^1.17.2"
   },
@@ -47,7 +48,8 @@
     "instagram-node-lib": "0.1.1",
     "javascript-state-machine": "^2.3.5",
     "lightsaber": "^0.4.1",
-    "lodash": "^3.10.0"
+    "lodash": "^3.10.0",
+    "request-promise": "0.4.3"
   },
   "engines": {
     "node": "4.2.2",

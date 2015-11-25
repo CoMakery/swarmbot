@@ -4,8 +4,17 @@ require './testHelper'
 global.App = require '../src/app'
 DCO = require '../src/models/dco'
 User = require '../src/models/user'
+nock = require 'nock'
 
 userId = "slack:1234"
+
+scope = nock('http://example.com')
+scope
+  .head '/too-large.png'
+  .reply 200, '', { 'content-length': (Math.pow 2, 17) }
+scope
+  .head '/very-small.png'
+  .reply 200, '', { 'content-length': (Math.pow 2, 15) }
 
 message = (input) ->
   @parts = []
@@ -48,7 +57,11 @@ describe 'swarmbot', ->
           App.route @message
         .then (reply) =>
           json(reply).should.match /Please enter an image URL for your proposal/
-          @message = message('A description')
+          @message = message('http://example.com/too-large.png')
+          App.route @message
+        .then (reply) =>
+          json(reply).should.match /Sorry, that image is too large.+Please enter an image URL for your proposal/
+          @message = message('http://example.com/very-small.png')
           App.route @message
         .then (reply) =>
           @message.parts.length.should.eq 1
