@@ -21,14 +21,13 @@ class SolutionsStateController extends ApplicationController
       @render new IndexView(proposal)
 
   show: (data) ->
-    # TODO: Is there a way to do this where we don't have to query the whole DCO every time?
     @getDco()
     .then (dco)=>
       Proposal.find data.proposalId, parent: dco
     .then (proposal)=>
       Solution.find data.solutionId, parent: proposal
     .then (solution)=>
-      @render new ShowView(solution)
+      @render new ShowView(solution, @currentUser)
 
   create: (data)->
     if @input?
@@ -59,7 +58,11 @@ class SolutionsStateController extends ApplicationController
     if @input? and @input.match /^\d+$/
       rewardAmount = @input
       @getDco()
-      .then (@dco) => Proposal.find(data.proposalId, parent: @dco)
+      .then (@dco) =>
+        if @dco.get('project_owner') is @currentUser.key()
+          Proposal.find(data.proposalId, parent: @dco)
+        else
+          Promise.reject(Promise.OperationalError "Only the creator of this project can send rewards")
       .then (@proposal) => Solution.find(data.solutionId, parent: @proposal)
       .then (@solution) => User.find @solution.get 'userId'
       .then (@recipient) =>

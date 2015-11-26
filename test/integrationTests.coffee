@@ -190,7 +190,7 @@ describe 'swarmbot', ->
     solutionId = 'Self Love'
     solutionCreatorId = "slack:4388"
     dcoId = 'my dco'
-    admin = ->
+    user = ->
       new User
         name: userId
         state: 'solutions#show'
@@ -203,25 +203,35 @@ describe 'swarmbot', ->
         slack_username: 'noah'
         btc_address: 'abc123'
       .save()
-    dco = -> new DCO(name: dcoId, project_owner: userId).save()
+    dco = (ownerId) -> new DCO(name: dcoId, project_owner: ownerId).save()
     proposal = (dco) -> dco.createProposal(name: proposalId)
     solution = (proposal) -> proposal.createSolution name: solutionId, userId: solutionCreatorId
 
     it "allows the progenitor to send a reward for a solution", ->
-      admin()
-      .then => solutionCreator()
-      .then (@solutionCreator) => dco()
+      user()
+      .then (@user) => solutionCreator()
+      .then (@solutionCreator) => dco(userId)
       .then (@dco) => proposal @dco
       .then (@proposal) => solution @proposal
       .then (@solution) => App.route message ''
       .then (reply) => App.route message('2') # Send Reward
       .then (reply) =>
         json(reply).should.match /Enter reward amount to send to noah for the solution 'Self Love'/
-      .then =>
         @message = message('1000') # Reward amount
         App.route @message
       .then (reply) =>
         @message.parts[0].should.match /Initiating transaction/
+
+    it "disallows anyone else from sending a reward for a solution", ->
+      user()
+      .then (@user) => solutionCreator()
+      .then (@solutionCreator) => dco(solutionCreatorId)
+      .then (@dco) => proposal @dco
+      .then (@proposal) => solution @proposal
+      .then (@solution) => App.route message ''
+      .then (reply) =>
+        json(reply).should.not.match /send reward/
+
 
   context 'solutions#index', ->
     userId = 'Me'

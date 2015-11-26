@@ -3,7 +3,7 @@
 ZorkView = require '../zork-view'
 
 class ShowView extends ZorkView
-  constructor: (@solution) ->
+  constructor: (@solution, currentUser) ->
     @menu = {}
     i = 0
     @menu[i++] = { text: "« back", transition: 'exit', data: { proposalId: @solution.parent.key() } }
@@ -16,13 +16,14 @@ class ShowView extends ZorkView
         solutionName: @solution.get('name')
         proposalId: @solution.parent.key()
 
-    @menu[i++] =
-      text: "send reward"
-      transition: 'sendReward'
-      data:
-        solutionId: @solution.key()
-        solutionName: @solution.get('name')
-        proposalId: @solution.parent.key()
+    if @solution.parent.parent.get('project_owner') is currentUser.key()
+      @menu[i++] =
+        text: "send reward"
+        transition: 'sendReward'
+        data:
+          solutionId: @solution.key()
+          solutionName: @solution.get('name')
+          proposalId: @solution.parent.key()
 
 
   render: ->
