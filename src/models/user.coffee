@@ -70,6 +70,10 @@ class User extends FirebaseModel
       { name: 'setDco', from: 'general#home', to: 'dcos#index' }
       { name: 'exit', from: 'dcos#index', to: 'general#home' }
 
+      { name: 'create', from: 'dcos#index', to: 'dcos#create' }
+      { name: 'exit', from: 'dcos#create', to: 'dcos#index' }
+      { name: 'showDco', from: 'dcos#create', to: 'general#home'}
+
       { name: 'myAccount', from: 'general#home', to: 'users#myAccount' }
       { name: 'exit', from: 'users#myAccount', to: 'general#home' }
 

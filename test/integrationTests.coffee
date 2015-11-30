@@ -92,24 +92,40 @@ describe 'swarmbot', ->
         jreply.should.match /[A-B]: be glorious/i
         jreply.should.match /\d: create a task/i
 
-  context 'users#setDco', ->
-    it "shows the list of name: and sets current dco", ->
-      i = 1
-      Promise.all [
-        new DCO(name: "Community #{i++}").save()
-        new DCO(name: "Community #{i++}").save()
-        new DCO(name: "Community #{i++}").save()
-      ]
-      .then (@dcos) => new User(name: userId, state: 'dcos#index').save()
-      .then (@user) => App.route message()
-      .then (reply) =>
-        jreply = json(reply)
-        jreply.should.match /Set Current Project/
-        jreply.should.match /[1-3]: Community [1-3]/
-        @message = message('1')
-        App.route @message
-      .then (reply) =>
-        @message.parts[0].should.match /Project set to Community \d/
+  context 'dcos controller', ->
+    context 'index', ->
+      it "shows the list of names and sets current dco", ->
+        i = 1
+        Promise.all [
+          new DCO(name: "Community #{i++}").save()
+          new DCO(name: "Community #{i++}").save()
+          new DCO(name: "Community #{i++}").save()
+        ]
+        .then (@dcos) => new User(name: userId, state: 'dcos#index').save()
+        .then (@user) => App.route message()
+        .then (reply) =>
+          jreply = json(reply)
+          jreply.should.match /Set Current Project/
+          jreply.should.match /[1-3]: Community [1-3]/
+          @message = message('1')
+          App.route @message
+        .then (reply) =>
+          @message.parts[0].should.match /Project set to Community \d/
+
+      context 'create', ->
+        it "asks questions and creates a project", ->
+          new User(name: userId, state: 'dcos#index').save()
+          .then (@user) => App.route message()
+          .then (reply) => App.route message('1')
+          .then (reply) =>
+            json(reply).should.match /What is the name of this project/
+            App.route message('Supafly')
+          .then (reply) =>
+            json(reply).should.match /Please enter a short description/
+            @message = message('Shaft')
+            App.route @message
+          .then (reply) =>
+            @message.parts[0].should.match /Project created/
 
   context 'general#home', ->
     userId = 'Me'

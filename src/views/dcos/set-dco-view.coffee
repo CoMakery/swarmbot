@@ -10,6 +10,11 @@ class SetDcoView extends ZorkView
     for dco in dcos.all()
       @menu[i++] = @dcoMenuItem dco
 
+    @menu[i++] = {
+      text: "create new project"
+      transition: 'create'
+    }
+
   dcoMenuItem: (dco) ->
     {
       text: dco.get 'name'

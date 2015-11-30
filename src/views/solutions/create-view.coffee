@@ -12,7 +12,5 @@ class CreateView extends ZorkView
       @question "What is the name of your solution? ('0' to go back)"
     else if !@data.link?
       @question "Please enter a link to your solution. ('0' to go back)"
-    else
-      ''
 
 module.exports = CreateView
