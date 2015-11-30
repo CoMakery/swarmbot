@@ -41,8 +41,8 @@ describe 'swarmbot', ->
           jreply.should.match /\d: cap table/
           jreply.should.match /\d: advanced commands/
 
-      it "allows the user to create a task within the current community", ->
-        dcoId = 'Your Great Community'
+      it "allows the user to create a task within the current project", ->
+        dcoId = 'Your Great Project'
         @user = new User(name: userId, current_dco: dcoId).save()
         dco = new DCO(name: dcoId)
         dco.save()
@@ -50,7 +50,7 @@ describe 'swarmbot', ->
         .then -> App.route message('1')
         .then (reply) ->
           json(reply).should.match /What is the name of your task/
-          App.route message('A Task.')
+          App.route message('A Task')
         .then (reply) =>
           json(reply).should.match /Please enter a brief description of your task/
           @message = message('A description')
@@ -75,10 +75,15 @@ describe 'swarmbot', ->
           @message.parts.length.should.eq 2
           @message.parts[1].should.match /Task created/
           (json reply).should.match /View Current Proposals/
-        # TODO check that proposal exists with those attributes
+        .then => @firebaseServer.getValue()
+        .then (db) =>
+          db.projects[dcoId].proposals['A Task'].should.deep.eq
+            name: 'A Task'
+            description: "A description"
+            imageUrl: "http://example.com/very-small.png"
 
     it "shows the user's current community, with proposals", ->
-      dcoId = 'Your Great Community'
+      dcoId = 'Your Great Project'
       @user = new User(name: userId, current_dco: dcoId).save()
       dco = new DCO(name: dcoId)
       dco.save()
@@ -126,7 +131,7 @@ describe 'swarmbot', ->
             App.route @message
           .then (reply) =>
             @message.parts[0].should.match /Project created/
-            @firebaseServer.getValue()
+          .then => @firebaseServer.getValue()
           .then (db) =>
             db.projects.Supafly.should.deep.eq
               name: 'Supafly'
