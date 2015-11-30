@@ -10,9 +10,9 @@ userId = "slack:1234"
 
 nock 'http://example.com'
   .head '/too-large.png'
-  .reply 200, '', { 'content-length': (Math.pow 2, 17), 'content-type': 'image/jpg' }
+  .reply 200, '', { 'content-length': App.MAX_SLACK_IMAGE_SIZE + 1, 'content-type': 'image/jpg' }
   .head '/very-small.png'
-  .reply 200, '', { 'content-length': (Math.pow 2, 15), 'content-type': 'image/jpg' }
+  .reply 200, '', { 'content-length': App.MAX_SLACK_IMAGE_SIZE - 1, 'content-type': 'image/jpg' }
   .head '/does-not-exist.png'
   .reply 404, ''
 

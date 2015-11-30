@@ -14,8 +14,6 @@ ZorkView = require '../views/zork-view'
 
 class ProposalsStateController extends ApplicationController
 
-  MAX_SLACK_IMAGE_SIZE = Math.pow 2,19
-
   index: ->
     @getDco()
     .then (dco) => dco.fetch()
@@ -58,7 +56,7 @@ class ProposalsStateController extends ApplicationController
     .then (response) =>
       if not response.headers['content-type']?.startsWith 'image/'
         Promise.reject(Promise.OperationalError("Sorry, that doesn't seem to be an image..."))
-      else if response.headers['content-length'] >= MAX_SLACK_IMAGE_SIZE
+      else if response.headers['content-length'] >= App.MAX_SLACK_IMAGE_SIZE
         Promise.reject(Promise.OperationalError("Sorry, that image is too large. Try one of less than half a megabyte..."))
 
   create: (data) ->
