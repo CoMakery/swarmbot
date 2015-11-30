@@ -110,6 +110,14 @@ HUBOT_INSTAGRAM_ACCESS_KEY
 HUBOT_INSTAGRAM_CLIENT_KEY
 ```
 
+### Code Notes
+
+|Naming            |                  |                  |                 |
+|------------------|:----------------:|:----------------:|:----------------:
+|Current interface |project           |task              |solution         |   
+|Current DB        |project           |proposal          |solution         |
+|Cruft in code     |DCO               |proposal          |N/A              |
+
 ## License
 
 Swarmbot is being developed under the experimental [Peer Production Royalty Token License](https://github.com/citizencode/swarmbot/blob/master/LICENSE.md).
