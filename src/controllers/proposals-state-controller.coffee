@@ -38,7 +38,7 @@ class ProposalsStateController extends ApplicationController
       Proposal.find(data.proposalId, parent: dco)
     .then (proposal) =>
       unless proposal.exists()
-        throw new Error "Could not find the proposal '#{data.proposalId}'. Please verify that it exists."
+        throw new Error "Could not find the task '#{data.proposalId}'. Please verify that it exists."
       proposal.upvote @currentUser
     .then =>
       @redirect "Your vote has been recorded."
@@ -88,7 +88,7 @@ class ProposalsStateController extends ApplicationController
       if done
         @getDco()
         .then (dco) => dco.createProposal data
-        .then => @sendInfo "Proposal created!"
+        .then => @sendInfo "Task created!"
         .then => @execute transition: 'exit'
         .error (opError) =>
           @render new CreateView {data, errorMessage: opError.message}

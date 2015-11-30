@@ -45,7 +45,7 @@ greet = (msg, username, privateMessage, robot) ->
     helpMessage = "Type 'bounties' to see active bounties\n"
     helpMessage += "Type 'register <my_bitcoin_address> to start getting bounties\n"
     helpMessage += "Type 'proposals' to see proposals\n"
-    helpMessage += "Type 'propose <proposal_name> for <number> bucks' to create a new proposal\n"
+    helpMessage += "Type 'propose <proposal_name> for <number> bucks' to create a new task\n"
     helpMessage += "Type 'more commands' to see other suggested commands\n"
 
     if (privateMessage)

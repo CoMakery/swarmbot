@@ -41,7 +41,7 @@ describe 'swarmbot', ->
           jreply.should.match /\d: cap table/
           jreply.should.match /\d: advanced commands/
 
-      it "allows the user to create a proposal within the current community", ->
+      it "allows the user to create a task within the current community", ->
         dcoId = 'Your Great Community'
         @user = new User(name: userId, current_dco: dcoId).save()
         dco = new DCO(name: dcoId)
@@ -49,31 +49,31 @@ describe 'swarmbot', ->
         .then -> App.route message()
         .then -> App.route message('1')
         .then (reply) ->
-          json(reply).should.match /What is the name of your proposal/
-          App.route message('A Proposal.')
+          json(reply).should.match /What is the name of your task/
+          App.route message('A Task.')
         .then (reply) =>
-          json(reply).should.match /Please enter a brief description of your proposal/
+          json(reply).should.match /Please enter a brief description of your task/
           @message = message('A description')
           App.route @message
         .then (reply) =>
-          json(reply).should.match /Please enter an image URL for your proposal/
+          json(reply).should.match /Please enter an image URL for your task/
           @message = message('this is not a valid URL...')
           App.route @message
         .then (reply) =>
-          json(reply).should.match /that is not a valid URL.+Please enter an image URL for your proposal/i
+          json(reply).should.match /that is not a valid URL.+Please enter an image URL for your task/i
           @message = message('http://example.com/does-not-exist.png')
           App.route @message
         .then (reply) =>
-          json(reply).should.match /that address doesn't seem to exist.+Please enter an image URL for your proposal/
+          json(reply).should.match /that address doesn't seem to exist.+Please enter an image URL for your task/
           @message = message('http://example.com/too-large.png')
           App.route @message
         .then (reply) =>
-          json(reply).should.match /Sorry, that image is too large.+Please enter an image URL for your proposal/
+          json(reply).should.match /Sorry, that image is too large.+Please enter an image URL for your task/
           @message = message('http://example.com/very-small.png')
           App.route @message
         .then (reply) =>
           @message.parts.length.should.eq 2
-          @message.parts[1].should.match /Proposal created/
+          @message.parts[1].should.match /Task created/
           (json reply).should.match /View Current Proposals/
         # TODO check that proposal exists with those attributes
 
@@ -90,7 +90,7 @@ describe 'swarmbot', ->
         jreply.should.match /View Current Proposals/
         jreply.should.match /[A-B]: do stuff/i
         jreply.should.match /[A-B]: be glorious/i
-        jreply.should.match /\d: create a proposal/i
+        jreply.should.match /\d: create a task/i
 
   context 'users#setDco', ->
     it "shows the list of name: and sets current dco", ->
@@ -168,7 +168,7 @@ describe 'swarmbot', ->
           App.route @message
         .then (reply) =>
           @message.parts[0].should.match /Bounty amount set to 1000/
-          (json reply).should.match /proposal: be amazing/i
+          (json reply).should.match /task: be amazing/i
           @proposal.fetch()
         .then (proposal) => proposal.get('amount').should.eq '1000'
 

@@ -25,7 +25,7 @@ class DCO extends FirebaseModel
           parent: dco
           # snapshot: dco.snapshot.child(Proposal::urlRoot).child(attributes.id)
         if proposal.exists()
-          Promise.reject(Promise.OperationalError("Proposal '#{attributes.name}' already exists within #{dco.key()}."))
+          Promise.reject(Promise.OperationalError("Task '#{attributes.name}' already exists within #{dco.key()}."))
         else
           proposal
       else

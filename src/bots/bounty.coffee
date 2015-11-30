@@ -2,10 +2,10 @@
 #   hubot I'd like <suggested improvement for swarmbot>
 
 # Hidden Commands:
-#   hubot create proposal <proposal name> for <number of coins> [in <community>]
-#   hubot rate <proposal name> <value>% [in <community name]
-#   hubot award proposal <proposal name> to <slack username> [in <community>]
-#   hubot show proposal <proposal name> [in <community name>]
+#   hubot create task <task name> for <number of coins> [in <community>]
+#   hubot rate <task name> <value>% [in <community name]
+#   hubot award task <task name> to <slack username> [in <community>]
+#   hubot show task <task name> [in <community name>]
 
 {log, p, pjson} = require 'lightsaber'
 { values } = require 'lodash'

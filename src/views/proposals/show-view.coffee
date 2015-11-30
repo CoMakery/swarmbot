@@ -65,7 +65,7 @@ class ShowView extends ZorkView
         text: @proposal.get('description')
         thumb_url: @proposal.get 'imageUrl'
         fallback: """
-          *Proposal: #{@proposal.get 'name'}*
+          *Task: #{@proposal.get 'name'}*
           #{description}
           """
       }

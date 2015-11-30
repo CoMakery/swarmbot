@@ -43,7 +43,7 @@ class IndexView extends ZorkView
           {
             title: 'Solutions'
             value: if @solutionItems.length == 0
-                "There are no solutions yet for this proposal."
+                "There are no solutions yet for this task."
               else
                 @renderMenuItems(@solutionItems)
           }

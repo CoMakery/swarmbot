@@ -38,20 +38,20 @@ but is easily configured to work anywhere Hubot works.
 
 ## For Example
 
-### View All Proposals & Choose Proposal
+### View All Tasks & Choose Task
 
 ![](https://cdn.rawgit.com/citizencode/swarmbot/e8e0e7b7f21346f69cac7882eb29613778098a39/doc/examples-2015-10/choose-proposal.png)
 
-### Upvote a Proposal
+### Upvote a Task
 
 ![](https://cdn.rawgit.com/citizencode/swarmbot/46feaa44597a47c160cafd3c8dc37fa077f4c336/doc/examples-2015-10/proposal-upvote.png)
 
-### Set a Bounty on a Proposal
+### Set a Bounty on a Task
 
 ![](https://cdn.rawgit.com/citizencode/swarmbot/46feaa44597a47c160cafd3c8dc37fa077f4c336/doc/examples-2015-10/set-bounty-1.png)
 ![](https://cdn.rawgit.com/citizencode/swarmbot/46feaa44597a47c160cafd3c8dc37fa077f4c336/doc/examples-2015-10/set-bounty-2.png)
 
-### Create a Solution to a Proposal
+### Create a Solution to a Task
 
 ![](https://cdn.rawgit.com/citizencode/swarmbot/46feaa44597a47c160cafd3c8dc37fa077f4c336/doc/examples-2015-10/solution-create.png)
 

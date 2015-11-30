@@ -24,12 +24,12 @@ class AdminController extends ApplicationController
 
             proposal.fetch().then (proposal) =>
               if proposal.get('awarded')
-                @msg.send "This proposal has already been awarded."
+                @msg.send "This task has already been awarded."
               else
                 @msg.send 'Initiating transaction.'
                 proposal.awardTo(awardeeAddress).then (body)=>
                   p "award #{proposal.key()} to #{awardee} :", body
-                  @msg.send "Awarded proposal to #{awardee}.\n#{@_coloredCoinTxnUrl(body.txid)}"
+                  @msg.send "Awarded task to #{awardee}.\n#{@_coloredCoinTxnUrl(body.txid)}"
                   proposal.set('awarded', user.key())
                 .catch (error)=>
                   @msg.send "Error awarding '#{proposal.key()}' to #{awardee}. Unable to complete the transaction.\n #{error.message}"

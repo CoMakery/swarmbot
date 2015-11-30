@@ -59,7 +59,7 @@ class ProposalsController extends ApplicationController
 
             proposal.fetch().then (proposal) =>
               if not proposal.exists()
-                @msg.send "Proposal '#{proposal.key()}' does not exist. Did you misspell it?"
+                @msg.send "Task '#{proposal.key()}' does not exist. Did you misspell it?"
               else if proposal.get('awarded')
                 @msg.send "This proposal has already been awarded."
               else if not proposal.get('amount') or proposal.get('amount') is '0'
@@ -85,7 +85,7 @@ class ProposalsController extends ApplicationController
     .then (@dco) =>
       @dco.createProposal({ name: proposalName, amount })
     .then =>
-      @msg.send "Proposal '#{proposalName}' created in community '#{@dco.key()}'"
+      @msg.send "Task '#{proposalName}' created in community '#{@dco.key()}'"
     .error(@_showError)
 
   swarmbotSuggestion: (@msg, { suggestion }) ->
@@ -97,7 +97,7 @@ class ProposalsController extends ApplicationController
         @msg.send "The community '#{swarmbot.feedbackDcokey}' does not exist. Please ask your amazing swarmbot admin to create it!"
 
   _proposalMessage: (proposal) ->
-    text = "Proposal #{proposal.key()}"
+    text = "Task #{proposal.key()}"
     if (proposal.get('amount') && proposal.get('amount') > 0)
       text += " Reward $#{proposal.get('amount')}"
     score = proposal.ratings().score()
