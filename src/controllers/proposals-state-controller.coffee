@@ -14,7 +14,7 @@ ZorkView = require '../views/zork-view'
 
 class ProposalsStateController extends ApplicationController
 
-  MAX_SLACK_IMAGE_SIZE = Math.pow 2,16
+  MAX_SLACK_IMAGE_SIZE = Math.pow 2,19
 
   index: ->
     @getDco()
