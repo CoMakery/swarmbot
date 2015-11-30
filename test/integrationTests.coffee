@@ -126,6 +126,12 @@ describe 'swarmbot', ->
             App.route @message
           .then (reply) =>
             @message.parts[0].should.match /Project created/
+            @firebaseServer.getValue()
+          .then (db) =>
+            db.projects.Supafly.should.deep.eq
+              name: 'Supafly'
+              project_statement: 'Shaft'
+              project_owner: userId
 
   context 'general#home', ->
     userId = 'Me'

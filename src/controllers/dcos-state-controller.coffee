@@ -24,17 +24,23 @@ class DcosStateController extends ApplicationController
         data.name = @input
       else if not data.description
         data.description = @input
-
-        return (new DCO name: data.name, project_statement: data.description).save()
-        .then (dco) =>
-          @sendInfo "Project created"
-          @currentUser.set 'current_dco', dco.key()
-        .then =>
-          @execute transition: 'showDco'
+        return @saveDco data
 
     @currentUser.set 'stateData', data
     .then =>
       @render new CreateView data
 
+  saveDco: (data) ->
+    new DCO
+      name: data.name
+      project_statement: data.description
+      project_owner: @currentUser.key()
+    .save()
+    .then (dco) =>
+      dco.issueAsset amount: DCO::INITIAL_PROJECT_COINS
+      @sendInfo "Project created"
+      @currentUser.set 'current_dco', dco.key()
+    .then =>
+      @execute transition: 'showDco'
 
 module.exports = DcosStateController

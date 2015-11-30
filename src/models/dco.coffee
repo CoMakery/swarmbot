@@ -1,3 +1,4 @@
+debug = require('debug')('app')
 {log, p, pjson} = require 'lightsaber'
 { assign, keys, find, indexOf, map, contains } = require 'lodash'
 Promise = require 'bluebird'
@@ -9,6 +10,7 @@ UserCollection = require '../collections/user-collection'
 
 class DCO extends FirebaseModel
   urlRoot: 'projects'
+  INITIAL_PROJECT_COINS: 100000000
 
   bounties: Promise.promisify (cb) ->
     @firebase().child('bounties').once 'value', (snapshot) =>
@@ -61,26 +63,24 @@ class DCO extends FirebaseModel
       metadata:
         assetName: dcoKey + ' Coin'
         issuer: issuer
-        # 'description': 'Super DCO membership'
-    swarmbot.colu().then (colu) =>
+
+    swarmbot.colu()
+    .then (colu) =>
       colu.issueAsset asset, (err, body) ->
         if err
-          p "error in asset creation"
-          return console.error(err)
-        dcos = swarmbot.firebase().child('projects')
-        console.log 'AssetId: ', body.assetId
-        dcos.child(dcoKey).update { coluAssetId: body.assetId, coluAssetAddress: body.issueAddress }
-        console.log 'Body: ', body
-        return
+          debug "error in asset creation: #{err}"
+        else
+          dcos = swarmbot.firebase().child('projects')
+          debug "AssetId: #{body.assetId}"
+          debug "Full response: #{pjson body}"
+          dcos.child(dcoKey).update { coluAssetId: body.assetId, coluAssetAddress: body.issueAddress }
 
   sendAsset: ({amount, recipient}, cb) ->
     p "username", recipient.key()
     recipient.fetch().then (user) ->
       recipientAddress = user.get('btc_address')
       if recipientAddress?
-        p "address", recipientAddress
-        # FIXME: Doesn't work
-        # @sendAssetToAddress amount, sendeeAddress
+        debug "creating project; address: #{recipientAddress}",
       else
         cb "user must register before receiving assets"
 

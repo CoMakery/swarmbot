@@ -26,8 +26,8 @@ beforeEach (done) ->
   swarmbot.firebase().remove done
 
 afterEach ->
-  debug 'FB data:'
-  debug pjson @firebaseServer.getValue()
+  @firebaseServer.getValue()
+  .then (data) =>  debug "Firebase data: #{pjson data}"
 
 after ->
   @firebaseServer.close()
