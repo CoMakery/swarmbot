@@ -100,7 +100,7 @@ describe 'swarmbot', ->
         new DCO(name: "Community #{i++}").save()
         new DCO(name: "Community #{i++}").save()
       ]
-      .then (@dcos) => new User(name: userId, state: 'users#setDco').save()
+      .then (@dcos) => new User(name: userId, state: 'dcos#index').save()
       .then (@user) => App.route message()
       .then (reply) =>
         jreply = json(reply)

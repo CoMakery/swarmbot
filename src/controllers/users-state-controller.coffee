@@ -8,7 +8,6 @@ DCO = require '../models/dco'
 DcoCollection = require '../collections/dco-collection'
 ShowView = require '../views/users/show-view'
 BtcView = require '../views/users/btc-view'
-SetDcoView = require '../views/users/set-dco-view'
 BalanceView = require '../views/general/balance-view'
 WelcomeView = require '../views/general/welcome-view'
 
@@ -24,19 +23,6 @@ class UsersStateController extends ApplicationController
   welcome: ->
     view = new WelcomeView {@currentUser}
     view.render()
-
-  # choose DCO
-  setDco: ->
-    DcoCollection.all().then (dcos) =>
-      view = new SetDcoView dcos
-      @currentUser.set 'menu', view.menu
-      view.render()
-
-  # set DCO
-  setDcoTo: (params)->
-    @currentUser.setDcoTo(params.id).then =>
-      @currentUser.exit()
-      @redirect "Project set to #{params.name}"
 
   myAccount: ->
     # show current user data

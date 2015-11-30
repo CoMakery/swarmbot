@@ -67,8 +67,8 @@ class User extends FirebaseModel
       { name: 'sendReward', from: 'solutions#show', to: 'solutions#sendReward' }
       { name: 'exit', from: 'solutions#sendReward', to: 'solutions#show' }
 
-      { name: 'setDco', from: 'general#home', to: 'users#setDco' }
-      { name: 'exit', from: 'users#setDco', to: 'general#home' }
+      { name: 'setDco', from: 'general#home', to: 'dcos#index' }
+      { name: 'exit', from: 'dcos#index', to: 'general#home' }
 
       { name: 'myAccount', from: 'general#home', to: 'users#myAccount' }
       { name: 'exit', from: 'users#myAccount', to: 'general#home' }
