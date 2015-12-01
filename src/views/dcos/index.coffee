@@ -1,21 +1,28 @@
 debug = require('debug')('app')
 { log, p, pjson } = require 'lightsaber'
-{ isEmpty } = require 'lodash'
+{ isEmpty, clone } = require 'lodash'
 ZorkView = require '../zork-view'
 
 class IndexView extends ZorkView
 
-  constructor: (@dcos) ->
+  constructor: (@dcos, @balances) ->
     i = 0
-    @menu = {}
-    @menu[i++] = { text: "back", transition: 'exit' }
+    @dcoItems = []
     for dco in @dcos.all()
-      @menu[i++] = @dcoMenuItem dco
+      @dcoItems.push [@letters[i++], @dcoMenuItem dco]
 
-    @menu[i++] = {
+    i = 0
+    @actions = {}
+    @actions[i++] = { text: "back", transition: 'exit' }
+    @actions[i++] = {
       text: "create new project"
       transition: 'create'
     }
+
+    @menu = clone @actions
+    for [key, menuItem] in @dcoItems
+      @menu[key.toLowerCase()] = menuItem if key?
+
 
   dcoMenuItem: (dco) ->
     {
@@ -39,6 +46,7 @@ class IndexView extends ZorkView
         title: "Let's get started!  Type 1 now to create a new project."
       }
     else
+      # [ {name: 'dco name', balance: 2000} ]
       [
         {
           color: @NAV_COLOR
@@ -48,8 +56,19 @@ class IndexView extends ZorkView
           color: @ACTION_COLOR
           fields: [
             {
-              title: 'Actions'
-              value: @renderMenu()
+              value: @renderOrderedMenuItems @dcoItems
+              short: true
+            }
+            {
+              title: "Project Coins"
+              value: "None Yet"
+              short: true
+            }
+            { short: true }
+            {
+              title: "Actions"
+              value: @renderMenuItems @actions
+              short: true
             }
           ]
           fallback: fallbackText

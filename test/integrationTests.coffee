@@ -124,8 +124,8 @@ describe 'swarmbot', ->
           jreply = json(reply)
           # jreply.should.match /Contribute to projects and get rewarded with project coins/
           jreply.should.match /Set Current Project/
-          jreply.should.match /[1-3]: Community [1-3]/
-          @message = message('1')
+          jreply.should.match /[A-C]: Community [1-3]/
+          @message = message('A')
           App.route @message
         .then (reply) =>
           @message.parts[0].should.match /Project set to Community \d/
