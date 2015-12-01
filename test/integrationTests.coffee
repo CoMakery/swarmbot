@@ -99,6 +99,18 @@ describe 'swarmbot', ->
 
   context 'dcos controller', ->
     context 'index', ->
+      it "shows a welcome screen if there are no projects", ->
+        new User(name: userId, state: 'dcos#index')
+        .save()
+        .then (@user) => App.route message()
+        .then (reply) =>
+          jreply = json(reply)
+          jreply.should.match /Contribute to projects and get rewarded with project coins/
+          jreply.should.match /Let's get started!  Type 1 now to create a new project./
+          App.route message('1')
+        .then (reply) =>
+          json(reply).should.match /What is the name of this project/
+
       it "shows the list of names and sets current dco", ->
         i = 1
         Promise.all [
@@ -110,6 +122,7 @@ describe 'swarmbot', ->
         .then (@user) => App.route message()
         .then (reply) =>
           jreply = json(reply)
+          # jreply.should.match /Contribute to projects and get rewarded with project coins/
           jreply.should.match /Set Current Project/
           jreply.should.match /[1-3]: Community [1-3]/
           @message = message('1')

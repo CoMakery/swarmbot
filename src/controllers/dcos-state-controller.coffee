@@ -1,7 +1,7 @@
 { log, p, pjson } = require 'lightsaber'
 ApplicationController = require './application-state-controller'
 DcoCollection = require '../collections/dco-collection'
-SetDcoView = require '../views/dcos/set-dco-view'
+IndexView = require '../views/dcos/index'
 CreateView = require '../views/dcos/create-view'
 DCO = require '../models/dco.coffee'
 
@@ -9,7 +9,7 @@ class DcosStateController extends ApplicationController
   # choose DCO
   index: ->
     DcoCollection.all().then (dcos) =>
-      view = new SetDcoView dcos
+      view = new IndexView dcos
       @render(view)
 
   # set DCO

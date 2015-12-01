@@ -21,6 +21,7 @@
     "push-if-green": "npm run fulltest && git push --tags origin head",
     "start": "bin/hubot --adapter slack",
     "test": "mocha",
+    "testv": "mocha --full-trace",
     "wrap": "npm shrinkwrap"
   },
   "devDependencies": {
