@@ -3,29 +3,14 @@ debug = require('debug')('app')
 { map } = require 'lodash'
 Promise = require 'bluebird'
 ApplicationController = require './application-state-controller'
-ProposalCollection = require '../collections/proposal-collection'
 swarmbot = require '../models/swarmbot'
 Proposal = require '../models/proposal'
 DCO = require '../models/dco'
 User = require '../models/user'
-HomeView = require '../views/general/home-view'
 CapTableView = require '../views/general/cap-table-view'
 AdvancedCommandsView = require '../views/general/advanced-commands-view'
 
 class GeneralStateController extends ApplicationController
-
-  home: ->
-    @getDco()
-    .then (dco) => dco.fetch()
-    .then (dco) =>
-      proposals = new ProposalCollection(dco.snapshot.child('proposals'), parent: dco)
-      # if proposals.isEmpty()
-      #   return @msg.send "There are no proposals to display in #{dco.key()}."
-      proposals.sortBy 'totalVotes'
-      # messages = proposals.map(@_proposalMessage)[0...5]
-
-      @render new HomeView dco, proposals
-    .error(@_showError)
 
   capTable: ->
     @getDco()

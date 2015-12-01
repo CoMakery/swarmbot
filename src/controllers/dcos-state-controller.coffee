@@ -1,9 +1,11 @@
 { log, p, pjson } = require 'lightsaber'
 ApplicationController = require './application-state-controller'
+DCO = require '../models/dco.coffee'
+ProposalCollection = require '../collections/proposal-collection'
 DcoCollection = require '../collections/dco-collection'
 IndexView = require '../views/dcos/index'
 CreateView = require '../views/dcos/create-view'
-DCO = require '../models/dco.coffee'
+ShowView = require '../views/dcos/show-view'
 
 class DcosStateController extends ApplicationController
   # choose DCO
@@ -11,6 +13,16 @@ class DcosStateController extends ApplicationController
     DcoCollection.all().then (dcos) =>
       view = new IndexView dcos
       @render(view)
+
+  show: ->
+    @getDco()
+    .then (dco) => dco.fetch()
+    .then (dco) =>
+      proposals = new ProposalCollection(dco.snapshot.child('proposals'), parent: dco)
+      proposals.sortBy 'totalVotes'
+
+      @render new ShowView dco, proposals
+    .error(@_showError)
 
   # set DCO
   setDcoTo: (data)->

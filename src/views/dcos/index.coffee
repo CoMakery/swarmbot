@@ -11,9 +11,8 @@ class IndexView extends ZorkView
     for dco in @dcos.all()
       @dcoItems.push [@letters[i++], @dcoMenuItem dco]
 
-    i = 0
+    i = 1
     @actions = {}
-    @actions[i++] = { text: "back", transition: 'exit' }
     @actions[i++] = {
       text: "create new project"
       transition: 'create'

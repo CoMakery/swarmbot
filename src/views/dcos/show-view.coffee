@@ -1,7 +1,7 @@
 { log, p, pjson } = require 'lightsaber'
 ZorkView = require '../zork-view'
 
-class HomeView extends ZorkView
+class ShowView extends ZorkView
   constructor: (@dco, @proposals) ->
     @orderedMenu = []
     @proposalItems = []
@@ -10,12 +10,10 @@ class HomeView extends ZorkView
       @proposalItems.push [@letters[i++], @proposalMenuItem proposal]
 
     i = 1
-    # @orderedMenu.push [i++, { text: "« back", transition: 'setDco' }]
-    @orderedMenu.push [i++, { text: "create a task", transition: 'create' }]
-    @orderedMenu.push [i++, { text: "set project", transition: 'setDco' }]
+    @orderedMenu.push [i++, { text: "all projects", transition: 'setDco' }]
     @orderedMenu.push [i++, { text: "my account", transition: 'myAccount' }]
     @orderedMenu.push [i++, { text: "cap table", command: 'capTable' }]
-    @orderedMenu.push [i++, { text: "advanced commands", command: 'advanced' }]
+    @orderedMenu.push [i++, { text: "create a task", transition: 'create' }]
 
     @menu = {}
     for [key, menuItem] in @proposalItems
@@ -75,4 +73,4 @@ class HomeView extends ZorkView
     # text += " (awarded)" if proposal.get('awarded')?
     text
 
-module.exports = HomeView
+module.exports = ShowView

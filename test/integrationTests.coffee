@@ -31,15 +31,15 @@ message = (input) ->
   }
 
 describe 'swarmbot', ->
-  context 'general#home', ->
+  context 'dcos#show', ->
     context 'with no proposals', ->
       it "allows the user to create a task within the current project", ->
         dcoId = 'Your Great Project'
-        @user = new User(name: userId, current_dco: dcoId, state: 'general#home').save()
+        @user = new User(name: userId, current_dco: dcoId, state: 'dcos#show').save()
         dco = new DCO(name: dcoId)
         dco.save()
         .then -> App.route message()
-        .then -> App.route message('1')
+        .then -> App.route message('4') # create a task
         .then (reply) ->
           json(reply).should.match /What is the name of your task/
           App.route message('A Task')
@@ -76,7 +76,7 @@ describe 'swarmbot', ->
 
     it "shows the user's current community, with proposals", ->
       dcoId = 'Your Great Project'
-      @user = new User(name: userId, current_dco: dcoId, state: 'general#home').save()
+      @user = new User(name: userId, current_dco: dcoId, state: 'dcos#show').save()
       dco = new DCO(name: dcoId)
       dco.save()
       .then -> dco.createProposal name: 'Do Stuff'
@@ -143,11 +143,11 @@ describe 'swarmbot', ->
               project_statement: 'Shaft'
               project_owner: userId
 
-  context 'general#home', ->
+  context 'dcos#show', ->
     userId = 'Me'
     dcoId = 'First Distributed Federation'
     user = ->
-      new User(name: userId, state: 'general#home', current_dco: dcoId).save()
+      new User(name: userId, state: 'dcos#show', current_dco: dcoId).save()
     dco = ->
       new DCO(name: dcoId, project_owner: userId).save()
     it "shows the list of proposals in order of votes", ->

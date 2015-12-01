@@ -44,11 +44,11 @@ class User extends FirebaseModel
     events: [
       { name: 'exit', from: User::initialState, to: User::initialState }
 
-      { name: 'show', from: 'general#home', to: 'proposals#show' }
-      { name: 'exit', from: 'proposals#show', to: 'general#home' }
+      { name: 'show', from: 'dcos#show', to: 'proposals#show' }
+      { name: 'exit', from: 'proposals#show', to: 'dcos#show' }
 
-      { name: 'create', from: 'general#home', to: 'proposals#create' }
-      { name: 'exit', from: 'proposals#create', to: 'general#home' }
+      { name: 'create', from: 'dcos#show', to: 'proposals#create' }
+      { name: 'exit', from: 'proposals#create', to: 'dcos#show' }
 
       { name: 'setBounty', from: 'proposals#show', to: 'proposals#edit' }
       { name: 'exit', from: 'proposals#edit', to: 'proposals#show' }
@@ -67,15 +67,15 @@ class User extends FirebaseModel
       { name: 'sendReward', from: 'solutions#show', to: 'solutions#sendReward' }
       { name: 'exit', from: 'solutions#sendReward', to: 'solutions#show' }
 
-      { name: 'setDco', from: 'general#home', to: 'dcos#index' }
-      { name: 'exit', from: 'dcos#index', to: 'general#home' }
+      { name: 'setDco', from: 'dcos#show', to: 'dcos#index' }
+      { name: 'exit', from: 'dcos#index', to: 'dcos#show' }
 
       { name: 'create', from: 'dcos#index', to: 'dcos#create' }
       { name: 'exit', from: 'dcos#create', to: 'dcos#index' }
-      { name: 'showDco', from: 'dcos#create', to: 'general#home'}
+      { name: 'showDco', from: 'dcos#create', to: 'dcos#show'}
 
-      { name: 'myAccount', from: 'general#home', to: 'users#myAccount' }
-      { name: 'exit', from: 'users#myAccount', to: 'general#home' }
+      { name: 'myAccount', from: 'dcos#show', to: 'users#myAccount' }
+      { name: 'exit', from: 'users#myAccount', to: 'dcos#show' }
 
       { name: 'setBtc', from: 'users#myAccount', to: 'users#setBtc' }
       { name: 'exit', from: 'users#setBtc', to: 'users#myAccount' }

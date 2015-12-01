@@ -7,21 +7,11 @@ ApplicationController = require './application-state-controller'
 ProposalCollection = require '../collections/proposal-collection'
 Proposal = require '../models/proposal'
 ShowView = require '../views/proposals/show-view'
-IndexView = require '../views/proposals/index-view'
 CreateView = require '../views/proposals/create-view'
 EditView = require '../views/proposals/edit-view'
 ZorkView = require '../views/zork-view'
 
 class ProposalsStateController extends ApplicationController
-
-  index: ->
-    @getDco()
-    .then (dco) => dco.fetch()
-    .then (dco) =>
-      proposals = new ProposalCollection(dco.snapshot.child('proposals'), parent: dco)
-      proposals.sortByReputationScore()
-
-      @render(new IndexView(proposals))
 
   show: (data) ->
     proposalId = data.proposalId ? throw new Error "show requires an id"
