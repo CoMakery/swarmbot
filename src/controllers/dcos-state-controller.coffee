@@ -28,7 +28,7 @@ class DcosStateController extends ApplicationController
   setDcoTo: (data)->
     @currentUser.setDcoTo(data.id).then =>
       @currentUser.exit()
-      @redirect "Project set to #{data.name}"
+      @redirect()
 
   create: (data={}) ->
     if @input

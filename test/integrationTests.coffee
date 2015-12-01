@@ -8,14 +8,6 @@ nock = require 'nock'
 
 userId = "slack:1234"
 
-nock 'http://example.com'
-  .head '/too-large.png'
-  .reply 200, '', { 'content-length': App.MAX_SLACK_IMAGE_SIZE + 1, 'content-type': 'image/jpg' }
-  .head '/very-small.png'
-  .reply 200, '', { 'content-length': App.MAX_SLACK_IMAGE_SIZE - 1, 'content-type': 'image/jpg' }
-  .head '/does-not-exist.png'
-  .reply 404, ''
-
 message = (input) ->
   @parts = []
   {
@@ -32,6 +24,15 @@ message = (input) ->
 
 describe 'swarmbot', ->
   context 'dcos#show', ->
+    beforeEach ->
+      nock 'http://example.com'
+        .head '/too-large.png'
+        .reply 200, '', { 'content-length': App.MAX_SLACK_IMAGE_SIZE + 1, 'content-type': 'image/jpg' }
+        .head '/very-small.png'
+        .reply 200, '', { 'content-length': App.MAX_SLACK_IMAGE_SIZE - 1, 'content-type': 'image/jpg' }
+        .head '/does-not-exist.png'
+        .reply 404, ''
+
     context 'with no proposals', ->
       it "allows the user to create a task within the current project", ->
         dcoId = 'Your Great Project'
@@ -104,11 +105,10 @@ describe 'swarmbot', ->
           json(reply).should.match /What is the name of this project/
 
       it "shows the list of names and sets current dco", ->
-        i = 1
         Promise.all [
-          new DCO(name: "Community #{i++}").save()
-          new DCO(name: "Community #{i++}").save()
-          new DCO(name: "Community #{i++}").save()
+          new DCO(name: "Community A").save()
+          new DCO(name: "Community B").save()
+          new DCO(name: "Community C").save()
         ]
         .then (@dcos) => new User(name: userId, state: 'dcos#index').save()
         .then (@user) => App.route message()
@@ -116,11 +116,13 @@ describe 'swarmbot', ->
           jreply = json(reply)
           # jreply.should.match /Contribute to projects and get rewarded with project coins/
           jreply.should.match /Set Current Project/
-          jreply.should.match /[A-C]: Community [1-3]/
+          jreply.should.match /A: Community A/
+          jreply.should.match /B: Community B/
+          jreply.should.match /C: Community C/
           @message = message('A')
           App.route @message
         .then (reply) =>
-          @message.parts[0].should.match /Project set to Community \d/
+          json(reply).should.match /Community A/i
 
       context 'create', ->
         it "asks questions and creates a project", ->

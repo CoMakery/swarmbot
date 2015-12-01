@@ -49,12 +49,13 @@ class IndexView extends ZorkView
       [
         {
           color: @NAV_COLOR
-          title: "choose your project"
+          title: "projects"
         }
         {
           color: @ACTION_COLOR
           fields: [
             {
+              title: "Choose Project"
               value: @renderOrderedMenuItems @dcoItems
               short: true
             }
