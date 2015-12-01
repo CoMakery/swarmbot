@@ -33,17 +33,9 @@ message = (input) ->
 describe 'swarmbot', ->
   context 'general#home', ->
     context 'with no proposals', ->
-      it "shows the default community", ->
-        App.route message('')
-        .then (reply) ->
-          jreply = json reply
-          jreply.should.match /no proposals/
-          jreply.should.match /\d: cap table/
-          jreply.should.match /\d: advanced commands/
-
       it "allows the user to create a task within the current project", ->
         dcoId = 'Your Great Project'
-        @user = new User(name: userId, current_dco: dcoId).save()
+        @user = new User(name: userId, current_dco: dcoId, state: 'general#home').save()
         dco = new DCO(name: dcoId)
         dco.save()
         .then -> App.route message()
@@ -84,7 +76,7 @@ describe 'swarmbot', ->
 
     it "shows the user's current community, with proposals", ->
       dcoId = 'Your Great Project'
-      @user = new User(name: userId, current_dco: dcoId).save()
+      @user = new User(name: userId, current_dco: dcoId, state: 'general#home').save()
       dco = new DCO(name: dcoId)
       dco.save()
       .then -> dco.createProposal name: 'Do Stuff'

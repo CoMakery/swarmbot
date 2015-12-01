@@ -42,7 +42,7 @@ class App
       unless controller and controller[action]
         console.error "Unexpected user state #{user.current} --
           resetting to default state"
-        return user.set('state', 'general#home').then => @route(msg)
+        return user.set('state', User::initialState).then => @route(msg)
 
       controller.input = msg.match[1]
 

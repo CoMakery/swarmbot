@@ -7,7 +7,7 @@ swarmbot = require './swarmbot'
 
 class User extends FirebaseModel
   urlRoot: 'users'
-  initialState: 'general#home'
+  initialState: 'dcos#index'
 
   @findBySlackUsername: Promise.promisify (slackUsername, cb)->
     swarmbot.firebase().child('users') # TODO: use urlRoot here
@@ -42,7 +42,7 @@ class User extends FirebaseModel
       throw new Error "State Machine Error! Event: #{event} // #{from} -> #{to} // args: #{pjson args} // error: #{errorCode}  #{errorMessage}"
 
     events: [
-      { name: 'exit', from: 'general#home', to: 'general#home' }
+      { name: 'exit', from: User::initialState, to: User::initialState }
 
       { name: 'show', from: 'general#home', to: 'proposals#show' }
       { name: 'exit', from: 'proposals#show', to: 'general#home' }
