@@ -12,12 +12,12 @@ class User extends FirebaseModel
   urlRoot: 'users'
   initialState: 'dcos#index'
 
-  @findBySlackUsername: Promise.promisify (slackUsername, cb)->
+  @findBySlackUsername: Promise.promisify (slackUsername, cb) ->
     swarmbot.firebase().child('users') # TODO: use urlRoot here
       .orderByChild('slack_username')
       .equalTo(slackUsername)
       .limitToFirst(1)
-      .once 'value', (snapshot)->
+      .once 'value', (snapshot) ->
         return cb(new Promise.OperationalError("Cannot find a user named '#{slackUsername}'.")) unless snapshot.val()
         userId = Object.keys(snapshot.val())[0]
         cb(null, new User({}, snapshot: snapshot.child(userId)))
