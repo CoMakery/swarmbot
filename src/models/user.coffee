@@ -85,6 +85,7 @@ class User extends FirebaseModel
       { name: 'createSolution', from: 'proposals#show', to: 'solutions#create' }
 
       { name: 'solutions', from: 'proposals#show', to: 'solutions#index' }
+      { name: 'showSolution', from: 'proposals#show', to: 'solutions#show' }
       { name: 'exit', from: 'solutions#index', to: 'proposals#show' }
 
       { name: 'show', from: 'solutions#index', to: 'solutions#show' }

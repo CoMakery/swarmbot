@@ -1,35 +1,49 @@
 { log, p, pjson } = require 'lightsaber'
-{ isEmpty } = require 'lodash'
+{ isEmpty, clone } = require 'lodash'
 ZorkView = require '../zork-view'
+User = require '../../models/user'
 
 class ShowView extends ZorkView
   constructor: (@proposal, { canSetBounty }) ->
-    @menu = {}
+    @solutionItems = {}
     i = 0
+    @proposal.solutions().sortBy('totalVotes').each (solution) =>
+      @solutionItems[@letters[i++]] =
+        text: solution.get('name').toLowerCase()
+        transition: 'show'
+        data: { solutionId: solution.key(), proposalId: solution.parent.key() }
 
-    @menu[i++] = { text: "« back", transition: 'exit' }
+    @menuItems = {}
+    i = 1
 
-    @menu[i++] =
+    @menuItems[i++] =
+      text: "all projects"
+      teleport: User::initialState
+
+    @menuItems[i++] =
       text: "vote up"
       command: 'upvote'
       data: { proposalId: @proposal.key() }
 
-    @menu[i++] =
-      text: "view all solutions",
-      transition: 'solutions'
-      data: { proposalId: @proposal.key() }
+    # @menuItems[i++] =
+    #   text: "view all solutions",
+    #   transition: 'solutions'
+    #   data: { proposalId: @proposal.key() }
 
-    @menu[i++] =
-      text: "submit solution",
+    @menuItems[i++] =
+      text: "submit new solution",
       transition: 'createSolution'
       data: { proposalId: @proposal.key() }
 
     if canSetBounty
-      @menu[i++] =
+      @menuItems[i++] =
         text: "set reward",
         transition: 'setBounty'
         data: { proposalId: @proposal.key() }
 
+    @menu = clone @menuItems
+    for key, item of @solutionItems
+      @menu[key.toLowerCase()] = item
 
   render: ->
     description = ''
@@ -42,8 +56,8 @@ class ShowView extends ZorkView
 
     fields = [
       {
-        title: 'Actions'
-        value: @renderMenu()
+        title: 'Solutions'
+        value: @renderMenuItems @solutionItems
         short: true
       }
     ]
@@ -53,6 +67,13 @@ class ShowView extends ZorkView
         value: amount
         short: true
       }
+      fields.push {short: true}
+
+    fields.push {
+      title: 'Actions'
+      value: @renderMenuItems @menuItems
+      short: true
+    }
 
     [
       {
