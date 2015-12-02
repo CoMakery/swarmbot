@@ -34,6 +34,15 @@ class ApplicationStateController
         else if type(transitionMethod) in ['null', 'undefined']
           throw new Error "Requested state transition '#{json transitionMethod}' is not a function! Event '#{menuAction.transition}' from state '#{@currentUser.current}'"
 
+    if menuAction.teleport?
+      promise = promise.then =>
+        Promise.all [
+          @currentUser.set 'stateData', menuAction.data or {}
+          @currentUser.set 'state', menuAction.teleport
+        ]
+      .then =>
+        @redirect()
+
     promise
 
   redirect: (flashMessage)->
