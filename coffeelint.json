@@ -68,7 +68,7 @@
     "level": "ignore"
   },
   "no_empty_param_list": {
-    "level": "ignore"
+    "level": "error"
   },
   "no_implicit_braces": {
     "level": "ignore",
@@ -79,10 +79,10 @@
     "level": "ignore"
   },
   "no_interpolation_in_single_quotes": {
-    "level": "ignore"
+    "level": "error"
   },
   "no_nested_string_interpolation": {
-    "level": "warn"
+    "level": "error"
   },
   "no_plusplus": {
     "level": "ignore"

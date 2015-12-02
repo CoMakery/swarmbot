@@ -7,7 +7,7 @@ class ApplicationController
   currentUser: ->
     @_currentUser ||= new User name: @msg.robot.whose(@msg)
 
-  getDco: ()->
+  getDco: ->
     if @community?
       Promise.resolve(DCO.find(@community)).bind(@)
     else
