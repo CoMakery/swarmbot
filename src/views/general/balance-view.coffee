@@ -3,7 +3,7 @@
 ZorkView = require '../zork-view'
 
 class BalanceView extends ZorkView
-  constructor: ({@assets}) ->
+  constructor: ({@assets})->
     @menu = {}
 
   render: ->

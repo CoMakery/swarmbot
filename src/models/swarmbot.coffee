@@ -25,7 +25,7 @@ class Swarmbot
       coluParams.redisPort = process.env.REDIS_PORT
 
     @_colu = new Colu coluParams
-    return new Promise (resolve) =>
+    return new Promise (resolve)=>
       @_colu.on 'connect', =>
         (require('debug')('privatekey'))( @_colu.hdwallet.getPrivateSeed() ) unless process.env.COLU_PRIVATE_SEED
         resolve @_colu

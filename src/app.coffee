@@ -12,11 +12,11 @@ controllers =
 class App
   @MAX_SLACK_IMAGE_SIZE = Math.pow 2,19
 
-  @respond: (pattern, cb) ->
+  @respond: (pattern, cb)->
     @responses ?= []
     @responses.push [pattern, cb]
 
-  @route: (msg) ->
+  @route: (msg)->
     debug "in @route: msg.match?[1] => #{msg.match?[1]}"
 
     # old commands:
@@ -25,7 +25,7 @@ class App
       for [pattern, cb] in @responses
         if match = input.match pattern
           msg.match = msg.message.match(pattern)
-          return new Promise (resolve, reject) =>
+          return new Promise (resolve, reject)=>
             debug "Command: `#{input}`, Matched: #{pattern}"
             cb(msg)
             resolve('')
@@ -33,7 +33,7 @@ class App
     # otherwise do Zork MVC routing:
     @setCurrentUser msg
     msg.currentUser.fetch()
-    .then (user) =>
+    .then (user)=>
       debug "state: #{user.current}"
       [controllerName, action] = user.current.split('#')
 
@@ -60,7 +60,7 @@ class App
       else
         throw new Error("Action for state '#{user.current}' not defined.")
 
-  @setCurrentUser: (msg) ->
+  @setCurrentUser: (msg)->
     msg.currentUser ?= new User name: msg.robot.whose(msg)
 
 module.exports = App

@@ -21,7 +21,7 @@ class ZorkView
       "#{key}: #{menuItem.text}"
     lines.join("\n")
 
-  bold: (text) -> "*#{text}*"
+  bold: (text)-> "*#{text}*"
 
 extend ZorkView::, ZorkHelper::
 

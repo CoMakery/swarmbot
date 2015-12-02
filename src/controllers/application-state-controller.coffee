@@ -8,14 +8,14 @@ swarmbot = require '../models/swarmbot'
 ZorkHelper = require '../helpers/zork-helper'
 
 class ApplicationStateController
-  constructor: (@msg) ->
+  constructor: (@msg)->
     @currentUser = @msg.currentUser
 
-  sendInfo:     (text) => @msg.robot.pmReply @msg, ZorkHelper::info text
-  sendQuestion: (text) => @msg.robot.pmReply @msg, ZorkHelper::question text
-  sendWarning:  (text) => @msg.robot.pmReply @msg, ZorkHelper::warning text
+  sendInfo:     (text)=> @msg.robot.pmReply @msg, ZorkHelper::info text
+  sendQuestion: (text)=> @msg.robot.pmReply @msg, ZorkHelper::question text
+  sendWarning:  (text)=> @msg.robot.pmReply @msg, ZorkHelper::warning text
 
-  execute: (menuAction) ->
+  execute: (menuAction)->
     promise = Promise.resolve()
     if menuAction.command?
       promise = promise.then =>
@@ -36,17 +36,17 @@ class ApplicationStateController
 
     promise
 
-  redirect: (flashMessage) ->
+  redirect: (flashMessage)->
     @sendInfo flashMessage if flashMessage
     @msg.match = [] # call default action in the next state
     App.route @msg
 
-  render: (view) ->
+  render: (view)->
     @currentUser.set 'menu', view.menu if view.menu
     view.render()
 
   getDco: ->
-    @currentUser.fetchIfNeeded().bind(@).then (user) ->
+    @currentUser.fetchIfNeeded().bind(@).then (user)->
       dcoId = user.get('current_dco')
       dcoId ?= swarmbot.feedbackDcokey
       if dcoId?

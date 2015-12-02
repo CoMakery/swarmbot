@@ -2,7 +2,7 @@
 ZorkView = require '../zork-view'
 
 class WelcomeView extends ZorkView
-  constructor: ({@currentUser}) ->
+  constructor: ({@currentUser})->
 
   render: ->
     [

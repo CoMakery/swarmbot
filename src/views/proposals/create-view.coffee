@@ -3,7 +3,7 @@
 ZorkView = require '../zork-view'
 
 class CreateView extends ZorkView
-  constructor: ({@data, @errorMessage}) ->
+  constructor: ({@data, @errorMessage})->
     @menu = {}
     @menu[0] = { text: "back", transition: 'exit' }
 

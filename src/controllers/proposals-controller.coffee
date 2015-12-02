@@ -10,9 +10,9 @@ ProposalCollection = require '../collections/proposal-collection'
 
 class ProposalsController extends ApplicationController
 
-  list: (@msg, { @community }) ->
+  list: (@msg, { @community })->
     @getDco().then (dco)=>
-      dco.fetch().then (dco) =>
+      dco.fetch().then (dco)=>
         proposals = new ProposalCollection(dco.snapshot.child('proposals'), parent: dco)
         if proposals.isEmpty()
           return @msg.send "There are no proposals to display in #{dco.key()}."
@@ -23,12 +23,12 @@ class ProposalsController extends ApplicationController
 
     .error(@_showError)
 
-  listApproved: (@msg, { @community }) ->
+  listApproved: (@msg, { @community })->
     @getDco().then (dco)=>
-      dco.fetch().then (dco) =>
+      dco.fetch().then (dco)=>
         proposals = new ProposalCollection(dco.snapshot.child('proposals'), parent: dco)
 
-        proposals.filter (proposal) ->
+        proposals.filter (proposal)->
           proposal.ratings().size() > 0 &&
           proposal.ratings().score() > 50 &&
           !proposal.get('awarded')?
@@ -45,11 +45,11 @@ class ProposalsController extends ApplicationController
     .error(@_showError)
 
 
-  award: (@msg, { proposalName, awardee, dcoKey }) ->
+  award: (@msg, { proposalName, awardee, dcoKey })->
     @community = dcoKey
     @getDco()
-    .then (dco) -> dco.fetch()
-    .then (dco) =>
+    .then (dco)-> dco.fetch()
+    .then (dco)=>
       if @currentUser().canUpdate(dco)
         User.findBySlackUsername(awardee).then (user)=>
           awardeeAddress = user.get('btc_address')
@@ -57,7 +57,7 @@ class ProposalsController extends ApplicationController
           if awardeeAddress?
             proposal = new Proposal({id: proposalName}, parent: dco)
 
-            proposal.fetch().then (proposal) =>
+            proposal.fetch().then (proposal)=>
               if not proposal.exists()
                 @msg.send "Task '#{proposal.key()}' does not exist. Did you misspell it?"
               else if proposal.get('awarded')
@@ -80,23 +80,23 @@ class ProposalsController extends ApplicationController
         # @msg.send "Sorry, you don't have sufficient trust in this community to award this proposal."
         @msg.send "Sorry, you must be the progenitor of this DCO to award proposals."
 
-  create: (@msg, { proposalName, amount, @community }) ->
+  create: (@msg, { proposalName, amount, @community })->
     @getDco()
-    .then (@dco) =>
+    .then (@dco)=>
       @dco.createProposal({ name: proposalName, amount })
     .then =>
       @msg.send "Task '#{proposalName}' created in community '#{@dco.key()}'"
     .error(@_showError)
 
-  swarmbotSuggestion: (@msg, { suggestion }) ->
+  swarmbotSuggestion: (@msg, { suggestion })->
     DCO.find(swarmbot.feedbackDcokey)
-    .then (dco) =>
+    .then (dco)=>
       if dco.exists()
         @create @msg, { proposalName: suggestion, amount: 0, community: swarmbot.feedbackDcokey }
       else
         @msg.send "The community '#{swarmbot.feedbackDcokey}' does not exist. Please ask your amazing swarmbot admin to create it!"
 
-  _proposalMessage: (proposal) ->
+  _proposalMessage: (proposal)->
     text = "Task #{proposal.key()}"
     if (proposal.get('amount') && proposal.get('amount') > 0)
       text += " Reward $#{proposal.get('amount')}"
@@ -105,7 +105,7 @@ class ProposalsController extends ApplicationController
     text += " (awarded)" if proposal.get('awarded')?
     text
 
-  _coloredCoinTxnUrl: (txnId) ->
+  _coloredCoinTxnUrl: (txnId)->
     url = ["http://coloredcoins.org/explorer"]
     url.push 'testnet' if process.env.COLU_NETWORK == 'testnet'
     url.push "tx/#{txnId}"

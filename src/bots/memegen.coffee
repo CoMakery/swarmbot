@@ -11,7 +11,7 @@
 
 inspect = require('util').inspect
 
-module.exports = (robot) ->
+module.exports = (robot)->
   unless robot.brain.data.imgflip_memes?
     robot.brain.data.imgflip_memes = [
       {
@@ -31,11 +31,11 @@ module.exports = (robot) ->
   for meme in robot.brain.data.imgflip_memes
     setupResponder robot, meme
 
-setupResponder = (robot, meme) ->
-  App.respond meme.regex, (msg) ->
+setupResponder = (robot, meme)->
+  App.respond meme.regex, (msg)->
     generateMeme msg, meme.template_id, msg.match[1], msg.match[2]
 
-generateMeme = (msg, template_id, text0, text1) ->
+generateMeme = (msg, template_id, text0, text1)->
   username = process.env.IMGFLIP_API_USERNAME
   password = process.env.IMGFLIP_API_PASSWORD
 
@@ -54,7 +54,7 @@ generateMeme = (msg, template_id, text0, text1) ->
     password: password,
     text0: text0,
     text1: text1
-  .post() (error, res, body) ->
+  .post() (error, res, body)->
     if error
       msg.reply "I got an error when talking to imgflip:", inspect(error)
       return

@@ -5,7 +5,7 @@ ZorkView = require '../zork-view'
 
 class IndexView extends ZorkView
 
-  constructor: ({@dcos, @userBalances}) ->
+  constructor: ({@dcos, @userBalances})->
     i = 0
     @dcoItems = []
     for dco in @dcos.all()
@@ -23,7 +23,7 @@ class IndexView extends ZorkView
       @menu[key.toLowerCase()] = menuItem if key?
 
 
-  dcoMenuItem: (dco) ->
+  dcoMenuItem: (dco)->
     {
       text: dco.get 'name'
       data: {id: dco.key(), name: dco.get('name')}

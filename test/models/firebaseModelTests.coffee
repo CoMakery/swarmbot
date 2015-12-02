@@ -16,9 +16,9 @@ describe 'SomeModel', ->
     it "should save and be fetchable by name", ->
       model = new SomeModel name: 'A Proper Name', description: 'something'
       model.save()
-      .then (model) =>
+      .then (model)=>
         # Fetch the model by its name alone
         newModel = new SomeModel name: 'A Proper Name'
         newModel.fetch()
-      .then (newModel) =>
+      .then (newModel)=>
         newModel.get('description').should.eq 'something'

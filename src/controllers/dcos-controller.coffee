@@ -7,41 +7,41 @@ ZorkHelper = require '../helpers/zork-helper'
 
 class DcosController extends ApplicationController
 
-  listMine: (@msg) ->
-    DcoCollection.create().then (allDcos) =>
-      myDcos = allDcos.filter((dco) => dco.hasMember @currentUser())
+  listMine: (@msg)->
+    DcoCollection.create().then (allDcos)=>
+      myDcos = allDcos.filter((dco)=> dco.hasMember @currentUser())
       @msg.send @textList myDcos
 
-  textList: (dcos) ->
-    dcoNames = dcos.map (dco) -> dco.key()
+  textList: (dcos)->
+    dcoNames = dcos.map (dco)-> dco.key()
     dcoNames.join "\n"
 
-  listMembers: (@msg, { dcoKey }) ->
+  listMembers: (@msg, { dcoKey })->
     @community = dcoKey
     @getDco()
     .then (dco)-> dco.fetch()
     .then (dco)->
-      dco.members().fetch().then (members) =>
+      dco.members().fetch().then (members)=>
         messages = members.map (member)=>
           @_userText(member)
         @msg.send(messages.join("\n"))
     .error(@_showError)
 
-  find: (msg, { dcoSearch }) ->
+  find: (msg, { dcoSearch })->
     swarmbot.firebase().child('projects').orderByKey()
       .startAt(dcoSearch).endAt(dcoSearch + "~")
-      .once 'value', (dcos) ->
+      .once 'value', (dcos)->
         dcoNames = []
-        dcos.forEach (dco) ->
+        dcos.forEach (dco)->
           dcoNames.push dco.key()
           false
         msg.send dcoNames.join("\n")
 
-  join: (@msg, { dcoKey }) ->
+  join: (@msg, { dcoKey })->
     @community = dcoKey
     @getDco()
-    .then (dco) -> dco.fetch()
-    .then (dco) ->
+    .then (dco)-> dco.fetch()
+    .then (dco)->
       return @msg.send "The community '#{dco.key()}' does not exist." unless dco.exists()
       return @msg.send "You are already a member of this community." if dco.hasMember(@currentUser())
 
@@ -54,7 +54,7 @@ class DcosController extends ApplicationController
       dcoJoinStatus = {stage: 1, dcoKey: dcoKey}
       @msg.robot.brain.set "dcoJoinStatus", dcoJoinStatus
 
-  joinAgreed: (@msg, { dcoKey }) ->
+  joinAgreed: (@msg, { dcoKey })->
     @community = dcoKey
     @getDco()
     .then (dco)-> dco.fetch()
@@ -71,9 +71,9 @@ class DcosController extends ApplicationController
 
     .error(@_showError)
 
-  create: (@msg, { dcoName }) ->
+  create: (@msg, { dcoName })->
     owner = @currentUser().key()
-    DCO.find(dcoName).then (dco) =>
+    DCO.find(dcoName).then (dco)=>
       if dco.exists()
         return @msg.send "Community '#{dcoName}' already exists!"
 
@@ -94,7 +94,7 @@ class DcosController extends ApplicationController
         ZorkHelper::question "Please provide a project description starting with 'We'"
       ]
 
-  issueAsset: (msg, { dcoKey, amount }) ->
+  issueAsset: (msg, { dcoKey, amount })->
     issuer = msg.robot.whose msg
     dco = DCO.find dcoKey
     dco.issueAsset { dcoKey, amount, issuer }

@@ -6,16 +6,16 @@ swarmbot = require './swarmbot'
 
 class FirebaseModel
 
-  @find: (name, options={}) ->
+  @find: (name, options={})->
     new @ {name}, options
       .fetchIfNeeded()
 
-  @findBy: Promise.promisify (attrName, attrValue, cb) ->
+  @findBy: Promise.promisify (attrName, attrValue, cb)->
     swarmbot.firebase().child(@::urlRoot)
       .orderByChild(attrName)
       .equalTo(attrValue)
       .limitToFirst(1)
-      .once 'value', (snapshot) =>
+      .once 'value', (snapshot)=>
         if snapshot.val()
           key = Object.keys(snapshot.val())[0]
           cb(null, new @({}, snapshot: snapshot.child(key)))
@@ -24,7 +24,7 @@ class FirebaseModel
     , cb # error
 
 
-  constructor: (@attributes={}, options={}) ->
+  constructor: (@attributes={}, options={})->
     @hasParent = @hasParent || false
     @parent = options.parent
 
@@ -56,16 +56,16 @@ class FirebaseModel
     parentPath = if @hasParent then @parent.firebasePath() else ''
     [ parentPath, @urlRoot, @key() ].join '/'
 
-  get: (attr) ->
+  get: (attr)->
     @attributes[attr]
 
-  set: (attr, val) ->
+  set: (attr, val)->
     @attributes[attr] = val
     @save()
 
-  fetch: Promise.promisify (cb) ->
+  fetch: Promise.promisify (cb)->
     throw new Error "No name attribute is set, cannot fetch" unless @get('name')
-    @firebase().once 'value', (@snapshot) =>
+    @firebase().once 'value', (@snapshot)=>
       @parseSnapshot()
       cb(null, @)
     , cb # failure callback
@@ -76,7 +76,7 @@ class FirebaseModel
     else
       @fetch()
 
-  save: Promise.promisify (cb) ->
+  save: Promise.promisify (cb)->
     @firebase().update @attributes, (error)=> cb error, @
 
   exists: ->

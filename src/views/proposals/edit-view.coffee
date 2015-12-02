@@ -2,7 +2,7 @@
 ZorkView = require '../zork-view'
 
 class EditView extends ZorkView
-  constructor: (@data) ->
+  constructor: (@data)->
     @menu = {}
     @menu[0] = { text: "Back", transition: 'exit', data: {proposalId: @data.proposalId} }
 

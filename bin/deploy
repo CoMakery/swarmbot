@@ -6,7 +6,7 @@
 require 'shelljs/global'
 { json, log, p, pjson } = require 'lightsaber'
 
-run = (cmd, options = {}) ->
+run = (cmd, options = {})->
   continue_on_failure = options.continue_on_failure ? false
   echo "==> #{cmd}"
   code = exec(cmd).code

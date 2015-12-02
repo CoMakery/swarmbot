@@ -12,16 +12,16 @@ class DCO extends FirebaseModel
   urlRoot: 'projects'
   INITIAL_PROJECT_COINS: 100000000
 
-  bounties: Promise.promisify (cb) ->
-    @firebase().child('bounties').once 'value', (snapshot) =>
+  bounties: Promise.promisify (cb)->
+    @firebase().child('bounties').once 'value', (snapshot)=>
       bounties = snapshot.val() # should really be an array of Proposal objects.
       cb(null, bounties)
 
-  createProposal: (attributes) ->
-    @makeProposal(attributes).then (proposal) -> proposal.save()
+  createProposal: (attributes)->
+    @makeProposal(attributes).then (proposal)-> proposal.save()
 
-  makeProposal: (attributes) ->
-    @fetchIfNeeded().then (dco) ->
+  makeProposal: (attributes)->
+    @fetchIfNeeded().then (dco)->
       if dco.exists()
         proposal = new Proposal attributes,
           parent: dco
@@ -37,12 +37,12 @@ class DCO extends FirebaseModel
     keys @get('members')
 
   members: ->
-    new UserCollection(map @memberIds(), (key) -> new User({name: key}))
+    new UserCollection(map @memberIds(), (key)-> new User({name: key}))
 
-  hasMember: (user) ->
+  hasMember: (user)->
     contains @memberIds(), user.key()
 
-  addMember: (user) ->
+  addMember: (user)->
     userId = user.key()
     present = (indexOf(@memberIds(), userId) != -1)
 
@@ -55,7 +55,7 @@ class DCO extends FirebaseModel
       # @attributes are now out of sync with firebase. Fetch here?
       user
 
-  issueAsset: ({ amount }, cb) ->
+  issueAsset: ({ amount }, cb)->
     dcoKey = @key()
     issuer = dcoKey
     asset =
@@ -65,8 +65,8 @@ class DCO extends FirebaseModel
         issuer: issuer
 
     swarmbot.colu()
-    .then (colu) =>
-      colu.issueAsset asset, (err, body) ->
+    .then (colu)=>
+      colu.issueAsset asset, (err, body)->
         if err
           debug "error in asset creation: #{err}"
         else
@@ -75,9 +75,9 @@ class DCO extends FirebaseModel
           debug "Full response: #{pjson body}"
           dcos.child(dcoKey).update { coluAssetId: body.assetId, coluAssetAddress: body.issueAddress }
 
-  sendAsset: ({amount, recipient}, cb) ->
+  sendAsset: ({amount, recipient}, cb)->
     p "username", recipient.key()
-    recipient.fetch().then (user) ->
+    recipient.fetch().then (user)->
       recipientAddress = user.get('btc_address')
       if recipientAddress?
         debug "creating project; address: #{recipientAddress}",

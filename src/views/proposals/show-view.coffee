@@ -3,7 +3,7 @@
 ZorkView = require '../zork-view'
 
 class ShowView extends ZorkView
-  constructor: (@proposal, { canSetBounty }) ->
+  constructor: (@proposal, { canSetBounty })->
     @menu = {}
     i = 0
 

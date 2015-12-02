@@ -8,15 +8,15 @@
 Instagram = require('instagram-node-lib')
 swarmbot = require '../models/swarmbot'
 
-module.exports = (robot) ->
+module.exports = (robot)->
 
-  App.respond /airbrake exception!$/i, (msg) ->
+  App.respond /airbrake exception!$/i, (msg)->
     throw new Error('I am a test exception')
 
-  App.respond /airbrake notify!$/i, (msg) ->
+  App.respond /airbrake notify!$/i, (msg)->
     if App.airbrake
       err = new Error('Hi through Airbrake')
-      App.airbrake.notify err, (err, url) ->
+      App.airbrake.notify err, (err, url)->
         if (err)
           throw err
         else
@@ -24,32 +24,32 @@ module.exports = (robot) ->
     else
       msg.send "No airbrake configured"
 
-  App.respond /x marks the what$/i, (msg) ->
+  App.respond /x marks the what$/i, (msg)->
     msg.send "https://www.youtube.com/watch?v=SFY-Kg1OqAk"
 
-  App.respond /hello$/i, (msg) ->
+  App.respond /hello$/i, (msg)->
     msg.send msg.random ["hello my friend", "hey buddy", "maybe it's time to swarm it?", "hi", "hello, it's good to see you, figuratively speaking"]
 
-  App.respond /fork me$/i, (msg) ->
+  App.respond /fork me$/i, (msg)->
     msg.send "https://github.com/citizencode/swarmbot"
 
-  App.respond /nyan$/i, (msg) ->
+  App.respond /nyan$/i, (msg)->
     msg.send "https://www.youtube.com/watch?v=QH2-TGUlwu4"
 
-  App.respond /space kitty say$/i, (msg) ->
+  App.respond /space kitty say$/i, (msg)->
     authenticateUser(msg)
     count = 1
     Instagram.tags.recent
       name: 'spacekittysay'
       count: count
-      complete: (data) ->
+      complete: (data)->
         for item in data
           msg.send item['images']['standard_resolution']['url']
 
-  App.respond /colu/i, (msg) ->
+  App.respond /colu/i, (msg)->
     swarmbot.colu()
 
-authenticateUser = (msg) ->
+authenticateUser = (msg)->
   config =
     client_key:     process.env.HUBOT_INSTAGRAM_CLIENT_KEY
     client_secret:  process.env.HUBOT_INSTAGRAM_ACCESS_KEY

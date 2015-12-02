@@ -5,7 +5,7 @@ ZorkView = require '../zork-view'
 class AdvancedCommandsView extends ZorkView
   BONUS_COMMAND_EXPRESSION: /\b(cat|dawg|kitty)\b/i
 
-  constructor: (@robot) ->
+  constructor: (@robot)->
     @menu = {}
     @menu[0] = { text: "back", transition: 'exit' }
 
@@ -28,7 +28,7 @@ class AdvancedCommandsView extends ZorkView
       cmd = cmd.replace /hubot/ig, @robot.name
       cmd.replace new RegExp("^#{@robot.name}"), prefix
 
-    cmds = filter cmds, (cmd) => not cmd.match @BONUS_COMMAND_EXPRESSION
+    cmds = filter cmds, (cmd)=> not cmd.match @BONUS_COMMAND_EXPRESSION
     cmds.join "\n"
 
 module.exports = AdvancedCommandsView

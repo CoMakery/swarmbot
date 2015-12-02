@@ -2,7 +2,7 @@
 ZorkView = require '../zork-view'
 
 class CreateView extends ZorkView
-  constructor: (@data) ->
+  constructor: (@data)->
     @menu = {}
     @menu[0] = { text: "back", transition: 'exit', data: {proposalId: @data.proposalId} }
 

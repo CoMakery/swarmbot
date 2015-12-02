@@ -2,7 +2,7 @@
 ZorkView = require '../zork-view'
 
 class BtcView extends ZorkView
-  constructor: (@data, @error) ->
+  constructor: (@data, @error)->
     i = 1
     @menu = {}
     @menu[0] = { text: "back", transition: 'exit' }

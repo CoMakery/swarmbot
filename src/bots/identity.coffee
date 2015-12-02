@@ -8,14 +8,14 @@ User = require '../models/user'
 DCO = require '../models/dco'
 inspect = require('util').inspect
 
-module.exports = (robot) ->
+module.exports = (robot)->
 
-  App.respond /about (.*)\s*$/i, (msg) ->
+  App.respond /about (.*)\s*$/i, (msg)->
     log "MATCH 'about' : #{msg.match[0]}"
     slackUsername = msg.match[1]
     new UsersController().getInfo(msg, { slackUsername })
 
-greet = (msg, username, privateMessage, robot) ->
+greet = (msg, username, privateMessage, robot)->
 
   hubot_username = 'imgflip_hubot'
   hubot_password = 'imgflip_hubot'
@@ -27,7 +27,7 @@ greet = (msg, username, privateMessage, robot) ->
     password: hubot_password,
     text0: "hello " + username,
     text1: "Im Nyan"
-  .post() (error, res, body) ->
+  .post() (error, res, body)->
     if error
       p "I got an error when talking to imgflip:", inspect(error)
       msg.reply "Hello I'm Nyan"

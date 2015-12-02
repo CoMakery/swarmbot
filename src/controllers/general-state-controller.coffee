@@ -14,25 +14,25 @@ class GeneralStateController extends ApplicationController
 
   capTable: ->
     @getDco()
-    .then (dco) =>
+    .then (dco)=>
       assetId = dco.get('coluAssetId')
-      new Promise (resolve, reject) =>
+      new Promise (resolve, reject)=>
         @msg.http "#{swarmbot.coluExplorerUrl()}/api/getassetinfowithtransactions?assetId=#{assetId}"
-        .get() (error, res, body) =>
+        .get() (error, res, body)=>
           if error
             reject error
           else
             data = JSON.parse body
             # names
-            Promise.map data.holders, (holder) ->
+            Promise.map data.holders, (holder)->
               User.findBy 'btc_address', holder.address
-              .then (user) =>
+              .then (user)=>
                 holder.name = user.get('slack_username')
                 holder
               .catch =>
                 holder
 
-            .then (holders) =>
+            .then (holders)=>
               debug holders
               resolve @render new CapTableView {project: dco, capTable: holders}
 

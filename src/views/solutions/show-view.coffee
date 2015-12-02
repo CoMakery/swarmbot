@@ -3,7 +3,7 @@
 ZorkView = require '../zork-view'
 
 class ShowView extends ZorkView
-  constructor: (@solution, currentUser) ->
+  constructor: (@solution, currentUser)->
     @menu = {}
     i = 0
     @menu[i++] = { text: "« back", transition: 'exit', data: { proposalId: @solution.parent.key() } }

@@ -2,7 +2,7 @@
 ZorkView = require '../zork-view'
 
 class SendRewardView extends ZorkView
-  constructor: ({@data, @recipientUsername}) ->
+  constructor: ({@data, @recipientUsername})->
     @menu = {}
     @menu[0] =
       text: "back"

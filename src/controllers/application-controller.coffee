@@ -11,7 +11,7 @@ class ApplicationController
     if @community?
       Promise.resolve(DCO.find(@community)).bind(@)
     else
-      @currentUser().fetchIfNeeded().bind(@).then (user) ->
+      @currentUser().fetchIfNeeded().bind(@).then (user)->
         @community = user.get('current_dco')
         if @community?
           DCO.find(@community)

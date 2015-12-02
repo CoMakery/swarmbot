@@ -5,8 +5,8 @@ swarmbot = require '../models/swarmbot'
 
 class FirebaseCollection
 
-  @all: Promise.promisify (cb) ->
-    swarmbot.firebase().child(@::model::urlRoot).once 'value', (snapshot) =>
+  @all: Promise.promisify (cb)->
+    swarmbot.firebase().child(@::model::urlRoot).once 'value', (snapshot)=>
       cb null, new @(snapshot)
 
   constructor: (modelsOrSnapshot, options={})->
@@ -24,11 +24,11 @@ class FirebaseCollection
 
   all: -> @models
 
-  get: (i) -> @models[i]
+  get: (i)-> @models[i]
 
   # TODO: Fetch this collection's path once, set all the models from the snapshot.child() nodes
   fetch: ->
-    Promise.all( @map (model) -> model.fetch() )
+    Promise.all( @map (model)-> model.fetch() )
     .then => @
 
   # XXX: Breaks if you edit the @models manually and not the @snapshot. (e.g. @filter())
@@ -42,14 +42,14 @@ class FirebaseCollection
   map: (cb)-> map @models, cb
 
   # TODO: Should this be destructive / edit in-place, or return a new collection?
-  filter: (cb) -> @models = filter @models, cb
+  filter: (cb)-> @models = filter @models, cb
 
   size: -> @models.length
 
-  sortBy: (sortField) ->
+  sortBy: (sortField)->
     @models = sortByOrder @models, [
-        (p) -> isNaN(p.get(sortField))
-        (p) -> p.get(sortField)
+        (p)-> isNaN(p.get(sortField))
+        (p)-> p.get(sortField)
       ],
       ['asc', 'desc']
     @

@@ -2,7 +2,7 @@
 ZorkView = require '../zork-view'
 
 class ShowView extends ZorkView
-  constructor: (@user) ->
+  constructor: (@user)->
     i = 0
     @menu = {}
 

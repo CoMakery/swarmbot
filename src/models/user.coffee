@@ -12,21 +12,21 @@ class User extends FirebaseModel
   urlRoot: 'users'
   initialState: 'dcos#index'
 
-  @findBySlackUsername: Promise.promisify (slackUsername, cb) ->
+  @findBySlackUsername: Promise.promisify (slackUsername, cb)->
     swarmbot.firebase().child('users') # TODO: use urlRoot here
       .orderByChild('slack_username')
       .equalTo(slackUsername)
       .limitToFirst(1)
-      .once 'value', (snapshot) ->
+      .once 'value', (snapshot)->
         return cb(new Promise.OperationalError("Cannot find a user named '#{slackUsername}'.")) unless snapshot.val()
         userId = Object.keys(snapshot.val())[0]
         cb(null, new User({}, snapshot: snapshot.child(userId)))
     , cb # error
 
-  setDcoTo: (dcoKey) ->
+  setDcoTo: (dcoKey)->
     @set "current_dco", dcoKey
 
-  canUpdate: (dco) ->
+  canUpdate: (dco)->
     dco.get('project_owner') == @key()
 
   fetch: ->
@@ -34,40 +34,40 @@ class User extends FirebaseModel
       @current = @get('state') || @initialState
       @
 
-  onafterevent: (event, from, to, data) ->
+  onafterevent: (event, from, to, data)->
     debug "// Transition #{from} -> #{to} // Event #{event} // Data: #{data} //"
     @set('state', to)
     # TODO: stat: user entering what state
 
   balances: ->
-    @allBalances().then (balances) ->
-      filter balances, (balance) -> balance.name?
+    @allBalances().then (balances)->
+      filter balances, (balance)-> balance.name?
 
   allBalances: ->
-    new Promise (resolve, reject) =>
+    new Promise (resolve, reject)=>
       uri = "#{swarmbot.coluExplorerUrl()}/api/getaddressinfo?address=#{@get('btc_address')}"
       debug uri
       request
         uri: uri
         json: true
-      .then (data) =>
-        Promise.map data.assets, (asset) ->
+      .then (data)=>
+        Promise.map data.assets, (asset)->
           DCO.findBy 'coluAssetId', asset.assetId
-          .then (dco) =>
+          .then (dco)=>
             asset.name = dco.get('name')
             asset
           .catch =>
             asset
-        .then (assets) =>
+        .then (assets)=>
           resolve assets
           # each asset has a .balance, .name, .assetId
-      .error (error) =>
+      .error (error)=>
         debug error.message
         Promise.reject(Promise.OperationalError("(Currently not available)"))
 
   StateMachine.create
     target: @prototype
-    error: (event, from, to, args, errorCode, errorMessage) ->
+    error: (event, from, to, args, errorCode, errorMessage)->
       throw new Error "State Machine Error! Event: #{event} // #{from} -> #{to} // args: #{pjson args} // error: #{errorCode}  #{errorMessage}"
 
     events: [

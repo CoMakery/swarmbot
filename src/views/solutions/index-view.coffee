@@ -3,12 +3,12 @@
 ZorkView = require '../zork-view'
 
 class IndexView extends ZorkView
-  constructor: (@proposal) ->
+  constructor: (@proposal)->
     @solutionItems = {}
     @actionItems = {}
 
     i = 0
-    @proposal.solutions().sortBy('totalVotes').each (solution) =>
+    @proposal.solutions().sortBy('totalVotes').each (solution)=>
       @solutionItems[@letters[i++]] =
         text: solution.get('name').toLowerCase()
         transition: 'show'

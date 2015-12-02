@@ -9,7 +9,7 @@ class Solution extends FirebaseModel
   hasParent: true
   urlRoot: "solutions"
 
-  upvote: (user) ->
+  upvote: (user)->
     @attributes.votes ?= {}
     @attributes.votes[user.key()] = 1
     @attributes.totalVotes = size @attributes.votes

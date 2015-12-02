@@ -10,11 +10,11 @@ ProposalCollection = require '../collections/proposal-collection'
 
 class AdminController extends ApplicationController
 
-  award: (@msg, { proposalName, awardee, dcoKey }) ->
+  award: (@msg, { proposalName, awardee, dcoKey })->
     @community = dcoKey
     @getDco()
-    .then (dco) -> dco.fetch()
-    .then (dco) =>
+    .then (dco)-> dco.fetch()
+    .then (dco)=>
       if @currentUser().canUpdate(dco)
         User.findBySlackUsername(awardee).then (user)=>
           awardeeAddress = user.get('btc_address')
@@ -22,7 +22,7 @@ class AdminController extends ApplicationController
           if awardeeAddress?
             proposal = new Proposal({name: proposalName}, parent: dco)
 
-            proposal.fetch().then (proposal) =>
+            proposal.fetch().then (proposal)=>
               if proposal.get('awarded')
                 @msg.send "This task has already been awarded."
               else
@@ -42,39 +42,39 @@ class AdminController extends ApplicationController
         @msg.send "Sorry, you must be the progenitor of this DCO to award proposals."
 
 
-  setCoinName: (@msg, { coinName, dcoKey }) ->
+  setCoinName: (@msg, { coinName, dcoKey })->
 
     @community = dcoKey
     @getDco()
-    .then (dco) -> dco.fetch()
-    .then (dco) =>
+    .then (dco)-> dco.fetch()
+    .then (dco)=>
       if @currentUser().canUpdate(dco)
         dco.set('coin_name', coinName)
         @msg.send "Coin name successfully updated to " + coinName
 
-  constitute: (@msg, { constitutionLink, dcoKey }) ->
+  constitute: (@msg, { constitutionLink, dcoKey })->
     @community = dcoKey
     @getDco()
-    .then (dco) -> dco.fetch()
-    .then (dco) =>
+    .then (dco)-> dco.fetch()
+    .then (dco)=>
       if @currentUser().canUpdate(dco)
         dco.set('project_contract', constitutionLink)
         @msg.send "Project constitution successfully set"
 
-  stats: (@msg) ->
+  stats: (@msg)->
 
     usersRef = swarmbot.firebase().child('users')
 
-    usersRef.orderByChild("account_created").startAt(Date.now() - (1000*60*60*24*7)).once 'value', (snapshot) =>
+    usersRef.orderByChild("account_created").startAt(Date.now() - (1000*60*60*24*7)).once 'value', (snapshot)=>
       @msg.send "#{snapshot.numChildren()} new users signed up in the last week."
 
-    usersRef.orderByChild("last_active_on_slack").startAt(Date.now() - (1000*60*60*24*7)).once 'value', (snapshot) =>
+    usersRef.orderByChild("last_active_on_slack").startAt(Date.now() - (1000*60*60*24*7)).once 'value', (snapshot)=>
       @msg.send "There are #{snapshot.numChildren()} users active in the last week."
 
-    usersRef.orderByChild("last_active_on_slack").startAt(Date.now() - (1000*60*60*24*30)).once 'value', (snapshot) =>
+    usersRef.orderByChild("last_active_on_slack").startAt(Date.now() - (1000*60*60*24*30)).once 'value', (snapshot)=>
       @msg.send "There are #{snapshot.numChildren()} users active in the last month."
 
-    usersRef.once 'value', (snapshot) =>
+    usersRef.once 'value', (snapshot)=>
       @msg.send "There are #{snapshot.numChildren()} users total."
 
 module.exports = AdminController

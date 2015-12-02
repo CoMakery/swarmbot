@@ -11,16 +11,16 @@ ShowView = require '../views/dcos/show-view'
 class DcosStateController extends ApplicationController
   index: ->
     DcoCollection.all()
-    .then (@dcos) =>
+    .then (@dcos)=>
       @currentUser.balances()
-    .then (@userBalances) =>
+    .then (@userBalances)=>
       debug @userBalances
       @render new IndexView {@dcos, @userBalances}
 
   show: ->
     @getDco()
-    .then (dco) => dco.fetch()
-    .then (dco) =>
+    .then (dco)=> dco.fetch()
+    .then (dco)=>
       proposals = new ProposalCollection(dco.snapshot.child('proposals'), parent: dco)
       proposals.sortBy 'totalVotes'
 
@@ -33,7 +33,7 @@ class DcosStateController extends ApplicationController
       @currentUser.exit()
       @redirect()
 
-  create: (data={}) ->
+  create: (data={})->
     if @input
       if not data.name
         data.name = @input
@@ -45,13 +45,13 @@ class DcosStateController extends ApplicationController
     .then =>
       @render new CreateView data
 
-  saveDco: (data) ->
+  saveDco: (data)->
     new DCO
       name: data.name
       project_statement: data.description
       project_owner: @currentUser.key()
     .save()
-    .then (dco) =>
+    .then (dco)=>
       dco.issueAsset amount: DCO::INITIAL_PROJECT_COINS
       @sendInfo "Project created"
       @currentUser.set 'current_dco', dco.key()

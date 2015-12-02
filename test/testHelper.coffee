@@ -16,18 +16,18 @@ process.env.FIREBASE_URL = "ws://#{MOCK_FIREBASE_ADDRESS}:5000"
 sinon.stub(swarmbot, 'colu').returns Promise.resolve
   on: ->
   init: ->
-  sendAsset: (x, cb) -> cb(null, {txid: 1234})
+  sendAsset: (x, cb)-> cb(null, {txid: 1234})
   issueAsset: ->
 
 before ->
   @firebaseServer = new FirebaseServer 5000, MOCK_FIREBASE_ADDRESS, {}
 
-beforeEach (done) ->
+beforeEach (done)->
   swarmbot.firebase().remove done
 
 afterEach ->
   @firebaseServer.getValue()
-  .then (data) =>  debug "Firebase data: #{pjson data}"
+  .then (data)=>  debug "Firebase data: #{pjson data}"
 
 after ->
   @firebaseServer.close()

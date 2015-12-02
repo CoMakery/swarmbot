@@ -12,29 +12,29 @@ DCO = require '../models/dco'
 AdminController = require '../controllers/admin-controller'
 ProposalsController = require '../controllers/proposals-controller'
 
-module.exports = (robot) ->
+module.exports = (robot)->
 
-  App.respond /admin$/i, (msg) ->
+  App.respond /admin$/i, (msg)->
 
     # msg.send "Data about your community: X Members; X open propsals; Y bounties claimed"
     #TODO: This should pull from wizard or some other repo where all the comamnds live
     msg.send "Admin commands work for owner only:\naward <task name> to <username>\nstats\nset coin name <currency_name>"
     #TODO: add: set budget <budget amount>
 
-  App.respond /award\s+(.+)\s+to\s+(.+?)(?:\s+in (.+))?\s*$/i, (msg) ->
+  App.respond /award\s+(.+)\s+to\s+(.+?)(?:\s+in (.+))?\s*$/i, (msg)->
     [all, proposalName, awardee, dcoKey] = msg.match
     log "MATCH 'award' : #{pjson msg.match}"
     new ProposalsController().award(msg, { proposalName, awardee, dcoKey })
 
-  App.respond /set coin name\s+(.+)\s*$/i, (msg) ->
+  App.respond /set coin name\s+(.+)\s*$/i, (msg)->
     [all, coinName, dcoKey] = msg.match
     new AdminController().setCoinName(msg, { coinName, dcoKey })
 
-  App.respond /constitute\s+(.+)\s*$/i, (msg) ->
+  App.respond /constitute\s+(.+)\s*$/i, (msg)->
     [all, constitutionLink, dcoKey] = msg.match
     new AdminController().constitute(msg, { constitutionLink, dcoKey })
 
-  App.respond /stats$/i, (msg) ->
+  App.respond /stats$/i, (msg)->
     [all] = msg.match
     new AdminController().stats(msg)
 
@@ -42,7 +42,7 @@ module.exports = (robot) ->
   #   log "MATCH 'create asset' : #{all}"
   #   new DcosController().issueAsset(msg, { dcoKey, amount })
   #
-  # App.respond /settings$/i, (msg) ->
+  # App.respond /settings$/i, (msg)->
   #   [all] = msg.match
   #   log "MATCH 'settings' : #{pjson msg.match}"
   #   msg.send "Set currency <currency>

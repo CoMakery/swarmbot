@@ -6,9 +6,9 @@ User = require '../models/user'
 DCO = require '../models/dco'
 
 class UsersController extends ApplicationController
-  register: (@msg) ->
+  register: (@msg)->
     # p "currentUser", @currentUser()
-    @currentUser().fetch().then (user) =>
+    @currentUser().fetch().then (user)=>
 
       slackUsername = @msg.message.user.name
       slackId = @msg.message.user.id
@@ -42,13 +42,13 @@ class UsersController extends ApplicationController
         user.set "slack_id", slackId
         # @msg.send "registered slack id"
 
-  getInfo: (@msg, { slackUsername }) ->
+  getInfo: (@msg, { slackUsername })->
     userPromise = if slackUsername == 'me'
       @currentUser().fetch()
     else
       User.findBySlackUsername(slackUsername)
 
-    userPromise.then (user) =>
+    userPromise.then (user)=>
       info = @_userText(user)
       @msg.send info
     .error (error)=>

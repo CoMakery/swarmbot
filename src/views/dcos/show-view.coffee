@@ -2,7 +2,7 @@
 ZorkView = require '../zork-view'
 
 class ShowView extends ZorkView
-  constructor: (@dco, @proposals) ->
+  constructor: (@dco, @proposals)->
     @orderedMenu = []
     @proposalItems = []
     i = 0
@@ -58,14 +58,14 @@ class ShowView extends ZorkView
       }
     ]
 
-  proposalMenuItem: (proposal) ->
+  proposalMenuItem: (proposal)->
     {
       text: @proposalMessage(proposal).toLowerCase()
       data: { proposalId: proposal.key() }
       transition: 'show'
     }
 
-  proposalMessage: (proposal) ->
+  proposalMessage: (proposal)->
     text = "#{proposal.get 'name'}"
     # text += " (Reward: #{proposal.get 'amount'})" if proposal.get('amount')?
     # score = proposal.ratings().score()
