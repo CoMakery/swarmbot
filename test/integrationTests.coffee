@@ -108,8 +108,8 @@ describe 'swarmbot', ->
         .then (@user)=> App.route message()
         .then (reply)=>
           jreply = json(reply)
-          jreply.should.match /Contribute to projects and get rewarded with project coins/
-          jreply.should.match /Let's get started!  Type 1 now to create a new project./
+          jreply.should.match /Welcome friend!/
+          jreply.should.match /Let's get started.*Type 1/
           App.route message('1')
         .then (reply)=>
           json(reply).should.match /What is the name of this project/

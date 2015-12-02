@@ -5,7 +5,7 @@ ZorkView = require '../zork-view'
 
 class IndexView extends ZorkView
 
-  constructor: ({@dcos, @userBalances})->
+  constructor: ({@dcos, @currentUser, @userBalances})->
     i = 0
     @dcoItems = []
     for dco in @dcos.all()
@@ -14,8 +14,12 @@ class IndexView extends ZorkView
     i = 1
     @actions = {}
     @actions[i++] = {
-      text: "create new project"
+      text: "create your project"
       transition: 'create'
+    }
+    @actions[i++] = {
+      text: "set your bitcoin address"
+      transition: 'setBtc'
     }
 
     @menu = clone @actions
@@ -38,44 +42,47 @@ class IndexView extends ZorkView
     To take an action, simply enter the number or letter at the beginning of the line.
     """
 
-    if isEmpty @dcos.all()
-      {
-        color: @BODY_COLOR
-        pretext: "Contribute to projects and get rewarded with project coins!"
-        title: "Let's get started!  Type 1 now to create a new project."
+
+    message = []
+    if isEmpty @dcoItems
+      projectsItems = "There are currently no projects."
+      message.push {
+        pretext: "Welcome friend! I am here to help you contribute to projects and receive project coins. Project coins track your share of a project using a trusty blockchain."
+        title: "Let's get started!  Type 1, hit enter, and create your first project."
       }
     else
-      # [ {name: 'dco name', balance: 2000} ]
-      balances = for userBalance in @userBalances
-        "#{userBalance.name} :moneybag: #{userBalance.balance}"
+      projectsItems = @renderOrderedMenuItems @dcoItems
 
-      [
+    balances = for userBalance in @userBalances
+      "#{userBalance.name} :moneybag: #{userBalance.balance}"
+
+    balances = balances.join("\n") or "No Coins yet"
+
+    balances += "\nbitcoin address: " +
+      ( @currentUser.get('btc_address') or "None" )
+
+    message.push {
+      fields: [
         {
-          color: @NAV_COLOR
-          title: "projects"
+          title: "Choose a Project"
+          value: projectsItems
+          short: true
         }
         {
-          color: @ACTION_COLOR
-          fields: [
-            {
-              title: "Choose Project"
-              value: @renderOrderedMenuItems @dcoItems
-              short: true
-            }
-            {
-              title: "Project Coins"
-              value: balances.join("\n")
-              short: true
-            }
-            { short: true }
-            {
-              title: "Actions"
-              value: @renderMenuItems @actions
-              short: true
-            }
-          ]
-          fallback: fallbackText
+          title: "Your Project Coins"
+          value: balances
+          short: true
+        }
+        { short: true }
+        {
+          title: "Actions"
+          value: @renderMenuItems @actions
+          short: true
         }
       ]
+      fallback: fallbackText
+    }
+
+    message
 
 module.exports = IndexView

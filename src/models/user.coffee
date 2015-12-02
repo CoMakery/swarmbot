@@ -107,8 +107,8 @@ class User extends FirebaseModel
       { name: 'myAccount', from: 'dcos#show', to: 'users#myAccount' }
       { name: 'exit', from: 'users#myAccount', to: 'dcos#show' }
 
-      { name: 'setBtc', from: 'users#myAccount', to: 'users#setBtc' }
-      { name: 'exit', from: 'users#setBtc', to: 'users#myAccount' }
+      { name: 'setBtc', from: 'dcos#index', to: 'users#setBtc' }
+      { name: 'exit', from: 'users#setBtc', to: 'dcos#index' }
 
     ]
 

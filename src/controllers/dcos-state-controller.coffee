@@ -15,7 +15,7 @@ class DcosStateController extends ApplicationController
       @currentUser.balances()
     .then (@userBalances)=>
       debug @userBalances
-      @render new IndexView {@dcos, @userBalances}
+      @render new IndexView {@dcos, @currentUser, @userBalances}
 
   show: ->
     @getDco()
