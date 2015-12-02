@@ -41,23 +41,4 @@ class UsersStateController extends ApplicationController
 
     @render new BtcView({address: btcAddress}, error)
 
-  balance: ->
-    new Promise (resolve, reject) =>
-      @msg.http "#{swarmbot.coluExplorerUrl()}/api/getaddressinfo?address=#{@currentUser.get('btc_address')}"
-      .get() (error, res, body) =>
-        if error
-          reject(error)
-        else
-          data = JSON.parse body
-          Promise.map data.assets, (asset) ->
-            DCO.findBy 'coluAssetId', asset.assetId
-            .then (dco) =>
-              asset.name = dco.get('name')
-              asset
-            .catch =>
-              asset
-          .then (assets) =>
-            resolve @render new BalanceView assets: assets
-
-
 module.exports = UsersStateController

@@ -1,3 +1,4 @@
+debug = require('debug')('app')
 { log, p, pjson } = require 'lightsaber'
 ApplicationController = require './application-state-controller'
 DCO = require '../models/dco.coffee'
@@ -8,11 +9,13 @@ CreateView = require '../views/dcos/create-view'
 ShowView = require '../views/dcos/show-view'
 
 class DcosStateController extends ApplicationController
-  # choose DCO
   index: ->
-    DcoCollection.all().then (dcos) =>
-      view = new IndexView dcos
-      @render(view)
+    DcoCollection.all()
+    .then (@dcos) =>
+      @currentUser.balances()
+    .then (@userBalances) =>
+      debug @userBalances
+      @render new IndexView {@dcos, @userBalances}
 
   show: ->
     @getDco()

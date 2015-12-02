@@ -1,11 +1,11 @@
 debug = require('debug')('app')
 { log, p, pjson } = require 'lightsaber'
-{ isEmpty, clone } = require 'lodash'
+{ clone, isEmpty, map } = require 'lodash'
 ZorkView = require '../zork-view'
 
 class IndexView extends ZorkView
 
-  constructor: (@dcos, @balances) ->
+  constructor: ({@dcos, @userBalances}) ->
     i = 0
     @dcoItems = []
     for dco in @dcos.all()
@@ -46,6 +46,9 @@ class IndexView extends ZorkView
       }
     else
       # [ {name: 'dco name', balance: 2000} ]
+      balances = for userBalance in @userBalances
+        "#{userBalance.name} :moneybag: #{userBalance.balance}"
+
       [
         {
           color: @NAV_COLOR
@@ -61,7 +64,7 @@ class IndexView extends ZorkView
             }
             {
               title: "Project Coins"
-              value: "None Yet"
+              value: balances.join("\n")
               short: true
             }
             { short: true }

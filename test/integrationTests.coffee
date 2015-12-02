@@ -5,6 +5,7 @@ global.App = require '../src/app'
 DCO = require '../src/models/dco'
 User = require '../src/models/user'
 nock = require 'nock'
+sinon = require 'sinon'
 
 userId = "slack:1234"
 
@@ -92,9 +93,18 @@ describe 'swarmbot', ->
 
   context 'dcos controller', ->
     context 'index', ->
+      beforeEach ->
+        @user = new User(name: userId, state: 'dcos#index')
+        sinon.stub(@user, 'balances').onCall(1).returns Promise.resolve [
+          {
+            name: 'FinTechHacks'
+            assetId: 'xyz123'
+            balance: 456
+          }
+        ]
+
       it "shows a welcome screen if there are no projects", ->
-        new User(name: userId, state: 'dcos#index')
-        .save()
+        @user.save()
         .then (@user) => App.route message()
         .then (reply) =>
           jreply = json(reply)
@@ -110,7 +120,7 @@ describe 'swarmbot', ->
           new DCO(name: "Community B").save()
           new DCO(name: "Community C").save()
         ]
-        .then (@dcos) => new User(name: userId, state: 'dcos#index').save()
+        .then (@dcos) => @user.save()
         .then (@user) => App.route message()
         .then (reply) =>
           jreply = json(reply)
@@ -126,7 +136,7 @@ describe 'swarmbot', ->
 
       context 'create', ->
         it "asks questions and creates a project", ->
-          new User(name: userId, state: 'dcos#index').save()
+          @user.save()
           .then (@user) => App.route message()
           .then (reply) => App.route message('1')
           .then (reply) =>
