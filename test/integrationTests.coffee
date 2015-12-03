@@ -68,7 +68,7 @@ describe 'swarmbot', ->
         .then (reply)=>
           @message.parts.length.should.eq 2
           @message.parts[1].should.match /Task created/
-          (json reply).should.match /View Current Proposals/
+          (json reply).should.match /See Project Tasks/
         .then => @firebaseServer.getValue()
         .then (db)=>
           db.projects[dcoId].proposals['A Task'].should.deep.eq
@@ -76,7 +76,7 @@ describe 'swarmbot', ->
             description: "A description"
             imageUrl: "http://example.com/very-small.png"
 
-    it "shows the user's current community, with proposals", ->
+    it "shows the user's current project", ->
       dcoId = 'Your Great Project'
       @user = new User(name: userId, current_dco: dcoId, state: 'dcos#show').save()
       dco = new DCO(name: dcoId)
@@ -86,10 +86,10 @@ describe 'swarmbot', ->
       .then -> App.route message('1')
       .then (reply)->
         jreply = json reply
-        jreply.should.match /View Current Proposals/
-        jreply.should.match /[A-B]: do stuff/i
-        jreply.should.match /[A-B]: be glorious/i
-        jreply.should.match /\d: create a task/i
+        jreply.should.match /See Project Tasks/
+        jreply.should.match /Do stuff/i
+        jreply.should.match /Be glorious/i
+        jreply.should.match /\d: create an award/i
 
   context 'dcos controller', ->
     context 'index', ->
@@ -155,7 +155,7 @@ describe 'swarmbot', ->
               project_statement: 'Shaft'
               project_owner: userId
 
-  context 'dcos#show', ->
+  xcontext 'dcos#show', ->
     userId = 'Me'
     dcoId = 'First Distributed Federation'
     user = ->

@@ -1,12 +1,17 @@
 debug = require('debug')('app')
 { log, p, pjson } = require 'lightsaber'
+{ map } = require 'lodash'
+Promise = require 'bluebird'
+swarmbot = require '../models/swarmbot'
 ApplicationController = require './application-state-controller'
 DCO = require '../models/dco.coffee'
+User = require '../models/user'
 ProposalCollection = require '../collections/proposal-collection'
 DcoCollection = require '../collections/dco-collection'
 IndexView = require '../views/dcos/index'
 CreateView = require '../views/dcos/create-view'
 ShowView = require '../views/dcos/show-view'
+CapTableView = require '../views/dcos/cap-table-view'
 
 class DcosStateController extends ApplicationController
   index: ->
@@ -21,10 +26,7 @@ class DcosStateController extends ApplicationController
     @getDco()
     .then (dco)=> dco.fetch()
     .then (dco)=>
-      proposals = new ProposalCollection(dco.snapshot.child('proposals'), parent: dco)
-      proposals.sortBy 'totalVotes'
-
-      @render new ShowView dco, proposals
+      @render new ShowView {dco, @currentUser, userBalance: {}}
     .error(@_showError)
 
   # set DCO
@@ -57,5 +59,29 @@ class DcosStateController extends ApplicationController
       @currentUser.set 'current_dco', dco.key()
     .then =>
       @execute transition: 'showDco'
+
+  capTable: ->
+    @getDco()
+    .then (dco)=>
+      assetId = dco.get('coluAssetId')
+      new Promise (resolve, reject)=>
+        @msg.http "#{swarmbot.coluExplorerUrl()}/api/getassetinfowithtransactions?assetId=#{assetId}"
+        .get() (error, res, body)=>
+          if error
+            reject error
+          else
+            data = JSON.parse body
+            # names
+            Promise.map data.holders, (holder)->
+              User.findBy 'btc_address', holder.address
+              .then (user)=>
+                holder.name = user.get('slack_username')
+                holder
+              .catch =>
+                holder
+
+            .then (holders)=>
+              debug holders
+              resolve @render new CapTableView {project: dco, capTable: holders}
 
 module.exports = DcosStateController

@@ -7,6 +7,7 @@ FirebaseModel = require './firebase-model'
 Proposal = require '../models/proposal'
 User = require '../models/user'
 UserCollection = require '../collections/user-collection'
+ProposalCollection = require '../collections/proposal-collection'
 
 class DCO extends FirebaseModel
   urlRoot: 'projects'
@@ -32,6 +33,9 @@ class DCO extends FirebaseModel
           proposal
       else
         Promise.reject(Promise.OperationalError("The project '#{dco.key()}' does not exist."))
+
+  proposals: ->
+    @_proposals ?= new ProposalCollection @snapshot.child('proposals'), parent: @
 
   memberIds: ->
     keys @get('members')

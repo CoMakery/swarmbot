@@ -2,75 +2,80 @@
 ZorkView = require '../zork-view'
 
 class ShowView extends ZorkView
-  constructor: (@dco, @proposals)->
+  constructor: ({@dco, @currentUser, @userBalance})->
     @orderedMenu = []
-    @proposalItems = []
-    i = 0
-    for proposal in @proposals.all()
-      @proposalItems.push [@letters[i++], @proposalMenuItem proposal]
+    @menu = {}
 
     i = 1
-    @orderedMenu.push [i++, { text: "all projects", transition: 'setDco' }]
-    @orderedMenu.push [i++, { text: "my account", transition: 'myAccount' }]
-    @orderedMenu.push [i++, { text: "cap table", command: 'capTable' }]
-    @orderedMenu.push [i++, { text: "create a task", transition: 'create' }]
+    @menu[i++] = { text: "all projects", transition: 'setDco' }
+    @menu[i++] = { text: "show awards list", transition: 'myAccount' }
+    @menu[i++] = { text: "show project ownership", command: 'capTable' }
+    # @menu[i++] = { text: "suggest a swarmbot improvement", transition: 'suggest' }
 
-    @menu = {}
-    for [key, menuItem] in @proposalItems
-      @menu[key.toLowerCase()] = menuItem if key?
-    for [key, menuItem] in @orderedMenu
-      @menu[key] = menuItem if key?
+    # if admin/progenitor
+    @menu[i++] = { text: "create an award", transition: 'create' }
+    @menu[i++] = { text: "award a contribution", transition: 'award' }
 
   render: ->
-    headline = if @proposals.isEmpty() then 'No proposals' else 'Proposals'
+    headline = if @dco.proposals().isEmpty() then 'No proposals' else 'Proposals'
     headline += " in #{@dco.get 'name'}"
     """
     [Home] #{@bold headline}
     #{@renderMenu()}
 
-    Meow! Rewards are granted by project admins for accepted solutions at their discretion.
+    Rewards are granted by project admins for accepted solutions at their discretion.
     To take an action, simply enter the number or letter at the beginning of the line.
     """
 
+    if @userBalance.balance
+      balance = "#{App.COIN} #{@userBalance.balance}/#{@userBalance.totalCoins}"
+    else
+      balance = "No Coins yet"
+
+    balance += "\nbitcoin address: " +
+      ( @currentUser.get('btc_address') or "None" )
+
+
     [
       {
-        color: @NAV_COLOR
-        title: "project » #{(@dco.get 'name').toLowerCase()}"
+        title: @dco.get('name').toUpperCase()
+        text: @dco.get 'project_statement'
       }
       {
-        color: @ACTION_COLOR
+        title: 'See Project Tasks'
+        title_link: 'http://jira.com'
+      }
+      {
         fields: [
           {
-            title: 'View Current Proposals'
-            value: if @proposalItems.length == 0
-                "There are no proposals in this project."
+            title: 'Possible Awards'
+            value: if @dco.proposals().isEmpty()
+                "There are no awards in this project."
               else
-                @renderOrderedMenuItems(@proposalItems)
+                @dco.proposals().map (proposal)-> proposal.get 'name'
+                .join("\n")
             short: true
           }
           {
+            title: "Your Project Coins"
+            value: balance
+            short: true
+          }
+          { short: true }
+          {
             title: 'Actions'
-            value: @renderOrderedMenuItems(@orderedMenu)
+            value: @renderMenu()
             short: true
           }
         ]
-
       }
     ]
 
   proposalMenuItem: (proposal)->
     {
-      text: @proposalMessage(proposal).toLowerCase()
+      text: proposal.get('name').toLowerCase()
       data: { proposalId: proposal.key() }
       transition: 'show'
     }
-
-  proposalMessage: (proposal)->
-    text = "#{proposal.get 'name'}"
-    # text += " (Reward: #{proposal.get 'amount'})" if proposal.get('amount')?
-    # score = proposal.ratings().score()
-    # text += " Rating: #{score}%" unless isNaN(score)
-    # text += " (awarded)" if proposal.get('awarded')?
-    text
 
 module.exports = ShowView

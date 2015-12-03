@@ -10,6 +10,7 @@ controllers =
   solutions: require './controllers/solutions-state-controller'
 
 class App
+  @COIN = '❂'
   @MAX_SLACK_IMAGE_SIZE = Math.pow 2,19
 
   @respond: (pattern, cb)->

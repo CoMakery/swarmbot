@@ -45,12 +45,15 @@ class IndexView extends ZorkView
 
     message = []
     if isEmpty @dcoItems
-      projectsItems = "There are currently no projects."
       message.push {
         pretext: "Welcome friend! I am here to help you contribute to projects and receive project coins. Project coins track your share of a project using a trusty blockchain."
         title: "Let's get started!  Type 1, hit enter, and create your first project."
       }
+      projectsItems = "There are currently no projects."
     else
+      message.push {
+        pretext: "Contibute to projects and receive project coins!"
+      }
       projectsItems = @renderOrderedMenuItems @dcoItems
 
     balances = for userBalance in @userBalances
