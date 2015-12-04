@@ -42,6 +42,8 @@ class DcosStateController extends ApplicationController
       data.name = @input
     else if not data.description
       data.description = @input
+    else if not data.tasksUrl
+      data.tasksUrl = @input
     else #if not data.imageUrl
       promise = @parseImageUrl().then (imageUrl)=>
         if imageUrl then data.imageUrl = imageUrl else data.ignoreImage = true
@@ -63,6 +65,7 @@ class DcosStateController extends ApplicationController
       project_statement: data.description
       imageUrl: data.imageUrl ? ''
       project_owner: @currentUser.key()
+      tasksUrl: data.tasksUrl
     .save()
     .then (dco)=>
       dco.issueAsset amount: DCO::INITIAL_PROJECT_COINS

@@ -16,6 +16,8 @@ class CreateView extends ZorkView
         @question "What is the name of this project? (0: back)"
       else if not @data.description?
         @question "Please enter a short description of this project."
+      else if not @data.tasksUrl?
+        @question "Please enter a link to your project tasks."
       else if not @data.imageUrl or @data.ignoreImage
         @question "Please enter an image URL for this project (enter 'n' for none)"
       else

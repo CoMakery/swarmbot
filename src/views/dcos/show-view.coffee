@@ -44,7 +44,7 @@ class ShowView extends ZorkView
       }
       {
         title: 'See Project Tasks'
-        title_link: 'http://jira.com'
+        title_link: @dco.get 'tasksUrl'
       }
       {
         fields: [

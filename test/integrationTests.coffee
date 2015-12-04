@@ -127,6 +127,10 @@ describe 'swarmbot', ->
             @message = message('Shaft')
             App.route @message
           .then (reply)=>
+            json(reply).should.match /Please enter a link to your project tasks./
+            @message = message('http://jira.com')
+            App.route @message
+          .then (reply)=>
             json(reply).should.match /Please enter an image URL/
             @message = message('this is not a valid URL...')
             App.route @message
@@ -151,6 +155,7 @@ describe 'swarmbot', ->
               project_statement: 'Shaft'
               project_owner: userId
               imageUrl: 'http://example.com/very-small.png'
+              tasksUrl: 'http://jira.com'
 
   context 'proposals', ->
     context 'proposals#create', ->
