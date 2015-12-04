@@ -4,7 +4,7 @@ ZorkView = require '../zork-view'
 class SendRewardView extends ZorkView
   constructor: ({@data, @recipientUsername})->
     @menu = {}
-    @menu[0] =
+    @menu.x =
       text: "back"
       transition: 'exit'
       data: { proposalId: @data.proposalId, solutionId: @data.solutionId }
@@ -12,6 +12,6 @@ class SendRewardView extends ZorkView
   render: ->
     @question "Enter reward amount to send to #{@recipientUsername}
       for the solution '#{@data.solutionName}'
-      ('0' to go back)"
+      ('x' to exit)"
 
 module.exports = SendRewardView
