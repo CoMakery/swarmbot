@@ -35,14 +35,9 @@ describe 'swarmbot', ->
       .then (reply)->
         json(reply).should.match /What is the award name/
         App.route message('Kitais')
-      # TODO:
-      # .then (reply)=>
-      #   json(reply).should.match /Enter a suggested amount for this award/
-      #   @message = message('foo bar not a number')
-      #   App.route @message
       .then (reply)=>
         json(reply).should.match /Enter a suggested amount for this award/
-        @message = message('400')
+        @message = message('4000')
         App.route @message
       .then (reply)=>
         json(@message.parts).should.match /Award created/
@@ -50,7 +45,7 @@ describe 'swarmbot', ->
       .then (db)=>
         db.projects[dcoId].proposals['Kitais'].should.deep.eq
           name: 'Kitais'
-          suggestedAmount: 400
+          suggestedAmount: '4000'
 
   context 'dcos#show', ->
     it "shows the user's current project", ->

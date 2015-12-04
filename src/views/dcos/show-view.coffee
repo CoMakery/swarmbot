@@ -53,7 +53,8 @@ class ShowView extends ZorkView
             value: if @dco.proposals().isEmpty()
                 "There are no awards in this project."
               else
-                @dco.proposals().map (proposal)-> proposal.get 'name'
+                @dco.proposals().map (proposal)->
+                  "#{proposal.get 'name'} (#{proposal.get('suggestedAmount')})"
                 .join("\n")
             short: true
           }

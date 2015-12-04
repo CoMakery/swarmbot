@@ -5,16 +5,16 @@ ZorkView = require '../zork-view'
 class CreateView extends ZorkView
   constructor: ({@data, @errorMessage})->
     @menu = {}
-    @menu[0] = { text: "back", transition: 'exit' }
+    @menu['x'] = { text: "back", transition: 'exit' }
 
   render: ->
     errorAttachment = @warning(@errorMessage) if @errorMessage?
 
     questionAttachment = \
       if !@data.name?
-        @question "What is the award name? ('0' to go back)"
+        @question "What is the award name? ('x' to exit)"
       else if !@data.suggestedAmount?
-        @question "Enter a suggested amount for this award. ('0' to go back)"
+        @question "Enter a suggested amount for this award. ('x' to exit)"
       else
         ''
 

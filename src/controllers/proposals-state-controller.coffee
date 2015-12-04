@@ -58,7 +58,7 @@ class ProposalsStateController extends ApplicationController
       .then (dco)=> dco.makeProposal name: @input  # throws op error if already exists
       .then => data.name = @input
     else if not data.suggestedAmount?
-      data.suggestedAmount = Number @input
+      data.suggestedAmount = @input.trim()
       promise = @getDco()
         .then (dco)=> dco.createProposal data
         .then (@proposal)=> # @proposal = proposal
