@@ -29,39 +29,17 @@ describe 'swarmbot', ->
       it "shows the user's current project", ->
         dcoId = 'Your Great Project'
         @user = new User(name: userId, current_dco: dcoId, state: 'dcos#show').save()
-        dco = new DCO(name: dcoId)
+        dco = new DCO(name: dcoId, project_owner: userId)
         dco.save()
         .then -> dco.createProposal name: 'Do Stuff'
         .then -> dco.createProposal name: 'Be Glorious'
-        .then -> App.route message('1')
+        .then -> App.route message()
         .then (reply)->
           jreply = json reply
           jreply.should.match /See Project Tasks/
           jreply.should.match /Do stuff/i
           jreply.should.match /Be glorious/i
           jreply.should.match /\d: create an award/i
-
-    xcontext 'dcos#show', ->
-      userId = 'Me'
-      dcoId = 'First Distributed Federation'
-      user = ->
-        new User(name: userId, state: 'dcos#show', current_dco: dcoId).save()
-      dco = ->
-        new DCO(name: dcoId, project_owner: userId).save()
-      it "shows the list of proposals in order of votes", ->
-        user()
-        .then (@user)=> dco()
-        .then (@dco)=> @dco.createProposal(name: 'A1')
-        .then (@proposalA)=> @dco.createProposal(name: 'B2')
-        .then (@proposalB)=> App.route message()
-        .then (reply)=>
-          (json reply).should.match /.: a1\\n.: b2/i
-          @proposalB.upvote(@user)
-        .then => @proposalB.fetch()
-        .then (@proposalB)=>
-          App.route message('h')
-        .then (reply)=>
-          (json reply).should.match /.: b2\\n.: a1/i
 
     context 'dcos#index', ->
       beforeEach ->
