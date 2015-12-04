@@ -1,3 +1,5 @@
+request = require 'request-promise'
+validator = require 'validator'
 debug = require('debug')('app')
 { log, p, pjson, type } = require 'lightsaber'
 { extend, isEmpty } = require 'lodash'
@@ -28,7 +30,7 @@ class ApplicationStateController
         if type(transitionMethod) is 'function'
           @currentUser[menuAction.transition]()
           debug 'redirecting...'
-          @redirect()
+          @redirect(menuAction.flashMessage)
         else if type(transitionMethod) in ['null', 'undefined']
           throw new Error "Requested state transition is undefined! Event '#{menuAction.transition}' from state '#{@currentUser.current}'"
         else if type(transitionMethod) in ['null', 'undefined']
@@ -51,8 +53,8 @@ class ApplicationStateController
     App.route @msg
 
   render: (view)->
-    @currentUser.set 'menu', view.menu if view.menu
-    view.render()
+    @currentUser.set 'menu', view.menu if view.menu  # asyncronously saves to DB
+    view.render()                                    # don't wait for it, just render
 
   getDco: ->
     @currentUser.fetchIfNeeded().bind(@).then (user)->
@@ -62,6 +64,31 @@ class ApplicationStateController
         DCO.find dcoId
       else
         Promise.reject(Promise.OperationalError("Please specify the project in the command."))
+
+  parseImageUrl: (ignore='n')->
+    if @input.trim().toLowerCase() is ignore
+      Promise.resolve()
+    else
+      @isValidSlackImage(@input).then => @input
+
+  isValidSlackImage: (uri)->
+    if not validator.isURL(uri, require_protocol: true)
+      return Promise.reject(Promise.OperationalError("Sorry, that is not a valid URL."))
+
+    @sendInfo "Fetching image..."
+    request.head
+      uri: uri
+      resolveWithFullResponse: true
+    .then (response)=> response # needed to make promise a bluebird promise...
+    .error (error)=>
+      debug error.message
+      Promise.reject(Promise.OperationalError("Sorry, that address doesn't seem to exist."))
+    .then (response)=>
+      if not response.headers['content-type']?.startsWith 'image/'
+        Promise.reject(Promise.OperationalError("Sorry, that doesn't seem to be an image..."))
+      else if response.headers['content-length'] >= App.MAX_SLACK_IMAGE_SIZE
+        Promise.reject(Promise.OperationalError("Sorry, that image is too large. Try one of less than half a megabyte..."))
+
 
   _showError: (error)->
     @sendWarning error.message

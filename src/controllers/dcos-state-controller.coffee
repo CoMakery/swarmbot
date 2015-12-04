@@ -36,29 +36,37 @@ class DcosStateController extends ApplicationController
       @redirect()
 
   create: (data={})->
-    if @input
-      if not data.name
-        data.name = @input
-      else if not data.description
-        data.description = @input
-        return @saveDco data
+    if not @input
+      # fall through to render template
+    else if not data.name
+      data.name = @input
+    else if not data.description
+      data.description = @input
+    else #if not data.imageUrl
+      promise = @parseImageUrl().then (imageUrl)=>
+        if imageUrl then data.imageUrl = imageUrl else data.ignoreImage = true
+        @saveDco data
+        .then (dco)=> @dco = dco
 
-    @currentUser.set 'stateData', data
+    ( promise ? Promise.resolve() )
+    .error (opError)=> @errorMessage = opError.message
+    .then => @currentUser.set 'stateData', data
     .then =>
-      @render new CreateView data
+      if @dco?
+        @execute transition: 'showDco', flashMessage: 'Project created!'
+      else
+        @render new CreateView data, {@errorMessage}
 
   saveDco: (data)->
     new DCO
       name: data.name
       project_statement: data.description
+      imageUrl: data.imageUrl ? ''
       project_owner: @currentUser.key()
     .save()
     .then (dco)=>
       dco.issueAsset amount: DCO::INITIAL_PROJECT_COINS
-      @sendInfo "Project created"
       @currentUser.set 'current_dco', dco.key()
-    .then =>
-      @execute transition: 'showDco'
 
   capTable: ->
     @getDco()

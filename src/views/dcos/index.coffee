@@ -52,7 +52,7 @@ class IndexView extends ZorkView
       projectsItems = "There are currently no projects."
     else
       message.push {
-        pretext: "Contibute to projects and receive project coins!"
+        pretext: "Contribute to projects and receive project coins!"
       }
       projectsItems = @renderOrderedMenuItems @dcoItems
 

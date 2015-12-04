@@ -70,9 +70,9 @@ class DCO extends FirebaseModel
 
     swarmbot.colu()
     .then (colu)=>
-      colu.issueAsset asset, (err, body)->
-        if err
-          debug "error in asset creation: #{err}"
+      colu.issueAsset asset, (error, body)->
+        if error
+          debug "error in asset creation: #{error.message}"
         else
           dcos = swarmbot.firebase().child('projects')
           debug "AssetId: #{body.assetId}"

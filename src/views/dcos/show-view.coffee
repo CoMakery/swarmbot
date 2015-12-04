@@ -40,6 +40,7 @@ class ShowView extends ZorkView
       {
         title: @dco.get('name').toUpperCase()
         text: @dco.get 'project_statement'
+        thumb_url: @dco.get 'imageUrl'
       }
       {
         title: 'See Project Tasks'

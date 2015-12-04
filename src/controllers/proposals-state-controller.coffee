@@ -1,7 +1,6 @@
 { log, p, pjson } = require 'lightsaber'
 debug = require('debug')('app')
 request = require 'request-promise'
-validator = require 'validator'
 Promise = require 'bluebird'
 ApplicationController = require './application-state-controller'
 ProposalCollection = require '../collections/proposal-collection'
