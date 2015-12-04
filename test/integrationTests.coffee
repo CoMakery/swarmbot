@@ -24,47 +24,46 @@ message = (input)->
   }
 
 describe 'swarmbot', ->
-  context 'proposals#create', ->
-    it "allows the user to create a award within the current project", ->
-      dcoId = 'Your Great Project'
-      @user = new User(name: userId, current_dco: dcoId, state: 'dcos#show').save()
-      dco = new DCO(name: dcoId)
-      dco.save()
-      .then -> App.route message()
-      .then -> App.route message('4') # create a task
-      .then (reply)->
-        json(reply).should.match /What is the award name/
-        App.route message('Kitais')
-      .then (reply)=>
-        json(reply).should.match /Enter a suggested amount for this award/
-        @message = message('4000')
-        App.route @message
-      .then (reply)=>
-        json(@message.parts).should.match /Award created/
-      .then => @firebaseServer.getValue()
-      .then (db)=>
-        db.projects[dcoId].proposals['Kitais'].should.deep.eq
-          name: 'Kitais'
-          suggestedAmount: '4000'
+  context 'dcos', ->
+    context 'dcos#show', ->
+      it "shows the user's current project", ->
+        dcoId = 'Your Great Project'
+        @user = new User(name: userId, current_dco: dcoId, state: 'dcos#show').save()
+        dco = new DCO(name: dcoId)
+        dco.save()
+        .then -> dco.createProposal name: 'Do Stuff'
+        .then -> dco.createProposal name: 'Be Glorious'
+        .then -> App.route message('1')
+        .then (reply)->
+          jreply = json reply
+          jreply.should.match /See Project Tasks/
+          jreply.should.match /Do stuff/i
+          jreply.should.match /Be glorious/i
+          jreply.should.match /\d: create an award/i
 
-  context 'dcos#show', ->
-    it "shows the user's current project", ->
-      dcoId = 'Your Great Project'
-      @user = new User(name: userId, current_dco: dcoId, state: 'dcos#show').save()
-      dco = new DCO(name: dcoId)
-      dco.save()
-      .then -> dco.createProposal name: 'Do Stuff'
-      .then -> dco.createProposal name: 'Be Glorious'
-      .then -> App.route message('1')
-      .then (reply)->
-        jreply = json reply
-        jreply.should.match /See Project Tasks/
-        jreply.should.match /Do stuff/i
-        jreply.should.match /Be glorious/i
-        jreply.should.match /\d: create an award/i
+    xcontext 'dcos#show', ->
+      userId = 'Me'
+      dcoId = 'First Distributed Federation'
+      user = ->
+        new User(name: userId, state: 'dcos#show', current_dco: dcoId).save()
+      dco = ->
+        new DCO(name: dcoId, project_owner: userId).save()
+      it "shows the list of proposals in order of votes", ->
+        user()
+        .then (@user)=> dco()
+        .then (@dco)=> @dco.createProposal(name: 'A1')
+        .then (@proposalA)=> @dco.createProposal(name: 'B2')
+        .then (@proposalB)=> App.route message()
+        .then (reply)=>
+          (json reply).should.match /.: a1\\n.: b2/i
+          @proposalB.upvote(@user)
+        .then => @proposalB.fetch()
+        .then (@proposalB)=>
+          App.route message('h')
+        .then (reply)=>
+          (json reply).should.match /.: b2\\n.: a1/i
 
-  context 'dcos controller', ->
-    context 'index', ->
+    context 'dcos#index', ->
       beforeEach ->
         @user = new User(name: userId, state: 'dcos#index')
         sinon.stub(@user, 'balances').onCall(1).returns Promise.resolve [
@@ -106,7 +105,7 @@ describe 'swarmbot', ->
         .then (reply)=>
           json(reply).should.match /Community A/i
 
-      context 'create', ->
+      context 'dcos#create', ->
         beforeEach ->
           nock 'http://example.com'
             .head '/too-large.png'
@@ -153,152 +152,78 @@ describe 'swarmbot', ->
               project_owner: userId
               imageUrl: 'http://example.com/very-small.png'
 
-  xcontext 'dcos#show', ->
-    userId = 'Me'
-    dcoId = 'First Distributed Federation'
-    user = ->
-      new User(name: userId, state: 'dcos#show', current_dco: dcoId).save()
-    dco = ->
-      new DCO(name: dcoId, project_owner: userId).save()
-    it "shows the list of proposals in order of votes", ->
-      user()
-      .then (@user)=> dco()
-      .then (@dco)=> @dco.createProposal(name: 'A1')
-      .then (@proposalA)=> @dco.createProposal(name: 'B2')
-      .then (@proposalB)=> App.route message()
-      .then (reply)=>
-        (json reply).should.match /.: a1\\n.: b2/i
-        @proposalB.upvote(@user)
-      .then => @proposalB.fetch()
-      .then (@proposalB)=>
-        App.route message('h')
-      .then (reply)=>
-        (json reply).should.match /.: b2\\n.: a1/i
-
-  context 'proposals#show', ->
-    context 'setBounty', ->
-      proposalId = 'Be Amazing'
-      dcoId = 'my dco'
-      user = ->
-        new User(name: userId, state: 'proposals#show', stateData: {proposalId: proposalId}, current_dco: dcoId).save()
-      dco = ->
-        new DCO(name: dcoId, project_owner: userId).save()
-      proposal = (dco)->
-        dco.createProposal(name: proposalId)
-
-      it "shows setBounty item only for progenitors", ->
-        user()
-        .then (@user)=> dco()
-        .then (@dco)=> proposal(@dco)
-        .then (@proposal)=> App.route message()
+  context 'proposals', ->
+    context 'proposals#create', ->
+      it "allows the user to create a award within the current project", ->
+        dcoId = 'Your Great Project'
+        @user = new User(name: userId, current_dco: dcoId, state: 'dcos#show').save()
+        dco = new DCO(name: dcoId)
+        dco.save()
+        .then -> App.route message()
+        .then -> App.route message('4') # create a task
+        .then (reply)->
+          json(reply).should.match /What is the award name/
+          App.route message('Kitais')
         .then (reply)=>
-          (json reply).should.match /\d: set reward/i
-          @dco.set 'project_owner', 'someoneElse'
-        .then (@dco)=> App.route message()
-        .then (reply)=>
-          (json reply).should.not.match /\d: set reward/i
-
-      it "sets the bounty", ->
-        user()
-        .then (@user)=> dco()
-        .then (@dco)=> proposal(@dco)
-        .then (@proposal)=> App.route message()
-        .then (reply)=> App.route message('4') # Set Bounty
-        .then (reply)=>
-          json(reply).should.match /Enter the bounty amount/
-          @message = message '1000'
+          json(reply).should.match /Enter a suggested amount for this award/
+          @message = message('4000')
           App.route @message
         .then (reply)=>
-          @message.parts[0].should.match /Bounty amount set to 1000/
-          (json reply).should.match /task: be amazing/i
-          @proposal.fetch()
-        .then (proposal)=> proposal.get('amount').should.eq '1000'
+          json(@message.parts).should.match /Award created/
+        .then => @firebaseServer.getValue()
+        .then (db)=>
+          db.projects[dcoId].proposals['Kitais'].should.deep.eq
+            name: 'Kitais'
+            suggestedAmount: '4000'
 
-      it "doesn't set the bounty if you enter non-numbers", ->
-        user()
-        .then (@user)=> dco()
-        .then (@dco)=> proposal(@dco)
-        .then (@proposal)=> App.route message()
-        .then (reply)=> App.route message('4') # Set Bounty
-        .then (reply)=>
-          @message = message '1000x'
-          App.route @message
-        .then (reply)=>
-          @message.parts[0].should.match /please enter only numbers/i
-          json(reply).should.match /Enter the bounty amount/
+    context 'proposals#show', ->
+      context 'setBounty', ->
+        proposalId = 'Be Amazing'
+        dcoId = 'my dco'
+        user = ->
+          new User(name: userId, state: 'proposals#show', stateData: {proposalId: proposalId}, current_dco: dcoId).save()
+        dco = ->
+          new DCO(name: dcoId, project_owner: userId).save()
+        proposal = (dco)->
+          dco.createProposal(name: proposalId)
 
-  context 'solutions#sendReward', ->
-    proposalId = 'Be Amazing'
-    solutionId = 'Self Love'
-    solutionCreatorId = "slack:4388"
-    dcoId = 'my dco'
-    user = ->
-      new User
-        name: userId
-        state: 'solutions#show'
-        stateData: {solutionId, proposalId}
-        current_dco: dcoId
-      .save()
-    solutionCreator = ->
-      new User
-        name: solutionCreatorId
-        slack_username: 'noah'
-        btc_address: 'abc123'
-      .save()
-    dco = (ownerId)-> new DCO(name: dcoId, project_owner: ownerId).save()
-    proposal = (dco)-> dco.createProposal(name: proposalId)
-    solution = (proposal)-> proposal.createSolution name: solutionId, userId: solutionCreatorId
+        it "shows setBounty item only for progenitors", ->
+          user()
+          .then (@user)=> dco()
+          .then (@dco)=> proposal(@dco)
+          .then (@proposal)=> App.route message()
+          .then (reply)=>
+            (json reply).should.match /\d: set reward/i
+            @dco.set 'project_owner', 'someoneElse'
+          .then (@dco)=> App.route message()
+          .then (reply)=>
+            (json reply).should.not.match /\d: set reward/i
 
-    it "allows the progenitor to send a reward for a solution", ->
-      user()
-      .then (@user)=> solutionCreator()
-      .then (@solutionCreator)=> dco(userId)
-      .then (@dco)=> proposal @dco
-      .then (@proposal)=> solution @proposal
-      .then (@solution)=> App.route message ''
-      .then (reply)=> App.route message('2') # Send Reward
-      .then (reply)=>
-        json(reply).should.match /Enter reward amount to send to noah for the solution 'Self Love'/
-        @message = message('1000') # Reward amount
-        App.route @message
-      .then (reply)=>
-        @message.parts[0].should.match /Initiating transaction/
+        it "sets the bounty", ->
+          user()
+          .then (@user)=> dco()
+          .then (@dco)=> proposal(@dco)
+          .then (@proposal)=> App.route message()
+          .then (reply)=> App.route message('4') # Set Bounty
+          .then (reply)=>
+            json(reply).should.match /Enter the bounty amount/
+            @message = message '1000'
+            App.route @message
+          .then (reply)=>
+            @message.parts[0].should.match /Bounty amount set to 1000/
+            (json reply).should.match /task: be amazing/i
+            @proposal.fetch()
+          .then (proposal)=> proposal.get('amount').should.eq '1000'
 
-    it "disallows anyone else from sending a reward for a solution", ->
-      user()
-      .then (@user)=> solutionCreator()
-      .then (@solutionCreator)=> dco(solutionCreatorId)
-      .then (@dco)=> proposal @dco
-      .then (@proposal)=> solution @proposal
-      .then (@solution)=> App.route message ''
-      .then (reply)=>
-        json(reply).should.not.match /send reward/
-
-
-  context 'solutions#index', ->
-    userId = 'Me'
-    dcoId = 'First Distributed Federation'
-    user = ->
-      new User
-        name: userId
-        state: 'solutions#index'
-        current_dco: dcoId
-        stateData: {proposalId: 'proposal' }
-      .save()
-    dco = ->
-      new DCO(name: dcoId, project_owner: userId).save()
-    it "shows the list of proposals in order of votes", ->
-      user()
-      .then (@user)=> dco()
-      .then (@dco)=> @dco.createProposal(name: 'proposal')
-      .then (@proposal)=> @proposal.createSolution(name: 'solution A')
-      .then (@solutionA)=> @proposal.createSolution(name: 'solution B')
-      .then (@solutionB)=> App.route message()
-      .then (reply)=>
-        (json reply).should.match /.: solution a\\n.: solution b/i
-        @solutionB.upvote(@user)
-      .then => @solutionB.fetch()
-      .then (@solutionB)=>
-        App.route message('')
-      .then (reply)=>
-        (json reply).should.match /.: solution b\\n.: solution a/i
+        it "doesn't set the bounty if you enter non-numbers", ->
+          user()
+          .then (@user)=> dco()
+          .then (@dco)=> proposal(@dco)
+          .then (@proposal)=> App.route message()
+          .then (reply)=> App.route message('4') # Set Bounty
+          .then (reply)=>
+            @message = message '1000x'
+            App.route @message
+          .then (reply)=>
+            @message.parts[0].should.match /please enter only numbers/i
+            json(reply).should.match /Enter the bounty amount/
