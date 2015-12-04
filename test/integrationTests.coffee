@@ -24,34 +24,35 @@ message = (input)->
   }
 
 describe 'swarmbot', ->
+  context 'proposals#create', ->
+    it "allows the user to create a award within the current project", ->
+      dcoId = 'Your Great Project'
+      @user = new User(name: userId, current_dco: dcoId, state: 'dcos#show').save()
+      dco = new DCO(name: dcoId)
+      dco.save()
+      .then -> App.route message()
+      .then -> App.route message('4') # create a task
+      .then (reply)->
+        json(reply).should.match /What is the award name/
+        App.route message('Kitais')
+      # TODO:
+      # .then (reply)=>
+      #   json(reply).should.match /Enter a suggested amount for this award/
+      #   @message = message('foo bar not a number')
+      #   App.route @message
+      .then (reply)=>
+        json(reply).should.match /Enter a suggested amount for this award/
+        @message = message('400')
+        App.route @message
+      .then (reply)=>
+        json(@message.parts).should.match /Award created/
+      .then => @firebaseServer.getValue()
+      .then (db)=>
+        db.projects[dcoId].proposals['Kitais'].should.deep.eq
+          name: 'Kitais'
+          suggestedAmount: 400
+
   context 'dcos#show', ->
-
-    xcontext 'with no proposals', ->
-      it "allows the user to create a task within the current project", ->
-        dcoId = 'Your Great Project'
-        @user = new User(name: userId, current_dco: dcoId, state: 'dcos#show').save()
-        dco = new DCO(name: dcoId)
-        dco.save()
-        .then -> App.route message()
-        .then -> App.route message('4') # create a task
-        .then (reply)->
-          json(reply).should.match /What is the name of your task/
-          App.route message('A Task')
-        .then (reply)=>
-          json(reply).should.match /Please enter a brief description of your task/
-          @message = message('A description')
-          App.route @message
-        .then (reply)=>
-          @message.parts.length.should.eq 2
-          @message.parts[1].should.match /Task created/
-          (json reply).should.match /See Project Tasks/
-        .then => @firebaseServer.getValue()
-        .then (db)=>
-          db.projects[dcoId].proposals['A Task'].should.deep.eq
-            name: 'A Task'
-            description: "A description"
-            imageUrl: "http://example.com/very-small.png"
-
     it "shows the user's current project", ->
       dcoId = 'Your Great Project'
       @user = new User(name: userId, current_dco: dcoId, state: 'dcos#show').save()

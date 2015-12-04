@@ -12,11 +12,9 @@ class CreateView extends ZorkView
 
     questionAttachment = \
       if !@data.name?
-        @question "What is the name of your task? ('0' to go back)"
-      else if !@data.description?
-        @question "Please enter a brief description of your task. ('0' to go back)"
-      else if !@data.imageUrl?
-        @question "Please enter an image URL for your task (enter 'n' for none)"
+        @question "What is the award name? ('0' to go back)"
+      else if !@data.suggestedAmount?
+        @question "Enter a suggested amount for this award. ('0' to go back)"
       else
         ''
 

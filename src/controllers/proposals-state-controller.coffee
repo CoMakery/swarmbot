@@ -50,39 +50,26 @@ class ProposalsStateController extends ApplicationController
 
   create: (data)->
     data ?= {}
-    result = \
-      if @input?
-        if not data.name?
-          @getDco()
-          .then (dco)=> dco.makeProposal name: @input  # throws op error if already exists
-          .then => data.name = @input
-        else if not data.description?
-          data.description = @input
-        else if not data.imageUrl?
-          if @input in ['n', 'N']
-            Promise.resolve(done: true)
-          else
-            @isValidSlackImage(@input).then =>
-              data.imageUrl = @input
-              done: true
-
-    result = Promise.resolve(done: false) unless result?.then?
-
-    result
-    .error (opError)=>
-      @errorMessage = opError.message
-    .then ({done})=>
-      if done
-        @getDco()
+    promise = if not @input?
+      # fall through to render
+      Promise.resolve()
+    else if not data.name?
+      @getDco()
+      .then (dco)=> dco.makeProposal name: @input  # throws op error if already exists
+      .then => data.name = @input
+    else if not data.suggestedAmount?
+      data.suggestedAmount = Number @input
+      promise = @getDco()
         .then (dco)=> dco.createProposal data
-        .then => @sendInfo "Task created!"
-        .then => @execute transition: 'exit'
-        .error (opError)=>
-          @render new CreateView {data, errorMessage: opError.message}
+        .then (@proposal)=> # @proposal = proposal
+
+    promise
+    .then => @currentUser.set 'stateData', data
+    .then =>
+      if @proposal
+        @execute transition: 'exit', flashMessage: "Award created!"
       else
-        @currentUser.set 'stateData', data
-        .then =>
-          @render new CreateView {data, @errorMessage}
+        @render new CreateView {data, @errorMessage}
 
   edit: (data)->
     if @input?
