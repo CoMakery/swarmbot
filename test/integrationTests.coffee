@@ -222,7 +222,7 @@ describe 'swarmbot', ->
       proposal = (dco)->
         dco.createProposal(name: proposalId)
 
-      xgit "allows an admin to award coins to a user", ->
+      xit "allows an admin to award coins to a user", ->
         user()
         .then (@user)=> dco()
         .then (@dco)=> proposal(@dco)
