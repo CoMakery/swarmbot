@@ -1,4 +1,5 @@
 {log, p, pjson, json} = require 'lightsaber'
+{values} = require 'lodash'
 Promise = require 'bluebird'
 require './testHelper'
 global.App = require '../src/app'
@@ -210,3 +211,45 @@ describe 'swarmbot', ->
           .then (reply)=>
             @message.parts[0].should.match /please enter only numbers/i
             json(reply).should.match /Enter the bounty amount/
+
+    context 'proposals#sendReward', ->
+      proposalId = 'Be Amazing'
+      dcoId = 'my dco'
+      user = ->
+        new User(name: userId, state: 'proposals#show', stateData: {proposalId: proposalId}, current_dco: dcoId).save()
+      dco = ->
+        new DCO(name: dcoId, project_owner: userId).save()
+      proposal = (dco)->
+        dco.createProposal(name: proposalId)
+
+      xgit "allows an admin to award coins to a user", ->
+        user()
+        .then (@user)=> dco()
+        .then (@dco)=> proposal(@dco)
+        .then (@proposal)=> App.route message('')  # load menu into user
+        .then => App.route message('5')
+
+        .then (reply)=> (json reply).should.match /Which slack @user should I send the reward to/i
+        .then => App.route message('@duke')
+
+        .then (reply)=> (json reply).should.match /What award type/i
+        .then => App.route message('A')
+
+        .then (reply)=> json(reply).should.match /How much do you want to reward @duke for "Be Amazing"/i
+        .then => App.route message('4000')
+
+        .then (reply)=> json(reply).should.match /What was the contribution @duke made for the award/i
+        .then => App.route message('was awesome')
+
+        .then (reply)=> json(reply).should.match /Initiating transaction.+We will private message both yourself and @duke/
+        .then => @firebaseServer.getValue()
+        .then (db)=>
+          # project -> award -> reward(key: timestamp, issuer, repic, amount, awardType)
+          rewards = db.projects[dcoId].proposals[proposalId].rewards
+          reward = values(rewards)[0]
+          reward.should.deep.eq
+            issuer: userId
+            recipient: 'slack:dukesID'
+            amount: 4000
+            awardType: @proposal.key()
+          reward.key().should.match /iso.../
