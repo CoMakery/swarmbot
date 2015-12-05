@@ -1,4 +1,4 @@
-{ log, p, pjson } = require 'lightsaber'
+{ json, log, p, pjson } = require 'lightsaber'
 Promise = require 'bluebird'
 debug = require('debug')('app')
 User = require './models/user'
@@ -52,7 +52,7 @@ class App
 
       if menuAction?
         # specific menu action of entered command
-        debug "Command: #{controller.input}, controllerName: #{controllerName}, menuAction: #{menuAction}"
+        debug "Command: #{controller.input}, controllerName: #{controllerName}, menuAction: #{json menuAction}"
         controller.execute(menuAction)
       else if controller[action]?
         # default action for this state

@@ -1,3 +1,4 @@
+{ compact } = require 'lodash'
 { log, p, pjson } = require 'lightsaber'
 ZorkView = require '../zork-view'
 
@@ -35,17 +36,16 @@ class ShowView extends ZorkView
     balance += "\nbitcoin address: " +
       ( @currentUser.get('btc_address') or "None" )
 
-
-    [
+    compact [
       {
         title: @dco.get('name').toUpperCase()
         text: @dco.get 'project_statement'
         thumb_url: @dco.get 'imageUrl'
       }
-      {
+      (
         title: 'See Project Tasks'
         title_link: @dco.get 'tasksUrl'
-      }
+      ) if @dco.get 'tasksUrl'
       {
         fields: [
           {

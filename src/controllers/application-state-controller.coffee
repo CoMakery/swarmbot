@@ -89,6 +89,11 @@ class ApplicationStateController
       else if response.headers['content-length'] >= App.MAX_SLACK_IMAGE_SIZE
         Promise.reject(Promise.OperationalError("Sorry, that image is too large. Try one of less than half a megabyte..."))
 
+  _coloredCoinTxUrl: (txId)->
+    url = ["http://coloredcoins.org/explorer"]
+    url.push 'testnet' if process.env.COLU_NETWORK is 'testnet'
+    url.push 'tx', txId
+    url.join('/')
 
   _showError: (error)->
     @sendWarning error.message

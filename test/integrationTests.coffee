@@ -30,7 +30,10 @@ describe 'swarmbot', ->
       it "shows the user's current project", ->
         dcoId = 'Your Great Project'
         @user = new User(name: userId, current_dco: dcoId, state: 'dcos#show').save()
-        dco = new DCO(name: dcoId, project_owner: userId)
+        dco = new DCO
+          name: dcoId
+          project_owner: userId
+          tasksUrl: 'http://example.com'
         dco.save()
         .then -> dco.createProposal name: 'Do Stuff'
         .then -> dco.createProposal name: 'Be Glorious'
@@ -38,6 +41,7 @@ describe 'swarmbot', ->
         .then (reply)->
           jreply = json reply
           jreply.should.match /See Project Tasks/
+          jreply.should.match /example\.com/
           jreply.should.match /Do stuff/i
           jreply.should.match /Be glorious/i
           jreply.should.match /\d: create an award/i

@@ -6,14 +6,14 @@ class CreateView extends ZorkView
 
   constructor: (@data, {@errorMessage})->
     @menu = {}
-    @menu[0] = { text: "back", transition: 'exit' }
+    @menu.x = { text: "back", transition: 'exit' }
 
   render: ->
     errorAttachment = @warning(@errorMessage) if @errorMessage?
 
     questionAttachment = \
       if not @data.name?
-        @question "What is the name of this project? (0: back)"
+        @question "What is the name of this project? ('x' to exit)"
       else if not @data.description?
         @question "Please enter a short description of this project."
       else if not @data.tasksUrl?

@@ -99,23 +99,4 @@ class SolutionsStateController extends ApplicationController
         recipientUsername = solutionCreator.get 'slack_username'
         @render new SendRewardView {data, recipientUsername}
 
-
-  upvote: (data)->
-    @getDco().then (dco)=>
-      Proposal.find data.proposalId, parent: dco
-    .then (proposal)=>
-      Solution.find(data.solutionId, parent: proposal)
-    .then (solution)=>
-      unless solution.exists()
-        throw new Error "Could not find the solution '#{data.solutionId}'. Please verify that it exists."
-      solution.upvote @currentUser
-    .then =>
-      @redirect "Your vote has been recorded."
-
-  _coloredCoinTxUrl: (txId)->
-    url = ["http://coloredcoins.org/explorer"]
-    url.push 'testnet' if process.env.COLU_NETWORK == 'testnet'
-    url.push 'tx', txId
-    url.join('/')
-
 module.exports = SolutionsStateController
