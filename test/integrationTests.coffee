@@ -48,7 +48,7 @@ describe 'swarmbot', ->
 
     context 'dcos#index', ->
       beforeEach ->
-        @user = new User(name: userId, state: 'dcos#index')
+        @user = new User(name: userId, state: 'dcos#index', has_interacted: true)
         sinon.stub(@user, 'balances').onCall(1).returns Promise.resolve [
           {
             name: 'FinTechHacks'
@@ -59,7 +59,7 @@ describe 'swarmbot', ->
 
       it "shows a welcome screen if there are no projects", ->
         @user.save()
-        .then (@user)=> App.route message()
+        .then (@dco)=> App.route message()
         .then (reply)=>
           jreply = json(reply)
           jreply.should.match /Welcome friend!/
@@ -67,6 +67,20 @@ describe 'swarmbot', ->
           App.route message('1')
         .then (reply)=>
           json(reply).should.match /What is the name of this project/
+
+      it "shows a welcome screen if the user has never made contact", ->
+        @user.set 'has_interacted', false
+        .then (@user)=> new DCO(name: "Community A").save()
+        .then (@user)=> App.route message()
+        .then (reply)=>
+          jreply = json(reply)
+          jreply.should.match /Welcome friend!/
+          jreply.should.match /Let's get started.*Type 1/
+          App.route message('xyz')
+        .then (reply)=>
+          jreply = json(reply)
+          jreply.should.match /Contribute to projects/
+          jreply.should.not.match /Welcome friend!/
 
       it "shows the list of names and sets current dco", ->
         Promise.all [

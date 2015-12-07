@@ -44,11 +44,14 @@ class IndexView extends ZorkView
 
 
     message = []
-    if isEmpty @dcoItems
+    if isEmpty(@dcoItems) or not @currentUser.get('has_interacted')
       message.push {
         pretext: "Welcome friend! I am here to help you contribute to projects and receive project coins. Project coins track your share of a project using a trusty blockchain."
         title: "Let's get started!  Type 1, hit enter, and create your first project."
       }
+      @currentUser.set 'has_interacted', true
+
+    if isEmpty @dcoItems
       projectsItems = "There are currently no projects."
     else
       message.push {
