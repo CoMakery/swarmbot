@@ -11,15 +11,15 @@ Swarmbot hangs out in Slack and creates Project Coins on a trusty blockchain. It
 
 ## Current Implementation Status
 
-This project is in very early stages, and not ready for production use.
+This project is alpha and not ready for production use.
 It is being actively developed by [Citizen Code](http://citizencode.io/).
 We welcome [feature requests and pull requests](https://github.com/citizencode/swarmbot/issues).
 
 We are planning to license it as a Dynamic Equity Organization. The structure is being legally reviewed for use in Swarmbot and on your projects.
 
+To learn more when we release it, sign up for our mailing list over at [www.swarmbot.io](http://www.swarmbot.io/)
 
-
-## Here's What Swarmbot Does
+## Here's What Swarmbot Can Do
 
 ![Swarmbot UX](https://cloud.githubusercontent.com/assets/7764167/11573372/c8362dc0-99ba-11e5-87c7-b698a3d07a3d.png)
 
