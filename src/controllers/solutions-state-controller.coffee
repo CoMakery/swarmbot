@@ -51,7 +51,10 @@ class SolutionsStateController extends ApplicationController
     .then (recipient)=>
       @sendWarning @errorMessage if @errorMessage
       if @reward
-        @execute transition: 'exit', flashMessage: "Initiating transaction.  We will private message both you and @#{recipient.get 'slack_username'}"
+        @execute transition: 'exit', flashMessage: "Initiating transaction.
+                                                    This will take some time to confirm in the blockchain.
+                                                    We will private message both you and @#{@recipient.get('slack_username')}
+                                                    when the transaction is complete."
       else
         @currentUser.set 'stateData', data
         .then => @render new CreateView @dco, data, {recipient}
