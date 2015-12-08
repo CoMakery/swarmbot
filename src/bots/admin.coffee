@@ -10,7 +10,6 @@ swarmbot = require '../models/swarmbot'
 Proposal = require '../models/proposal'
 DCO = require '../models/dco'
 AdminController = require '../controllers/admin-controller'
-ProposalsController = require '../controllers/proposals-controller'
 
 module.exports = (robot)->
 
@@ -20,11 +19,6 @@ module.exports = (robot)->
     #TODO: This should pull from wizard or some other repo where all the comamnds live
     msg.send "Admin commands work for owner only:\naward <task name> to <username>\nstats\nset coin name <currency_name>"
     #TODO: add: set budget <budget amount>
-
-  App.respond /award\s+(.+)\s+to\s+(.+?)(?:\s+in (.+))?\s*$/i, (msg)->
-    [all, proposalName, awardee, dcoKey] = msg.match
-    log "MATCH 'award' : #{pjson msg.match}"
-    new ProposalsController().award(msg, { proposalName, awardee, dcoKey })
 
   App.respond /set coin name\s+(.+)\s*$/i, (msg)->
     [all, coinName, dcoKey] = msg.match
@@ -37,12 +31,3 @@ module.exports = (robot)->
   App.respond /stats$/i, (msg)->
     [all] = msg.match
     new AdminController().stats(msg)
-
-  #
-  #   log "MATCH 'create asset' : #{all}"
-  #   new DcosController().issueAsset(msg, { dcoKey, amount })
-  #
-  # App.respond /settings$/i, (msg)->
-  #   [all] = msg.match
-  #   log "MATCH 'settings' : #{pjson msg.match}"
-  #   msg.send "Set currency <currency>
