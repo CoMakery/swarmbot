@@ -1,102 +1,86 @@
-{ log, p, pjson } = require 'lightsaber'
 debug = require('debug')('app')
-{ isEmpty } = require 'lodash'
+{ log, p, pjson } = require 'lightsaber'
+{ isEmpty, last } = require 'lodash'
 Promise = require 'bluebird'
 ApplicationController = require './application-state-controller'
 Proposal = require '../models/proposal'
-Solution = require '../models/solution'
+Reward = require '../models/reward'
 User = require '../models/user'
-DcoCollection = require '../collections/dco-collection'
-IndexView = require '../views/solutions/index-view'
-ShowView = require '../views/solutions/show-view'
 CreateView = require '../views/solutions/create-view'
-SendRewardView = require '../views/solutions/send-reward-view'
 
 class SolutionsStateController extends ApplicationController
-  index: (params)->
+  cleanUsername: (username)->
+    username = username.trim()
+    username = username.slice(1) if username[0] is '@'
+    username = username.slice(0, username.length-1) if last(username) is ':'
+    username
+
+  create: (data={})->
     @getDco()
-    .then (dco)=>
-      Proposal.find(params.proposalId, parent: dco)
-    .then (proposal)=>
-      @render new IndexView(proposal)
+    .then (dco)=> dco.fetch()
+    .then (@dco)=>
+      if not @input
+        # fall through to render
+      else if not data.recipient?
+        User.findBySlackUsername @cleanUsername @input
+        .then (recipient)=>
+          unless recipient.get('btc_address')?
+            throw Promise.OperationalError("This user doesn't have a registered Bitcoin address!")
+          data.recipient = recipient.key()
+        .error (error)=>
+          @errorMessage = error.message
+      else if not data.awardId?
+        # Note : set by the menu item when selecting award
+      else if not data.rewardAmount?
+        data.rewardAmount = @input
+      else if not data.description?
+        data.description = @input.trim().replace /\$,/, ''
+        data.issuer = @currentUser.key()
+        Reward.push(data, parent: @dco)
+        .then (@reward)=> User.find data.recipient
+        .then (@recipient)=>
+          Proposal.find(data.awardId, parent: @dco)
+        .then (proposal)=>
+          @sendReward(proposal, data.rewardAmount)
+          Promise.resolve() # don't wait on sendReward's promise, which waits for the blockchain
 
-  show: (data)->
-    @getDco()
-    .then (dco)=>
-      Proposal.find data.proposalId, parent: dco
-    .then (proposal)=>
-      Solution.find data.solutionId, parent: proposal
-    .then (solution)=>
-      @render new ShowView(solution, @currentUser)
-
-  create: (data)->
-    if @input?
-      if not data.name?
-        data.name = @input
-      else if not data.link?
-        data.link = @input
-        return @getDco()
-          .then (@dco)=> Proposal.find data.proposalId, parent: @dco
-          .then (@proposal)=>
-            data.userId = @currentUser.key()
-            @proposal.createSolution data
-          .then (solution)=>
-            # Notify Progenitor
-            User.find @dco.get('project_owner')
-            .then (owner)=>
-              @msg.robot.messageRoom owner.get('slack_username'),
-                "*New Solution Submitted for #{@proposal.key()}*\n #{solution.key()}\n#{solution.get('link')}"
-
-            @sendInfo "Your solution has been submitted and will be reviewed!"
-            @execute transition: 'exit', data: { proposalId: data.proposalId }
-
-    @currentUser.set 'stateData', data
     .then =>
-      @render new CreateView data
+      if data.recipient
+        User.find data.recipient
 
-  sendReward: (data)->
-    if @input? and @input.match /^\d+$/
-      rewardAmount = @input
-      @getDco()
-      .then (@dco)=>
-        if @dco.get('project_owner') is @currentUser.key()
-          Proposal.find(data.proposalId, parent: @dco)
-        else
-          Promise.reject(Promise.OperationalError "Only the creator of this project can send rewards")
-      .then (@proposal)=> Solution.find(data.solutionId, parent: @proposal)
-      .then (@solution)=> User.find @solution.get 'userId'
-      .then (@recipient)=>
-        unless @recipient.get('btc_address')?
-          throw Promise.OperationalError("This user doesn't have a registered Bitcoin address!")
-        @sendInfo "Initiating transaction.
-          This will take some time to confirm in the blockchain.
-          We will private message both yourself and #{@recipient.get('slack_username')}
-          when the transaction is complete."
-        @proposal.awardTo(@recipient.get('btc_address'), rewardAmount)
-      .then (body)=>
-        @sendInfo 'Reward sent!'
-        debug "Reward #{@proposal.key()}/#{@solution.key()} to #{@recipient.get('slack_username')} :", body
-        txUrl = @_coloredCoinTxUrl(body.txid)
-        @sendInfo "Awarded proposal to #{@recipient.get('slack_username')}.\n#{txUrl}"
-        # PM message
-        @msg.robot.messageRoom @recipient.get('slack_username'),
-          "Congratulations! You have received #{rewardAmount} project coins for your solution '#{@solution.key()}'\n#{@_coloredCoinTxUrl(body.txid)}"
-      .error (error)=>
-        @sendWarning error.message
-      .then =>
-        @execute transition: 'exit', data: data
-      .catch (error)=>
-        @sendWarning "Error awarding '#{@proposal?.key()}' to #{@recipient?.get('slack_username')}. Unable to complete the transaction.\n #{error.message}"
-        @execute transition: 'exit', data: data
-        throw error
+    .then (recipient)=>
+      @sendWarning @errorMessage if @errorMessage
+      if @reward
+        @execute transition: 'exit', flashMessage: "Initiating transaction.  We will private message both you and @#{recipient.get 'slack_username'}"
+      else
+        @currentUser.set 'stateData', data
+        .then => @render new CreateView @dco, data, {recipient}
 
-    else
-      @getDco()
-      .then (dco)=> Proposal.find data.proposalId, parent: dco
-      .then (proposal)=> Solution.find data.solutionId, parent: proposal
-      .then (solution)=> User.find solution.get('userId')
-      .then (solutionCreator)=>
-        recipientUsername = solutionCreator.get 'slack_username'
-        @render new SendRewardView {data, recipientUsername}
+  setStateData: (data)->
+    @currentUser.set 'stateData', data
+    .then => @redirect()
+
+# only admin:
+      # @getDco()
+      # .then (@dco)=>
+      #   if @dco.get('project_owner') is @currentUser.key()
+      #     Proposal.find(data.proposalId, parent: @dco)
+      #   else
+      #     Promise.reject(Promise.OperationalError "Only the creator of this project can send rewards")
+
+  sendReward: (proposal, rewardAmount)->
+    proposal.awardTo(@recipient.get('btc_address'), rewardAmount)
+    .then (body)=>
+      @sendInfo 'Reward sent!'
+      debug "Reward #{proposal.key()} to #{@recipient.get('slack_username')} :", body
+      txUrl = @_coloredCoinTxUrl(body.txid)
+      @sendInfo "Awarded proposal to #{@recipient.get('slack_username')}.\n#{txUrl}"
+      @msg.robot.messageRoom @recipient.get('slack_username'),
+        "Congratulations! You have received #{rewardAmount} project coins\n#{@_coloredCoinTxUrl(body.txid)}"
+    .error (error)=>
+      @sendWarning error.message
+    .catch (error)=>
+      @sendWarning "Error awarding '#{proposal?.key()}' to #{@recipient?.get('slack_username')}. Unable to complete the transaction.\n #{error.message}"
+      throw error
 
 module.exports = SolutionsStateController

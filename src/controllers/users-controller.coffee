@@ -14,7 +14,7 @@ class UsersController extends ApplicationController
       slackId = @msg.message.user.id
       realName = @msg.message.user.real_name
       emailAddress = @msg.message.user.email_address
-      # p user, slackId, realName, emailAddress
+      # p user, slackId, realName, emailAddress, slackUsername
 
       # quickfix, set to silent register, now that it is automated
 

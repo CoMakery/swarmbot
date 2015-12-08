@@ -19,7 +19,8 @@ class DCO extends FirebaseModel
       cb(null, bounties)
 
   createProposal: (attributes)->
-    @makeProposal(attributes).then (proposal)-> proposal.save()
+    @makeProposal(attributes)
+    .then (proposal)-> proposal.save()
 
   makeProposal: (attributes)->
     @fetchIfNeeded().then (dco)->

@@ -39,8 +39,8 @@ class Proposal extends FirebaseModel
           amount: amount
         }]
         metadata:
-          project: dco.key()
-          proposal:  @key()
+          project: dco.get 'name'
+          award: @get 'name'
 
       try
         colu.sendAsset args, cb

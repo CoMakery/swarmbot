@@ -14,8 +14,8 @@ class ShowView extends ZorkView
     # @menu[i++] = { text: "suggest a swarmbot improvement", transition: 'suggest' }
 
     # if admin/progenitor
-    @menu[i++] = { text: "create an award", transition: 'create' }
-    @menu[i++] = { text: "award a contribution", transition: 'award' }
+    @menu[i++] = { text: "create an award level", transition: 'create' }
+    @menu[i++] = { text: "send an award", transition: 'sendReward', data: {dcoId: @dco.key()} }
 
   render: ->
     headline = if @dco.proposals().isEmpty() then 'No proposals' else 'Proposals'

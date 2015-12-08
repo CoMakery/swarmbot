@@ -7,6 +7,7 @@ DCO = require '../src/models/dco'
 User = require '../src/models/user'
 nock = require 'nock'
 sinon = require 'sinon'
+InitBot = require '../src/bots/!init'
 
 userId = "slack:1234"
 
@@ -183,7 +184,12 @@ describe 'swarmbot', ->
         proposalId = 'Be Amazing'
         dcoId = 'my dco'
         user = ->
-          new User(name: userId, state: 'proposals#show', stateData: {proposalId: proposalId}, current_dco: dcoId).save()
+          new User
+            name: userId
+            state: 'proposals#show'
+            stateData: {proposalId: proposalId}
+            current_dco: dcoId
+          .save()
         dco = ->
           new DCO(name: dcoId, project_owner: userId).save()
         proposal = (dco)->
@@ -230,44 +236,55 @@ describe 'swarmbot', ->
             @message.parts[0].should.match /please enter only numbers/i
             json(reply).should.match /Enter the bounty amount/
 
-    context 'proposals#sendReward', ->
-      proposalId = 'Be Amazing'
-      dcoId = 'my dco'
+  context 'solutions', ->
+    context 'solutions#create', -> # create reward
+      proposalId = 'a very special award'
+      dcoId = 'a project'
       user = ->
-        new User(name: userId, state: 'proposals#show', stateData: {proposalId: proposalId}, current_dco: dcoId).save()
+        new User
+          name: userId
+          state: 'solutions#create'
+          stateData: {}
+          current_dco: dcoId
+          slack_username: 'duke'
+          btc_address: 'i am a bitcoin address'
+        .save()
       dco = ->
         new DCO(name: dcoId, project_owner: userId).save()
       proposal = (dco)->
         dco.createProposal(name: proposalId)
 
-      xit "allows an admin to award coins to a user", ->
+      it "allows an admin to award coins to a user", ->
         user()
         .then (@user)=> dco()
         .then (@dco)=> proposal(@dco)
-        .then (@proposal)=> App.route message('')  # load menu into user
-        .then => App.route message('5')
+        .then (@proposal)=> @dco.fetch()
+        .then (@dco)=> App.route message('')
+        .then (reply)=>
+          json(reply).should.match /Which slack @user should I send the reward to/i
 
-        .then (reply)=> (json reply).should.match /Which slack @user should I send the reward to/i
-        .then => App.route message('@duke')
+          App.route message('@duke')
+        .then (reply)=>
+          json(reply).should.match /What award type.+A.+a very special award/
 
-        .then (reply)=> (json reply).should.match /What award type/i
-        .then => App.route message('A')
+          App.route message('A')
+        .then (reply)=>
+          json(reply).should.match /How much do you want to reward @duke for \\"a very special award\\"/i
+          App.route message('4000')
+        .then (reply)=>
+          json(reply).should.match /What was the contribution @duke made for the award/i
+          @message = message('was awesome')
+          App.route @message
 
-        .then (reply)=> json(reply).should.match /How much do you want to reward @duke for "Be Amazing"/i
-        .then => App.route message('4000')
-
-        .then (reply)=> json(reply).should.match /What was the contribution @duke made for the award/i
-        .then => App.route message('was awesome')
-
-        .then (reply)=> json(reply).should.match /Initiating transaction.+We will private message both yourself and @duke/
-        .then => @firebaseServer.getValue()
+        .then (reply)=>
+          @firebaseServer.getValue()
         .then (db)=>
           # project -> award -> reward(key: timestamp, issuer, repic, amount, awardType)
-          rewards = db.projects[dcoId].proposals[proposalId].rewards
+          rewards = db.projects[dcoId].rewards
           reward = values(rewards)[0]
           reward.should.deep.eq
             issuer: userId
-            recipient: 'slack:dukesID'
-            amount: 4000
-            awardType: @proposal.key()
-          reward.key().should.match /iso.../
+            recipient: 'slack:1234'
+            rewardAmount: '4000'
+            awardId: @proposal.key()
+            description: 'was awesome'

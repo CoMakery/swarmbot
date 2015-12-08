@@ -59,7 +59,6 @@ class ApplicationStateController
   getDco: ->
     @currentUser.fetchIfNeeded().bind(@).then (user)->
       dcoId = user.get('current_dco')
-      dcoId ?= swarmbot.feedbackDcokey
       if dcoId?
         DCO.find dcoId
       else

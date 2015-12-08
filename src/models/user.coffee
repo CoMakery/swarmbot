@@ -18,7 +18,7 @@ class User extends FirebaseModel
       .equalTo(slackUsername)
       .limitToFirst(1)
       .once 'value', (snapshot)->
-        return cb(new Promise.OperationalError("Cannot find a user named '#{slackUsername}'.")) unless snapshot.val()
+        return cb(new Promise.OperationalError("Cannot find a swarmbot user named '#{slackUsername}'.")) unless snapshot.val()
         userId = Object.keys(snapshot.val())[0]
         cb(null, new User({}, snapshot: snapshot.child(userId)))
     , cb # error
@@ -94,8 +94,8 @@ class User extends FirebaseModel
       { name: 'create', from: 'solutions#index', to: 'solutions#create' }
       { name: 'exit', from: 'solutions#create', to: 'solutions#index' }
 
-      { name: 'sendReward', from: 'solutions#show', to: 'solutions#sendReward' }
-      { name: 'exit', from: 'solutions#sendReward', to: 'solutions#show' }
+      { name: 'sendReward', from: 'dcos#show', to: 'solutions#create' }
+      { name: 'exit', from: 'solutions#create', to: 'dcos#show' }
 
       { name: 'setDco', from: 'dcos#show', to: 'dcos#index' }
       { name: 'exit', from: 'dcos#index', to: 'dcos#show' }

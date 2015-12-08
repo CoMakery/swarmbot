@@ -59,6 +59,8 @@ InitBot = (robot)->
 
   # State-based message routing
   robot.respond /(.*)/, (msg)->
+    new UsersController().register(msg)
+
     if robot.isPublic msg
       msg.reply "Let's take this offline.  I PM'd you :smile:"
     App.route(msg).then (response)->
@@ -86,10 +88,6 @@ InitBot = (robot)->
 
   App.respond /welcome me$/i, (msg)-> greet msg
 
-  # Generic auto register
-  autoRegisterUser = (msg)-> new UsersController().register(msg)
-
-  robot.enter (res)-> autoRegisterUser msg
 
 module.exports = InitBot
 
