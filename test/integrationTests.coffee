@@ -88,9 +88,10 @@ describe 'swarmbot', ->
           new DCO(name: "Community A").save()
           new DCO(name: "Community B").save()
           new DCO(name: "Community C").save()
+          @user.save()
         ]
-        .then (@dcos)=> @user.save()
-        .then (@user)=> App.route message()
+        .then =>
+          App.route message()
         .then (reply)=>
           jreply = json(reply)
           # jreply.should.match /Contribute to projects and get rewarded with project coins/
