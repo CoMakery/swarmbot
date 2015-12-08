@@ -6,7 +6,7 @@ Issue board: [![Waffle](https://badge.waffle.io/citizencode/swarmbot.svg?label=o
 
 ## Project Vision
 
-Swarmbot hangs out in Slack and creates Project Coins on a trusty blockchain. It helps you to distribute revenue and track your fair share of projects. Swarmbot helps you run a [Dynamic Equity Organization](https://github.com/citizencode/dynamic-equity-organization).
+Swarmbot hangs out in Slack and creates Project Coins on a trusty blockchain. It helps you to distribute profit and tracks your fair share of projects you work on. Swarmbot helps you run a [Dynamic Equity Organization](https://github.com/citizencode/dynamic-equity-organization).
 
 
 ## Current Implementation Status
