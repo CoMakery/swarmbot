@@ -103,7 +103,6 @@ class DCO extends FirebaseModel
           dcos.child(dcoKey).update { coluAssetId: body.assetId, coluAssetAddress: body.issueAddress }
 
   sendAsset: ({amount, recipient}, cb)->
-    p "username", recipient.key()
     recipient.fetch().then (user)->
       recipientAddress = user.get('btc_address')
       if recipientAddress?
@@ -128,5 +127,16 @@ class DCO extends FirebaseModel
     @getAssetInfo()
     .then (data)=>
       filter data.holders, (holder)=> holder.address != @get('coluAssetAddress')
+
+  allHoldersWithNames: ->
+    @allHolders()
+    .then (holders)=>
+      Promise.map holders, (holder)=>
+        User.findBy 'btc_address', holder.address
+        .then (user)=>
+          holder.name = user.get('slack_username')
+          holder
+        .catch =>
+          holder
 
 module.exports = DCO

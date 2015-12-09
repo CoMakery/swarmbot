@@ -10,9 +10,8 @@ class CapTableView extends ZorkView
     amounts = []
     names = []
     for {name, address, amount} in @capTable
-      if amount < 90000000
-        amounts.push amount
-        names.push name or address
+      amounts.push amount
+      names.push name or address
 
     if isEmpty names
       @warning "No cap table to show.  Try rewarding some solutions first."

@@ -81,28 +81,20 @@ class DcosStateController extends ApplicationController
       @currentUser.set 'current_dco', dco.key()
 
   capTable: ->
-    @getDco()
-    .then (dco)=>
-      assetId = dco.get('coluAssetId')
-      new Promise (resolve, reject)=>
-        @msg.http "#{swarmbot.coluExplorerUrl()}/api/getassetinfowithtransactions?assetId=#{assetId}"
-        .get() (error, res, body)=>
-          if error
-            reject error
-          else
-            data = JSON.parse body
-            # names
-            Promise.map data.holders, (holder)->
-              User.findBy 'btc_address', holder.address
-              .then (user)=>
-                holder.name = user.get('slack_username')
-                holder
-              .catch =>
-                holder
+    @getDco().then (dco)=>
 
-            .then (holders)=>
-              debug holders
-              resolve @render new CapTableView {project: dco, capTable: holders}
+      # TODO: use dco.allHoldersWithNames() after resolving circular reference.
+      dco.allHolders().then (holders)=>
+        Promise.map holders, (holder)=>
+          User.findBy 'btc_address', holder.address
+          .then (user)=>
+            holder.name = user.get('slack_username')
+            holder
+          .catch =>
+            holder
+      .then (holders)=>
+        debug holders
+        @render new CapTableView { project: dco, capTable: holders }
 
   rewardsList: (data)->
     @getDco()
