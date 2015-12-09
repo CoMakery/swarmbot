@@ -85,7 +85,9 @@ class DcosStateController extends ApplicationController
     @getDco().then (dco)=>
       (new ColuInfo).allHoldersWithNames(dco).then (holders)=>
         debug holders
-        @render new CapTableView { project: dco, capTable: holders }
+        @sendPm @render new CapTableView { project: dco, capTable: holders }
+        @redirect()
+
 
   rewardsList: (data)->
     @getDco()
