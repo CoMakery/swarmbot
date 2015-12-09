@@ -110,33 +110,4 @@ class DCO extends FirebaseModel
       else
         cb "user must register before receiving assets"
 
-  getAssetInfo: ->
-    new Promise (resolve, reject)=>
-      uri = "#{swarmbot.coluExplorerUrl()}/api/getassetinfowithtransactions?assetId=#{@get('coluAssetId')}"
-      debug uri
-      request
-        uri: uri
-        json: true
-      .then (data)=>
-        resolve data
-      .error (error)=>
-        debug error.message
-        reject Promise.OperationalError("(Currently not available)")
-
-  allHolders: ->
-    @getAssetInfo()
-    .then (data)=>
-      filter data.holders, (holder)=> holder.address != @get('coluAssetAddress')
-
-  allHoldersWithNames: ->
-    @allHolders()
-    .then (holders)=>
-      Promise.map holders, (holder)=>
-        User.findBy 'btc_address', holder.address
-        .then (user)=>
-          holder.name = user.get('slack_username')
-          holder
-        .catch =>
-          holder
-
 module.exports = DCO

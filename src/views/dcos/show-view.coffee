@@ -78,8 +78,4 @@ class ShowView extends ZorkView
       transition: 'show'
     }
 
-  bitcoinAddress: ->
-    addr = @currentUser.get('btc_address')?.slice(0,12)
-    if addr then addr + '...' else "None"
-
 module.exports = ShowView

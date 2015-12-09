@@ -64,8 +64,7 @@ class IndexView extends ZorkView
 
     balances = balances.join("\n") or "No Coins yet"
 
-    balances += "\nbitcoin address: " +
-      ( @currentUser.get('btc_address') or "None" )
+    balances += "\nbitcoin address: " + @bitcoinAddress @currentUser.get 'btc_address'
 
     message.push {
       fields: [

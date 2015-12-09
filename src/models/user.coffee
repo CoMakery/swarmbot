@@ -1,6 +1,5 @@
 debug = require('debug')('app')
 {log, p, pjson} = require 'lightsaber'
-{filter} = require 'lodash'
 request = require 'request-promise'
 StateMachine = require 'javascript-state-machine'
 Promise = require 'bluebird'
@@ -39,31 +38,6 @@ class User extends FirebaseModel
     @set('state', to)
     # TODO: stat: user entering what state
 
-  balances: ->
-    @allBalances().then (balances)->
-      filter balances, (balance)-> balance.name?
-
-  allBalances: ->
-    new Promise (resolve, reject)=>
-      uri = "#{swarmbot.coluExplorerUrl()}/api/getaddressinfo?address=#{@get('btc_address')}"
-      debug uri
-      request
-        uri: uri
-        json: true
-      .then (data)=>
-        Promise.map data.assets, (asset)->
-          DCO.findBy 'coluAssetId', asset.assetId
-          .then (dco)=>
-            asset.name = dco.get('name')
-            asset
-          .catch =>
-            asset
-        .then (assets)=>
-          resolve assets
-          # each asset has a .balance, .name, .assetId
-      .error (error)=>
-        debug error.message
-        reject Promise.OperationalError("(Currently not available)")
 
   StateMachine.create
     target: @prototype

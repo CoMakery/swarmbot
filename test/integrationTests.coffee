@@ -3,6 +3,7 @@
 Promise = require 'bluebird'
 require './testHelper'
 global.App = require '../src/app'
+ColuInfo = require '../src/services/colu-info'
 DCO = require '../src/models/dco'
 User = require '../src/models/user'
 Proposal = require '../src/models/proposal'
@@ -49,15 +50,16 @@ describe 'swarmbot', ->
           jreply.should.match /\d: create an award/i
 
     context 'dcos#index', ->
+      sinon.stub(ColuInfo.prototype, 'balances').returns Promise.resolve [
+        {
+          name: 'FinTechHacks'
+          assetId: 'xyz123'
+          balance: 456
+        }
+      ]
+
       beforeEach ->
         @user = new User(name: userId, state: 'dcos#index', has_interacted: true)
-        sinon.stub(@user, 'balances').onCall(1).returns Promise.resolve [
-          {
-            name: 'FinTechHacks'
-            assetId: 'xyz123'
-            balance: 456
-          }
-        ]
 
       it "shows a welcome screen if there are no projects", ->
         @user.save()

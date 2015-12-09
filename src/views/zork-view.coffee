@@ -23,6 +23,10 @@ class ZorkView
 
   bold: (text)-> "*#{text}*"
 
+  bitcoinAddress: ->
+    addr = @currentUser.get('btc_address')?.slice(0,12)
+    if addr then addr + '...' else "None"
+
 extend ZorkView::, ZorkHelper::
 
 module.exports = ZorkView

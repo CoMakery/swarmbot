@@ -4,6 +4,7 @@ debug = require('debug')('app')
 Promise = require 'bluebird'
 swarmbot = require '../models/swarmbot'
 ApplicationController = require './application-state-controller'
+ColuInfo = require '../services/colu-info'
 DCO = require '../models/dco.coffee'
 User = require '../models/user'
 ProposalCollection = require '../collections/proposal-collection'
@@ -18,7 +19,7 @@ class DcosStateController extends ApplicationController
   index: ->
     DcoCollection.all()
     .then (@dcos)=>
-      @currentUser.balances()
+      (new ColuInfo).balances(@currentUser)
     .then (@userBalances)=>
       debug @userBalances
       @render new IndexView {@dcos, @currentUser, @userBalances}
@@ -29,7 +30,7 @@ class DcosStateController extends ApplicationController
     .then (@dco)=>
 
 
-      @dco.allHolders()
+      (new ColuInfo).allHolders(@dco)
     .then (holders)=>
       @userBalance =
         balance: (findWhere holders, { address: @currentUser.get 'btc_address' })?.amount
@@ -82,17 +83,7 @@ class DcosStateController extends ApplicationController
 
   capTable: ->
     @getDco().then (dco)=>
-
-      # TODO: use dco.allHoldersWithNames() after resolving circular reference.
-      dco.allHolders().then (holders)=>
-        Promise.map holders, (holder)=>
-          User.findBy 'btc_address', holder.address
-          .then (user)=>
-            holder.name = user.get('slack_username')
-            holder
-          .catch =>
-            holder
-      .then (holders)=>
+      (new ColuInfo).allHoldersWithNames(dco).then (holders)=>
         debug holders
         @render new CapTableView { project: dco, capTable: holders }
 
