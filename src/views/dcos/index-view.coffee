@@ -60,7 +60,7 @@ class IndexView extends ZorkView
       projectsItems = @renderOrderedMenuItems @dcoItems
 
     balances = for userBalance in @userBalances
-      "#{userBalance.name} :moneybag: #{userBalance.balance}"
+      "#{userBalance.name} #{App.COIN} #{userBalance.balance}"
 
     balances = balances.join("\n") or "No Coins yet"
 
