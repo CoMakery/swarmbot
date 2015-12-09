@@ -15,6 +15,7 @@
     "deploy-staging": "npm run fulltest && git branch --force staging head && git push --force --tags origin staging:staging",
     "deploy-production": "git fetch && git branch --force production origin/staging && git push --force --tags origin production:production",
     "dev": "bin/hubot --name s",
+    "devbot": "bin/devbot",
     "fulltest": "npm test && npm run lint",
     "lint": "coffeelint --quiet src test",
     "shipit": "if [[ $(git status --porcelain) ]]; then echo '*** Please stash or commit changes first ***\n'; else npm run push-if-green; fi ",
