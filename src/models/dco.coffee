@@ -7,6 +7,8 @@ FirebaseModel = require './firebase-model'
 Proposal = require '../models/proposal'
 User = require '../models/user'
 UserCollection = require '../collections/user-collection'
+Reward = require '../models/reward'
+RewardCollection = require '../collections/reward-collection'
 ProposalCollection = require '../collections/proposal-collection'
 
 class DCO extends FirebaseModel
@@ -29,14 +31,33 @@ class DCO extends FirebaseModel
           parent: dco
           # snapshot: dco.snapshot.child(Proposal::urlRoot).child(attributes.id)
         if proposal.exists()
-          Promise.reject(Promise.OperationalError("Task '#{attributes.name}' already exists within #{dco.key()}."))
+          Promise.reject(Promise.OperationalError("Award '#{attributes.name}' already exists within #{dco.key()}."))
         else
           proposal
       else
         Promise.reject(Promise.OperationalError("The project '#{dco.key()}' does not exist."))
 
+  makeReward: (attributes)->
+    attributes.name ?= new Date().toISOString()
+    @fetchIfNeeded().then (dco)->
+      if not dco.exists()
+        return Promise.reject(Promise.OperationalError("The project '#{dco.key()}' does not exist."))
+
+      reward = new Reward attributes, parent: dco
+      if reward.exists()
+        Promise.reject(Promise.OperationalError("Reward '#{attributes.name}' already exists within #{dco.key()}."))
+      else
+        reward
+
+  createReward: (attributes)->
+    @makeReward(attributes)
+    .then (reward)-> reward.save()
+
   proposals: ->
     @_proposals ?= new ProposalCollection @snapshot.child('proposals'), parent: @
+
+  rewards: ->
+    new RewardCollection @snapshot.child('rewards'), parent: @
 
   memberIds: ->
     keys @get('members')

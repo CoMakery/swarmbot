@@ -9,7 +9,7 @@ class ShowView extends ZorkView
 
     i = 1
     @menu[i++] = { text: "all projects", transition: 'setDco' }
-    @menu[i++] = { text: "show awards list", transition: 'myAccount' }
+    @menu[i++] = { text: "show awards list", command: 'rewardsList' }
     @menu[i++] = { text: "show project ownership", command: 'capTable' }
     # @menu[i++] = { text: "suggest a swarmbot improvement", transition: 'suggest' }
 

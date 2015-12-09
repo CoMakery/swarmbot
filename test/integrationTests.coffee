@@ -5,6 +5,7 @@ require './testHelper'
 global.App = require '../src/app'
 DCO = require '../src/models/dco'
 User = require '../src/models/user'
+Proposal = require '../src/models/proposal'
 nock = require 'nock'
 sinon = require 'sinon'
 InitBot = require '../src/bots/!init'
@@ -88,7 +89,6 @@ describe 'swarmbot', ->
           new DCO(name: "Community A").save()
           new DCO(name: "Community B").save()
           new DCO(name: "Community C").save()
-          @user.save()
         ]
         .then =>
           App.route message()
@@ -103,6 +103,35 @@ describe 'swarmbot', ->
           App.route @message
         .then (reply)=>
           json(reply).should.match /Community A/i
+
+      it "shows the list of rewards", ->
+        user = new User(name: userId, state: 'dcos#show', current_dco: "Community A",has_interacted: true)
+        user.save()
+        .then (@user)=>
+          new DCO(name: "Community A").save()
+        .then (@dco)=>
+          @dco.createProposal(name: "Super sweet award", suggestedAmount: 100)
+        .then (@proposal)=>
+          @dco.createReward
+            name: "this is a reward"
+            awardId: @proposal.key()
+            suggestedAmount: 20
+            description: "Great award description"
+            issuer: user.key()
+            recipient: "slack:recipient"
+            rewardAmount: "100"
+        .then (@reward)=>
+          App.route message()
+        .then (reply)=>
+          jreply = json(reply)
+          jreply.should.match /Community A/i
+          jreply.should.match /2: show awards list/
+          @message = message('2')
+          App.route @message
+        .then (reply)=>
+          jreply = json(reply)
+          jreply.should.match /AWARDS/
+          jreply.should.match /this is a reward/
 
       context 'dcos#create', ->
         beforeEach ->
@@ -283,6 +312,8 @@ describe 'swarmbot', ->
           # project -> award -> reward(key: timestamp, issuer, repic, amount, awardType)
           rewards = db.projects[dcoId].rewards
           reward = values(rewards)[0]
+          reward.name.should.match /[0-9-:Z]+/
+          delete reward.name
           reward.should.deep.eq
             issuer: userId
             recipient: 'slack:1234'

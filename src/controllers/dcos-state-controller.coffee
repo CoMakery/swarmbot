@@ -11,6 +11,7 @@ DcoCollection = require '../collections/dco-collection'
 IndexView = require '../views/dcos/index-view'
 CreateView = require '../views/dcos/create-view'
 ShowView = require '../views/dcos/show-view'
+ListRewardsView = require '../views/dcos/list-rewards-view'
 CapTableView = require '../views/dcos/cap-table-view'
 
 class DcosStateController extends ApplicationController
@@ -94,5 +95,10 @@ class DcosStateController extends ApplicationController
             .then (holders)=>
               debug holders
               resolve @render new CapTableView {project: dco, capTable: holders}
+
+  rewardsList: (data)->
+    @getDco()
+    .then (dco)=>
+      @render new ListRewardsView {rewards: dco.rewards()}
 
 module.exports = DcosStateController

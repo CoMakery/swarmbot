@@ -23,19 +23,6 @@ class FirebaseModel
           cb(new Promise.OperationalError("Cannot find a model with #{attrName} equal to #{attrValue}."))
     , cb # error
 
-  @push: Promise.promisify (attrs, options, cb)->
-    if parent = options?.parent
-      path = swarmbot.firebase().child(parent.firebasePath())
-    else
-      path = swarmbot.firebase()
-
-    ref = path.child(@::urlRoot).push(attrs)
-    key = last ref.path.o # WTF Firebase
-    ref.once 'value', (snapshot)=>
-      options = snapshot: snapshot.child(key)
-      options = if parent then assign options, {parent}
-      cb null, new @({}, options)
-
   constructor: (@attributes={}, options={})->
     @hasParent = @hasParent || false
     @parent = options.parent

@@ -36,7 +36,7 @@ class SolutionsStateController extends ApplicationController
       else if not data.description?
         data.description = @input.trim().replace /\$,/, ''
         data.issuer = @currentUser.key()
-        Reward.push(data, parent: @dco)
+        @dco.createReward(data)
         .then (@reward)=> User.find data.recipient
         .then (@recipient)=>
           Proposal.find(data.awardId, parent: @dco)
