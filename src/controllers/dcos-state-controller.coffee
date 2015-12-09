@@ -1,6 +1,6 @@
 debug = require('debug')('app')
 { log, p, pjson } = require 'lightsaber'
-{ map } = require 'lodash'
+{ map, findWhere, sum, pluck } = require 'lodash'
 Promise = require 'bluebird'
 swarmbot = require '../models/swarmbot'
 ApplicationController = require './application-state-controller'
@@ -26,8 +26,16 @@ class DcosStateController extends ApplicationController
   show: ->
     @getDco()
     .then (dco)=> dco.fetch()
-    .then (dco)=>
-      @render new ShowView {dco, @currentUser, userBalance: {}}
+    .then (@dco)=>
+
+
+      @dco.allHolders()
+    .then (holders)=>
+      @userBalance =
+        balance: (findWhere holders, { address: @currentUser.get 'btc_address' })?.amount
+        totalCoins: sum pluck holders, 'amount'
+
+      @render new ShowView {@dco, @currentUser, @userBalance}
     .error(@_showError)
 
   # set DCO

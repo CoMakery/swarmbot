@@ -63,7 +63,7 @@ class User extends FirebaseModel
           # each asset has a .balance, .name, .assetId
       .error (error)=>
         debug error.message
-        Promise.reject(Promise.OperationalError("(Currently not available)"))
+        reject Promise.OperationalError("(Currently not available)")
 
   StateMachine.create
     target: @prototype

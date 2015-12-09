@@ -33,9 +33,7 @@ class ShowView extends ZorkView
     else
       balance = "No Coins yet"
 
-    balance += "\nbitcoin address: " +
-      ( @currentUser.get('btc_address') or "None" )
-
+    balance += "\nbitcoin address: " + @bitcoinAddress()
     compact [
       {
         title: @dco.get('name').toUpperCase()
@@ -79,5 +77,9 @@ class ShowView extends ZorkView
       data: { proposalId: proposal.key() }
       transition: 'show'
     }
+
+  bitcoinAddress: ->
+    addr = @currentUser.get('btc_address')?.slice(0,12)
+    if addr then addr + '...' else "None"
 
 module.exports = ShowView

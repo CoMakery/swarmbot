@@ -1,7 +1,8 @@
 debug = require('debug')('app')
 {log, p, pjson} = require 'lightsaber'
-{ assign, keys, find, indexOf, map, contains } = require 'lodash'
+{ assign, keys, find, indexOf, map, contains, filter } = require 'lodash'
 Promise = require 'bluebird'
+request = require 'request-promise'
 swarmbot = require '../models/swarmbot'
 FirebaseModel = require './firebase-model'
 Proposal = require '../models/proposal'
@@ -109,5 +110,23 @@ class DCO extends FirebaseModel
         debug "creating project; address: #{recipientAddress}",
       else
         cb "user must register before receiving assets"
+
+  getAssetInfo: ->
+    new Promise (resolve, reject)=>
+      uri = "#{swarmbot.coluExplorerUrl()}/api/getassetinfowithtransactions?assetId=#{@get('coluAssetId')}"
+      debug uri
+      request
+        uri: uri
+        json: true
+      .then (data)=>
+        resolve data
+      .error (error)=>
+        debug error.message
+        reject Promise.OperationalError("(Currently not available)")
+
+  allHolders: ->
+    @getAssetInfo()
+    .then (data)=>
+      filter data.holders, (holder)=> holder.address != @get('coluAssetAddress')
 
 module.exports = DCO
