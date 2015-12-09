@@ -10,7 +10,7 @@ class IndexView extends ZorkView
     i = 0
     @proposal.solutions().sortBy('totalVotes').each (solution)=>
       @solutionItems[@letters[i++]] =
-        text: solution.get('name').toLowerCase()
+        text: solution.get('name')?.toLowerCase()
         transition: 'show'
         data: { solutionId: solution.key(), proposalId: solution.parent.key() }
 
