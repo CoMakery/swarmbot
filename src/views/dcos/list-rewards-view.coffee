@@ -10,15 +10,14 @@ class ListRewardsView extends ZorkView
     rewards = @rewards.map (reward)=>
       proposalId = reward.get('proposalId')
       proposal = @proposals.find (proposal)-> proposal.key() is proposalId
-      "
-      #{moment(reward.get('name'), moment.ISO_8601).format("MMM Do YYYY")}
-      ❂
-      #{reward.get('rewardAmount')}
-      *#{reward.recipientRealName}*
-      #{proposal.get('name')}
-      _#{reward.get('description')}_
-      "
-    .join(", ")
+      [
+        moment(reward.get('name'), moment.ISO_8601).format("MMM Do YYYY")
+        "❂ #{reward.get('rewardAmount')}"
+        "*#{reward.recipientRealName}*"
+        proposal.get('name')
+        "_#{reward.get('description')}_"
+      ].join("   ")
+    .join("\n")
 
     """
       AWARDS
