@@ -12,7 +12,7 @@ class ListRewardsView extends ZorkView
       proposal = @proposals.find (proposal)-> proposal.key() is proposalId
       [
         moment(reward.get('name'), moment.ISO_8601).format("MMM Do YYYY")
-        "❂ #{reward.get('rewardAmount')}"
+        "#{App.COIN} #{reward.get('rewardAmount')}"
         "*#{reward.recipientRealName}*"
         proposal.get('name')
         "_#{reward.get('description')}_"
