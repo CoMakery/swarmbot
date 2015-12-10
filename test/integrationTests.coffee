@@ -132,7 +132,7 @@ describe 'swarmbot', ->
           App.route @message
         .then (reply)=>
           jreply = json(reply)
-          jreply.should.match /AWARDS/
+          jreply.should.match /coming soon/
           jreply.should.match /this is a reward/
 
       context 'dcos#create', ->
