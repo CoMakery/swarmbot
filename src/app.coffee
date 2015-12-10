@@ -7,7 +7,7 @@ controllers =
   general:   require './controllers/general-state-controller'
   dcos:      require './controllers/dcos-state-controller'
   users:     require './controllers/users-state-controller'
-  solutions: require './controllers/solutions-state-controller'
+  rewards: require './controllers/rewards-state-controller'
 
 class App
   @COIN = '❂'
@@ -41,8 +41,11 @@ class App
       controllerClass = controllers[controllerName]
       controller = new controllerClass(msg) if controllerClass?
       unless controller and controller[action]
-        console.error "Unexpected user state #{user.current} --
-          resetting to default state"
+        errorMessage = "Unexpected user state #{user.current} -- resetting to default state"
+
+        msg.send("*#{errorMessage}*") if process.env.NODE_ENV is 'development'
+
+        console.error "#{errorMessage}"
         return user.set('state', User::initialState).then => @route(msg)
 
       controller.input = msg.match[1]

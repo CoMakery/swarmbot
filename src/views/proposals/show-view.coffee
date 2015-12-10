@@ -7,7 +7,7 @@ class ShowView extends ZorkView
   constructor: (@proposal, { canSetBounty })->
     @solutionItems = {}
     i = 0
-    @proposal.solutions().sortBy('totalVotes').each (solution)=>
+    @proposal.rewards().sortBy('totalVotes').each (solution)=>
       @solutionItems[@letters[i++]] =
         text: solution.get('name').toLowerCase()
         transition: 'show'

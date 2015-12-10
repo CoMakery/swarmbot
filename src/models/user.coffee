@@ -56,20 +56,18 @@ class User extends FirebaseModel
       { name: 'setBounty', from: 'proposals#show', to: 'proposals#edit' }
       { name: 'exit', from: 'proposals#edit', to: 'proposals#show' }
 
-      { name: 'createSolution', from: 'proposals#show', to: 'solutions#create' }
+      { name: 'solutions', from: 'proposals#show', to: 'rewards#index' }
+      { name: 'showSolution', from: 'proposals#show', to: 'rewards#show' }
+      { name: 'exit', from: 'rewards#index', to: 'proposals#show' }
 
-      { name: 'solutions', from: 'proposals#show', to: 'solutions#index' }
-      { name: 'showSolution', from: 'proposals#show', to: 'solutions#show' }
-      { name: 'exit', from: 'solutions#index', to: 'proposals#show' }
+      { name: 'show', from: 'rewards#index', to: 'rewards#show' }
+      { name: 'exit', from: 'rewards#show', to: 'rewards#index' }
 
-      { name: 'show', from: 'solutions#index', to: 'solutions#show' }
-      { name: 'exit', from: 'solutions#show', to: 'solutions#index' }
+      { name: 'create', from: 'rewards#index', to: 'rewards#create' }
+      { name: 'exit', from: 'rewards#create', to: 'rewards#index' }
 
-      { name: 'create', from: 'solutions#index', to: 'solutions#create' }
-      { name: 'exit', from: 'solutions#create', to: 'solutions#index' }
-
-      { name: 'sendReward', from: 'dcos#show', to: 'solutions#create' }
-      { name: 'exit', from: 'solutions#create', to: 'dcos#show' }
+      { name: 'sendReward', from: 'dcos#show', to: 'rewards#create' }
+      { name: 'exit', from: 'rewards#create', to: 'dcos#show' }
 
       { name: 'setDco', from: 'dcos#show', to: 'dcos#index' }
       { name: 'exit', from: 'dcos#index', to: 'dcos#show' }

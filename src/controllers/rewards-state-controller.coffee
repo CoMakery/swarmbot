@@ -8,7 +8,7 @@ Reward = require '../models/reward'
 User = require '../models/user'
 CreateView = require '../views/solutions/create-view'
 
-class SolutionsStateController extends ApplicationController
+class RewardsStateController extends ApplicationController
   cleanUsername: (username)->
     username = username.trim()
     username = username.slice(1) if username[0] is '@'
@@ -86,4 +86,4 @@ class SolutionsStateController extends ApplicationController
       @sendWarning "Error awarding '#{proposal?.key()}' to #{@recipient?.get('slack_username')}. Unable to complete the transaction.\n #{error.message}"
       throw error
 
-module.exports = SolutionsStateController
+module.exports = RewardsStateController

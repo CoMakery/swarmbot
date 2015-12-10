@@ -32,7 +32,8 @@ describe 'swarmbot', ->
     context 'dcos#show', ->
       it "shows the user's current project", ->
         dcoId = 'Your Great Project'
-        @user = new User(name: userId, current_dco: dcoId, state: 'dcos#show').save()
+        new User(name: userId, current_dco: dcoId, state: 'dcos#show').save()
+        .then (@user) =>
         dco = new DCO
           name: dcoId
           project_owner: userId
@@ -272,14 +273,14 @@ describe 'swarmbot', ->
             @message.parts[0].should.match /please enter only numbers/i
             json(reply).should.match /Enter the bounty amount/
 
-  context 'solutions', ->
-    context 'solutions#create', -> # create reward
+  context 'rewards', ->
+    context 'rewards#create', -> # create reward
       proposalId = 'a very special award'
       dcoId = 'a project'
       user = ->
         new User
           name: userId
-          state: 'solutions#create'
+          state: 'rewards#create'
           stateData: {}
           current_dco: dcoId
           slack_username: 'duke'

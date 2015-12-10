@@ -8,7 +8,7 @@ class IndexView extends ZorkView
     @actionItems = {}
 
     i = 0
-    @proposal.solutions().sortBy('totalVotes').each (solution)=>
+    @proposal.rewards().sortBy('totalVotes').each (solution)=>
       @solutionItems[@letters[i++]] =
         text: solution.get('name')?.toLowerCase()
         transition: 'show'
@@ -24,7 +24,7 @@ class IndexView extends ZorkView
 
   render: ->
     fallbackText = """
-    *#{if @proposal.solutions().isEmpty() then 'No solutions' else 'Solutions'} for #{@proposal.key()}*
+    *#{if @proposal.rewards().isEmpty() then 'No solutions' else 'Solutions'} for #{@proposal.key()}*
 
     #{@renderMenu()}
 

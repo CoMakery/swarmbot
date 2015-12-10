@@ -5,7 +5,6 @@ swarmbot = require '../models/swarmbot'
 FirebaseModel = require './firebase-model'
 Solution = require './solution'
 RatingCollection = require '../collections/rating-collection'
-SolutionCollection = require '../collections/solution-collection'
 
 class Proposal extends FirebaseModel
   hasParent: true
@@ -17,13 +16,8 @@ class Proposal extends FirebaseModel
     @attributes.totalVotes = size @attributes.votes
     @save()
 
-  createSolution: (attrs)->
-    # id & link
-    solution = new Solution(attrs, {parent: @})
-    solution.save()
-
-  solutions: ->
-    @_solutions ?= new SolutionCollection @snapshot.child('solutions'), parent: @
+  rewards: ->
+    @parent.rewards()
 
   ratings: ->
     @_ratings ?= new RatingCollection @snapshot.child('ratings'), parent: @
