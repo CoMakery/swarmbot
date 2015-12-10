@@ -1,6 +1,6 @@
 {log, p, pjson} = require 'lightsaber'
 FirebaseModel = require '../../src/models/firebase-model'
-require '../testHelper'
+require '../helpers/testHelper'
 
 class SomeModel extends FirebaseModel
   urlRoot: 'fakemodel'

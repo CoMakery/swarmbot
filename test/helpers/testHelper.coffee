@@ -8,7 +8,7 @@ global.debug = require('debug')('test')
 sinon = require 'sinon'
 
 FirebaseServer = require('firebase-server')
-swarmbot = require '../src/models/swarmbot'
+swarmbot = require '../../src/models/swarmbot'
 
 MOCK_FIREBASE_ADDRESS = '127.0.1' # strange host name needed by testing framework
 process.env.FIREBASE_URL = "ws://#{MOCK_FIREBASE_ADDRESS}:5000"
