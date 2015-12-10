@@ -93,12 +93,12 @@ class DcosStateController extends ApplicationController
     @getDco()
     .then (@dco)=>
       rewards = @dco.rewards().models
-      Promise.map rewards, (reward) =>
+      Promise.map rewards, (reward)=>
         User.find reward.get('recipient')
-        .then (recipient) =>
+        .then (recipient)=>
           reward.recipientRealName = recipient.get('real_name')
           reward
-    .then (rewards) =>
+    .then (rewards)=>
       view  = new ListRewardsView
         rewards: rewards
         proposals: @dco.proposals()
