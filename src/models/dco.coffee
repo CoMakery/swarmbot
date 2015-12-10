@@ -5,12 +5,12 @@ Promise = require 'bluebird'
 request = require 'request-promise'
 swarmbot = require '../models/swarmbot'
 FirebaseModel = require './firebase-model'
-Proposal = require '../models/proposal'
+Award = require '../models/award'
 User = require '../models/user'
 UserCollection = require '../collections/user-collection'
 Reward = require '../models/reward'
 RewardCollection = require '../collections/reward-collection'
-ProposalCollection = require '../collections/proposal-collection'
+AwardCollection = require '../collections/award-collection'
 
 class DCO extends FirebaseModel
   urlRoot: 'projects'
@@ -18,7 +18,7 @@ class DCO extends FirebaseModel
 
   bounties: Promise.promisify (cb)->
     @firebase().child('bounties').once 'value', (snapshot)=>
-      bounties = snapshot.val() # should really be an array of Proposal objects.
+      bounties = snapshot.val() # should really be an array of Award objects.
       cb(null, bounties)
 
   createProposal: (attributes)->
@@ -28,9 +28,9 @@ class DCO extends FirebaseModel
   makeProposal: (attributes)->
     @fetchIfNeeded().then (dco)->
       if dco.exists()
-        proposal = new Proposal attributes,
+        proposal = new Award attributes,
           parent: dco
-          # snapshot: dco.snapshot.child(Proposal::urlRoot).child(attributes.id)
+          # snapshot: dco.snapshot.child(Award::urlRoot).child(attributes.id)
         if proposal.exists()
           Promise.reject(Promise.OperationalError("Award '#{attributes.name}' already exists within #{dco.key()}."))
         else
@@ -56,7 +56,7 @@ class DCO extends FirebaseModel
     .then (reward)-> reward.save()
 
   proposals: ->
-    new ProposalCollection @snapshot.child('proposals'), parent: @
+    new AwardCollection @snapshot.child('proposals'), parent: @
 
   rewards: ->
     new RewardCollection @snapshot.child('rewards'), parent: @

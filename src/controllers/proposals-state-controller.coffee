@@ -3,8 +3,8 @@ debug = require('debug')('app')
 request = require 'request-promise'
 Promise = require 'bluebird'
 ApplicationController = require './application-state-controller'
-ProposalCollection = require '../collections/proposal-collection'
-Proposal = require '../models/proposal'
+AwardCollection = require '../collections/award-collection'
+Award = require '../models/award'
 ShowView = require '../views/proposals/show-view'
 CreateView = require '../views/proposals/create-view'
 EditView = require '../views/proposals/edit-view'
@@ -15,14 +15,14 @@ class ProposalsStateController extends ApplicationController
   show: (data)->
     proposalId = data.proposalId ? throw new Error "show requires an id"
     @getDco()
-    .then (dco)=> Proposal.find(proposalId, parent: dco)
+    .then (dco)=> Award.find(proposalId, parent: dco)
     .then (proposal)=>
       canSetBounty = (proposal.parent.get('project_owner') == @currentUser.key())
       @render(new ShowView(proposal, { canSetBounty }))
 
   upvote: (data)->
     @getDco().then (dco)=>
-      Proposal.find(data.proposalId, parent: dco)
+      Award.find(data.proposalId, parent: dco)
     .then (proposal)=>
       unless proposal.exists()
         throw new Error "Could not find the task '#{data.proposalId}'. Please verify that it exists."
@@ -77,7 +77,7 @@ class ProposalsStateController extends ApplicationController
         if @input.match /^\d+$/
           data.bounty = @input
           return @getDco()
-          .then (dco)-> Proposal.find data.proposalId, parent: dco
+          .then (dco)-> Award.find data.proposalId, parent: dco
           .then (proposal)-> proposal.set 'amount', data.bounty
           .then =>
             @sendInfo "Bounty amount set to #{data.bounty}"

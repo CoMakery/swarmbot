@@ -7,7 +7,7 @@
 {log, p, pjson} = require 'lightsaber'
 { values } = require 'lodash'
 swarmbot = require '../models/swarmbot'
-Proposal = require '../models/proposal'
+Award = require '../models/award'
 DCO = require '../models/dco'
 AdminController = require '../controllers/admin-controller'
 

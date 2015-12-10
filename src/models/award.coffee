@@ -6,7 +6,7 @@ FirebaseModel = require './firebase-model'
 Solution = require './solution'
 RatingCollection = require '../collections/rating-collection'
 
-class Proposal extends FirebaseModel
+class Award extends FirebaseModel
   hasParent: true
   urlRoot: "proposals"
 
@@ -41,4 +41,4 @@ class Proposal extends FirebaseModel
       catch error
         cb(error)
 
-module.exports = Proposal
+module.exports = Award
