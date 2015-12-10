@@ -91,7 +91,17 @@ class DcosStateController extends ApplicationController
 
   rewardsList: (data)->
     @getDco()
-    .then (dco)=>
-      @render new ListRewardsView {rewards: dco.rewards()}
+    .then (@dco)=>
+      rewards = @dco.rewards().models
+      Promise.map rewards, (reward) =>
+        User.find reward.get('recipient')
+        .then (recipient) =>
+          reward.recipientRealName = recipient.get('real_name')
+          reward
+    .then (rewards) =>
+      view  = new ListRewardsView
+        rewards: rewards
+        proposals: @dco.proposals()
+      @render view
 
 module.exports = DcosStateController

@@ -29,7 +29,7 @@ class SolutionsStateController extends ApplicationController
           data.recipient = recipient.key()
         .error (error)=>
           @errorMessage = error.message
-      else if not data.awardId?
+      else if not data.proposalId?
         # Note : set by the menu item when selecting award
       else if not data.rewardAmount?
         data.rewardAmount = @input
@@ -39,7 +39,7 @@ class SolutionsStateController extends ApplicationController
         @dco.createReward(data)
         .then (@reward)=> User.find data.recipient
         .then (@recipient)=>
-          Proposal.find(data.awardId, parent: @dco)
+          Proposal.find(data.proposalId, parent: @dco)
         .then (proposal)=>
           @sendReward(proposal, data.rewardAmount)
           Promise.resolve() # don't wait on sendReward's promise, which waits for the blockchain

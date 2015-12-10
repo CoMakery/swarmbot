@@ -1,6 +1,6 @@
 Promise = require 'bluebird'
 {log, p, pjson} = require 'lightsaber'
-{ partition, sortByOrder, forEach, map, filter } = require 'lodash'
+{ partition, sortByOrder, find, forEach, map, filter } = require 'lodash'
 swarmbot = require '../models/swarmbot'
 
 class FirebaseCollection
@@ -43,6 +43,8 @@ class FirebaseCollection
 
   # TODO: Should this be destructive / edit in-place, or return a new collection?
   filter: (cb)-> @models = filter @models, cb
+
+  find: (cb)-> @models = find @models, cb
 
   size: -> @models.length
 

@@ -39,7 +39,8 @@ class DCO extends FirebaseModel
         Promise.reject(Promise.OperationalError("The project '#{dco.key()}' does not exist."))
 
   makeReward: (attributes)->
-    attributes.name ?= new Date().toISOString()
+    throw new Error "reward attrs should not contain 'name' key" if attributes.name?
+    attributes.name = (new Date).toISOString()
     @fetchIfNeeded().then (dco)->
       if not dco.exists()
         return Promise.reject(Promise.OperationalError("The project '#{dco.key()}' does not exist."))
@@ -55,7 +56,7 @@ class DCO extends FirebaseModel
     .then (reward)-> reward.save()
 
   proposals: ->
-    @_proposals ?= new ProposalCollection @snapshot.child('proposals'), parent: @
+    new ProposalCollection @snapshot.child('proposals'), parent: @
 
   rewards: ->
     new RewardCollection @snapshot.child('rewards'), parent: @

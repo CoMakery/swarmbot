@@ -74,9 +74,9 @@ HUBOT_INSTAGRAM_CLIENT_KEY
 
 |Naming            |                  |                  |                 |
 |------------------|:----------------:|:----------------:|:----------------:
-|Current interface |project           |award             |(depreacted)     |   
-|Current DB        |project           |proposal          |solution         |
-|Cruft in code     |DCO               |proposal, task    |solution         |
+|Current interface |project           |award             |reward           |
+|Current DB        |project           |proposal          |reward           |
+|Cruft in code     |DCO               |proposal, task    |solution                 |
 
 ## License
 

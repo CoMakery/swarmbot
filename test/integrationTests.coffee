@@ -107,7 +107,13 @@ describe 'swarmbot', ->
           json(reply).should.match /Community A/i
 
       it "shows the list of rewards", ->
-        user = new User(name: userId, state: 'dcos#show', current_dco: "Community A",has_interacted: true)
+        user = new User
+          name: userId
+          slack_username: "joe"
+          real_name: 'Joe User'
+          state: 'dcos#show'
+          current_dco: "Community A"
+          has_interacted: true
         user.save()
         .then (@user)=>
           new DCO(name: "Community A").save()
@@ -115,13 +121,11 @@ describe 'swarmbot', ->
           @dco.createProposal(name: "Super sweet award", suggestedAmount: 100)
         .then (@proposal)=>
           @dco.createReward
-            name: "this is a reward"
-            awardId: @proposal.key()
-            suggestedAmount: 20
-            description: "Great award description"
+            proposalId: @proposal.key()
+            description: "He is helpful"
             issuer: user.key()
-            recipient: "slack:recipient"
-            rewardAmount: "100"
+            recipient: userId
+            rewardAmount: 100
         .then (@reward)=>
           App.route message()
         .then (reply)=>
@@ -132,8 +136,8 @@ describe 'swarmbot', ->
           App.route @message
         .then (reply)=>
           jreply = json(reply)
-          jreply.should.match /coming soon/
-          # jreply.should.match /this is a reward/
+          jreply.should.match /AWARDS/
+          jreply.should.match /\d{4} ❂ 100 \*Joe User\* Super sweet award _He is helpful_/
 
       context 'dcos#create', ->
         beforeEach ->
@@ -294,7 +298,6 @@ describe 'swarmbot', ->
         .then (@dco)=> App.route message('')
         .then (reply)=>
           json(reply).should.match /Which slack @user should I send the reward to/i
-
           App.route message('@duke')
         .then (reply)=>
           json(reply).should.match /What award type.+A.+a very special award/
@@ -320,5 +323,5 @@ describe 'swarmbot', ->
             issuer: userId
             recipient: 'slack:1234'
             rewardAmount: '4000'
-            awardId: @proposal.key()
+            proposalId: @proposal.key()
             description: 'was awesome'
