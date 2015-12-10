@@ -1,5 +1,5 @@
 {log, p, pjson, json} = require 'lightsaber'
-{values} = require 'lodash'
+{values, size} = require 'lodash'
 Promise = require 'bluebird'
 require '../helpers/testHelper'
 global.App = require '../../src/app'
@@ -34,13 +34,13 @@ describe 'swarmbot', ->
         dcoId = 'Your Great Project'
         new User(name: userId, current_dco: dcoId, state: 'dcos#show').save()
         .then (@user) =>
-        dco = new DCO
+        @dco = new DCO
           name: dcoId
           project_owner: userId
           tasksUrl: 'http://example.com'
-        dco.save()
-        .then -> dco.createProposal name: 'Do Stuff'
-        .then -> dco.createProposal name: 'Be Glorious'
+        @dco.save()
+        .then (@dco)-> @dco.createAward name: 'Do Stuff'
+        .then -> @dco.createAward name: 'Be Glorious'
         .then -> App.route message()
         .then (reply)->
           jreply = json reply
@@ -119,10 +119,10 @@ describe 'swarmbot', ->
         .then (@user)=>
           new DCO(name: "Community A").save()
         .then (@dco)=>
-          @dco.createProposal(name: "Super sweet award", suggestedAmount: 100)
-        .then (@proposal)=>
+          @dco.createAward(name: "Super sweet award", suggestedAmount: 100)
+        .then (@award)=>
           @dco.createReward
-            proposalId: @proposal.key()
+            awardId: @award.key()
             description: "He is helpful"
             issuer: user.key()
             recipient: userId
@@ -192,8 +192,8 @@ describe 'swarmbot', ->
               imageUrl: 'http://example.com/very-small.png'
               tasksUrl: 'http://jira.com'
 
-  context 'proposals', ->
-    context 'proposals#create', ->
+  context 'awards', ->
+    context 'awards#create', ->
       it "allows the user to create a award within the current project", ->
         dcoId = 'Your Great Project'
         @user = new User(name: userId, current_dco: dcoId, state: 'dcos#show').save()
@@ -212,31 +212,32 @@ describe 'swarmbot', ->
           json(@message.parts).should.match /Award created/
         .then => @firebaseServer.getValue()
         .then (db)=>
-          db.projects[dcoId].proposals['Kitais'].should.deep.eq
+          size(db.projects[dcoId].awards).should.eq 1
+          db.projects[dcoId].awards['Kitais'].should.deep.eq
             name: 'Kitais'
             suggestedAmount: '4000'
 
-    context 'proposals#show', ->
+    context 'awards#show', ->
       context 'setBounty', ->
-        proposalId = 'Be Amazing'
+        awardId = 'Be Amazing'
         dcoId = 'my dco'
         user = ->
           new User
             name: userId
-            state: 'proposals#show'
-            stateData: {proposalId: proposalId}
+            state: 'awards#show'
+            stateData: {awardId: awardId}
             current_dco: dcoId
           .save()
         dco = ->
           new DCO(name: dcoId, project_owner: userId).save()
-        proposal = (dco)->
-          dco.createProposal(name: proposalId)
+        award = (dco)->
+          dco.createAward(name: awardId)
 
         it "shows setBounty item only for progenitors", ->
           user()
           .then (@user)=> dco()
-          .then (@dco)=> proposal(@dco)
-          .then (@proposal)=> App.route message()
+          .then (@dco)=> award(@dco)
+          .then (@award)=> App.route message()
           .then (reply)=>
             (json reply).should.match /\d: set reward/i
             @dco.set 'project_owner', 'someoneElse'
@@ -247,8 +248,8 @@ describe 'swarmbot', ->
         it "sets the bounty", ->
           user()
           .then (@user)=> dco()
-          .then (@dco)=> proposal(@dco)
-          .then (@proposal)=> App.route message()
+          .then (@dco)=> award(@dco)
+          .then (@award)=> App.route message()
           .then (reply)=> App.route message('4') # Set Bounty
           .then (reply)=>
             json(reply).should.match /Enter the bounty amount/
@@ -257,14 +258,14 @@ describe 'swarmbot', ->
           .then (reply)=>
             @message.parts[0].should.match /Bounty amount set to 1000/
             (json reply).should.match /task: be amazing/i
-            @proposal.fetch()
-          .then (proposal)=> proposal.get('amount').should.eq '1000'
+            @award.fetch()
+          .then (award)=> award.get('amount').should.eq '1000'
 
         it "doesn't set the bounty if you enter non-numbers", ->
           user()
           .then (@user)=> dco()
-          .then (@dco)=> proposal(@dco)
-          .then (@proposal)=> App.route message()
+          .then (@dco)=> award(@dco)
+          .then (@award)=> App.route message()
           .then (reply)=> App.route message('4') # Set Bounty
           .then (reply)=>
             @message = message '1000x'
@@ -275,7 +276,7 @@ describe 'swarmbot', ->
 
   context 'rewards', ->
     context 'rewards#create', -> # create reward
-      proposalId = 'a very special award'
+      awardId = 'a very special award'
       dcoId = 'a project'
       user = ->
         new User
@@ -288,14 +289,14 @@ describe 'swarmbot', ->
         .save()
       dco = ->
         new DCO(name: dcoId, project_owner: userId).save()
-      proposal = (dco)->
-        dco.createProposal(name: proposalId)
+      award = (dco)->
+        dco.createAward(name: awardId)
 
       it "allows an admin to award coins to a user", ->
         user()
         .then (@user)=> dco()
-        .then (@dco)=> proposal(@dco)
-        .then (@proposal)=> @dco.fetch()
+        .then (@dco)=> award(@dco)
+        .then (@award)=> @dco.fetch()
         .then (@dco)=> App.route message('')
         .then (reply)=>
           json(reply).should.match /Which slack @user should I send the reward to/i
@@ -324,5 +325,5 @@ describe 'swarmbot', ->
             issuer: userId
             recipient: 'slack:1234'
             rewardAmount: '4000'
-            proposalId: @proposal.key()
+            awardId: @award.key()
             description: 'was awesome'

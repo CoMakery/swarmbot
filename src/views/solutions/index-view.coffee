@@ -3,20 +3,20 @@
 ZorkView = require '../zork-view'
 
 class IndexView extends ZorkView
-  constructor: (@proposal)->
+  constructor: (@award)->
     @solutionItems = {}
     @actionItems = {}
 
     i = 0
-    @proposal.rewards().sortBy('totalVotes').each (solution)=>
+    @award.rewards().sortBy('totalVotes').each (solution)=>
       @solutionItems[@letters[i++]] =
         text: solution.get('name')?.toLowerCase()
         transition: 'show'
-        data: { solutionId: solution.key(), proposalId: solution.parent.key() }
+        data: { solutionId: solution.key(), awardId: solution.parent.key() }
 
     i = 0
-    @actionItems[i++] = { text: "« back", transition: 'exit', data: {proposalId: @proposal.key()} }
-    @actionItems[i++] = { text: "submit a solution", transition: 'create', data: {proposalId: @proposal.key()} }
+    @actionItems[i++] = { text: "« back", transition: 'exit', data: {awardId: @award.key()} }
+    @actionItems[i++] = { text: "submit a solution", transition: 'create', data: {awardId: @award.key()} }
 
     @menu = merge {}, @actionItems
     for key, item of @solutionItems
@@ -24,7 +24,7 @@ class IndexView extends ZorkView
 
   render: ->
     fallbackText = """
-    *#{if @proposal.rewards().isEmpty() then 'No solutions' else 'Solutions'} for #{@proposal.key()}*
+    *#{if @award.rewards().isEmpty() then 'No solutions' else 'Solutions'} for #{@award.key()}*
 
     #{@renderMenu()}
 
@@ -34,11 +34,11 @@ class IndexView extends ZorkView
     [
       {
         color: @NAV_COLOR
-        title: "project » #{(@proposal.parent.get 'name').toLowerCase()} » #{@proposal.get('name').toLowerCase()} » solutions"
+        title: "project » #{(@award.parent.get 'name').toLowerCase()} » #{@award.get('name').toLowerCase()} » solutions"
       }
       {
         color: @BODY_COLOR
-        title: (@proposal.get 'name').toUpperCase()
+        title: (@award.get 'name').toUpperCase()
         fields: [
           {
             title: 'Solutions'

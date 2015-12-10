@@ -47,18 +47,18 @@ class User extends FirebaseModel
     events: [
       { name: 'exit', from: User::initialState, to: User::initialState }
 
-      { name: 'show', from: 'dcos#show', to: 'proposals#show' }
-      { name: 'exit', from: 'proposals#show', to: 'dcos#show' }
+      { name: 'show', from: 'dcos#show', to: 'awards#show' }
+      { name: 'exit', from: 'awards#show', to: 'dcos#show' }
 
-      { name: 'create', from: 'dcos#show', to: 'proposals#create' }
-      { name: 'exit', from: 'proposals#create', to: 'dcos#show' }
+      { name: 'create', from: 'dcos#show', to: 'awards#create' }
+      { name: 'exit', from: 'awards#create', to: 'dcos#show' }
 
-      { name: 'setBounty', from: 'proposals#show', to: 'proposals#edit' }
-      { name: 'exit', from: 'proposals#edit', to: 'proposals#show' }
+      { name: 'setBounty', from: 'awards#show', to: 'awards#edit' }
+      { name: 'exit', from: 'awards#edit', to: 'awards#show' }
 
-      { name: 'solutions', from: 'proposals#show', to: 'rewards#index' }
-      { name: 'showSolution', from: 'proposals#show', to: 'rewards#show' }
-      { name: 'exit', from: 'rewards#index', to: 'proposals#show' }
+      { name: 'solutions', from: 'awards#show', to: 'rewards#index' }
+      { name: 'showSolution', from: 'awards#show', to: 'rewards#show' }
+      { name: 'exit', from: 'rewards#index', to: 'awards#show' }
 
       { name: 'show', from: 'rewards#index', to: 'rewards#show' }
       { name: 'exit', from: 'rewards#show', to: 'rewards#index' }

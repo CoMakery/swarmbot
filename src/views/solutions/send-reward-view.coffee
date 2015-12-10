@@ -7,7 +7,7 @@ class SendRewardView extends ZorkView
     @menu.x =
       text: "back"
       transition: 'exit'
-      data: { proposalId: @data.proposalId, solutionId: @data.solutionId }
+      data: { awardId: @data.awardId, solutionId: @data.solutionId }
 
   render: ->
     @question "Enter reward amount to send to #{@recipientUsername}

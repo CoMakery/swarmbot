@@ -5,28 +5,28 @@ Promise = require 'bluebird'
 ApplicationController = require './application-state-controller'
 AwardCollection = require '../collections/award-collection'
 Award = require '../models/award'
-ShowView = require '../views/proposals/show-view'
-CreateView = require '../views/proposals/create-view'
-EditView = require '../views/proposals/edit-view'
+ShowView = require '../views/awards/show-view'
+CreateView = require '../views/awards/create-view'
+EditView = require '../views/awards/edit-view'
 ZorkView = require '../views/zork-view'
 
-class ProposalsStateController extends ApplicationController
+class AwardsStateController extends ApplicationController
 
   show: (data)->
-    proposalId = data.proposalId ? throw new Error "show requires an id"
+    awardId = data.awardId ? throw new Error "show requires an id"
     @getDco()
-    .then (dco)=> Award.find(proposalId, parent: dco)
-    .then (proposal)=>
-      canSetBounty = (proposal.parent.get('project_owner') == @currentUser.key())
-      @render(new ShowView(proposal, { canSetBounty }))
+    .then (dco)=> Award.find(awardId, parent: dco)
+    .then (award)=>
+      canSetBounty = (award.parent.get('project_owner') == @currentUser.key())
+      @render(new ShowView(award, { canSetBounty }))
 
   upvote: (data)->
     @getDco().then (dco)=>
-      Award.find(data.proposalId, parent: dco)
-    .then (proposal)=>
-      unless proposal.exists()
-        throw new Error "Could not find the task '#{data.proposalId}'. Please verify that it exists."
-      proposal.upvote @currentUser
+      Award.find(data.awardId, parent: dco)
+    .then (award)=>
+      unless award.exists()
+        throw new Error "Could not find the task '#{data.awardId}'. Please verify that it exists."
+      award.upvote @currentUser
     .then =>
       @redirect "Your vote has been recorded."
 
@@ -55,18 +55,18 @@ class ProposalsStateController extends ApplicationController
       Promise.resolve()
     else if not data.name?
       @getDco()
-      .then (dco)=> dco.makeProposal name: @input  # throws op error if already exists
+      .then (dco)=> dco.makeAward name: @input  # throws op error if already exists
       .then => data.name = @input
     else if not data.suggestedAmount?
       data.suggestedAmount = @input.trim()
       promise = @getDco()
-        .then (dco)=> dco.createProposal data
-        .then (@proposal)=> # @proposal = proposal
+        .then (dco)=> dco.createAward data
+        .then (@award)=>
 
     promise
     .then => @currentUser.set 'stateData', data
     .then =>
-      if @proposal
+      if @award
         @execute transition: 'exit', flashMessage: "Award created!"
       else
         @render new CreateView {data, @errorMessage}
@@ -77,11 +77,11 @@ class ProposalsStateController extends ApplicationController
         if @input.match /^\d+$/
           data.bounty = @input
           return @getDco()
-          .then (dco)-> Award.find data.proposalId, parent: dco
-          .then (proposal)-> proposal.set 'amount', data.bounty
+          .then (dco)-> Award.find data.awardId, parent: dco
+          .then (award)-> award.set 'amount', data.bounty
           .then =>
             @sendInfo "Bounty amount set to #{data.bounty}"
-            @execute transition: 'exit', data: {proposalId: data.proposalId}
+            @execute transition: 'exit', data: {awardId: data.awardId}
         else
           @sendWarning "For a bounty amount, please enter only numbers"
 
@@ -89,4 +89,4 @@ class ProposalsStateController extends ApplicationController
     @currentUser.set 'stateData', data
     @render new EditView data
 
-module.exports = ProposalsStateController
+module.exports = AwardsStateController

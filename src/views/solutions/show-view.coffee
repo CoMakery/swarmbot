@@ -6,7 +6,7 @@ class ShowView extends ZorkView
   constructor: (@solution, currentUser)->
     @menu = {}
     i = 0
-    @menu[i++] = { text: "« back", transition: 'exit', data: { proposalId: @solution.parent.key() } }
+    @menu[i++] = { text: "« back", transition: 'exit', data: { awardId: @solution.parent.key() } }
 
     @menu[i++] =
       text: "vote up"
@@ -14,7 +14,7 @@ class ShowView extends ZorkView
       data:
         solutionId: @solution.key()
         solutionName: @solution.get('name')
-        proposalId: @solution.parent.key()
+        awardId: @solution.parent.key()
 
     if @solution.parent.parent.get('project_owner') is currentUser.key()
       @menu[i++] =
@@ -23,7 +23,7 @@ class ShowView extends ZorkView
         data:
           solutionId: @solution.key()
           solutionName: @solution.get('name')
-          proposalId: @solution.parent.key()
+          awardId: @solution.parent.key()
 
 
   render: ->

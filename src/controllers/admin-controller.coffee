@@ -10,7 +10,7 @@ AwardCollection = require '../collections/award-collection'
 
 class AdminController extends ApplicationController
 
-  award: (@msg, { proposalName, awardee, dcoKey })->
+  award: (@msg, { awardName, awardee, dcoKey })->
     @community = dcoKey
     @getDco()
     .then (dco)-> dco.fetch()
@@ -20,26 +20,26 @@ class AdminController extends ApplicationController
           awardeeAddress = user.get('btc_address')
 
           if awardeeAddress?
-            proposal = new Award({name: proposalName}, parent: dco)
+            award = new Award({name: awardName}, parent: dco)
 
-            proposal.fetch().then (proposal)=>
-              if proposal.get('awarded')
+            award.fetch().then (award)=>
+              if award.get('awarded')
                 @msg.send "This task has already been awarded."
               else
                 @msg.send 'Initiating transaction.'
-                proposal.awardTo(awardeeAddress).then (body)=>
-                  p "award #{proposal.key()} to #{awardee} :", body
+                award.awardTo(awardeeAddress).then (body)=>
+                  p "award #{award.key()} to #{awardee} :", body
                   @msg.send "Awarded task to #{awardee}.\n#{@_coloredCoinTxnUrl(body.txid)}"
-                  proposal.set('awarded', user.key())
+                  award.set('awarded', user.key())
                 .catch (error)=>
-                  @msg.send "Error awarding '#{proposal.key()}' to #{awardee}. Unable to complete the transaction.\n #{error.message}"
+                  @msg.send "Error awarding '#{award.key()}' to #{awardee}. Unable to complete the transaction.\n #{error.message}"
                   throw error
           else
             @msg.send "#{user.get('slack_username')} must register a BTC address to receive this award!"
       else
         p "#{@currentUser().key()} trying to award bounty within dco #{dco.key()}"
-        # @msg.send "Sorry, you don't have sufficient trust in this community to award this proposal."
-        @msg.send "Sorry, you must be the progenitor of this DCO to award proposals."
+        # @msg.send "Sorry, you don't have sufficient trust in this community to award this award."
+        @msg.send "Sorry, you must be the progenitor of this DCO to award awards."
 
 
   setCoinName: (@msg, { coinName, dcoKey })->

@@ -4,14 +4,14 @@ ZorkView = require '../zork-view'
 User = require '../../models/user'
 
 class ShowView extends ZorkView
-  constructor: (@proposal, { canSetBounty })->
+  constructor: (@award, { canSetBounty })->
     @solutionItems = {}
     i = 0
-    @proposal.rewards().sortBy('totalVotes').each (solution)=>
+    @award.rewards().sortBy('totalVotes').each (solution)=>
       @solutionItems[@letters[i++]] =
         text: solution.get('name').toLowerCase()
         transition: 'show'
-        data: { solutionId: solution.key(), proposalId: solution.parent.key() }
+        data: { solutionId: solution.key(), awardId: solution.parent.key() }
 
     @menuItems = {}
     i = 1
@@ -23,23 +23,23 @@ class ShowView extends ZorkView
     @menuItems[i++] =
       text: "vote up"
       command: 'upvote'
-      data: { proposalId: @proposal.key() }
+      data: { awardId: @award.key() }
 
     # @menuItems[i++] =
     #   text: "view all solutions",
     #   transition: 'solutions'
-    #   data: { proposalId: @proposal.key() }
+    #   data: { awardId: @award.key() }
 
     @menuItems[i++] =
       text: "submit new solution",
       transition: 'createSolution'
-      data: { proposalId: @proposal.key() }
+      data: { awardId: @award.key() }
 
     if canSetBounty
       @menuItems[i++] =
         text: "set reward",
         transition: 'setBounty'
-        data: { proposalId: @proposal.key() }
+        data: { awardId: @award.key() }
 
     @menu = clone @menuItems
     for key, item of @solutionItems
@@ -47,11 +47,11 @@ class ShowView extends ZorkView
 
   render: ->
     description = ''
-    if not isEmpty @proposal.get('description')
-      description += "_#{@proposal.get('description')}_\n"
-    if amount = @proposal.get 'amount'
+    if not isEmpty @award.get('description')
+      description += "_#{@award.get('description')}_\n"
+    if amount = @award.get 'amount'
       description += "Reward: #{amount}\n"
-    if imageUrl = @proposal.get 'imageUrl'
+    if imageUrl = @award.get 'imageUrl'
       description += "Image: #{imageUrl}\n"
 
     fields = [
@@ -61,7 +61,7 @@ class ShowView extends ZorkView
         short: true
       }
     ]
-    if amount = @proposal.get 'amount'
+    if amount = @award.get 'amount'
       fields.push {
         title: 'Reward'
         value: amount
@@ -78,15 +78,15 @@ class ShowView extends ZorkView
     [
       {
         color: @NAV_COLOR
-        title: "project » #{(@proposal.parent.get 'name').toLowerCase()} » #{(@proposal.get 'name').toLowerCase()}"
+        title: "project » #{(@award.parent.get 'name').toLowerCase()} » #{(@award.get 'name').toLowerCase()}"
       }
       {
         color: @BODY_COLOR
-        title: (@proposal.get 'name').toUpperCase()
-        text: @proposal.get('description')
-        thumb_url: @proposal.get 'imageUrl'
+        title: (@award.get 'name').toUpperCase()
+        text: @award.get('description')
+        thumb_url: @award.get 'imageUrl'
         fallback: """
-          *Task: #{@proposal.get 'name'}*
+          *Task: #{@award.get 'name'}*
           #{description}
           """
       }
