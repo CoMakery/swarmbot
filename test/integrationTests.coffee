@@ -137,7 +137,7 @@ describe 'swarmbot', ->
         .then (reply)=>
           jreply = json(reply)
           jreply.should.match /AWARDS/
-          jreply.should.match /\d{4} ❂ 100 \*Joe User\* Super sweet award _He is helpful_/
+          jreply.should.match /\d{4}\s+❂ 100\s+\*Joe User\*\s+Super sweet award\s+_He is helpful_/
 
       context 'dcos#create', ->
         beforeEach ->
