@@ -3,9 +3,9 @@ ApplicationController = require './application-controller'
 Promise = require 'bluebird'
 DCO = require '../models/dco'
 swarmbot = require '../models/swarmbot'
-Proposal = require '../models/proposal'
+Award = require '../models/award'
 User = require '../models/user'
-ProposalCollection = require '../collections/proposal-collection'
+AwardCollection = require '../collections/award-collection'
 { values, assign, map } = require 'lodash'
 
 class AdminController extends ApplicationController
@@ -20,7 +20,7 @@ class AdminController extends ApplicationController
           awardeeAddress = user.get('btc_address')
 
           if awardeeAddress?
-            proposal = new Proposal({name: proposalName}, parent: dco)
+            proposal = new Award({name: proposalName}, parent: dco)
 
             proposal.fetch().then (proposal)=>
               if proposal.get('awarded')

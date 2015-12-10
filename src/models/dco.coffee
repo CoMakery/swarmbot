@@ -5,12 +5,12 @@ Promise = require 'bluebird'
 request = require 'request-promise'
 swarmbot = require '../models/swarmbot'
 FirebaseModel = require './firebase-model'
-Proposal = require '../models/proposal'
+Award = require '../models/award'
 User = require '../models/user'
 UserCollection = require '../collections/user-collection'
 Reward = require '../models/reward'
 RewardCollection = require '../collections/reward-collection'
-ProposalCollection = require '../collections/proposal-collection'
+AwardCollection = require '../collections/award-collection'
 
 class DCO extends FirebaseModel
   urlRoot: 'projects'
@@ -56,7 +56,7 @@ class DCO extends FirebaseModel
     .then (reward)-> reward.save()
 
   proposals: ->
-    new ProposalCollection @snapshot.child('proposals'), parent: @
+    new AwardCollection @snapshot.child('proposals'), parent: @
 
   rewards: ->
     new RewardCollection @snapshot.child('rewards'), parent: @
