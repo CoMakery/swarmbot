@@ -1,15 +1,15 @@
 {log, p, pjson, json} = require 'lightsaber'
 {values} = require 'lodash'
 Promise = require 'bluebird'
-require './testHelper'
-global.App = require '../src/app'
-ColuInfo = require '../src/services/colu-info'
-DCO = require '../src/models/dco'
-User = require '../src/models/user'
-Award = require '../src/models/award'
+require '../helpers/testHelper'
+global.App = require '../../src/app'
+ColuInfo = require '../../src/services/colu-info'
+DCO = require '../../src/models/dco'
+User = require '../../src/models/user'
+Award = require '../../src/models/award'
 nock = require 'nock'
 sinon = require 'sinon'
-InitBot = require '../src/bots/!init'
+InitBot = require '../../src/bots/!init'
 
 userId = "slack:1234"
 

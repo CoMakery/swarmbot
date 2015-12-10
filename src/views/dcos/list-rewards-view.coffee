@@ -10,6 +10,7 @@ class ListRewardsView extends ZorkView
     rewards = @rewards.map (reward)=>
       proposalId = reward.get('proposalId')
       proposal = @proposals.find (proposal)-> proposal.key() is proposalId
+
       [
         moment(reward.get('name'), moment.ISO_8601).format("MMM Do YYYY")
         "#{App.COIN} #{reward.get('rewardAmount')}"
@@ -23,5 +24,4 @@ class ListRewardsView extends ZorkView
       AWARDS
       #{rewards}
     """
-
 module.exports = ListRewardsView

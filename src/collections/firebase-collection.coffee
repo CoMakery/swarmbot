@@ -41,10 +41,9 @@ class FirebaseCollection
 
   map: (cb)-> map @models, cb
 
-  # TODO: Should this be destructive / edit in-place, or return a new collection?
-  filter: (cb)-> @models = filter @models, cb
+  filter: (cb)-> filter @models, cb
 
-  find: (cb)-> @models = find @models, cb
+  find: (cb)-> find @models, cb
 
   size: -> @models.length
 
