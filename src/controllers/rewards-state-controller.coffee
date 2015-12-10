@@ -39,7 +39,7 @@ class RewardsStateController extends ApplicationController
         @dco.createReward(data)
         .then (@reward)=> User.find data.recipient
         .then (@recipient)=>
-          Proposal.find(data.proposalId, parent: @dco)
+          Award.find(data.proposalId, parent: @dco)
         .then (proposal)=>
           @sendReward(proposal, data.rewardAmount)
           Promise.resolve() # don't wait on sendReward's promise, which waits for the blockchain
@@ -67,7 +67,7 @@ class RewardsStateController extends ApplicationController
       # @getDco()
       # .then (@dco)=>
       #   if @dco.get('project_owner') is @currentUser.key()
-      #     Proposal.find(data.proposalId, parent: @dco)
+      #     Award.find(data.proposalId, parent: @dco)
       #   else
       #     Promise.reject(Promise.OperationalError "Only the creator of this project can send rewards")
 
