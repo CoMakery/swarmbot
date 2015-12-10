@@ -14,4 +14,6 @@ class ListRewardsView extends ZorkView
       #{rewards}
     """
 
+    return "coming soon..."
+
 module.exports = ListRewardsView
