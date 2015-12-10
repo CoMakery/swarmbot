@@ -21,20 +21,20 @@ class DCO extends FirebaseModel
       bounties = snapshot.val() # should really be an array of Award objects.
       cb(null, bounties)
 
-  createProposal: (attributes)->
-    @makeProposal(attributes)
-    .then (proposal)-> proposal.save()
+  createAward: (attributes)->
+    @makeAward(attributes)
+    .then (award)-> award.save()
 
-  makeProposal: (attributes)->
+  makeAward: (attributes)->
     @fetchIfNeeded().then (dco)->
       if dco.exists()
-        proposal = new Award attributes,
+        award = new Award attributes,
           parent: dco
           # snapshot: dco.snapshot.child(Award::urlRoot).child(attributes.id)
-        if proposal.exists()
+        if award.exists()
           Promise.reject(Promise.OperationalError("Award '#{attributes.name}' already exists within #{dco.key()}."))
         else
-          proposal
+          award
       else
         Promise.reject(Promise.OperationalError("The project '#{dco.key()}' does not exist."))
 
@@ -55,11 +55,11 @@ class DCO extends FirebaseModel
     @makeReward(attributes)
     .then (reward)-> reward.save()
 
-  proposals: ->
-    new AwardCollection @snapshot.child('proposals'), parent: @
+  awards: ->
+    new AwardCollection @snapshot.child(Award::urlRoot), parent: @
 
   rewards: ->
-    new RewardCollection @snapshot.child('rewards'), parent: @
+    new RewardCollection @snapshot.child(Reward::urlRoot), parent: @
 
   memberIds: ->
     keys @get('members')

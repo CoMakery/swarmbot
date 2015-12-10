@@ -101,7 +101,7 @@ class DcosStateController extends ApplicationController
     .then (rewards)=>
       view  = new ListRewardsView
         rewards: rewards
-        proposals: @dco.proposals()
+        awards: @dco.awards()
       @render view
 
 module.exports = DcosStateController
