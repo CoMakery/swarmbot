@@ -5,9 +5,9 @@ swarmbot = require '../models/swarmbot'
 FirebaseModel = require './firebase-model'
 RatingCollection = require '../collections/rating-collection'
 
-class Award extends FirebaseModel
+class RewardType extends FirebaseModel
   hasParent: true
-  urlRoot: "awards"
+  urlRoot: "reward-types"
 
   upvote: (user)->
     @attributes.votes ?= {}
@@ -33,11 +33,11 @@ class Award extends FirebaseModel
         }]
         metadata:
           project: dco.get 'name'
-          award: @get 'name'
+          rewardType: @get 'name'
 
       try
         colu.sendAsset args, cb
       catch error
         cb(error)
 
-module.exports = Award
+module.exports = RewardType

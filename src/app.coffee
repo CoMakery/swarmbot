@@ -3,11 +3,11 @@ Promise = require 'bluebird'
 debug = require('debug')('app')
 User = require './models/user'
 controllers =
-  awards:    require './controllers/awards-state-controller'
-  general:   require './controllers/general-state-controller'
-  dcos:      require './controllers/dcos-state-controller'
-  users:     require './controllers/users-state-controller'
-  rewards:   require './controllers/rewards-state-controller'
+  rewardTypes: require './controllers/reward-types-state-controller'
+  general:     require './controllers/general-state-controller'
+  dcos:        require './controllers/dcos-state-controller'
+  users:       require './controllers/users-state-controller'
+  rewards:     require './controllers/rewards-state-controller'
 
 class App
   @COIN = '❂'

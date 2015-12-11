@@ -5,12 +5,12 @@ Promise = require 'bluebird'
 request = require 'request-promise'
 swarmbot = require '../models/swarmbot'
 FirebaseModel = require './firebase-model'
-Award = require '../models/award'
+RewardType = require '../models/reward-type'
 User = require '../models/user'
 UserCollection = require '../collections/user-collection'
 Reward = require '../models/reward'
 RewardCollection = require '../collections/reward-collection'
-AwardCollection = require '../collections/award-collection'
+RewardTypeCollection = require '../collections/reward-type-collection'
 
 class DCO extends FirebaseModel
   urlRoot: 'projects'
@@ -18,23 +18,23 @@ class DCO extends FirebaseModel
 
   bounties: Promise.promisify (cb)->
     @firebase().child('bounties').once 'value', (snapshot)=>
-      bounties = snapshot.val() # should really be an array of Award objects.
+      bounties = snapshot.val() # should really be an array of RewardType objects.
       cb(null, bounties)
 
-  createAward: (attributes)->
-    @makeAward(attributes)
-    .then (award)-> award.save()
+  createRewardType: (attributes)->
+    @makeRewardType(attributes)
+    .then (rewardType)-> rewardType.save()
 
-  makeAward: (attributes)->
+  makeRewardType: (attributes)->
     @fetchIfNeeded().then (dco)->
       if dco.exists()
-        award = new Award attributes,
+        rewardType = new RewardType attributes,
           parent: dco
-          # snapshot: dco.snapshot.child(Award::urlRoot).child(attributes.id)
-        if award.exists()
+          # snapshot: dco.snapshot.child(RewardType::urlRoot).child(attributes.id)
+        if rewardType.exists()
           Promise.reject(Promise.OperationalError("Award '#{attributes.name}' already exists within #{dco.key()}."))
         else
-          award
+          rewardType
       else
         Promise.reject(Promise.OperationalError("The project '#{dco.key()}' does not exist."))
 
@@ -55,8 +55,8 @@ class DCO extends FirebaseModel
     @makeReward(attributes)
     .then (reward)-> reward.save()
 
-  awards: ->
-    new AwardCollection @snapshot.child(Award::urlRoot), parent: @
+  rewardTypes: ->
+    new RewardTypeCollection @snapshot.child(RewardType::urlRoot), parent: @
 
   rewards: ->
     new RewardCollection @snapshot.child(Reward::urlRoot), parent: @

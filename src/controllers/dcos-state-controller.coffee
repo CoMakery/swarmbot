@@ -7,7 +7,7 @@ ApplicationController = require './application-state-controller'
 ColuInfo = require '../services/colu-info'
 DCO = require '../models/dco.coffee'
 User = require '../models/user'
-AwardCollection = require '../collections/award-collection'
+RewardTypeCollection = require '../collections/reward-type-collection'
 DcoCollection = require '../collections/dco-collection'
 IndexView = require '../views/dcos/index-view'
 CreateView = require '../views/dcos/create-view'
@@ -101,7 +101,7 @@ class DcosStateController extends ApplicationController
     .then (rewards)=>
       view  = new ListRewardsView
         rewards: rewards
-        awards: @dco.awards()
+        rewardTypes: @dco.rewardTypes()
       @render view
 
 module.exports = DcosStateController

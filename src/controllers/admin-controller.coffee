@@ -3,9 +3,9 @@ ApplicationController = require './application-controller'
 Promise = require 'bluebird'
 DCO = require '../models/dco'
 swarmbot = require '../models/swarmbot'
-Award = require '../models/award'
+RewardType = require '../models/reward-type'
 User = require '../models/user'
-AwardCollection = require '../collections/award-collection'
+RewardTypeCollection = require '../collections/reward-type-collection'
 { values, assign, map } = require 'lodash'
 
 class AdminController extends ApplicationController
