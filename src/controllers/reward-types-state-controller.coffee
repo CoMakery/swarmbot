@@ -3,21 +3,21 @@ debug = require('debug')('app')
 request = require 'request-promise'
 Promise = require 'bluebird'
 ApplicationController = require './application-state-controller'
-AwardCollection = require '../collections/award-collection'
-Award = require '../models/award'
-CreateView = require '../views/awards/create-view'
-EditView = require '../views/awards/edit-view'
+RewardTypeCollection = require '../collections/reward-type-collection'
+RewardType = require '../models/reward-type'
+CreateView = require '../views/reward-types/create-view'
+EditView = require '../views/reward-types/edit-view'
 ZorkView = require '../views/zork-view'
 
-class AwardsStateController extends ApplicationController
+class RewardTypesStateController extends ApplicationController
 
   upvote: (data)->
     @getDco().then (dco)=>
-      Award.find(data.awardId, parent: dco)
-    .then (award)=>
-      unless award.exists()
-        throw new Error "Could not find the task '#{data.awardId}'. Please verify that it exists."
-      award.upvote @currentUser
+      RewardType.find(data.rewardTypeId, parent: dco)
+    .then (rewardType)=>
+      unless rewardType.exists()
+        throw new Error "Could not find the task '#{data.rewardTypeId}'. Please verify that it exists."
+      rewardType.upvote @currentUser
     .then =>
       @redirect "Your vote has been recorded."
 
@@ -46,18 +46,18 @@ class AwardsStateController extends ApplicationController
       Promise.resolve()
     else if not data.name?
       @getDco()
-      .then (dco)=> dco.makeAward name: @input  # throws op error if already exists
+      .then (dco)=> dco.makeRewardType name: @input  # throws op error if already exists
       .then => data.name = @input
     else if not data.suggestedAmount?
       data.suggestedAmount = @input.trim()
       promise = @getDco()
-        .then (dco)=> dco.createAward data
-        .then (@award)=>
+        .then (dco)=> dco.createRewardType data
+        .then (@rewardType)=>
 
     promise
     .then => @currentUser.set 'stateData', data
     .then =>
-      if @award
+      if @rewardType
         @execute transition: 'exit', flashMessage: "Award created!"
       else
         @render new CreateView {data, @errorMessage}
@@ -68,11 +68,11 @@ class AwardsStateController extends ApplicationController
         if @input.match /^\d+$/
           data.bounty = @input
           return @getDco()
-          .then (dco)-> Award.find data.awardId, parent: dco
-          .then (award)-> award.set 'amount', data.bounty
+          .then (dco)-> RewardType.find data.rewardTypeId, parent: dco
+          .then (rewardType)-> rewardType.set 'amount', data.bounty
           .then =>
             @sendInfo "Bounty amount set to #{data.bounty}"
-            @execute transition: 'exit', data: {awardId: data.awardId}
+            @execute transition: 'exit', data: {rewardTypeId: data.rewardTypeId}
         else
           @sendWarning "For a bounty amount, please enter only numbers"
 
@@ -80,4 +80,4 @@ class AwardsStateController extends ApplicationController
     @currentUser.set 'stateData', data
     @render new EditView data
 
-module.exports = AwardsStateController
+module.exports = RewardTypesStateController

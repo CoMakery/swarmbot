@@ -4,18 +4,18 @@ ZorkView = require '../zork-view'
 moment = require 'moment'
 
 class ListRewardsView extends ZorkView
-  constructor: ({@awards, @rewards})->
+  constructor: ({@rewardTypes, @rewards})->
 
   render: ->
     rewards = @rewards.map (reward)=>
-      awardId = reward.get('awardId')
-      award = @awards.find (award)-> award.key() is awardId
+      rewardTypeId = reward.get('rewardTypeId')
+      rewardType = @rewardTypes.find (rewardType)-> rewardType.key() is rewardTypeId
 
       [
         moment(reward.get('name'), moment.ISO_8601).format("MMM Do YYYY")
         "#{App.COIN} #{reward.get('rewardAmount')}"
         "*#{reward.recipientRealName}*"
-        award.get('name')
+        rewardType.get('name')
         "_#{reward.get('description')}_"
       ].join("   ")
     .join("\n")

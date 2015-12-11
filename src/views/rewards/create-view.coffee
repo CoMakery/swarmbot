@@ -8,35 +8,35 @@ class CreateView extends ZorkView
     @menu.x = { transition: 'exit', text: 'exit' }
     # if only there was a better way...
 
-    if @data.recipient? and not @data.awardId?
-      for key, menuItem of @awardsMenu()
+    if @data.recipient? and not @data.rewardTypeId?
+      for key, menuItem of @rewardTypesMenu()
         @menu[key.toLowerCase()] = menuItem if key?
 
   render: ->
     if not @data.recipient?
       @question "Which slack @user should I send the reward to? ('x' to exit)"
-    else if not @data.awardId? # which points to a award: this reward's parent
+    else if not @data.rewardTypeId? # which points to a rewardType: this reward's parent
       [
         {
           pretext: "What award type?"
           fields: [
-            value: @renderMenuItems @awardsMenu()
+            value: @renderMenuItems @rewardTypesMenu()
           ]
         }
       ]
     else if not @data.rewardAmount?
-      @question "How much do you want to reward @#{@recipient.get 'slack_username'} for \"#{@data.awardId}\""
+      @question "How much do you want to reward @#{@recipient.get 'slack_username'} for \"#{@data.rewardTypeId}\""
     else if not @data.description?
       @question "What was the contribution @#{@recipient.get 'slack_username'} made for the award?"
 
 
-  awardsMenu: ->
+  rewardTypesMenu: ->
     i = 0
     menu = {}
-    @dco.awards().map (award)=>
+    @dco.rewardTypes().map (rewardType)=>
       menu[@letters[i++]] =
-        text: award.get('name')
-        data: merge {awardId: award.key()}, @data
+        text: rewardType.get('name')
+        data: merge {rewardTypeId: rewardType.key()}, @data
         command: 'setStateData'
     menu
 

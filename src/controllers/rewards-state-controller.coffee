@@ -3,7 +3,7 @@ debug = require('debug')('app')
 { isEmpty, last } = require 'lodash'
 Promise = require 'bluebird'
 ApplicationController = require './application-state-controller'
-Award = require '../models/award'
+RewardType = require '../models/reward-type'
 Reward = require '../models/reward'
 User = require '../models/user'
 CreateView = require '../views/rewards/create-view'
@@ -29,8 +29,8 @@ class RewardsStateController extends ApplicationController
           data.recipient = recipient.key()
         .error (error)=>
           @errorMessage = error.message
-      else if not data.awardId?
-        # Note : set by the menu item when selecting award
+      else if not data.rewardTypeId?
+        # Note : set by the menu item when selecting rewardType
       else if not data.rewardAmount?
         data.rewardAmount = @input
       else if not data.description?
@@ -39,9 +39,9 @@ class RewardsStateController extends ApplicationController
         @dco.createReward(data)
         .then (@reward)=> User.find data.recipient
         .then (@recipient)=>
-          Award.find(data.awardId, parent: @dco)
-        .then (award)=>
-          @sendReward(award, data.rewardAmount)
+          RewardType.find(data.rewardTypeId, parent: @dco)
+        .then (rewardType)=>
+          @sendReward(rewardType, data.rewardAmount)
           Promise.resolve() # don't wait on sendReward's promise, which waits for the blockchain
 
     .then =>
@@ -67,15 +67,15 @@ class RewardsStateController extends ApplicationController
       # @getDco()
       # .then (@dco)=>
       #   if @dco.get('project_owner') is @currentUser.key()
-      #     Award.find(data.awardId, parent: @dco)
+      #     RewardType.find(data.rewardTypeId, parent: @dco)
       #   else
       #     Promise.reject(Promise.OperationalError "Only the creator of this project can send rewards")
 
-  sendReward: (award, rewardAmount)->
-    award.awardTo(@recipient.get('btc_address'), rewardAmount)
+  sendReward: (rewardType, rewardAmount)->
+    rewardType.awardTo(@recipient.get('btc_address'), rewardAmount)
     .then (body)=>
       @sendInfo 'Reward sent!'
-      debug "Reward #{award.key()} to #{@recipient.get('slack_username')} :", body
+      debug "Reward #{rewardType.key()} to #{@recipient.get('slack_username')} :", body
       txUrl = @_coloredCoinTxUrl(body.txid)
       @sendInfo "Awarded award to #{@recipient.get('slack_username')}.\n#{txUrl}"
       @msg.robot.messageRoom @recipient.get('slack_username'),
@@ -83,7 +83,7 @@ class RewardsStateController extends ApplicationController
     .error (error)=>
       @sendWarning error.message
     .catch (error)=>
-      @sendWarning "Error awarding '#{award?.key()}' to #{@recipient?.get('slack_username')}. Unable to complete the transaction.\n #{error.message}"
+      @sendWarning "Error awarding '#{rewardType?.key()}' to #{@recipient?.get('slack_username')}. Unable to complete the transaction.\n #{error.message}"
       throw error
 
 module.exports = RewardsStateController

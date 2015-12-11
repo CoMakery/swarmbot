@@ -6,7 +6,7 @@ global.App = require '../../src/app'
 ColuInfo = require '../../src/services/colu-info'
 DCO = require '../../src/models/dco'
 User = require '../../src/models/user'
-Award = require '../../src/models/award'
+RewardType = require '../../src/models/reward-type'
 nock = require 'nock'
 sinon = require 'sinon'
 InitBot = require '../../src/bots/!init'
@@ -39,8 +39,8 @@ describe 'swarmbot', ->
           project_owner: userId
           tasksUrl: 'http://example.com'
         @dco.save()
-        .then (@dco)-> @dco.createAward name: 'Do Stuff'
-        .then -> @dco.createAward name: 'Be Glorious'
+        .then (@dco)-> @dco.createRewardType name: 'Do Stuff'
+        .then -> @dco.createRewardType name: 'Be Glorious'
         .then -> App.route message()
         .then (reply)->
           jreply = json reply
@@ -119,10 +119,10 @@ describe 'swarmbot', ->
         .then (@user)=>
           new DCO(name: "Community A").save()
         .then (@dco)=>
-          @dco.createAward(name: "Super sweet award", suggestedAmount: 100)
-        .then (@award)=>
+          @dco.createRewardType(name: "Super sweet award", suggestedAmount: 100)
+        .then (@rewardType)=>
           @dco.createReward
-            awardId: @award.key()
+            rewardTypeId: @rewardType.key()
             description: "He is helpful"
             issuer: user.key()
             recipient: userId
@@ -192,9 +192,9 @@ describe 'swarmbot', ->
               imageUrl: 'http://example.com/very-small.png'
               tasksUrl: 'http://jira.com'
 
-  context 'awards', ->
-    context 'awards#create', ->
-      it "allows the user to create a award within the current project", ->
+  context 'rewardTypes', ->
+    context 'rewardTypes#create', ->
+      it "allows the user to create a rewardType within the current project", ->
         dcoId = 'Your Great Project'
         @user = new User(name: userId, current_dco: dcoId, state: 'dcos#show').save()
         dco = new DCO(name: dcoId)
@@ -212,14 +212,14 @@ describe 'swarmbot', ->
           json(@message.parts).should.match /Award created/
         .then => @firebaseServer.getValue()
         .then (db)=>
-          size(db.projects[dcoId].awards).should.eq 1
-          db.projects[dcoId].awards['Kitais'].should.deep.eq
+          size(db.projects[dcoId]['reward-types']).should.eq 1
+          db.projects[dcoId]['reward-types']['Kitais'].should.deep.eq
             name: 'Kitais'
             suggestedAmount: '4000'
 
   context 'rewards', ->
     context 'rewards#create', -> # create reward
-      awardId = 'a very special award'
+      rewardTypeId = 'a very special award'
       dcoId = 'a project'
       user = ->
         new User
@@ -232,14 +232,14 @@ describe 'swarmbot', ->
         .save()
       dco = ->
         new DCO(name: dcoId, project_owner: userId).save()
-      award = (dco)->
-        dco.createAward(name: awardId)
+      rewardType = (dco)->
+        dco.createRewardType(name: rewardTypeId)
 
       it "allows an admin to award coins to a user", ->
         user()
         .then (@user)=> dco()
-        .then (@dco)=> award(@dco)
-        .then (@award)=> @dco.fetch()
+        .then (@dco)=> rewardType(@dco)
+        .then (@rewardType)=> @dco.fetch()
         .then (@dco)=> App.route message('')
         .then (reply)=>
           json(reply).should.match /Which slack @user should I send the reward to/i
@@ -259,7 +259,7 @@ describe 'swarmbot', ->
         .then (reply)=>
           @firebaseServer.getValue()
         .then (db)=>
-          # project -> award -> reward(key: timestamp, issuer, repic, amount, awardType)
+          # project -> award -> reward(key: timestamp, issuer, repic, amount, rewardType)
           rewards = db.projects[dcoId].rewards
           reward = values(rewards)[0]
           reward.name.should.match /[0-9-:Z]+/
@@ -268,5 +268,5 @@ describe 'swarmbot', ->
             issuer: userId
             recipient: 'slack:1234'
             rewardAmount: '4000'
-            awardId: @award.key()
+            rewardTypeId: @rewardType.key()
             description: 'was awesome'

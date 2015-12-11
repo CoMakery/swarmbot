@@ -18,7 +18,7 @@ class ShowView extends ZorkView
     @menu[i++] = { text: "send an award", transition: 'sendReward', data: {dcoId: @dco.key()} }
 
   render: ->
-    headline = if @dco.awards().isEmpty() then 'No awards' else 'Awards'
+    headline = if @dco.rewardTypes().isEmpty() then 'No awards' else 'Awards'
     headline += " in #{@dco.get 'name'}"
     """
     [Home] #{@bold headline}
@@ -48,11 +48,11 @@ class ShowView extends ZorkView
         fields: [
           {
             title: 'Possible Awards'
-            value: if @dco.awards().isEmpty()
+            value: if @dco.rewardTypes().isEmpty()
                 "There are no awards in this project."
               else
-                @dco.awards().map (award)->
-                  "#{award.get 'name'} (#{award.get('suggestedAmount')})"
+                @dco.rewardTypes().map (rewardType)->
+                  "#{rewardType.get 'name'} (#{rewardType.get('suggestedAmount')})"
                 .join("\n")
             short: true
           }
@@ -71,10 +71,10 @@ class ShowView extends ZorkView
       }
     ]
 
-  awardMenuItem: (award)->
+  rewardTypeMenuItem: (rewardType)->
     {
-      text: award.get('name').toLowerCase()
-      data: { awardId: award.key() }
+      text: rewardType.get('name').toLowerCase()
+      data: { rewardTypeId: rewardType.key() }
       transition: 'show'
     }
 
