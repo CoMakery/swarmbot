@@ -5,43 +5,40 @@ Promise = require 'bluebird'
 swarmbot = require '../models/swarmbot'
 ApplicationController = require './application-state-controller'
 ColuInfo = require '../services/colu-info'
-DCO = require '../models/dco.coffee'
+Project = require '../models/project.coffee'
 User = require '../models/user'
 RewardTypeCollection = require '../collections/reward-type-collection'
-DcoCollection = require '../collections/dco-collection'
-IndexView = require '../views/dcos/index-view'
-CreateView = require '../views/dcos/create-view'
-ShowView = require '../views/dcos/show-view'
-ListRewardsView = require '../views/dcos/list-rewards-view'
-CapTableView = require '../views/dcos/cap-table-view'
+ProjectCollection = require '../collections/project-collection'
+IndexView = require '../views/projects/index-view'
+CreateView = require '../views/projects/create-view'
+ShowView = require '../views/projects/show-view'
+ListRewardsView = require '../views/projects/list-rewards-view'
+CapTableView = require '../views/projects/cap-table-view'
 
-class DcosStateController extends ApplicationController
+class ProjectsStateController extends ApplicationController
   index: ->
-    DcoCollection.all()
-    .then (@dcos)=>
+    ProjectCollection.all()
+    .then (@projects)=>
       (new ColuInfo).balances(@currentUser)
     .then (@userBalances)=>
       debug @userBalances
-      @render new IndexView {@dcos, @currentUser, @userBalances}
+      @render new IndexView {@projects, @currentUser, @userBalances}
 
   show: ->
-    @getDco()
-    .then (dco)=> dco.fetch()
-    .then (@dco)=>
-
-
-      (new ColuInfo).allHolders(@dco)
+    @getProject()
+    .then (project)=> project.fetch()
+    .then (@project)=>
+      (new ColuInfo).allHolders(@project)
     .then (holders)=>
       @userBalance =
         balance: (findWhere holders, { address: @currentUser.get 'btc_address' })?.amount
         totalCoins: sum pluck holders, 'amount'
-
-      @render new ShowView {@dco, @currentUser, @userBalance}
+      @render new ShowView {@project, @currentUser, @userBalance}
     .error(@_showError)
 
-  # set DCO
-  setDcoTo: (data)->
-    @currentUser.setDcoTo(data.id).then =>
+  # set Project
+  setProjectTo: (data)->
+    @currentUser.setProjectTo(data.id).then =>
       @currentUser.exit()
       @redirect()
 
@@ -57,42 +54,42 @@ class DcosStateController extends ApplicationController
     else #if not data.imageUrl
       promise = @parseImageUrl().then (imageUrl)=>
         if imageUrl then data.imageUrl = imageUrl else data.ignoreImage = true
-        @saveDco data
-        .then (dco)=> @dco = dco
+        @saveProject data
+        .then (project)=> @project = project
 
     ( promise ? Promise.resolve() )
     .error (opError)=> @errorMessage = opError.message
     .then => @currentUser.set 'stateData', data
     .then =>
-      if @dco?
-        @execute transition: 'showDco', flashMessage: 'Project created!'
+      if @project?
+        @execute transition: 'showProject', flashMessage: 'Project created!'
       else
         @render new CreateView data, {@errorMessage}
 
-  saveDco: (data)->
-    new DCO
+  saveProject: (data)->
+    new Project
       name: data.name
       project_statement: data.description
       imageUrl: data.imageUrl ? ''
       project_owner: @currentUser.key()
       tasksUrl: data.tasksUrl
     .save()
-    .then (dco)=>
-      dco.issueAsset amount: DCO::INITIAL_PROJECT_COINS
-      @currentUser.set 'current_dco', dco.key()
+    .then (project)=>
+      project.issueAsset amount: Project::INITIAL_PROJECT_COINS
+      @currentUser.set 'current_project', project.key()
 
   capTable: ->
-    @getDco().then (dco)=>
-      (new ColuInfo).allHoldersWithNames(dco).then (holders)=>
+    @getProject().then (project)=>
+      (new ColuInfo).allHoldersWithNames(project).then (holders)=>
         debug holders
-        @sendPm @render new CapTableView { project: dco, capTable: holders }
+        @sendPm @render new CapTableView { project: project, capTable: holders }
         @redirect()
 
 
   rewardsList: (data)->
-    @getDco()
-    .then (@dco)=>
-      rewards = @dco.rewards().models
+    @getProject()
+    .then (@project)=>
+      rewards = @project.rewards().models
       Promise.map rewards, (reward)=>
         User.find reward.get('recipient')
         .then (recipient)=>
@@ -101,7 +98,7 @@ class DcosStateController extends ApplicationController
     .then (rewards)=>
       view  = new ListRewardsView
         rewards: rewards
-        rewardTypes: @dco.rewardTypes()
+        rewardTypes: @project.rewardTypes()
       @render view
 
-module.exports = DcosStateController
+module.exports = ProjectsStateController

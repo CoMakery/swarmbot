@@ -1,20 +1,20 @@
 { log, p, pjson } = require 'lightsaber'
 User = require '../models/user'
 Promise = require 'bluebird'
-DCO = require '../models/dco'
+Project = require '../models/project'
 
 class ApplicationController
   currentUser: ->
     @_currentUser ||= new User name: @msg.robot.whose(@msg)
 
-  getDco: ->
+  getProject: ->
     if @community?
-      Promise.resolve(DCO.find(@community)).bind(@)
+      Promise.resolve(Project.find(@community)).bind(@)
     else
       @currentUser().fetchIfNeeded().bind(@).then (user)->
-        @community = user.get('current_dco')
+        @community = user.get('current_project')
         if @community?
-          DCO.find(@community)
+          Project.find(@community)
         else
           Promise.reject(Promise.OperationalError("Please either set a community or specify the community in the command."))
 
@@ -26,7 +26,7 @@ class ApplicationController
       info = ""
       info += "real name: " + user.get('real_name')
       info += ", slack username: " + user.get('slack_username')
-      info += ", default community: " + user.get('current_dco')
+      info += ", default community: " + user.get('current_project')
       info += ", receiving address: " + user.get('btc_address')
     else
       "User not found"

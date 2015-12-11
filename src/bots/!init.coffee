@@ -79,7 +79,7 @@ InitBot = (robot)->
     .then => App.route res
     .then (welcome)=>
       robot.pmReply res, welcome
-      @user.set 'state', 'users#setDco'    # goes away if this becomes the new home page
+      @user.set 'state', 'users#setProject'    # goes away if this becomes the new home page
     .then => App.route res
     .then (projects)=> robot.pmReply res, projects
 

@@ -3,23 +3,23 @@
 ZorkView = require '../zork-view'
 
 class ShowView extends ZorkView
-  constructor: ({@dco, @currentUser, @userBalance})->
+  constructor: ({@project, @currentUser, @userBalance})->
     @orderedMenu = []
     @menu = {}
 
     i = 1
-    @menu[i++] = { text: "all projects", transition: 'setDco' }
+    @menu[i++] = { text: "all projects", transition: 'setProject' }
     @menu[i++] = { text: "show awards list", command: 'rewardsList' }
     @menu[i++] = { text: "show project ownership", command: 'capTable' }
     # @menu[i++] = { text: "suggest a swarmbot improvement", transition: 'suggest' }
 
     # if admin/progenitor
     @menu[i++] = { text: "create an award level", transition: 'create' }
-    @menu[i++] = { text: "send an award", transition: 'sendReward', data: {dcoId: @dco.key()} }
+    @menu[i++] = { text: "send an award", transition: 'sendReward', data: {projectId: @project.key()} }
 
   render: ->
-    headline = if @dco.rewardTypes().isEmpty() then 'No awards' else 'Awards'
-    headline += " in #{@dco.get 'name'}"
+    headline = if @project.rewardTypes().isEmpty() then 'No awards' else 'Awards'
+    headline += " in #{@project.get 'name'}"
     """
     [Home] #{@bold headline}
     #{@renderMenu()}
@@ -36,22 +36,22 @@ class ShowView extends ZorkView
     balance += "\nbitcoin address: " + @bitcoinAddress()
     compact [
       {
-        title: @dco.get('name').toUpperCase()
-        text: @dco.get 'project_statement'
-        thumb_url: @dco.get 'imageUrl'
+        title: @project.get('name').toUpperCase()
+        text: @project.get 'project_statement'
+        thumb_url: @project.get 'imageUrl'
       }
       (
         title: 'See Project Tasks'
-        title_link: @dco.get 'tasksUrl'
-      ) if @dco.get 'tasksUrl'
+        title_link: @project.get 'tasksUrl'
+      ) if @project.get 'tasksUrl'
       {
         fields: [
           {
             title: 'Possible Awards'
-            value: if @dco.rewardTypes().isEmpty()
+            value: if @project.rewardTypes().isEmpty()
                 "There are no awards in this project."
               else
-                @dco.rewardTypes().map (rewardType)->
+                @project.rewardTypes().map (rewardType)->
                   "#{rewardType.get 'name'} (#{rewardType.get('suggestedAmount')})"
                 .join("\n")
             short: true

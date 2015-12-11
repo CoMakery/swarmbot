@@ -1,7 +1,7 @@
 {log, p, pjson} = require 'lightsaber'
 ApplicationController = require './application-controller'
 Promise = require 'bluebird'
-DCO = require '../models/dco'
+Project = require '../models/project'
 swarmbot = require '../models/swarmbot'
 RewardType = require '../models/reward-type'
 User = require '../models/user'

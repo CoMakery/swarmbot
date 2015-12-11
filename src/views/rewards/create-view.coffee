@@ -3,7 +3,7 @@
 ZorkView = require '../zork-view'
 
 class CreateView extends ZorkView
-  constructor: (@dco, @data, {@recipient})->
+  constructor: (@project, @data, {@recipient})->
     @menu = {}
     @menu.x = { transition: 'exit', text: 'exit' }
     # if only there was a better way...
@@ -33,7 +33,7 @@ class CreateView extends ZorkView
   rewardTypesMenu: ->
     i = 0
     menu = {}
-    @dco.rewardTypes().map (rewardType)=>
+    @project.rewardTypes().map (rewardType)=>
       menu[@letters[i++]] =
         text: rewardType.get('name')
         data: merge {rewardTypeId: rewardType.key()}, @data

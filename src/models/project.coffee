@@ -12,7 +12,7 @@ Reward = require '../models/reward'
 RewardCollection = require '../collections/reward-collection'
 RewardTypeCollection = require '../collections/reward-type-collection'
 
-class DCO extends FirebaseModel
+class Project extends FirebaseModel
   urlRoot: 'projects'
   INITIAL_PROJECT_COINS: 100000000
 
@@ -26,28 +26,28 @@ class DCO extends FirebaseModel
     .then (rewardType)-> rewardType.save()
 
   makeRewardType: (attributes)->
-    @fetchIfNeeded().then (dco)->
-      if dco.exists()
+    @fetchIfNeeded().then (project)->
+      if project.exists()
         rewardType = new RewardType attributes,
-          parent: dco
-          # snapshot: dco.snapshot.child(RewardType::urlRoot).child(attributes.id)
+          parent: project
+          # snapshot: project.snapshot.child(RewardType::urlRoot).child(attributes.id)
         if rewardType.exists()
-          Promise.reject(Promise.OperationalError("Award '#{attributes.name}' already exists within #{dco.key()}."))
+          Promise.reject(Promise.OperationalError("Award '#{attributes.name}' already exists within #{project.key()}."))
         else
           rewardType
       else
-        Promise.reject(Promise.OperationalError("The project '#{dco.key()}' does not exist."))
+        Promise.reject(Promise.OperationalError("The project '#{project.key()}' does not exist."))
 
   makeReward: (attributes)->
     throw new Error "reward attrs should not contain 'name' key" if attributes.name?
     attributes.name = (new Date).toISOString()
-    @fetchIfNeeded().then (dco)->
-      if not dco.exists()
-        return Promise.reject(Promise.OperationalError("The project '#{dco.key()}' does not exist."))
+    @fetchIfNeeded().then (project)->
+      if not project.exists()
+        return Promise.reject(Promise.OperationalError("The project '#{project.key()}' does not exist."))
 
-      reward = new Reward attributes, parent: dco
+      reward = new Reward attributes, parent: project
       if reward.exists()
-        Promise.reject(Promise.OperationalError("Reward '#{attributes.name}' already exists within #{dco.key()}."))
+        Promise.reject(Promise.OperationalError("Reward '#{attributes.name}' already exists within #{project.key()}."))
       else
         reward
 
@@ -84,12 +84,12 @@ class DCO extends FirebaseModel
       user
 
   issueAsset: ({ amount }, cb)->
-    dcoKey = @key()
-    issuer = dcoKey
+    projectKey = @key()
+    issuer = projectKey
     asset =
       amount: amount
       metadata:
-        assetName: dcoKey + ' Coin'
+        assetName: projectKey + ' Coin'
         issuer: issuer
 
     swarmbot.colu()
@@ -98,10 +98,10 @@ class DCO extends FirebaseModel
         if error
           debug "error in asset creation: #{error.message}"
         else
-          dcos = swarmbot.firebase().child('projects')
+          projects = swarmbot.firebase().child('projects')
           debug "AssetId: #{body.assetId}"
           debug "Full response: #{pjson body}"
-          dcos.child(dcoKey).update { coluAssetId: body.assetId, coluAssetAddress: body.issueAddress }
+          projects.child(projectKey).update { coluAssetId: body.assetId, coluAssetAddress: body.issueAddress }
 
   sendAsset: ({amount, recipient}, cb)->
     recipient.fetch().then (user)->
@@ -111,4 +111,4 @@ class DCO extends FirebaseModel
       else
         cb "user must register before receiving assets"
 
-module.exports = DCO
+module.exports = Project

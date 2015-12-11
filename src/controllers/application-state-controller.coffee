@@ -5,7 +5,7 @@ debug = require('debug')('app')
 { extend, isEmpty } = require 'lodash'
 User = require '../models/user'
 Promise = require 'bluebird'
-DCO = require '../models/dco'
+Project = require '../models/project'
 swarmbot = require '../models/swarmbot'
 ZorkHelper = require '../helpers/zork-helper'
 
@@ -58,11 +58,11 @@ class ApplicationStateController
     @currentUser.set 'menu', view.menu if view.menu  # asyncronously saves to DB
     view.render()                                    # don't wait for it, just render
 
-  getDco: ->
+  getProject: ->
     @currentUser.fetchIfNeeded().bind(@).then (user)->
-      dcoId = user.get('current_dco')
-      if dcoId?
-        DCO.find dcoId
+      projectId = user.get('current_project')
+      if projectId?
+        Project.find projectId
       else
         Promise.reject(Promise.OperationalError("Please specify the project in the command."))
 

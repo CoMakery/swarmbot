@@ -3,7 +3,7 @@
 ApplicationController = require './application-controller'
 swarmbot = require '../models/swarmbot'
 User = require '../models/user'
-DCO = require '../models/dco'
+Project = require '../models/project'
 
 class UsersController extends ApplicationController
   register: (@msg)->
@@ -26,8 +26,8 @@ class UsersController extends ApplicationController
         user.set "last_active_on_slack", Date.now()
 
 
-      if process.env.HUBOT_DEFAULT_COMMUNITY && !user.get('current_dco')
-        user.set "current_dco", process.env.HUBOT_DEFAULT_COMMUNITY
+      if process.env.HUBOT_DEFAULT_COMMUNITY && !user.get('current_project')
+        user.set "current_project", process.env.HUBOT_DEFAULT_COMMUNITY
         # @msg.send "registered Slack username"
 
       if realName

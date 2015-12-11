@@ -5,11 +5,11 @@ ZorkView = require '../zork-view'
 
 class IndexView extends ZorkView
 
-  constructor: ({@dcos, @currentUser, @userBalances})->
+  constructor: ({@projects, @currentUser, @userBalances})->
     i = 0
-    @dcoItems = []
-    for dco in @dcos.all()
-      @dcoItems.push [@letters[i++], @dcoMenuItem dco]
+    @projectItems = []
+    for project in @projects.all()
+      @projectItems.push [@letters[i++], @projectMenuItem project]
 
     i = 1
     @actions = {}
@@ -23,15 +23,15 @@ class IndexView extends ZorkView
     }
 
     @menu = clone @actions
-    for [key, menuItem] in @dcoItems
+    for [key, menuItem] in @projectItems
       @menu[key.toLowerCase()] = menuItem if key?
 
 
-  dcoMenuItem: (dco)->
+  projectMenuItem: (project)->
     {
-      text: dco.get 'name'
-      data: {id: dco.key(), name: dco.get('name')}
-      command: 'setDcoTo'
+      text: project.get 'name'
+      data: {id: project.key(), name: project.get('name')}
+      command: 'setProjectTo'
     }
 
   render: ->
@@ -44,20 +44,20 @@ class IndexView extends ZorkView
 
 
     message = []
-    if isEmpty(@dcoItems) or not @currentUser.get('has_interacted')
+    if isEmpty(@projectItems) or not @currentUser.get('has_interacted')
       message.push {
         pretext: "Welcome friend! I am here to help you contribute to projects and receive project coins. Project coins track your share of a project using a trusty blockchain."
         title: "Let's get started!  Type 1, hit enter, and create your first project."
       }
       @currentUser.set 'has_interacted', true
 
-    if isEmpty @dcoItems
+    if isEmpty @projectItems
       projectsItems = "There are currently no projects."
     else
       message.push {
         pretext: "Contribute to projects and receive project coins!"
       }
-      projectsItems = @renderOrderedMenuItems @dcoItems
+      projectsItems = @renderOrderedMenuItems @projectItems
 
     balances = for userBalance in @userBalances
       "#{userBalance.name} #{App.COIN} #{userBalance.balance}"

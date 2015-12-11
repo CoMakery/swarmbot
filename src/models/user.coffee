@@ -5,11 +5,11 @@ StateMachine = require 'javascript-state-machine'
 Promise = require 'bluebird'
 FirebaseModel = require './firebase-model'
 swarmbot = require './swarmbot'
-DCO = require '../models/dco.coffee'
+Project = require '../models/project.coffee'
 
 class User extends FirebaseModel
   urlRoot: 'users'
-  initialState: 'dcos#index'
+  initialState: 'projects#index'
 
   @findBySlackUsername: Promise.promisify (slackUsername, cb)->
     swarmbot.firebase().child('users') # TODO: use urlRoot here
@@ -22,11 +22,11 @@ class User extends FirebaseModel
         cb(null, new User({}, snapshot: snapshot.child(userId)))
     , cb # error
 
-  setDcoTo: (dcoKey)->
-    @set "current_dco", dcoKey
+  setProjectTo: (projectKey)->
+    @set "current_project", projectKey
 
-  canUpdate: (dco)->
-    dco.get('project_owner') == @key()
+  canUpdate: (project)->
+    project.get('project_owner') == @key()
 
   fetch: ->
     super().then =>
@@ -47,11 +47,11 @@ class User extends FirebaseModel
     events: [
       { name: 'exit', from: User::initialState, to: User::initialState }
 
-      { name: 'show', from: 'dcos#show', to: 'rewardTypes#show' }
-      { name: 'exit', from: 'rewardTypes#show', to: 'dcos#show' }
+      { name: 'show', from: 'projects#show', to: 'rewardTypes#show' }
+      { name: 'exit', from: 'rewardTypes#show', to: 'projects#show' }
 
-      { name: 'create', from: 'dcos#show', to: 'rewardTypes#create' }
-      { name: 'exit', from: 'rewardTypes#create', to: 'dcos#show' }
+      { name: 'create', from: 'projects#show', to: 'rewardTypes#create' }
+      { name: 'exit', from: 'rewardTypes#create', to: 'projects#show' }
 
       { name: 'setBounty', from: 'rewardTypes#show', to: 'rewardTypes#edit' }
       { name: 'exit', from: 'rewardTypes#edit', to: 'rewardTypes#show' }
@@ -65,21 +65,21 @@ class User extends FirebaseModel
       { name: 'create', from: 'rewards#index', to: 'rewards#create' }
       { name: 'exit', from: 'rewards#create', to: 'rewards#index' }
 
-      { name: 'sendReward', from: 'dcos#show', to: 'rewards#create' }
-      { name: 'exit', from: 'rewards#create', to: 'dcos#show' }
+      { name: 'sendReward', from: 'projects#show', to: 'rewards#create' }
+      { name: 'exit', from: 'rewards#create', to: 'projects#show' }
 
-      { name: 'setDco', from: 'dcos#show', to: 'dcos#index' }
-      { name: 'exit', from: 'dcos#index', to: 'dcos#show' }
+      { name: 'setProject', from: 'projects#show', to: 'projects#index' }
+      { name: 'exit', from: 'projects#index', to: 'projects#show' }
 
-      { name: 'create', from: 'dcos#index', to: 'dcos#create' }
-      { name: 'exit', from: 'dcos#create', to: 'dcos#index' }
-      { name: 'showDco', from: 'dcos#create', to: 'dcos#show'}
+      { name: 'create', from: 'projects#index', to: 'projects#create' }
+      { name: 'exit', from: 'projects#create', to: 'projects#index' }
+      { name: 'showProject', from: 'projects#create', to: 'projects#show'}
 
-      { name: 'myAccount', from: 'dcos#show', to: 'users#myAccount' }
-      { name: 'exit', from: 'users#myAccount', to: 'dcos#show' }
+      { name: 'myAccount', from: 'projects#show', to: 'users#myAccount' }
+      { name: 'exit', from: 'users#myAccount', to: 'projects#show' }
 
-      { name: 'setBtc', from: 'dcos#index', to: 'users#setBtc' }
-      { name: 'exit', from: 'users#setBtc', to: 'dcos#index' }
+      { name: 'setBtc', from: 'projects#index', to: 'users#setBtc' }
+      { name: 'exit', from: 'users#setBtc', to: 'projects#index' }
 
     ]
 
