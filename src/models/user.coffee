@@ -56,8 +56,7 @@ class User extends FirebaseModel
       { name: 'setBounty', from: 'awards#show', to: 'awards#edit' }
       { name: 'exit', from: 'awards#edit', to: 'awards#show' }
 
-      { name: 'solutions', from: 'awards#show', to: 'rewards#index' }
-      { name: 'showSolution', from: 'awards#show', to: 'rewards#show' }
+      { name: 'rewards', from: 'awards#show', to: 'rewards#index' }
       { name: 'exit', from: 'rewards#index', to: 'awards#show' }
 
       { name: 'show', from: 'rewards#index', to: 'rewards#show' }
