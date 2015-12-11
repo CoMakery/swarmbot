@@ -217,63 +217,6 @@ describe 'swarmbot', ->
             name: 'Kitais'
             suggestedAmount: '4000'
 
-    context 'awards#show', ->
-      context 'setBounty', ->
-        awardId = 'Be Amazing'
-        dcoId = 'my dco'
-        user = ->
-          new User
-            name: userId
-            state: 'awards#show'
-            stateData: {awardId: awardId}
-            current_dco: dcoId
-          .save()
-        dco = ->
-          new DCO(name: dcoId, project_owner: userId).save()
-        award = (dco)->
-          dco.createAward(name: awardId)
-
-        it "shows setBounty item only for progenitors", ->
-          user()
-          .then (@user)=> dco()
-          .then (@dco)=> award(@dco)
-          .then (@award)=> App.route message()
-          .then (reply)=>
-            (json reply).should.match /\d: set reward/i
-            @dco.set 'project_owner', 'someoneElse'
-          .then (@dco)=> App.route message()
-          .then (reply)=>
-            (json reply).should.not.match /\d: set reward/i
-
-        it "sets the bounty", ->
-          user()
-          .then (@user)=> dco()
-          .then (@dco)=> award(@dco)
-          .then (@award)=> App.route message()
-          .then (reply)=> App.route message('4') # Set Bounty
-          .then (reply)=>
-            json(reply).should.match /Enter the bounty amount/
-            @message = message '1000'
-            App.route @message
-          .then (reply)=>
-            @message.parts[0].should.match /Bounty amount set to 1000/
-            (json reply).should.match /task: be amazing/i
-            @award.fetch()
-          .then (award)=> award.get('amount').should.eq '1000'
-
-        it "doesn't set the bounty if you enter non-numbers", ->
-          user()
-          .then (@user)=> dco()
-          .then (@dco)=> award(@dco)
-          .then (@award)=> App.route message()
-          .then (reply)=> App.route message('4') # Set Bounty
-          .then (reply)=>
-            @message = message '1000x'
-            App.route @message
-          .then (reply)=>
-            @message.parts[0].should.match /please enter only numbers/i
-            json(reply).should.match /Enter the bounty amount/
-
   context 'rewards', ->
     context 'rewards#create', -> # create reward
       awardId = 'a very special award'
