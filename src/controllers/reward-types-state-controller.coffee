@@ -12,8 +12,8 @@ ZorkView = require '../views/zork-view'
 class RewardTypesStateController extends ApplicationController
 
   upvote: (data)->
-    @getDco().then (dco)=>
-      RewardType.find(data.rewardTypeId, parent: dco)
+    @getProject().then (project)=>
+      RewardType.find(data.rewardTypeId, parent: project)
     .then (rewardType)=>
       unless rewardType.exists()
         throw new Error "Could not find the task '#{data.rewardTypeId}'. Please verify that it exists."
@@ -45,13 +45,13 @@ class RewardTypesStateController extends ApplicationController
       # fall through to render
       Promise.resolve()
     else if not data.name?
-      @getDco()
-      .then (dco)=> dco.makeRewardType name: @input  # throws op error if already exists
+      @getProject()
+      .then (project)=> project.makeRewardType name: @input  # throws op error if already exists
       .then => data.name = @input
     else if not data.suggestedAmount?
       data.suggestedAmount = @input.trim()
-      promise = @getDco()
-        .then (dco)=> dco.createRewardType data
+      promise = @getProject()
+        .then (project)=> project.createRewardType data
         .then (@rewardType)=>
 
     promise
@@ -67,8 +67,8 @@ class RewardTypesStateController extends ApplicationController
       if not data.bounty?
         if @input.match /^\d+$/
           data.bounty = @input
-          return @getDco()
-          .then (dco)-> RewardType.find data.rewardTypeId, parent: dco
+          return @getProject()
+          .then (project)-> RewardType.find data.rewardTypeId, parent: project
           .then (rewardType)-> rewardType.set 'amount', data.bounty
           .then =>
             @sendInfo "Bounty amount set to #{data.bounty}"

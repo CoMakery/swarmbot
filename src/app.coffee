@@ -5,7 +5,7 @@ User = require './models/user'
 controllers =
   rewardTypes: require './controllers/reward-types-state-controller'
   general:     require './controllers/general-state-controller'
-  dcos:        require './controllers/dcos-state-controller'
+  projects:        require './controllers/projects-state-controller'
   users:       require './controllers/users-state-controller'
   rewards:     require './controllers/rewards-state-controller'
 

@@ -5,7 +5,7 @@ Firebase = require 'firebase'
 Colu = require 'colu'
 
 class Swarmbot
-  feedbackDcokey: 'swarmbot-lovers'
+  feedbackProjectkey: 'swarmbot-lovers'
 
   firebase: ->
     @_firebase ?= new Firebase process.env.FIREBASE_URL

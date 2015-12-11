@@ -16,9 +16,9 @@ class RewardsStateController extends ApplicationController
     username
 
   create: (data={})->
-    @getDco()
-    .then (dco)=> dco.fetch()
-    .then (@dco)=>
+    @getProject()
+    .then (project)=> project.fetch()
+    .then (@project)=>
       if not @input
         # fall through to render
       else if not data.recipient?
@@ -36,10 +36,10 @@ class RewardsStateController extends ApplicationController
       else if not data.description?
         data.description = @input.trim().replace /\$,/, ''
         data.issuer = @currentUser.key()
-        @dco.createReward(data)
+        @project.createReward(data)
         .then (@reward)=> User.find data.recipient
         .then (@recipient)=>
-          RewardType.find(data.rewardTypeId, parent: @dco)
+          RewardType.find(data.rewardTypeId, parent: @project)
         .then (rewardType)=>
           @sendReward(rewardType, data.rewardAmount)
           Promise.resolve() # don't wait on sendReward's promise, which waits for the blockchain
@@ -57,17 +57,17 @@ class RewardsStateController extends ApplicationController
                                                     when the transaction is complete."
       else
         @currentUser.set 'stateData', data
-        .then => @render new CreateView @dco, data, {recipient}
+        .then => @render new CreateView @project, data, {recipient}
 
   setStateData: (data)->
     @currentUser.set 'stateData', data
     .then => @redirect()
 
 # only admin:
-      # @getDco()
-      # .then (@dco)=>
-      #   if @dco.get('project_owner') is @currentUser.key()
-      #     RewardType.find(data.rewardTypeId, parent: @dco)
+      # @getProject()
+      # .then (@project)=>
+      #   if @project.get('project_owner') is @currentUser.key()
+      #     RewardType.find(data.rewardTypeId, parent: @project)
       #   else
       #     Promise.reject(Promise.OperationalError "Only the creator of this project can send rewards")
 

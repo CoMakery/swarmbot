@@ -4,8 +4,8 @@
 Promise = require 'bluebird'
 ApplicationController = require './application-state-controller'
 swarmbot = require '../models/swarmbot'
-DCO = require '../models/dco'
-DcoCollection = require '../collections/dco-collection'
+Project = require '../models/project'
+ProjectCollection = require '../collections/project-collection'
 ShowView = require '../views/users/show-view'
 BtcView = require '../views/users/btc-view'
 BalanceView = require '../views/general/balance-view'
@@ -16,7 +16,7 @@ class UsersStateController extends ApplicationController
   # TODO:
   # consider switching to just users#edit and users#update controller actions:
   #
-  # edit  # read the state and render setBtc or setDco tempalate
+  # edit  # read the state and render setBtc or setProject template
   # update # read the state and update the right field from the input
 
 

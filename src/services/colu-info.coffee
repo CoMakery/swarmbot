@@ -3,7 +3,7 @@ debug = require('debug')('app')
 request = require 'request-promise'
 Promise = require 'bluebird'
 swarmbot = require '../models/swarmbot'
-DCO = require '../models/dco.coffee'
+Project = require '../models/project.coffee'
 User = require '../models/user'
 
 
@@ -21,9 +21,9 @@ class ColuInfo
         json: true
       .then (data)=>
         Promise.map data.assets, (asset)->
-          DCO.findBy 'coluAssetId', asset.assetId
-          .then (dco)=>
-            asset.name = dco.get('name')
+          Project.findBy 'coluAssetId', asset.assetId
+          .then (project)=>
+            asset.name = project.get('name')
             asset
           .catch =>
             asset
@@ -35,9 +35,9 @@ class ColuInfo
         reject Promise.OperationalError("(Currently not available)")
 
 
-  getAssetInfo: (dco)->
+  getAssetInfo: (project)->
     new Promise (resolve, reject)=>
-      uri = "#{swarmbot.coluExplorerUrl()}/api/getassetinfowithtransactions?assetId=#{dco.get('coluAssetId')}"
+      uri = "#{swarmbot.coluExplorerUrl()}/api/getassetinfowithtransactions?assetId=#{project.get('coluAssetId')}"
       debug uri
       request
         uri: uri
@@ -48,13 +48,13 @@ class ColuInfo
         debug error.message
         reject Promise.OperationalError("(Currently not available)")
 
-  allHolders: (dco)->
-    @getAssetInfo(dco)
+  allHolders: (project)->
+    @getAssetInfo(project)
     .then (data)=>
-      filter data.holders, (holder)=> holder.address != dco.get('coluAssetAddress')
+      filter data.holders, (holder)=> holder.address != project.get('coluAssetAddress')
 
-  allHoldersWithNames: (dco)->
-    @allHolders(dco)
+  allHoldersWithNames: (project)->
+    @allHolders(project)
     .then (holders)=>
       Promise.map holders, (holder)=>
         User.findBy 'btc_address', holder.address

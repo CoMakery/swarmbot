@@ -5,7 +5,7 @@
 UsersController = require '../controllers/users-controller'
 swarmbot = require '../models/swarmbot'
 User = require '../models/user'
-DCO = require '../models/dco'
+Project = require '../models/project'
 inspect = require('util').inspect
 
 module.exports = (robot)->

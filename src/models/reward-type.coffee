@@ -23,16 +23,16 @@ class RewardType extends FirebaseModel
 
   awardTo: Promise.promisify (btcAddress, amount, cb)->
     swarmbot.colu().then (colu)=>
-      dco = @parent
+      project = @parent
       args =
-        from: [ dco.get('coluAssetAddress') ]
+        from: [ project.get('coluAssetAddress') ]
         to: [{
           address: btcAddress
-          assetId: dco.get('coluAssetId')
+          assetId: project.get('coluAssetId')
           amount: amount
         }]
         metadata:
-          project: dco.get 'name'
+          project: project.get 'name'
           rewardType: @get 'name'
 
       try
