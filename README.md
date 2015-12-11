@@ -72,11 +72,12 @@ HUBOT_INSTAGRAM_CLIENT_KEY
 
 ### Code Notes
 
-|Naming            |                  |                  |
-|------------------|:----------------:|:----------------:|
-|Current interface |project           |award             |
-|Current DB        |project           |proposal          |
-|Cruft in code     |DCO               |proposal, task    |
+|Naming            |                  |                         |                         |
+|------------------|:----------------:|:-----------------------:|:-----------------------:|
+|Current interface |project           |award                    |reward                   |
+|Desired code & DB |project           |rewardType               |reward                   |
+|Current DB        |project           |award                    |solution                 |
+|Cruft in code     |DCO               |~                        |~                        |
 
 ## License
 
