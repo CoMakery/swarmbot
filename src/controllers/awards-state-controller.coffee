@@ -5,20 +5,11 @@ Promise = require 'bluebird'
 ApplicationController = require './application-state-controller'
 AwardCollection = require '../collections/award-collection'
 Award = require '../models/award'
-ShowView = require '../views/awards/show-view'
 CreateView = require '../views/awards/create-view'
 EditView = require '../views/awards/edit-view'
 ZorkView = require '../views/zork-view'
 
 class AwardsStateController extends ApplicationController
-
-  show: (data)->
-    awardId = data.awardId ? throw new Error "show requires an id"
-    @getDco()
-    .then (dco)=> Award.find(awardId, parent: dco)
-    .then (award)=>
-      canSetBounty = (award.parent.get('project_owner') == @currentUser.key())
-      @render(new ShowView(award, { canSetBounty }))
 
   upvote: (data)->
     @getDco().then (dco)=>
