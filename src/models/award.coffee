@@ -3,7 +3,6 @@
 Promise = require 'bluebird'
 swarmbot = require '../models/swarmbot'
 FirebaseModel = require './firebase-model'
-Solution = require './solution'
 RatingCollection = require '../collections/rating-collection'
 
 class Award extends FirebaseModel

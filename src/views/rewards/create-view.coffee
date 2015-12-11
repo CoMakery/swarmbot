@@ -15,7 +15,7 @@ class CreateView extends ZorkView
   render: ->
     if not @data.recipient?
       @question "Which slack @user should I send the reward to? ('x' to exit)"
-    else if not @data.awardId? # which points to a award: this solution's parent
+    else if not @data.awardId? # which points to a award: this reward's parent
       [
         {
           pretext: "What award type?"

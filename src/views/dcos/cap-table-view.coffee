@@ -14,7 +14,7 @@ class CapTableView extends ZorkView
       names.push name or address
 
     if isEmpty names
-      @warning "No cap table to show.  Try rewarding some solutions first."
+      @warning "No awards have yet been issued for this project."
     else
       total = sum amounts
       amounts = (amount * 100 / total for amount in amounts)

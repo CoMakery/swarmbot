@@ -24,7 +24,7 @@ class ShowView extends ZorkView
     [Home] #{@bold headline}
     #{@renderMenu()}
 
-    Rewards are granted by project admins for accepted solutions at their discretion.
+    Note: awards are granted by project admins at their discretion.
     To take an action, simply enter the number or letter at the beginning of the line.
     """
 

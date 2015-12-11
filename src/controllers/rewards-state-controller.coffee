@@ -6,7 +6,7 @@ ApplicationController = require './application-state-controller'
 Award = require '../models/award'
 Reward = require '../models/reward'
 User = require '../models/user'
-CreateView = require '../views/solutions/create-view'
+CreateView = require '../views/rewards/create-view'
 
 class RewardsStateController extends ApplicationController
   cleanUsername: (username)->
