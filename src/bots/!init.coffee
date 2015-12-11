@@ -66,9 +66,6 @@ InitBot = (robot)->
     App.route(msg).then (response)->
       robot.pmReply msg, response
 
-  robot.router.post '/hubot/chatsecrets/:room', (req, res)->
-    p "HTTP webhook received", req, res
-
   App.respond /what data\?$/i, (msg)->
     p pjson msg
     msg.send 'check the logs'
@@ -87,6 +84,5 @@ InitBot = (robot)->
     .then (projects)=> robot.pmReply res, projects
 
   App.respond /welcome me$/i, (msg)-> greet msg
-
 
 module.exports = InitBot
