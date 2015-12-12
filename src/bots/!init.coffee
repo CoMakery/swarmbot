@@ -16,7 +16,6 @@ Promise = require 'bluebird'
 swarmbot = require '../models/swarmbot'
 User = require '../models/user'
 global.App = require '../app'
-UsersController = require '../controllers/users-controller'
 
 App.airbrake = airbrake
 

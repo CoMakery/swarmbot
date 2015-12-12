@@ -19,6 +19,12 @@ message = (input)->
     parts: @parts
     match: [null, input]
     send: (reply)=> throw new Error "deprecated, use pmReply"
+    message:
+      user:
+        name: 'frank'
+        id: userId
+        real_name: 'Frank Herbert'
+        email_address: 'frank@herbert.com'
     robot:
       whose: (msg)-> userId
       messageRoom: ->
