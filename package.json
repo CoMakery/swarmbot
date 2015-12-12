@@ -3,10 +3,11 @@
   "version": "0.4.6",
   "private": true,
   "authors": [
-    "Joel Dietz <joel.dietz@citizencode.io>",
-    "Harlan T Wood <harlan@citizencode.io>",
-    "Noah Thorp <noah@citizencode.io>",
-    "Duke Dorje <duke@citizencode.io>"
+    "Joel Dietz (https://github.com/fractastical)",
+    "Harlan T Wood (https://github.com/harlantwood)",
+    "Noah Thorp (https://github.com/aquabu)",
+    "Duke Dorje (https://github.com/dukedorje)",
+    "Glenn Jahnke (https://github.com/gleenn)"
   ],
   "description": "Bot for bounties",
   "scripts": {
