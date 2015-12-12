@@ -10,7 +10,6 @@ controllers =
   rewards:     require './controllers/rewards-state-controller'
 
 class App
-  @UNIQUE_KEY: 'WxmhxTuxKfjnVQ3mLgGZaG2KPn'
   @COIN = '❂'
   @MAX_SLACK_IMAGE_SIZE = Math.pow 2,19
 
