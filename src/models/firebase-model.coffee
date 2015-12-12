@@ -63,7 +63,7 @@ class FirebaseModel
     @save()
 
   fetch: Promise.promisify (cb)->
-    throw new Error "No name attribute is set, cannot fetch" unless @get('name')
+    throw new Error "No 'name' attribute is set, cannot fetch" unless @get('name')
     @firebase().once 'value', (@snapshot)=>
       @parseSnapshot()
       cb(null, @)
