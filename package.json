@@ -11,19 +11,22 @@
   ],
   "description": "Bot for bounties",
   "scripts": {
-    "colu": "colu",
-    "deploy": "bin/deploy",
-    "deploy-staging": "npm run fulltest && git branch --force staging head && git push --force --tags origin staging:staging",
-    "deploy-production": "git fetch && git branch --force production origin/staging && git push --force --tags origin production:production",
+    "start": "bin/hubot --adapter slack",
     "dev": "bin/hubot --name s",
     "devbot": "bin/devbot",
+
     "fulltest": "npm test && npm run lint",
-    "lint": "coffeelint --quiet src test",
-    "shipit": "if [[ $(git status --porcelain) ]]; then echo '*** Please stash or commit changes first ***\n'; else npm run push-if-green; fi ",
-    "push-if-green": "npm run fulltest && git push --tags origin head",
-    "start": "bin/hubot --adapter slack",
-    "test": "mocha",
     "testv": "mocha --full-trace",
+    "test": "mocha",
+    "lint": "coffeelint --quiet src test",
+
+    "deploy-staging": "npm run pre-push && npm version patch && git push --tags origin head && git branch --force staging head && git push --force origin staging:staging",
+    "deploy-production": "git fetch && git branch --force production origin/staging && git push --force origin production:production",
+    "shipit": "npm run pre-push && git push --tags origin head",
+    "pre-push": "npm run check-clean && npm run fulltest",
+    "check-clean": "if [[ $(git status --porcelain) ]]; then echo '*** Please stash or commit changes first ***\n' && exit 1; fi ",
+
+    "deploy": "bin/deploy",
     "wrap": "npm shrinkwrap"
   },
   "devDependencies": {
