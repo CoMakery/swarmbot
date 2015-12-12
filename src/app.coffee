@@ -10,6 +10,7 @@ controllers =
   rewards:     require './controllers/rewards-state-controller'
 
 class App
+  @UNIQUE_KEY: 'WxmhxTuxKfjnVQ3mLgGZaG2KPn'
   @COIN = '❂'
   @MAX_SLACK_IMAGE_SIZE = Math.pow 2,19
 
@@ -68,7 +69,6 @@ class App
 
   @registerUser: (msg)->
     msg.currentUser.fetch().then (user)=>
-      user.set "last_active_on_slack", Date.now()
       unless user.get "slack_username"
         slackUsername = msg.message.user.name
         slackId = msg.message.user.id
@@ -80,5 +80,6 @@ class App
         user.set "real_name", realName if realName
         user.set "email_address", emailAddress if emailAddress
         user.set "slack_id", slackId if slackId
+      user.set "last_active_on_slack", Date.now()
 
 module.exports = App

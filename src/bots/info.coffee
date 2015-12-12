@@ -10,10 +10,10 @@ swarmbot = require '../models/swarmbot'
 
 module.exports = (robot)->
 
-  App.respond /airbrake exception!$/i, (msg)->
+  App.respond /airbrake exception! WxmhxTuxKfjnVQ3mLgGZaG2KPn$/i, (msg)->
     throw new Error('I am a test exception')
 
-  App.respond /airbrake notify!$/i, (msg)->
+  App.respond /airbrake notify! WxmhxTuxKfjnVQ3mLgGZaG2KPn$/i, (msg)->
     if App.airbrake
       err = new Error('Hi through Airbrake')
       App.airbrake.notify err, (err, url)->
@@ -24,41 +24,21 @@ module.exports = (robot)->
     else
       msg.send "No airbrake configured"
 
-  App.respond /x marks the what$/i, (msg)->
-    msg.send "https://www.youtube.com/watch?v=SFY-Kg1OqAk"
-
-  App.respond /hello$/i, (msg)->
-    msg.send msg.random ["hello my friend", "hey buddy", "maybe it's time to swarm it?", "hi", "hello, it's good to see you, figuratively speaking"]
-
-  App.respond /fork me$/i, (msg)->
-    msg.send "https://github.com/citizencode/swarmbot"
-
-  App.respond /nyan$/i, (msg)->
-    msg.send "https://www.youtube.com/watch?v=QH2-TGUlwu4"
-
-  App.respond /space kitty say$/i, (msg)->
-    authenticateUser(msg)
-    count = 1
-    Instagram.tags.recent
-      name: 'spacekittysay'
-      count: count
-      complete: (data)->
-        for item in data
-          msg.send item['images']['standard_resolution']['url']
-
-  App.respond /colu/i, (msg)->
+  App.respond /colu WxmhxTuxKfjnVQ3mLgGZaG2KPn/i, (msg)->
     swarmbot.colu()
 
-authenticateUser = (msg)->
-  config =
-    client_key:     process.env.HUBOT_INSTAGRAM_CLIENT_KEY
-    client_secret:  process.env.HUBOT_INSTAGRAM_ACCESS_KEY
+  App.respond /stats WxmhxTuxKfjnVQ3mLgGZaG2KPn/i, (msg)->
 
-  unless config.client_key
-    msg.send "Please set the HUBOT_INSTAGRAM_CLIENT_KEY environment variable."
-    return
-  unless config.client_secret
-    msg.send "Please set the HUBOT_INSTAGRAM_ACCESS_TOKEN environment variable."
-    return
-  Instagram.set('client_id', config.client_key)
-  Instagram.set('client_secret', config.client_secret)
+    usersRef = swarmbot.firebase().child('users')
+
+    usersRef.orderByChild("account_created").startAt(Date.now() - (1000*60*60*24*7)).once 'value', (snapshot)=>
+      msg.send "#{snapshot.numChildren()} new users signed up in the last week."
+
+    usersRef.orderByChild("last_active_on_slack").startAt(Date.now() - (1000*60*60*24*7)).once 'value', (snapshot)=>
+      msg.send "There are #{snapshot.numChildren()} users active in the last week."
+
+    usersRef.orderByChild("last_active_on_slack").startAt(Date.now() - (1000*60*60*24*30)).once 'value', (snapshot)=>
+      msg.send "There are #{snapshot.numChildren()} users active in the last month."
+
+    usersRef.once 'value', (snapshot)=>
+      msg.send "There are #{snapshot.numChildren()} users total."
