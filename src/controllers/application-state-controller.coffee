@@ -92,7 +92,7 @@ class ApplicationStateController
       Promise.reject(Promise.OperationalError("Sorry, that address doesn't seem to exist."))
     .then (response)=>
       if not response.headers['content-type']?.startsWith 'image/'
-        Promise.reject(Promise.OperationalError("Sorry, that doesn't seem to be an image..."))
+        Promise.reject(Promise.OperationalError("Sorry, we can't download that, please try a different image..."))
       else if response.headers['content-length'] >= App.MAX_SLACK_IMAGE_SIZE
         Promise.reject(Promise.OperationalError("Sorry, that image is too large. Try one of less than half a megabyte..."))
 
