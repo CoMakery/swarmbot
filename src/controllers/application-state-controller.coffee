@@ -1,12 +1,12 @@
 request = require 'request-promise'
 validator = require 'validator'
 debug = require('debug')('app')
-{ log, p, pjson, type } = require 'lightsaber'
+{ json, log, p, pjson, type } = require 'lightsaber'
 { extend, isEmpty } = require 'lodash'
-User = require '../models/user'
 Promise = require 'bluebird'
-Project = require '../models/project'
 swarmbot = require '../models/swarmbot'
+User = require '../models/user'
+Project = require '../models/project'
 ZorkHelper = require '../helpers/zork-helper'
 
 class ApplicationStateController
@@ -64,7 +64,13 @@ class ApplicationStateController
       if projectId?
         Project.find projectId
       else
-        Promise.reject(Promise.OperationalError("Please specify the project in the command."))
+        @reset()
+
+  reset: ->
+    debug "Resetting to #{User::initialState} from state: #{json @currentUser?.get 'state'}, stateData: #{json @currentUser?.get 'stateData'}"
+    @currentUser?.set('state', User::initialState)
+    @currentUser?.set('stateData', {})
+    .then => @redirect()
 
   parseImageUrl: (ignore='n')->
     if @input.trim().toLowerCase() is ignore
