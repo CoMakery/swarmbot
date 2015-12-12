@@ -42,10 +42,8 @@ class App
       controller = new controllerClass(msg) if controllerClass?
       unless controller and controller[action]
         errorMessage = "Unexpected user state #{user.current} -- resetting to default state"
-
         msg.send("*#{errorMessage}*") if process.env.NODE_ENV is 'development'
-
-        console.error "#{errorMessage}"
+        console.error errorMessage
         return user.set('state', User::initialState).then => @route(msg)
 
       controller.input = msg.match[1]
