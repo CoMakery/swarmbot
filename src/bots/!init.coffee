@@ -66,7 +66,7 @@ InitBot = (robot)->
     App.route(msg).then (response)->
       robot.pmReply msg, response
 
-  App.respond /what data\?$/i, (msg)->
+  App.respond /what data\? 38ab73de79958458fb324e657c5236$/i, (msg)->
     p pjson msg
     msg.send 'check the logs'
 
