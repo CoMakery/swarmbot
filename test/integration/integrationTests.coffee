@@ -239,7 +239,9 @@ describe 'swarmbot', ->
       project = ->
         new Project(name: projectId, project_owner: userId).save()
       rewardType = (project)->
-        project.createRewardType(name: rewardTypeId)
+        project.createRewardType
+          name: rewardTypeId
+          suggestedAmount: '888'
 
       it "allows an admin to award coins to a user", ->
         user()
@@ -251,8 +253,7 @@ describe 'swarmbot', ->
           json(reply).should.match /Which slack @user should I send the reward to/i
           App.route message('@duke')
         .then (reply)=>
-          json(reply).should.match /What award type.+A.+a very special award/
-
+          json(reply).should.match /What award type.+A.+a very special award.+888/
           App.route message('A')
         .then (reply)=>
           json(reply).should.match /How much do you want to reward @duke for \\"a very special award\\"/i

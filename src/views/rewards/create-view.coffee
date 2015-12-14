@@ -34,8 +34,11 @@ class CreateView extends ZorkView
     i = 0
     menu = {}
     @project.rewardTypes().map (rewardType)=>
+      suggestedAmount = rewardType.get('suggestedAmount')
+      rewardTypeText = rewardType.get('name')
+      rewardTypeText += " (#{suggestedAmount})" if suggestedAmount
       menu[@letters[i++]] =
-        text: rewardType.get('name')
+        text: rewardTypeText
         data: merge {rewardTypeId: rewardType.key()}, @data
         command: 'setStateData'
     menu
