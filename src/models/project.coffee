@@ -56,7 +56,10 @@ class Project extends FirebaseModel
     .then (reward)-> reward.save()
 
   rewardTypes: ->
-    new RewardTypeCollection @snapshot.child(RewardType::urlRoot), parent: @
+    if @snapshot?
+      new RewardTypeCollection @snapshot.child(RewardType::urlRoot), parent: @
+    else
+      new RewardTypeCollection [], parent: @
 
   rewards: ->
     new RewardCollection @snapshot.child(Reward::urlRoot), parent: @

@@ -33,7 +33,12 @@ class CreateView extends ZorkView
   rewardTypesMenu: ->
     i = 0
     menu = {}
-    @project.rewardTypes().map (rewardType)=>
+    rewardTypes = @project.rewardTypes()
+    
+    # if rewardTypes.isEmpty? # not sure why this doesn't work
+    if rewardTypes.models.length == 0
+      return {'x': {text: 'No award types, please create one', transition: 'exit'}}
+    rewardTypes.map (rewardType)=>
       suggestedAmount = rewardType.get('suggestedAmount')
       rewardTypeText = rewardType.get('name')
       rewardTypeText += " (#{suggestedAmount})" if suggestedAmount

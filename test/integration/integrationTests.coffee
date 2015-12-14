@@ -246,14 +246,26 @@ describe 'swarmbot', ->
       it "allows an admin to award coins to a user", ->
         user()
         .then (@user)=> project()
-        .then (@project)=> rewardType(@project)
-        .then (@rewardType)=> @project.fetch()
+        .then (@project)=> @project.fetch()
         .then (@project)=> App.route message('')
         .then (reply)=>
           json(reply).should.match /Which slack @user should I send the reward to/i
           App.route message('@duke')
         .then (reply)=>
-          json(reply).should.match /What award type.+A.+a very special award.+888/
+          json(reply).should.match /What award type\?/
+          json(reply).should.match /No award types, please create one/
+          rewardType(@project)
+        .then (@rewardType)=>
+          App.route message('x')
+        .then (reply)=>
+          json(reply).should.match /5: send an award/
+          App.route message('5')
+        .then (reply)=>
+          json(reply).should.match /Which slack @user should I send the reward to/i
+          App.route message('@duke')
+        .then (reply)=>
+          json(reply).should.match /What award type\?/
+          json(reply).should.match /a very special award.+888/
           App.route message('A')
         .then (reply)=>
           json(reply).should.match /How much do you want to reward @duke for \\"a very special award\\"/i
@@ -277,3 +289,4 @@ describe 'swarmbot', ->
             rewardAmount: '4000'
             rewardTypeId: @rewardType.key()
             description: 'was awesome'
+            projectId: "a project"

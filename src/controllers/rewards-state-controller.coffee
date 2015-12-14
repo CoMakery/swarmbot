@@ -63,6 +63,10 @@ class RewardsStateController extends ApplicationController
     @currentUser.set 'stateData', data
     .then => @redirect()
 
+  # is there a better way to use the global exit controller action?
+  exitRewardTypeSelection: ->
+    @reset()
+
 # only admin:
       # @getProject()
       # .then (@project)=>
