@@ -50,7 +50,7 @@
     "hubot-slack": "^3.3.0",
     "instagram-node-lib": "0.1.1",
     "javascript-state-machine": "^2.3.5",
-    "lightsaber": "^0.4.1",
+    "lightsaber": "^0.5.0",
     "lodash": "^3.10.0",
     "moment": "^2.10.6",
     "request-promise": "0.4.3",
