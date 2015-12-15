@@ -4,7 +4,7 @@ ZorkView = require '../zork-view'
 moment = require 'moment'
 
 class ListRewardsView extends ZorkView
-  constructor: ({@rewardTypes, @rewards})->
+  constructor: ({@project, @rewardTypes, @rewards})->
 
   render: ->
     rewards = @rewards.map (reward)=>
@@ -21,7 +21,7 @@ class ListRewardsView extends ZorkView
     .join("\n")
 
     """
-      AWARDS
+      *AWARDS FOR #{@project.get('name')}*
       #{rewards}
     """
 module.exports = ListRewardsView

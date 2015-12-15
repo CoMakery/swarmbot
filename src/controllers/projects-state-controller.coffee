@@ -97,6 +97,7 @@ class ProjectsStateController extends ApplicationController
           reward
     .then (rewards)=>
       view  = new ListRewardsView
+        project: @project
         rewards: rewards
         rewardTypes: @project.rewardTypes()
       @render view
