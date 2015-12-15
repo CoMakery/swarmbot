@@ -315,16 +315,43 @@ describe 'swarmbot', ->
             description: 'was awesome'
             projectId: "a project"
 
-      it "resets a user's state if they route with an invalid state", ->
-        new User
-          name: userId
-          state: 'invalid#state'
-          stateData: {}
-        .save()
-        .then (@user)=>
-          @message = message('')
+      it "shows messages if user isn't in the db, or if they don't have a bitcoin address", ->
+        user()
+        .then (@user)=> project()
+        .then (@project)=>
+          @project.set 'project_owner', @user.key()
+          @project.fetch()
+        .then (@project)=>
+          App.route message('')
+        .then (reply)=>
+          App.route message('5')
+        .then (reply)=>
+          @message = message('@not_a_slack_user')
           App.route @message
         .then (reply)=>
-          @user.fetch()
-        .then (@user)=>
-          @user.get('state').should.eq User::initialState
+          @message.parts[0].should.match /The user '@not_a_slack_user' is not recognized.+Please have them register a bitcoin address./
+        .then (reply)=>
+          new User
+            name: 'slack:id2'
+            slack_username: 'real_user'
+          .save()
+        .then (@recipient)=>
+          @message = message('@real_user: ')
+          App.route @message
+        .then (reply)=>
+          @message.parts[0].should.match /This user doesn't have a registered bitcoin address./
+
+  context 'error states', ->
+    it "resets a user's state if they route with an invalid state", ->
+      new User
+        name: userId
+        state: 'invalid#state'
+        stateData: {}
+      .save()
+      .then (@user)=>
+        @message = message('')
+        App.route @message
+      .then (reply)=>
+        @user.fetch()
+      .then (@user)=>
+        @user.get('state').should.eq User::initialState
