@@ -38,7 +38,12 @@ describe 'swarmbot', ->
     context 'projects#show', ->
       it "shows the user's current project", ->
         projectId = 'Your Great Project'
-        new User(name: userId, current_project: projectId, state: 'projects#show').save()
+        new User
+          name: userId
+          current_project: projectId
+          state: 'projects#show'
+          btc_address: '3HNSiAq7wFDaPsYDcUxNSRMD78qVcYKicw'
+        .save()
         .then (@user) =>
         @project = new Project
           name: projectId
@@ -55,6 +60,7 @@ describe 'swarmbot', ->
           jreply.should.match /Do stuff/i
           jreply.should.match /Be glorious/i
           jreply.should.match /\d: create an award/i
+          jreply.should.match /bitcoin address: 3HNSiAq7wFDaPsYDcUxNSRMD78qVcYKicw/i
 
     context 'projects#index', ->
       sinon.stub(ColuInfo.prototype, 'balances').returns Promise.resolve [
