@@ -142,9 +142,8 @@ describe 'swarmbot', ->
           @message = message('2')
           App.route @message
         .then (reply)=>
-          jreply = json(reply)
-          jreply.should.match /\*AWARDS FOR Community A\*/
-          jreply.should.match /\d{4}\s+❂ 100\s+\*Joe User\*\s+Super sweet award\s+_He is helpful_/
+          @message.parts[0].should.match /\*AWARDS FOR Community A\*/
+          @message.parts[0].should.match /\d{4}\s+❂ 100\s+\*Joe User\*\s+Super sweet award\s+_He is helpful_/
 
       context 'projects#create', ->
         beforeEach ->
