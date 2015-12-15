@@ -34,7 +34,7 @@ class CreateView extends ZorkView
     i = 0
     menu = {}
     rewardTypes = @project.rewardTypes()
-    
+
     # if rewardTypes.isEmpty? # not sure why this doesn't work
     if rewardTypes.models.length == 0
       return {'x': {text: 'No award types, please create one', transition: 'exit'}}

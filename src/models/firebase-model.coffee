@@ -62,6 +62,10 @@ class FirebaseModel
     @attributes[attr] = val
     @save()
 
+  update: (newAttributes)->
+    assign @attributes, newAttributes
+    @save()
+
   fetch: Promise.promisify (cb)->
     throw new Error "No 'name' attribute is set, cannot fetch" unless @get('name')
     @firebase().once 'value', (@snapshot)=>

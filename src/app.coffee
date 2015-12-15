@@ -32,24 +32,27 @@ class App
             resolve('')
 
     # otherwise do Zork MVC routing:
-    @setCurrentUser msg
-    @registerUser msg
+
+    msg.currentUser ?= new User name: msg.robot.whose(msg)
     msg.currentUser.fetch()
-    .then (user)=>
-      debug "state: #{user.current}"
-      [controllerName, action] = user.current.split('#')
+    .then (@user)=>
+      @registerUser @user, msg
+    .then (@user)=>
+      debug "state: #{@user.get 'state'}"
+      [controllerName, action] = @user.get('state').split('#')
 
       controllerClass = controllers[controllerName]
       controller = new controllerClass(msg) if controllerClass?
       unless controller and controller[action]
-        errorMessage = "Unexpected user state #{user.current} -- resetting to default state"
+        errorMessage = "Unexpected @user state #{@user.get('state')} -- resetting to default state"
         msg.send("*#{errorMessage}*") if process.env.NODE_ENV is 'development'
         console.error errorMessage
-        return user.set('state', User::initialState).then => @route(msg)
+        return @user.set('state', User::initialState)
+          .then => @route(msg)
 
       controller.input = msg.match[1]
 
-      lastMenuItems = user.get('menu')
+      lastMenuItems = @user.get('menu')
       menuAction = lastMenuItems?[controller.input?.toLowerCase()]
 
       if menuAction?
@@ -59,26 +62,27 @@ class App
       else if controller[action]?
         # default action for this state
         debug "Command: #{controller.input}, controllerName: #{controllerName}, action: #{action}"
-        controller[action]( user.get('stateData') )
+        controller[action]( @user.get('stateData') )
       else
-        throw new Error("Action for state '#{user.current}' not defined.")
+        throw new Error("Action for state '#{@user.get('state')}' not defined.")
 
-  @setCurrentUser: (msg)->
-    msg.currentUser ?= new User name: msg.robot.whose(msg)
 
-  @registerUser: (msg)->
-    msg.currentUser.fetch().then (user)=>
-      unless user.get "slack_username"
-        slackUsername = msg.message.user.name
-        slackId = msg.message.user.id
-        realName = msg.message.user.real_name
-        emailAddress = msg.message.user.email_address
+  @registerUser: (user, msg)->
+    attributes = {}
+    unless user.get "slack_username"
+      slackUsername = msg.message.user.name
+      slackId = msg.message.user.id
+      realName = msg.message.user.real_name
+      emailAddress = msg.message.user.email_address
 
-        user.set "slack_username", slackUsername if slackUsername
-        user.set "first_seen", Date.now() if slackUsername
-        user.set "real_name", realName if realName
-        user.set "email_address", emailAddress if emailAddress
-        user.set "slack_id", slackId if slackId
-      user.set "last_active_on_slack", Date.now()
+      attributes.slack_username = slackUsername if slackUsername
+      attributes.first_seen = Date.now() if slackUsername
+      attributes.real_name = realName if realName
+      attributes.email_address = emailAddress if emailAddress
+      attributes.slack_id = slackId if slackId
+    attributes.last_active_on_slack = Date.now()
+    attributes.state = User::initialState unless user.get 'state'
+
+    user.update attributes
 
 module.exports = App

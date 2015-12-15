@@ -306,3 +306,17 @@ describe 'swarmbot', ->
             rewardTypeId: @rewardType.key()
             description: 'was awesome'
             projectId: "a project"
+
+      it "resets a user's state if they route with an invalid state", ->
+        new User
+          name: userId
+          state: 'invalid#state'
+          stateData: {}
+        .save()
+        .then (@user)=>
+          @message = message('')
+          App.route @message
+        .then (reply)=>
+          @user.fetch()
+        .then (@user)=>
+          @user.get('state').should.eq User::initialState

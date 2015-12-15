@@ -27,16 +27,15 @@ class ApplicationStateController
 
     if menuAction.transition?
       promise = promise.then =>
-        @currentUser.set 'stateData', menuAction.data or {}
+        @currentUser.set 'stateData', (menuAction.data or {})
+      .then (@currentUser)=>
         transitionMethod = @currentUser[menuAction.transition]
         if type(transitionMethod) is 'function'
           @currentUser[menuAction.transition]()
           debug 'redirecting...'
           @redirect(menuAction.flashMessage)
         else if type(transitionMethod) in ['null', 'undefined']
-          throw new Error "Requested state transition is undefined! Event '#{menuAction.transition}' from state '#{@currentUser.current}'"
-        else if type(transitionMethod) in ['null', 'undefined']
-          throw new Error "Requested state transition '#{json transitionMethod}' is not a function! Event '#{menuAction.transition}' from state '#{@currentUser.current}'"
+          throw new Error "Requested state transition is undefined! Event '#{menuAction.transition}' from state '#{@currentUser.get('state')}'"
 
     if menuAction.teleport?
       promise = promise.then =>
