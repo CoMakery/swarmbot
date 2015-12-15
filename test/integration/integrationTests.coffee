@@ -144,6 +144,9 @@ describe 'swarmbot', ->
         .then (reply)=>
           @message.parts[0].should.match /\*AWARDS FOR Community A\*/
           @message.parts[0].should.match /\d{4}\s+❂ 100\s+\*Joe User\*\s+Super sweet award\s+_He is helpful_/
+          jreply = json(reply)
+          jreply.should.match /COMMUNITY A/
+          jreply.should.match /Possible Awards/
 
       context 'projects#create', ->
         beforeEach ->

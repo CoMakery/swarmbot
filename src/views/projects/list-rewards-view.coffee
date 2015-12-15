@@ -24,4 +24,5 @@ class ListRewardsView extends ZorkView
       *AWARDS FOR #{@project.get('name')}*
       #{rewards}
     """
+
 module.exports = ListRewardsView

@@ -100,8 +100,9 @@ class ProjectsStateController extends ApplicationController
         project: @project
         rewards: rewards
         rewardTypes: @project.rewardTypes()
-
-      @sendPm @render view
+      @sendPm(@render(view))
+      @currentUser.exit()
+    .then =>
       @redirect()
 
 module.exports = ProjectsStateController

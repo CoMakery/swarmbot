@@ -53,6 +53,9 @@ class User extends FirebaseModel
       { name: 'create', from: 'projects#show', to: 'rewardTypes#create' }
       { name: 'exit', from: 'rewardTypes#create', to: 'projects#show' }
 
+      { name: 'rewardsList', from: 'projects#show', to: "projects#rewardsList" }
+      { name: 'exit', from: 'projects#rewardsList', to: "projects#show" }
+
       { name: 'setBounty', from: 'rewardTypes#show', to: 'rewardTypes#edit' }
       { name: 'exit', from: 'rewardTypes#edit', to: 'rewardTypes#show' }
 
