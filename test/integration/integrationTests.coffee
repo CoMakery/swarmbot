@@ -224,7 +224,7 @@ describe 'swarmbot', ->
             suggestedAmount: '4000'
 
   context 'rewards', ->
-    context 'rewards#create', -> # create reward
+    context 'rewards#create', ->
       rewardTypeId = 'a very special award'
       projectId = 'a project'
       user = ->
@@ -237,8 +237,11 @@ describe 'swarmbot', ->
           btc_address: 'i am a bitcoin address'
         .save()
       project = ->
-        new Project(name: projectId, project_owner: userId).save()
-      rewardType = (project)->
+        new Project
+          name: projectId
+          project_owner: 'nobody'
+        .save()
+      rewardType = (project)=>
         project.createRewardType
           name: rewardTypeId
           suggestedAmount: '888'
@@ -246,8 +249,21 @@ describe 'swarmbot', ->
       it "allows an admin to award coins to a user", ->
         user()
         .then (@user)=> project()
-        .then (@project)=> @project.fetch()
-        .then (@project)=> App.route message('')
+        .then (@project)=>
+          @project.fetch()
+        .then (@project)=>
+          @message = message('')
+          App.route @message
+        .then (reply)=>
+          @project.get('project_owner').should.not.eq @user.get('name')
+          json(@message.parts[0]).should.match /Only project administrators can award coins/i
+          @project.set 'project_owner', @user.key()
+          @project.save()
+        .then (@project)=>
+          App.route message('')
+        .then (reply)=>
+          json(reply).should.match /5: send an award/
+          App.route message('5')
         .then (reply)=>
           json(reply).should.match /Which slack @user should I send the reward to/i
           App.route message('@duke')

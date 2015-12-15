@@ -19,6 +19,9 @@ class RewardsStateController extends ApplicationController
     @getProject()
     .then (project)=> project.fetch()
     .then (@project)=>
+      if @project.get('project_owner') != @currentUser.get('name')
+        return Promise.reject(Promise.OperationalError("Only project administrators can award coins"))
+
       if not @input
         # fall through to render
       else if not data.recipient?
@@ -57,7 +60,9 @@ class RewardsStateController extends ApplicationController
                                                     when the transaction is complete."
       else
         @currentUser.set 'stateData', data
-        .then => @render new CreateView @project, data, {recipient}
+          .then => @render new CreateView @project, data, {recipient}
+    .error (error)=>
+      @execute transition: 'exit', flashMessage: error.message
 
   setStateData: (data)->
     @currentUser.set 'stateData', data
