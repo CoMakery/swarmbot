@@ -13,11 +13,11 @@ class ApplicationStateController
   constructor: (@msg)->
     @currentUser = @msg.currentUser
 
-  sendPm: (attachment)=> @msg.robot.pmReply @msg, attachment
+  sendPm: (attachment)=> App.pmReply @msg, attachment
 
-  sendInfo:     (text)=> @msg.robot.pmReply @msg, ZorkHelper::info text
-  sendQuestion: (text)=> @msg.robot.pmReply @msg, ZorkHelper::question text
-  sendWarning:  (text)=> @msg.robot.pmReply @msg, ZorkHelper::warning text
+  sendInfo:     (text)=> App.pmReply @msg, ZorkHelper::info text
+  sendQuestion: (text)=> App.pmReply @msg, ZorkHelper::question text
+  sendWarning:  (text)=> App.pmReply @msg, ZorkHelper::warning text
 
   execute: (menuAction)->
     promise = Promise.resolve()

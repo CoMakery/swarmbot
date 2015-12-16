@@ -1,5 +1,5 @@
-{log, p, pjson, json} = require 'lightsaber'
-{values, size} = require 'lodash'
+{json, log, p, pjson, type} = require 'lightsaber'
+{size, values} = require 'lodash'
 Promise = require 'bluebird'
 require '../helpers/testHelper'
 global.App = require '../../src/app'
@@ -11,7 +11,17 @@ nock = require 'nock'
 sinon = require 'sinon'
 InitBot = require '../../src/bots/!init'
 
-userId = "slack:1234"
+USER_ID = "slack:1234"
+
+App.robot =
+  whose: (msg)-> USER_ID
+  messageRoom: ->
+  adapter:
+    customMessage: ->
+
+App.pmReply = (msg, textOrAttachments)=>
+  reply = textOrAttachments.text or textOrAttachments
+  msg.parts.push reply
 
 message = (input)->
   @parts = []
@@ -22,15 +32,10 @@ message = (input)->
     message:
       user:
         name: 'frank'
-        id: userId
+        id: USER_ID
         real_name: 'Frank Herbert'
         email_address: 'frank@herbert.com'
-    robot:
-      whose: (msg)-> userId
-      messageRoom: ->
-      pmReply: (msg, attachment)=>
-        reply = attachment.text or attachment
-        @parts.push reply
+    robot: App.robot
   }
 
 describe 'swarmbot', ->
@@ -39,7 +44,7 @@ describe 'swarmbot', ->
       it "shows the user's current project", ->
         projectId = 'Your Great Project'
         new User
-          name: userId
+          name: USER_ID
           current_project: projectId
           state: 'projects#show'
           btc_address: '3HNSiAq7wFDaPsYDcUxNSRMD78qVcYKicw'
@@ -47,7 +52,7 @@ describe 'swarmbot', ->
         .then (@user) =>
         @project = new Project
           name: projectId
-          project_owner: userId
+          project_owner: USER_ID
           tasksUrl: 'http://example.com'
         @project.save()
         .then (@project)-> @project.createRewardType name: 'Do Stuff'
@@ -72,11 +77,11 @@ describe 'swarmbot', ->
       ]
 
       beforeEach ->
-        @user = new User(name: userId, state: 'projects#index', has_interacted: true)
+        @user = new User(name: USER_ID, state: 'projects#index', has_interacted: true)
 
       it "shows a welcome screen if there are no projects", ->
         @user.save()
-        .then (@project)=> App.route message()
+        .then (@user)=> App.route message()
         .then (reply)=>
           jreply = json(reply)
           jreply.should.match /Welcome friend!/
@@ -121,7 +126,7 @@ describe 'swarmbot', ->
 
       it "shows the list of rewards", ->
         user = new User
-          name: userId
+          name: USER_ID
           slack_username: "joe"
           real_name: 'Joe User'
           state: 'projects#show'
@@ -137,7 +142,7 @@ describe 'swarmbot', ->
             rewardTypeId: @rewardType.key()
             description: "He is helpful"
             issuer: user.key()
-            recipient: userId
+            recipient: USER_ID
             rewardAmount: 100
         .then (@reward)=>
           App.route message()
@@ -202,7 +207,7 @@ describe 'swarmbot', ->
             db.projects.Supafly.should.deep.eq
               name: 'Supafly'
               project_statement: 'Shaft'
-              project_owner: userId
+              project_owner: USER_ID
               imageUrl: 'http://example.com/very-small.png'
               tasksUrl: 'http://jira.com'
 
@@ -210,7 +215,7 @@ describe 'swarmbot', ->
     context 'rewardTypes#create', ->
       it "allows the user to create a rewardType within the current project", ->
         projectId = 'Your Great Project'
-        @user = new User(name: userId, current_project: projectId, state: 'projects#show').save()
+        @user = new User(name: USER_ID, current_project: projectId, state: 'projects#show').save()
         project = new Project(name: projectId)
         project.save()
         .then -> App.route message()
@@ -237,7 +242,7 @@ describe 'swarmbot', ->
       projectId = 'a project'
       user = ->
         new User
-          name: userId
+          name: USER_ID
           state: 'rewards#create'
           stateData: {}
           current_project: projectId
@@ -308,7 +313,7 @@ describe 'swarmbot', ->
           reward.name.should.match /[0-9-:Z]+/
           delete reward.name
           reward.should.deep.eq
-            issuer: userId
+            issuer: USER_ID
             recipient: 'slack:1234'
             rewardAmount: '4000'
             rewardTypeId: @rewardType.key()
@@ -344,7 +349,7 @@ describe 'swarmbot', ->
   context 'error states', ->
     it "resets a user's state if they route with an invalid state", ->
       new User
-        name: userId
+        name: USER_ID
         state: 'invalid#state'
         stateData: {}
       .save()
@@ -355,3 +360,24 @@ describe 'swarmbot', ->
         @user.fetch()
       .then (@user)=>
         @user.get('state').should.eq User::initialState
+
+  context 'fallback text', ->
+    context 'projects#index', ->
+
+      beforeEach ->
+        @user = new User
+          name: USER_ID
+          state: 'projects#index'
+          has_interacted: true
+
+      it "contains fallback text", ->
+        @user.save()
+        .then (@user)=> App.route message()
+        .then (reply)=> App.route message()
+        .then (reply)=>
+          type(reply).should.eq 'array'
+          reply[0].fallback.should.match /Welcome friend/
+          reply[0].fallback.should.match /Let's get started/
+
+      # TODO: loop over controller actions
+        # fallback text not empty

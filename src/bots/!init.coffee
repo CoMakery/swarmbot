@@ -12,6 +12,7 @@ if process.env.AIRBRAKE_API_KEY
 
 debug = require('debug')('app')
 { json, log, p, pjson, type } = require 'lightsaber'
+{ merge } = require 'lodash'
 Promise = require 'bluebird'
 swarmbot = require '../models/swarmbot'
 User = require '../models/user'
@@ -41,17 +42,6 @@ InitBot = (robot)->
 
   robot.whose = (msg)-> "slack:#{msg.message.user.id}"
 
-  robot.pmReply = (msg, textOrAttachments)->
-    channel = msg.message.user.name
-    if type(textOrAttachments) is 'string'
-      robot.messageRoom channel, textOrAttachments
-    else if type(textOrAttachments) in ['array', 'object']
-      robot.adapter.customMessage
-        channel: channel
-        attachments: textOrAttachments
-    else
-      throw new Error "Unexpected type(textOrAttachments)-> #{type(textOrAttachments)}"
-
   robot.isPublic = (msg)-> msg.message.room isnt msg.message.user?.name
 
   robot.slack = robot.adapter.client # TODO: Detect if this actually is a slack adapter.
@@ -61,7 +51,7 @@ InitBot = (robot)->
     if robot.isPublic msg
       msg.reply "Let's take this offline.  I PM'd you :smile:"
     App.route(msg).then (response)->
-      robot.pmReply msg, response
+      App.pmReply msg, response
 
   App.respond /what data\? WxmhxTuxKfjnVQ3mLgGZaG2KPn$/i, (msg)->
     p pjson msg
@@ -75,11 +65,11 @@ InitBot = (robot)->
     .then (@user)=> @user.set('state', 'users#welcome')   # goes away if this is new home page
     .then => App.route res
     .then (welcome)=>
-      robot.pmReply res, welcome
+      App.pmReply res, welcome
       @user.set 'state', 'users#setProject'    # goes away if this becomes the new home page
     .then => App.route res
-    .then (projects)=> robot.pmReply res, projects
+    .then (projects)=> App.pmReply res, projects
 
-  App.respond /welcome me$/i, (msg)-> greet msg
+  App.respond /welcome me WxmhxTuxKfjnVQ3mLgGZaG2KPn$/i, (msg)-> greet msg
 
 module.exports = InitBot

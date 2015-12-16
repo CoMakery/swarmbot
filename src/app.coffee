@@ -1,4 +1,5 @@
-{ json, log, p, pjson } = require 'lightsaber'
+{ json, log, p, pjson, type } = require 'lightsaber'
+{ defaults } = require 'lodash'
 Promise = require 'bluebird'
 debug = require('debug')('app')
 User = require './models/user'
@@ -55,7 +56,7 @@ class App
       lastMenuItems = @user.get('menu')
       menuAction = lastMenuItems?[controller.input?.toLowerCase()]
 
-      if menuAction?
+      resultPromise = if menuAction?
         # specific menu action of entered command
         debug "Command: #{controller.input}, controllerName: #{controllerName}, menuAction: #{json menuAction}"
         controller.execute(menuAction)
@@ -66,6 +67,44 @@ class App
       else
         throw new Error("Action for state '#{@user.get('state')}' not defined.")
 
+      resultPromise.then (textOrAttachments)=>
+        @addFallbackTextIfNeeded textOrAttachments
+
+  @pmReply: (msg, textOrAttachments)=>
+    channel = msg.message.user.name
+    if type(textOrAttachments) is 'string'
+      @robot.messageRoom(msg, channel, textOrAttachments)
+    else if type(textOrAttachments) is 'array'
+      for attachment in textOrAttachments
+        @pmReplyAttachment(msg, channel, attachment)
+    else if type(textOrAttachments) is 'object'
+      @pmReplyAttachment(msg, channel, textOrAttachments)
+    else
+      throw new Error "Unexpected type(textOrAttachments)-> #{type(textOrAttachments)}"
+
+  @pmReplyAttachment: (msg, channel, attachment)=>
+    @robot.adapter.customMessage
+      channel: channel
+      attachments: attachment
+
+  @addFallbackTextIfNeeded: (textOrAttachments)->
+    if type(textOrAttachments) is 'string'
+      textOrAttachments
+    else if type(textOrAttachments) is 'array'
+      for attachment in textOrAttachments
+        @addFallbackText(attachment)
+    else if type(textOrAttachments) is 'object'
+      @addFallbackText(textOrAttachments)
+
+  @addFallbackText: (attachment)->
+    SLACK_NON_TEXT_FIELDS = [
+      'author_icon'
+      'color'
+    ]
+    fallbackText = ''
+    for key, value of attachment
+      fallbackText += "#{value}\n" unless key in SLACK_NON_TEXT_FIELDS
+    defaults attachment, fallback: fallbackText
 
   @registerUser: (user, msg)->
     attributes = {}
