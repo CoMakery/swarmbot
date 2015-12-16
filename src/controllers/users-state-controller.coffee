@@ -8,8 +8,8 @@ Project = require '../models/project'
 ProjectCollection = require '../collections/project-collection'
 ShowView = require '../views/users/show-view'
 BtcView = require '../views/users/btc-view'
-BalanceView = require '../views/general/balance-view'
-WelcomeView = require '../views/general/welcome-view'
+BalanceView = require '../views/users/balance-view'
+WelcomeView = require '../views/users/welcome-view'
 
 class UsersStateController extends ApplicationController
 
