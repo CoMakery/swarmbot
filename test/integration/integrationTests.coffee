@@ -43,7 +43,9 @@ describe 'swarmbot', ->
   context 'projects', ->
     context 'projects#show', ->
       it "shows the user's current project", ->
-        createUser({name: USER_ID})
+        createUser
+          name: USER_ID
+          state: 'projects#show'
         .then (@user)=>
           createProject()
         .then (@project)=> @project.createRewardType name: 'Do Stuff'
