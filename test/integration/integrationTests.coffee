@@ -1,14 +1,14 @@
 {json, log, p, pjson, type} = require 'lightsaber'
 {size, values} = require 'lodash'
 Promise = require 'bluebird'
+nock = require 'nock'
+sinon = require 'sinon'
+
 { createUser, createProject } = require '../helpers/testHelper'
 global.App = require '../../src/app'
-ColuInfo = require '../../src/services/colu-info'
 Project = require '../../src/models/project'
 User = require '../../src/models/user'
 RewardType = require '../../src/models/reward-type'
-nock = require 'nock'
-sinon = require 'sinon'
 InitBot = require '../../src/bots/!init'
 
 USER_ID = "slack:1234"
@@ -61,14 +61,6 @@ describe 'swarmbot', ->
           jreply.should.match /bitcoin address: 3HNSiAq7wFDaPsYDcUxNSRMD78qVcYKicw/i
 
     context 'projects#index', ->
-      sinon.stub(ColuInfo.prototype, 'balances').returns Promise.resolve [
-        {
-          name: 'FinTechHacks'
-          assetId: 'xyz123'
-          balance: 456
-        }
-      ]
-
       beforeEach ->
         createUser
           name: USER_ID
@@ -111,7 +103,7 @@ describe 'swarmbot', ->
           App.route message()
         .then (reply)=>
           jreply = json(reply)
-          jreply.should.match /Set Current Project/
+          jreply.should.match /Choose a Project/
           jreply.should.match /A: Community A/
           jreply.should.match /B: Community B/
           jreply.should.match /C: Community C/
@@ -359,7 +351,10 @@ describe 'swarmbot', ->
           name: USER_ID
           state: 'projects#index'
           has_interacted: true
+          btc_address: '3HNSiAq7wFDaPsYDcUxNSRMD78qVcYKicw'
         .then (@user)=>
+          createProject(name: "Community A")
+        .then (@project)=>
 
       it "contains fallback text", ->
         @user.save()
@@ -367,8 +362,19 @@ describe 'swarmbot', ->
         .then (reply)=> App.route message()
         .then (reply)=>
           type(reply).should.eq 'array'
-          reply[0].fallback.should.match /Welcome friend/
-          reply[0].fallback.should.match /Let's get started/
+          reply.length.should.eq 2
+          reply[0].fallback.should.match /Contribute to projects and receive project coins/
+
+          reply[1].fallback.should.match /Choose a Project/
+          reply[1].fallback.should.match /Community A/
+
+          reply[1].fallback.should.match /Your Project Coins/
+          reply[1].fallback.should.match /FinTechHacks ❂ 456/
+          reply[1].fallback.should.match /bitcoin address: 3HNSiAq7wFDaPsYDcUxNSRMD78qVcYKicw/
+
+          reply[1].fallback.should.match /Actions/
+          reply[1].fallback.should.match /create your project/
+          reply[1].fallback.should.match /set your bitcoin address/
 
       # TODO: loop over controller actions
         # fallback text not empty

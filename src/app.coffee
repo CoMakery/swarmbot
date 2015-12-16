@@ -1,7 +1,8 @@
 { json, log, p, pjson, type } = require 'lightsaber'
-{ defaults } = require 'lodash'
+{ defaults, isEmpty } = require 'lodash'
 Promise = require 'bluebird'
 debug = require('debug')('app')
+inspectFallback = require('debug')('fallback')
 User = require './models/user'
 controllers =
   rewardTypes: require './controllers/reward-types-state-controller'
@@ -13,6 +14,11 @@ controllers =
 class App
   @COIN = '❂'
   @MAX_SLACK_IMAGE_SIZE = Math.pow 2,19
+  @SLACK_NON_TEXT_FIELDS = [
+    'author_icon'
+    'color'
+    'short'
+  ]
 
   @respond: (pattern, cb)->
     @responses ?= []
@@ -80,7 +86,7 @@ class App
     else if type(textOrAttachments) is 'object'
       @pmReplyAttachment(msg, channel, textOrAttachments)
     else
-      throw new Error "Unexpected type(textOrAttachments)-> #{type(textOrAttachments)}"
+      throw new Error "Unexpected type(textOrAttachments) -> #{type(textOrAttachments)}"
 
   @pmReplyAttachment: (msg, channel, attachment)=>
     @robot.adapter.customMessage
@@ -90,21 +96,36 @@ class App
   @addFallbackTextIfNeeded: (textOrAttachments)->
     if type(textOrAttachments) is 'string'
       textOrAttachments
+    else if type(textOrAttachments) is 'object'
+      @fallbackForAttachment(textOrAttachments)
     else if type(textOrAttachments) is 'array'
       for attachment in textOrAttachments
-        @addFallbackText(attachment)
-    else if type(textOrAttachments) is 'object'
-      @addFallbackText(textOrAttachments)
+        @fallbackForAttachment(attachment)
 
-  @addFallbackText: (attachment)->
-    SLACK_NON_TEXT_FIELDS = [
-      'author_icon'
-      'color'
-    ]
-    fallbackText = ''
-    for key, value of attachment
-      fallbackText += "#{value}\n" unless key in SLACK_NON_TEXT_FIELDS
-    defaults attachment, fallback: fallbackText
+  @fallbackForAttachment: (attachment)->
+    if isEmpty attachment.fallback?.trim()
+      inspectFallback "Attachment:\n#{pjson attachment}"
+      fallbackText = @extractTextLines(attachment).join("\n")
+      inspectFallback "Fallback text:\n#{fallbackText}"
+      attachment.fallback = fallbackText
+    else
+      inspectFallback "Attachment with predefined fallback:\n#{pjson attachment}"
+    attachment
+
+  @extractTextLines: (element)->
+    lines = []
+    if type(element) is 'array'
+      for item in element
+        lines.push @extractTextLines(item)...
+    else if type(element) is 'object'
+      for key, value of element
+        if (key not in @SLACK_NON_TEXT_FIELDS) and value
+          lines.push @extractTextLines(value)...
+    else if type(element) is 'string'
+      lines.push element
+    else
+      throw new Error "Unexpected attachment chunk type: '#{type(element)}' for #{pjson element}"
+    lines
 
   @registerUser: (user, msg)->
     attributes = {}
