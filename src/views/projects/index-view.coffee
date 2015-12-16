@@ -21,6 +21,10 @@ class IndexView extends ZorkView
       text: "set your bitcoin address"
       transition: 'setBtc'
     }
+    @actions[i++] = {
+      text: "suggest a swarmbot improvement"
+      command: 'suggest'
+    }
 
     @menu = clone @actions
     for [key, menuItem] in @projectItems
