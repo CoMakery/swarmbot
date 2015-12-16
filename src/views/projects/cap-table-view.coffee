@@ -28,7 +28,6 @@ class CapTableView extends ZorkView
       [
         title: @project.get 'name'
         image_url: chartUrl
-        fallback: chartUrl
       ]
 
 module.exports = CapTableView
