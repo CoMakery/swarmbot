@@ -28,6 +28,7 @@ class RewardsStateController extends ApplicationController
         User.findBySlackUsername @cleanUsername @input
         .error (error)=>
           throw Promise.OperationalError(error.message + ' Please have them register a bitcoin address.')
+          # PM here
         .then (recipient)=>
           unless recipient.get('btc_address')?
             throw Promise.OperationalError("This user doesn't have a registered bitcoin address.")

@@ -234,20 +234,18 @@ describe 'swarmbot', ->
     context 'rewards#create', ->
       rewardTypeId = 'a very special award'
       projectId = 'some project id'
-      user = ->
-        createUser
-          name: USER_ID
-          state: 'rewards#create'
-          current_project: projectId
-          slack_username: 'duke'
-          btc_address: 'i am a bitcoin address'
       rewardType = (project)=>
         project.createRewardType
           name: rewardTypeId
           suggestedAmount: '888'
 
       it "allows an admin to award coins to a user", ->
-        user()
+        createUser
+          name: USER_ID
+          state: 'rewards#create'
+          current_project: projectId
+          slack_username: 'duke'
+          btc_address: null
         .then (@user)=>
           createProject
             name: projectId
@@ -269,7 +267,13 @@ describe 'swarmbot', ->
           App.route message('5')
         .then (reply)=>
           json(reply).should.match /Which slack @user should I send the reward to/i
-          App.route message('@duke')
+          @message = message('@duke')
+          App.route @message
+        .then (reply)=>
+          @message.parts[0].should.match /This user doesn't have a registered bitcoin address./
+          @user.set 'btc_address', 'i am a bitcoin address'
+        .then (@user)=>
+          App.route @message
         .then (reply)=>
           json(reply).should.match /What award type\?/
           json(reply).should.match /No award types, please create one/
@@ -310,7 +314,7 @@ describe 'swarmbot', ->
             description: 'was awesome'
             projectId: "some project id"
 
-      it "shows messages if user isn't in the db, or if they don't have a bitcoin address", ->
+      it "shows good error message if user isn't in the db", ->
         createUser
           name: USER_ID
           state: 'rewards#create'
@@ -330,16 +334,7 @@ describe 'swarmbot', ->
           App.route @message
         .then (reply)=>
           @message.parts[0].should.match /The user '@not_a_slack_user' is not recognized.+Please have them register a bitcoin address./
-        .then (reply)=>
-          createUser
-            name: 'slack:id2'
-            slack_username: 'real_user'
-            btc_address: null
-        .then (@recipient)=>
-          @message = message('@real_user: ')
-          App.route @message
-        .then (reply)=>
-          @message.parts[0].should.match /This user doesn't have a registered bitcoin address./
+          # user got a pm
 
   context 'error states', ->
     it "resets a user's state if they route with an invalid state", ->
