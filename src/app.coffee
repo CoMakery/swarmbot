@@ -77,17 +77,20 @@ class App
 
   @pmReply: (msg, textOrAttachments)=>
     channel = msg.message.user.name
+    @sendMessage channel, textOrAttachments
+
+  @sendMessage: (channel, textOrAttachments)=>
     if type(textOrAttachments) is 'string'
       @robot.messageRoom(channel, textOrAttachments)
     else if type(textOrAttachments) is 'array'
       for attachment in textOrAttachments
-        @pmReplyAttachment(msg, channel, attachment)
+        @sendAttachmentMessage(channel, attachment)
     else if type(textOrAttachments) is 'object'
-      @pmReplyAttachment(msg, channel, textOrAttachments)
+      @sendAttachmentMessage(channel, textOrAttachments)
     else
       throw new Error "Unexpected type(textOrAttachments) -> #{type(textOrAttachments)}"
 
-  @pmReplyAttachment: (msg, channel, attachment)=>
+  @sendAttachmentMessage: (channel, attachment)=>
     @robot.adapter.customMessage
       channel: channel
       attachments: attachment

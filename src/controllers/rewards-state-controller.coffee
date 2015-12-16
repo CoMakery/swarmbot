@@ -25,15 +25,16 @@ class RewardsStateController extends ApplicationController
       if not @input
         # fall through to render
       else if not data.recipient?
-        User.findBySlackUsername @cleanUsername @input
+        @userName = @cleanUsername @input
+        User.findBySlackUsername @userName
         .error (error)=>
-          throw Promise.OperationalError(error.message + ' Please have them register a bitcoin address.')
-          # PM here
+          throw Promise.OperationalError("The user @#{@userName} is not recognized. Sending them a message now.")
         .then (recipient)=>
-          unless recipient.get('btc_address')?
-            throw Promise.OperationalError("This user doesn't have a registered bitcoin address.")
           data.recipient = recipient.key()
+          unless recipient.get('btc_address')?
+            throw Promise.OperationalError("Sending a message to have @#{@userName} register a bitcoin address.")
         .error (error)=>
+          App.sendMessage(@userName, "Hi! @#{@currentUser.get("slack_username")} is trying to send you project coins for '#{@currentUser.get('current_project')}'. In order to receive project coin awards please tell me your bitcoin address.")
           @errorMessage = error.message
       else if not data.rewardTypeId?
         # Note : set by the menu item when selecting rewardType

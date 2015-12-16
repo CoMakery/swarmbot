@@ -24,7 +24,7 @@ App.pmReply = (msg, textOrAttachments)=>
   reply = textOrAttachments.text or textOrAttachments
   msg.parts.push reply
 
-message = (input)->
+message = (input, user)->
   @parts = []
   {
     parts: @parts
@@ -39,7 +39,15 @@ message = (input)->
     robot: App.robot
   }
 
+App.sendMessage = (channel, textOrAttachments)=>
+  msg = textOrAttachments.text or textOrAttachments
+  App.sendMessage.deliveries[channel] ?= []
+  App.sendMessage.deliveries[channel].push msg
+
 describe 'swarmbot', ->
+  beforeEach ->
+    App.sendMessage.deliveries = {}
+
   context 'projects', ->
     context 'projects#show', ->
       it "shows the user's current project", ->
@@ -264,7 +272,7 @@ describe 'swarmbot', ->
           @message = message('@duke')
           App.route @message
         .then (reply)=>
-          @message.parts[0].should.match /This user doesn't have a registered bitcoin address./
+          @message.parts[0].should.match /Sending a message to have @duke register a bitcoin address./
           @user.set 'btc_address', 'i am a bitcoin address'
         .then (@user)=>
           App.route @message
@@ -308,7 +316,7 @@ describe 'swarmbot', ->
             description: 'was awesome'
             projectId: "some project id"
 
-      it "shows good error message if user isn't in the db", ->
+      it "shows good error message if user isn't in the db, and pms the user", ->
         createUser
           name: USER_ID
           state: 'rewards#create'
@@ -327,8 +335,9 @@ describe 'swarmbot', ->
           @message = message('@not_a_slack_user')
           App.route @message
         .then (reply)=>
-          @message.parts[0].should.match /The user '@not_a_slack_user' is not recognized.+Please have them register a bitcoin address./
-          # user got a pm
+          @message.parts[0].should.match /The user @not_a_slack_user is not recognized. Sending them a message now./
+          App.sendMessage.deliveries['not_a_slack_user'].length.should.eq 1
+          App.sendMessage.deliveries['not_a_slack_user'][0].should.match /Hi! @.+ is trying to send you project coins for 'some project id'. In order to receive project coin awards please tell me your bitcoin address./
 
   context 'error states', ->
     it "resets a user's state if they route with an invalid state", ->
