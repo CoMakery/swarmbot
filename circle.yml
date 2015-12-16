@@ -1,8 +1,8 @@
 machine:
   node:
-    version: 4
+    version: 4.2.3
   post:
-    - npm install -g npm@3.3.12
+    - npm install -g npm@3.5.2
 test:
   override:
     - npm run fulltest
