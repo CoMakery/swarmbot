@@ -11,7 +11,6 @@ class ShowView extends ZorkView
     @menu[i++] = { text: "all projects", transition: 'setProject' }
     @menu[i++] = { text: "show awards list", transition: 'rewardsList' }
     @menu[i++] = { text: "show project ownership", command: 'capTable' }
-    # @menu[i++] = { text: "suggest a swarmbot improvement", transition: 'suggest' }
 
     # if admin/progenitor
     @menu[i++] = { text: "create an award level", transition: 'create' }
