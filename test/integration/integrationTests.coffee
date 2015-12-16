@@ -43,8 +43,8 @@ describe 'swarmbot', ->
   context 'projects', ->
     context 'projects#show', ->
       it "shows the user's current project", ->
-        createUser({userId: USER_ID})
-        .then (@user) =>
+        createUser({name: USER_ID})
+        .then (@user)=>
           createProject()
         .then (@project)=> @project.createRewardType name: 'Do Stuff'
         .then => @project.createRewardType name: 'Be Glorious'
@@ -68,7 +68,11 @@ describe 'swarmbot', ->
       ]
 
       beforeEach ->
-        @user = new User(name: USER_ID, state: 'projects#index', has_interacted: true)
+        createUser
+          name: USER_ID
+          state: 'projects#index'
+          has_interacted: true
+        .then (@user)=>
 
       it "shows a welcome screen if there are no projects", ->
         @user.save()
@@ -83,8 +87,8 @@ describe 'swarmbot', ->
 
       it "shows a welcome screen if the user has never made contact", ->
         @user.set 'has_interacted', false
-        .then (@user)=> new Project(name: "Community A").save()
-        .then (@user)=> App.route message()
+        .then (@user)=> createProject(name: "Community A")
+        .then (@project)=> App.route message()
         .then (reply)=>
           jreply = json(reply)
           jreply.should.match /Welcome friend!/
@@ -97,42 +101,39 @@ describe 'swarmbot', ->
 
       it "shows the list of names and sets current project", ->
         Promise.all [
-          new Project(name: "Community A").save()
-          new Project(name: "Community B").save()
-          new Project(name: "Community C").save()
+          createProject(name: "Community A")
+          createProject(name: "Community B")
+          createProject(name: "Community C")
         ]
         .then =>
           App.route message()
         .then (reply)=>
           jreply = json(reply)
-          # jreply.should.match /Contribute to projects and get rewarded with project coins/
           jreply.should.match /Set Current Project/
           jreply.should.match /A: Community A/
           jreply.should.match /B: Community B/
           jreply.should.match /C: Community C/
-          @message = message('A')
-          App.route @message
+          App.route message('A')
         .then (reply)=>
           json(reply).should.match /Community A/i
 
       it "shows the list of rewards", ->
-        user = new User
+        createUser
           name: USER_ID
           slack_username: "joe"
           real_name: 'Joe User'
           state: 'projects#show'
           current_project: "Community A"
           has_interacted: true
-        user.save()
         .then (@user)=>
-          new Project(name: "Community A").save()
+          createProject(name: "Community A")
         .then (@project)=>
           @project.createRewardType(name: "Super sweet award", suggestedAmount: 100)
         .then (@rewardType)=>
           @project.createReward
             rewardTypeId: @rewardType.key()
             description: "He is helpful"
-            issuer: user.key()
+            issuer: @user.key()
             recipient: USER_ID
             rewardAmount: 100
         .then (@reward)=>
@@ -205,10 +206,13 @@ describe 'swarmbot', ->
   context 'rewardTypes', ->
     context 'rewardTypes#create', ->
       it "allows the user to create a rewardType within the current project", ->
-        @user = new User(name: USER_ID, current_project: PROJECT_ID, state: 'projects#show').save()
-        project = new Project(name: PROJECT_ID)
-        project.save()
-        .then -> App.route message()
+        createUser
+          name: USER_ID
+          current_project: PROJECT_ID
+          state: 'projects#show'
+        .then (@user)=>
+          createProject(name: PROJECT_ID)
+        .then (@project)=> App.route message()
         .then -> App.route message('4') # create a task
         .then (reply)->
           json(reply).should.match /What is the award name/
@@ -229,21 +233,14 @@ describe 'swarmbot', ->
   context 'rewards', ->
     context 'rewards#create', ->
       rewardTypeId = 'a very special award'
-      projectId = 'a project'
+      projectId = 'some project id'
       user = ->
-        new User
+        createUser
           name: USER_ID
           state: 'rewards#create'
-          stateData: {}
           current_project: projectId
           slack_username: 'duke'
           btc_address: 'i am a bitcoin address'
-        .save()
-      project = ->
-        new Project
-          name: projectId
-          project_owner: 'nobody'
-        .save()
       rewardType = (project)=>
         project.createRewardType
           name: rewardTypeId
@@ -251,7 +248,10 @@ describe 'swarmbot', ->
 
       it "allows an admin to award coins to a user", ->
         user()
-        .then (@user)=> project()
+        .then (@user)=>
+          createProject
+            name: projectId
+            project_owner: 'nobody'
         .then (@project)=>
           @project.fetch()
         .then (@project)=>
@@ -308,14 +308,19 @@ describe 'swarmbot', ->
             rewardAmount: '4000'
             rewardTypeId: @rewardType.key()
             description: 'was awesome'
-            projectId: "a project"
+            projectId: "some project id"
 
       it "shows messages if user isn't in the db, or if they don't have a bitcoin address", ->
-        user()
-        .then (@user)=> project()
-        .then (@project)=>
-          @project.set 'project_owner', @user.key()
-          @project.fetch()
+        createUser
+          name: USER_ID
+          state: 'rewards#create'
+          current_project: projectId
+          slack_username: 'duke'
+          btc_address: 'i am a bitcoin address'
+        .then (@user)=>
+          createProject
+            name: projectId
+            project_owner: @user.key()
         .then (@project)=>
           App.route message('')
         .then (reply)=>
@@ -326,10 +331,10 @@ describe 'swarmbot', ->
         .then (reply)=>
           @message.parts[0].should.match /The user '@not_a_slack_user' is not recognized.+Please have them register a bitcoin address./
         .then (reply)=>
-          new User
+          createUser
             name: 'slack:id2'
             slack_username: 'real_user'
-          .save()
+            btc_address: null
         .then (@recipient)=>
           @message = message('@real_user: ')
           App.route @message
@@ -338,11 +343,9 @@ describe 'swarmbot', ->
 
   context 'error states', ->
     it "resets a user's state if they route with an invalid state", ->
-      new User
+      createUser
         name: USER_ID
         state: 'invalid#state'
-        stateData: {}
-      .save()
       .then (@user)=>
         @message = message('')
         App.route @message
@@ -355,10 +358,11 @@ describe 'swarmbot', ->
     context 'projects#index', ->
 
       beforeEach ->
-        @user = new User
+        createUser
           name: USER_ID
           state: 'projects#index'
           has_interacted: true
+        .then (@user)=>
 
       it "contains fallback text", ->
         @user.save()

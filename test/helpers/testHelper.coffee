@@ -38,20 +38,21 @@ after ->
 
 class TestHelper
   @createUser: (args = {})=>
-    {userId, projectId} = defaults args, {userId: "some user id", projectId: "some project id"}
-    new User
-      name: userId
-      current_project: projectId
+    defaults args, {
+      name: "some user id"
+      current_project: "some project id"
       state: 'projects#show'
+      stateData: {}
       btc_address: '3HNSiAq7wFDaPsYDcUxNSRMD78qVcYKicw'
-    .save()
+    }
+    new User(args).save()
 
   @createProject: (args = {})=>
-    {userId, projectId} = defaults args, {userId: "some user id", projectId: "some project id"}
-    @project = new Project
-      name: projectId
-      project_owner: userId
+    defaults args, {
+      project_owner: "some user id"
+      name: "some project id"
       tasksUrl: 'http://example.com'
-    @project.save()
+    }
+    new Project(args).save()
 
 module.exports = TestHelper
