@@ -50,15 +50,15 @@
     "hubot-slack": "^3.3.0",
     "instagram-node-lib": "0.1.1",
     "javascript-state-machine": "^2.3.5",
-    "lightsaber": "^0.4.1",
+    "lightsaber": "^0.5.1",
     "lodash": "^3.10.0",
     "moment": "^2.10.6",
     "request-promise": "0.4.3",
     "validator": "^4.3.0"
   },
   "engines": {
-    "node": "4.2.2",
-    "npm": "3.3.12"
+    "node": "4.2.3",
+    "npm": "~3.5.2"
   },
   "repository": {
     "type": "git",
