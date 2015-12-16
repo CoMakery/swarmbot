@@ -39,6 +39,14 @@ class IndexView extends ZorkView
     }
 
   render: ->
+    fallbackText = """
+    *Set Current Project*
+    #{@renderMenu()}
+
+    To take an action, simply enter the number or letter at the beginning of the line.
+    """
+
+
     message = []
     if isEmpty(@projectItems) or not @currentUser.get('has_interacted')
       message.push {
@@ -81,6 +89,7 @@ class IndexView extends ZorkView
           short: true
         }
       ]
+      fallback: fallbackText
     }
 
     message

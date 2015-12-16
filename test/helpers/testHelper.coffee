@@ -1,18 +1,17 @@
-{ defaults } = require 'lodash'
 {log, p, pjson} = require 'lightsaber'
 Promise = require 'bluebird'
-global.debug = require('debug')('test')
-
 chai = require 'chai'
 chaiAsPromised = require("chai-as-promised")
 chai.should()
 chai.use(chaiAsPromised)
+global.debug = require('debug')('test')
 sinon = require 'sinon'
-FirebaseServer = require('firebase-server')
+{ defaults } = require 'lodash'
 
-ColuInfo = require '../../src/services/colu-info'
 Project = require '../../src/models/project'
 User = require '../../src/models/user'
+
+FirebaseServer = require('firebase-server')
 swarmbot = require '../../src/models/swarmbot'
 
 MOCK_FIREBASE_ADDRESS = '127.0.1' # strange host name needed by testing framework
@@ -23,14 +22,6 @@ sinon.stub(swarmbot, 'colu').returns Promise.resolve
   init: ->
   sendAsset: (x, cb)-> cb(null, {txid: 1234})
   issueAsset: ->
-
-sinon.stub(ColuInfo.prototype, 'balances').returns Promise.resolve [
-  {
-    name: 'FinTechHacks'
-    assetId: 'xyz123'
-    balance: 456
-  }
-]
 
 before ->
   @firebaseServer = new FirebaseServer 5000, MOCK_FIREBASE_ADDRESS, {}

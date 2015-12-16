@@ -2,7 +2,6 @@
 { defaults } = require 'lodash'
 Promise = require 'bluebird'
 debug = require('debug')('app')
-inspectFallback = require('debug')('fallback')
 User = require './models/user'
 controllers =
   rewardTypes: require './controllers/reward-types-state-controller'
@@ -102,9 +101,9 @@ class App
       'author_icon'
       'color'
     ]
-    fallbackLines = (value for key, value of attachment when key not in SLACK_NON_TEXT_FIELDS)
-    fallbackText = fallbackLines.join "\n"
-    inspectFallback "\n#{fallbackText}"
+    fallbackText = ''
+    for key, value of attachment
+      fallbackText += "#{value}\n" unless key in SLACK_NON_TEXT_FIELDS
     defaults attachment, fallback: fallbackText
 
   @registerUser: (user, msg)->
