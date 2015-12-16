@@ -61,18 +61,18 @@ class App
       lastMenuItems = @user.get('menu')
       menuAction = lastMenuItems?[controller.input?.toLowerCase()]
 
-      resultPromise = if menuAction?
-        # specific menu action of entered command
-        debug "Command: #{controller.input}, controllerName: #{controllerName}, menuAction: #{json menuAction}"
-        controller.execute(menuAction)
-      else if controller[action]?
-        # default action for this state
-        debug "Command: #{controller.input}, controllerName: #{controllerName}, action: #{action}"
-        controller[action]( @user.get('stateData') )
-      else
-        throw new Error("Action for state '#{@user.get('state')}' not defined.")
-
-      resultPromise.then (textOrAttachments)=>
+      Promise.resolve().then =>
+        if menuAction?
+          # specific menu action of entered command
+          debug "Command: #{controller.input}, controllerName: #{controllerName}, menuAction: #{json menuAction}"
+          controller.execute(menuAction)
+        else if controller[action]?
+          # default action for this state
+          debug "Command: #{controller.input}, controllerName: #{controllerName}, action: #{action}"
+          controller[action]( @user.get('stateData') )
+        else
+          throw new Error("Action for state '#{@user.get('state')}' not defined.")
+      .then (textOrAttachments)=>
         @addFallbackTextIfNeeded textOrAttachments
 
   @pmReply: (msg, textOrAttachments)=>
