@@ -1,7 +1,7 @@
 {json, log, p, pjson, type} = require 'lightsaber'
 {size, values} = require 'lodash'
 Promise = require 'bluebird'
-require '../helpers/testHelper'
+{ createUser, createProject } = require '../helpers/testHelper'
 global.App = require '../../src/app'
 ColuInfo = require '../../src/services/colu-info'
 Project = require '../../src/models/project'
@@ -12,6 +12,7 @@ sinon = require 'sinon'
 InitBot = require '../../src/bots/!init'
 
 USER_ID = "slack:1234"
+PROJECT_ID = 'Your Great Project'
 
 App.robot =
   whose: (msg)-> USER_ID
@@ -42,23 +43,13 @@ describe 'swarmbot', ->
   context 'projects', ->
     context 'projects#show', ->
       it "shows the user's current project", ->
-        projectId = 'Your Great Project'
-        new User
-          name: USER_ID
-          current_project: projectId
-          state: 'projects#show'
-          btc_address: '3HNSiAq7wFDaPsYDcUxNSRMD78qVcYKicw'
-        .save()
+        createUser({userId: USER_ID})
         .then (@user) =>
-        @project = new Project
-          name: projectId
-          project_owner: USER_ID
-          tasksUrl: 'http://example.com'
-        @project.save()
-        .then (@project)-> @project.createRewardType name: 'Do Stuff'
-        .then -> @project.createRewardType name: 'Be Glorious'
-        .then -> App.route message()
-        .then (reply)->
+          createProject()
+        .then (@project)=> @project.createRewardType name: 'Do Stuff'
+        .then => @project.createRewardType name: 'Be Glorious'
+        .then => App.route message()
+        .then (reply)=>
           jreply = json reply
           jreply.should.match /See Project Tasks/
           jreply.should.match /example\.com/
@@ -214,9 +205,8 @@ describe 'swarmbot', ->
   context 'rewardTypes', ->
     context 'rewardTypes#create', ->
       it "allows the user to create a rewardType within the current project", ->
-        projectId = 'Your Great Project'
-        @user = new User(name: USER_ID, current_project: projectId, state: 'projects#show').save()
-        project = new Project(name: projectId)
+        @user = new User(name: USER_ID, current_project: PROJECT_ID, state: 'projects#show').save()
+        project = new Project(name: PROJECT_ID)
         project.save()
         .then -> App.route message()
         .then -> App.route message('4') # create a task
@@ -231,8 +221,8 @@ describe 'swarmbot', ->
           json(@message.parts).should.match /Award created/
         .then => @firebaseServer.getValue()
         .then (db)=>
-          size(db.projects[projectId]['reward-types']).should.eq 1
-          db.projects[projectId]['reward-types']['Kitais'].should.deep.eq
+          size(db.projects[PROJECT_ID]['reward-types']).should.eq 1
+          db.projects[PROJECT_ID]['reward-types']['Kitais'].should.deep.eq
             name: 'Kitais'
             suggestedAmount: '4000'
 

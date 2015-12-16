@@ -6,6 +6,10 @@ chai.should()
 chai.use(chaiAsPromised)
 global.debug = require('debug')('test')
 sinon = require 'sinon'
+{ defaults } = require 'lodash'
+
+Project = require '../../src/models/project'
+User = require '../../src/models/user'
 
 FirebaseServer = require('firebase-server')
 swarmbot = require '../../src/models/swarmbot'
@@ -31,3 +35,23 @@ afterEach ->
 
 after ->
   @firebaseServer.close()
+
+class TestHelper
+  @createUser: (args = {})=>
+    {userId, projectId} = defaults args, {userId: "some user id", projectId: "some project id"}
+    new User
+      name: userId
+      current_project: projectId
+      state: 'projects#show'
+      btc_address: '3HNSiAq7wFDaPsYDcUxNSRMD78qVcYKicw'
+    .save()
+
+  @createProject: (args = {})=>
+    {userId, projectId} = defaults args, {userId: "some user id", projectId: "some project id"}
+    @project = new Project
+      name: projectId
+      project_owner: userId
+      tasksUrl: 'http://example.com'
+    @project.save()
+
+module.exports = TestHelper
