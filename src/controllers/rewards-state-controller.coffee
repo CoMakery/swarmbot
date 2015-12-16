@@ -35,7 +35,7 @@ class RewardsStateController extends ApplicationController
             throw Promise.OperationalError("Sending a message to have @#{@userName} register a bitcoin address.")
         .error (error)=>
           App.sendMessage(@userName, "Hi! @#{@currentUser.get("slack_username")} is trying to send you project coins for '#{@currentUser.get('current_project')}'. In order to receive project coin awards please tell me your bitcoin address.")
-          @errorMessage = error.message
+          throw error
       else if not data.rewardTypeId?
         # Note : set by the menu item when selecting rewardType
       else if not data.rewardAmount?

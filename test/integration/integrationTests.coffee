@@ -47,6 +47,7 @@ App.sendMessage = (channel, textOrAttachments)=>
 describe 'swarmbot', ->
   beforeEach ->
     App.sendMessage.deliveries = {}
+    @message = null
 
   context 'projects', ->
     context 'projects#show', ->
@@ -247,7 +248,7 @@ describe 'swarmbot', ->
           state: 'rewards#create'
           current_project: projectId
           slack_username: 'duke'
-          btc_address: null
+          btc_address: 'a123bitcoin'
         .then (@user)=>
           createProject
             name: projectId
@@ -270,11 +271,6 @@ describe 'swarmbot', ->
         .then (reply)=>
           json(reply).should.match /Which slack @user should I send the reward to/i
           @message = message('@duke')
-          App.route @message
-        .then (reply)=>
-          @message.parts[0].should.match /Sending a message to have @duke register a bitcoin address./
-          @user.set 'btc_address', 'i am a bitcoin address'
-        .then (@user)=>
           App.route @message
         .then (reply)=>
           json(reply).should.match /What award type\?/
@@ -330,14 +326,39 @@ describe 'swarmbot', ->
         .then (@project)=>
           App.route message('')
         .then (reply)=>
-          App.route message('5')
-        .then (reply)=>
+          json(reply).should.match /Which slack @user should I send the reward to?/
           @message = message('@not_a_slack_user')
           App.route @message
         .then (reply)=>
           @message.parts[0].should.match /The user @not_a_slack_user is not recognized. Sending them a message now./
           App.sendMessage.deliveries['not_a_slack_user'].length.should.eq 1
           App.sendMessage.deliveries['not_a_slack_user'][0].should.match /Hi! @.+ is trying to send you project coins for 'some project id'. In order to receive project coin awards please tell me your bitcoin address./
+          json(reply).should.match ///#{projectId}///i
+
+      it "messages the possible awardee if they don't have a bitcoin address", ->
+        createUser
+          name: USER_ID
+          state: 'rewards#create'
+          current_project: projectId
+          slack_username: 'duke'
+          btc_address: 'i am a bitcoin address'
+        .then (@user)=>
+          createProject
+            name: projectId
+            project_owner: @user.key()
+        .then (@project)=>
+        createUser
+          slack_username: 'joebob'
+          btc_address: null
+        .then (@awardee)=>
+
+          App.route message('')
+        .then (reply)=>
+          @message = message('@joebob')
+          App.route @message
+        .then (reply)=>
+          @message.parts[0].should.match /Sending a message to have @joebob register a bitcoin address./
+          json(reply).should.not.match /What award type\?/
 
   context 'error states', ->
     it "resets a user's state if they route with an invalid state", ->
