@@ -73,7 +73,7 @@ class App
   @pmReply: (msg, textOrAttachments)=>
     channel = msg.message.user.name
     if type(textOrAttachments) is 'string'
-      @robot.messageRoom(msg, channel, textOrAttachments)
+      @robot.messageRoom(channel, textOrAttachments)
     else if type(textOrAttachments) is 'array'
       for attachment in textOrAttachments
         @pmReplyAttachment(msg, channel, attachment)
