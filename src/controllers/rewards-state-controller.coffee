@@ -28,7 +28,15 @@ class RewardsStateController extends ApplicationController
         @userName = @cleanUsername @input
         User.findBySlackUsername @userName
         .error (error)=>
-          throw Promise.OperationalError("The user @#{@userName} is not recognized. Sending them a message now.")
+          user = App.robot.adapter.client.getUserByName(@userName)
+          # handle completely non-existant username here...
+          new User
+            name: "slack:#{user.id}"
+            slack_username: @userName
+            state: 'users#setBtc'
+          .save()
+          .then =>
+            throw Promise.OperationalError("The user @#{@userName} is not recognized. Sending them a message now.")
         .then (recipient)=>
           data.recipient = recipient.key()
           unless recipient.get('btc_address')?

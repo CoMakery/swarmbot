@@ -19,6 +19,7 @@ App.robot =
   messageRoom: ->
   adapter:
     customMessage: ->
+    client: {}
 
 App.pmReply = (msg, textOrAttachments)=>
   reply = textOrAttachments.text or textOrAttachments
@@ -338,6 +339,9 @@ describe 'swarmbot', ->
             projectId: "some project id"
 
       it "shows good error message if user isn't in the db, and pms the user", ->
+        otherSlackId = "other slack user id"
+        App.robot.adapter.client.getUserByName = ->
+          {id: otherSlackId}
         createUser
           name: USER_ID
           state: 'rewards#create'
@@ -355,10 +359,16 @@ describe 'swarmbot', ->
           @message = message('@not_a_slack_user')
           App.route @message
         .then (reply)=>
+          json(reply).should.match ///#{projectId}///i
           @message.parts[0].should.match /The user @not_a_slack_user is not recognized. Sending them a message now./
           App.sendMessage.deliveries['not_a_slack_user'].length.should.eq 1
           App.sendMessage.deliveries['not_a_slack_user'][0].should.match /Hi! @.+ is trying to send you project coins for 'some project id'. In order to receive project coin awards please tell me your bitcoin address./
-          json(reply).should.match ///#{projectId}///i
+          User.find("slack:other slack user id")
+        .then (newUser)=>
+          newUser.exists().should.eq true
+          newUser.get('slack_username').should.eq 'not_a_slack_user'
+          newUser.get('name').should.eq "slack:#{otherSlackId}"
+          newUser.get('state').should.eq "users#setBtc"
 
       it "messages the possible awardee if they don't have a bitcoin address", ->
         createUser
