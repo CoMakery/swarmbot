@@ -60,7 +60,7 @@ describe 'swarmbot', ->
           createProject()
         .then (@project)=> @project.createRewardType name: 'Do Stuff'
         .then => @project.createRewardType name: 'Be Glorious'
-        .then => App.route message()
+        .then => App.respondTo message()
         .then (reply)=>
           jreply = json reply
           jreply.should.match /See Project Tasks/
@@ -81,24 +81,24 @@ describe 'swarmbot', ->
 
       it "shows a welcome screen if there are no projects", ->
         @user.save()
-        .then (@user)=> App.route message()
+        .then (@user)=> App.respondTo message()
         .then (reply)=>
           jreply = json(reply)
           jreply.should.match /Welcome friend!/
           jreply.should.match /Let's get started.*Type 1/
-          App.route message('1')
+          App.respondTo message('1')
         .then (reply)=>
           json(reply).should.match /What is the name of this project/
 
       it "shows a welcome screen if the user has never made contact", ->
         @user.set 'has_interacted', false
         .then (@user)=> createProject(name: "Community A")
-        .then (@project)=> App.route message()
+        .then (@project)=> App.respondTo message()
         .then (reply)=>
           jreply = json(reply)
           jreply.should.match /Welcome friend!/
           jreply.should.match /Let's get started.*Type 1/
-          App.route message('xyz')
+          App.respondTo message('xyz')
         .then (reply)=>
           jreply = json(reply)
           jreply.should.match /Contribute to projects/
@@ -111,14 +111,14 @@ describe 'swarmbot', ->
           createProject(name: "Community C")
         ]
         .then =>
-          App.route message()
+          App.respondTo message()
         .then (reply)=>
           jreply = json(reply)
           jreply.should.match /Choose a Project/
           jreply.should.match /A: Community A/
           jreply.should.match /B: Community B/
           jreply.should.match /C: Community C/
-          App.route message('A')
+          App.respondTo message('A')
         .then (reply)=>
           json(reply).should.match /Community A/i
 
@@ -142,13 +142,13 @@ describe 'swarmbot', ->
             recipient: USER_ID
             rewardAmount: 100
         .then (@reward)=>
-          App.route message()
+          App.respondTo message()
         .then (reply)=>
           jreply = json(reply)
           jreply.should.match /Community A/i
           jreply.should.match /2: show awards list/
           @message = message('2')
-          App.route @message
+          App.respondTo @message
         .then (reply)=>
           @message.parts[0].should.match /\*AWARDS FOR Community A\*/
           @message.parts[0].should.match /\d{4}\s+❂ 100\s+\*Joe User\*\s+Super sweet award\s+_He is helpful_/
@@ -163,8 +163,8 @@ describe 'swarmbot', ->
 
         it "contains fallback text", ->
           @user.save()
-          .then (@user)=> App.route message()
-          .then (reply)=> App.route message()
+          .then (@user)=> App.respondTo message()
+          .then (reply)=> App.respondTo message()
           .then (reply)=>
             type(reply).should.eq 'array'
             reply.length.should.eq 2
@@ -193,35 +193,35 @@ describe 'swarmbot', ->
 
         it "asks questions and creates a project", ->
           @user.save()
-          .then (@user)=> App.route message()
-          .then (reply)=> App.route message('1')
+          .then (@user)=> App.respondTo message()
+          .then (reply)=> App.respondTo message('1')
           .then (reply)=>
             json(reply).should.match /What is the name of this project/
-            App.route message('Supafly')
+            App.respondTo message('Supafly')
           .then (reply)=>
             json(reply).should.match /Please enter a short description/
             @message = message('Shaft')
-            App.route @message
+            App.respondTo @message
           .then (reply)=>
             json(reply).should.match /Please enter a link to your project tasks./
             @message = message('http://jira.com')
-            App.route @message
+            App.respondTo @message
           .then (reply)=>
             json(reply).should.match /Please enter an image URL/
             @message = message('this is not a valid URL...')
-            App.route @message
+            App.respondTo @message
           .then (reply)=>
             json(reply).should.match /that is not a valid URL.+Please enter an image URL/i
             @message = message('http://example.com/does-not-exist.png')
-            App.route @message
+            App.respondTo @message
           .then (reply)=>
             json(reply).should.match /that address doesn't seem to exist.+Please enter an image URL/
             @message = message('http://example.com/too-large.png')
-            App.route @message
+            App.respondTo @message
           .then (reply)=>
             json(reply).should.match /Sorry, that image is too large.+Please enter an image URL/
             @message = message('http://example.com/very-small.png')
-            App.route @message
+            App.respondTo @message
           .then (reply)=>
             @message.parts[1].should.match /Project created/
           .then => @firebaseServer.getValue()
@@ -242,15 +242,15 @@ describe 'swarmbot', ->
           state: 'projects#show'
         .then (@user)=>
           createProject(name: PROJECT_ID)
-        .then (@project)=> App.route message()
-        .then -> App.route message('4') # create a task
+        .then (@project)=> App.respondTo message()
+        .then -> App.respondTo message('4') # create a task
         .then (reply)->
           json(reply).should.match /What is the award name/
-          App.route message('Kitais')
+          App.respondTo message('Kitais')
         .then (reply)=>
           json(reply).should.match /Enter a suggested amount for this award/
           @message = message('4000')
-          App.route @message
+          App.respondTo @message
         .then (reply)=>
           json(@message.parts).should.match /Award created/
         .then => @firebaseServer.getValue()
@@ -284,44 +284,44 @@ describe 'swarmbot', ->
           @project.fetch()
         .then (@project)=>
           @message = message('')
-          App.route @message
+          App.respondTo @message
         .then (reply)=>
           @project.get('project_owner').should.not.eq @user.get('name')
           json(@message.parts[0]).should.match /Only project administrators can award coins/i
           @project.set 'project_owner', @user.key()
           @project.save()
         .then (@project)=>
-          App.route message('')
+          App.respondTo message('')
         .then (reply)=>
           json(reply).should.match /5: send an award/
-          App.route message('5')
+          App.respondTo message('5')
         .then (reply)=>
           json(reply).should.match /Which slack @user should I send the reward to/i
           @message = message('@duke')
-          App.route @message
+          App.respondTo @message
         .then (reply)=>
           json(reply).should.match /What award type\?/
           json(reply).should.match /No award types, please create one/
           rewardType(@project)
         .then (@rewardType)=>
-          App.route message('x')
+          App.respondTo message('x')
         .then (reply)=>
           json(reply).should.match /5: send an award/
-          App.route message('5')
+          App.respondTo message('5')
         .then (reply)=>
           json(reply).should.match /Which slack @user should I send the reward to/i
-          App.route message('@duke')
+          App.respondTo message('@duke')
         .then (reply)=>
           json(reply).should.match /What award type\?/
           json(reply).should.match /a very special award.+888/
-          App.route message('A')
+          App.respondTo message('A')
         .then (reply)=>
           json(reply).should.match /How much do you want to reward @duke for \\"a very special award\\"/i
-          App.route message('4000')
+          App.respondTo message('4000')
         .then (reply)=>
           json(reply).should.match /What was the contribution @duke made for the award/i
           @message = message('was awesome')
-          App.route @message
+          App.respondTo @message
         .then (reply)=>
           @firebaseServer.getValue()
         .then (db)=>
@@ -353,11 +353,11 @@ describe 'swarmbot', ->
             name: projectId
             project_owner: @user.key()
         .then (@project)=>
-          App.route message('')
+          App.respondTo message('')
         .then (reply)=>
           json(reply).should.match /Which slack @user should I send the reward to?/
           @message = message('@not_a_slack_user')
-          App.route @message
+          App.respondTo @message
         .then (reply)=>
           json(reply).should.match ///#{projectId}///i
           @message.parts[0].should.match /The user @not_a_slack_user is not recognized. Sending them a message now./
@@ -411,10 +411,10 @@ describe 'swarmbot', ->
           btc_address: null
         .then (@awardee)=>
 
-          App.route message('')
+          App.respondTo message('')
         .then (reply)=>
           @message = message('@joebob')
-          App.route @message
+          App.respondTo @message
         .then (reply)=>
           @message.parts[0].should.match /Sending a message to have @joebob register a bitcoin address./
           json(reply).should.not.match /What award type\?/
@@ -426,7 +426,7 @@ describe 'swarmbot', ->
         state: 'invalid#state'
       .then (@user)=>
         @message = message('')
-        App.route @message
+        App.respondTo @message
       .then (reply)=>
         @user.fetch()
       .then (@user)=>

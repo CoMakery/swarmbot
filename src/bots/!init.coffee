@@ -50,7 +50,7 @@ InitBot = (robot)->
   robot.respond /(.*)/, (msg)->
     if robot.isPublic msg
       msg.reply "Let's take this offline.  I PM'd you :smile:"
-    App.route(msg).then (response)->
+    App.respondTo(msg).then (response)->
       App.pmReply msg, response
 
   App.respond /what data\? WxmhxTuxKfjnVQ3mLgGZaG2KPn$/i, (msg)->

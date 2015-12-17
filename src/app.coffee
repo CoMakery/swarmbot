@@ -3,12 +3,13 @@
 Promise = require 'bluebird'
 debug = require('debug')('app')
 inspectFallback = require('debug')('fallback')
+
 User = require './models/user'
 controllers =
-  rewardTypes: require './controllers/reward-types-state-controller'
-  projects:        require './controllers/projects-state-controller'
-  users:       require './controllers/users-state-controller'
+  projects:    require './controllers/projects-state-controller'
   rewards:     require './controllers/rewards-state-controller'
+  rewardTypes: require './controllers/reward-types-state-controller'
+  users:       require './controllers/users-state-controller'
 
 class App
   @COIN = '❂'
@@ -22,6 +23,10 @@ class App
   @respond: (pattern, cb)->
     @responses ?= []
     @responses.push [pattern, cb]
+
+  @respondTo: (msg)->
+    @route(msg)
+    .then (textOrAttachments)=> @addFallbackTextIfNeeded textOrAttachments
 
   @route: (msg)->
     debug "in @route: msg.match?[1] => #{msg.match?[1]}"
@@ -61,19 +66,16 @@ class App
       lastMenuItems = @user.get('menu')
       menuAction = lastMenuItems?[controller.input?.toLowerCase()]
 
-      Promise.resolve().then =>
-        if menuAction?
-          # specific menu action of entered command
-          debug "Command: #{controller.input}, controllerName: #{controllerName}, menuAction: #{json menuAction}"
-          controller.execute(menuAction)
-        else if controller[action]?
-          # default action for this state
-          debug "Command: #{controller.input}, controllerName: #{controllerName}, action: #{action}"
-          controller[action]( @user.get('stateData') )
-        else
-          throw new Error("Action for state '#{@user.get('state')}' not defined.")
-      .then (textOrAttachments)=>
-        @addFallbackTextIfNeeded textOrAttachments
+      if menuAction?
+        # specific menu action of entered command
+        debug "Command: #{controller.input}, controllerName: #{controllerName}, menuAction: #{json menuAction}"
+        controller.execute(menuAction)
+      else if controller[action]?
+        # default action for this state
+        debug "Command: #{controller.input}, controllerName: #{controllerName}, action: #{action}"
+        controller[action]( @user.get('stateData') )
+      else
+        throw new Error("Action for state '#{@user.get('state')}' not defined.")
 
   @pmReply: (msg, textOrAttachments)=>
     channel = msg.message.user.name
