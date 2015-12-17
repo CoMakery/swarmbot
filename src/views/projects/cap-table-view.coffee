@@ -26,8 +26,10 @@ class CapTableView extends ZorkView
       chartUrl = "https://chart.googleapis.com/chart?chs=450x200&chd=t:#{amounts.join(',')}&cht=p3&chl=#{names.join('|')}"
       debug chartUrl
       [
-        title: @project.get 'name'
-        image_url: chartUrl
+        {
+          title: @project.get 'name'
+          image_url: chartUrl
+        }
       ]
 
 module.exports = CapTableView

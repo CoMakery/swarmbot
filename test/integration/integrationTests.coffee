@@ -75,6 +75,7 @@ describe 'swarmbot', ->
           name: USER_ID
           state: 'projects#index'
           has_interacted: true
+          btc_address: '3HNSiAq7wFDaPsYDcUxNSRMD78qVcYKicw'
         .then (@user)=>
 
       it "shows a welcome screen if there are no projects", ->
@@ -120,7 +121,7 @@ describe 'swarmbot', ->
         .then (reply)=>
           json(reply).should.match /Community A/i
 
-      it "shows the list of rewards", ->
+      it "shows the list of rewards types", ->
         createUser
           name: USER_ID
           slack_username: "joe"
@@ -153,6 +154,31 @@ describe 'swarmbot', ->
           jreply = json(reply)
           jreply.should.match /COMMUNITY A/
           jreply.should.match /Possible Awards/
+
+      context 'fallback text', ->
+        beforeEach ->
+          createProject(name: "Community A")
+          .then (@project)=>
+
+        it "contains fallback text", ->
+          @user.save()
+          .then (@user)=> App.route message()
+          .then (reply)=> App.route message()
+          .then (reply)=>
+            type(reply).should.eq 'array'
+            reply.length.should.eq 2
+            reply[0].fallback.should.match /Contribute to projects and receive project coins/
+
+            reply[1].fallback.should.match /Choose a Project/
+            reply[1].fallback.should.match /Community A/
+
+            reply[1].fallback.should.match /Your Project Coins/
+            reply[1].fallback.should.match /FinTechHacks ❂ 456/
+            reply[1].fallback.should.match /bitcoin address: 3HNSiAq7wFDaPsYDcUxNSRMD78qVcYKicw/
+
+            reply[1].fallback.should.match /Actions/
+            reply[1].fallback.should.match /create your project/
+            reply[1].fallback.should.match /set your bitcoin address/
 
       context 'projects#create', ->
         beforeEach ->
@@ -295,7 +321,6 @@ describe 'swarmbot', ->
           json(reply).should.match /What was the contribution @duke made for the award/i
           @message = message('was awesome')
           App.route @message
-
         .then (reply)=>
           @firebaseServer.getValue()
         .then (db)=>
@@ -372,39 +397,3 @@ describe 'swarmbot', ->
         @user.fetch()
       .then (@user)=>
         @user.get('state').should.eq User::initialState
-
-  context 'fallback text', ->
-    context 'projects#index', ->
-
-      beforeEach ->
-        createUser
-          name: USER_ID
-          state: 'projects#index'
-          has_interacted: true
-          btc_address: '3HNSiAq7wFDaPsYDcUxNSRMD78qVcYKicw'
-        .then (@user)=>
-          createProject(name: "Community A")
-        .then (@project)=>
-
-      it "contains fallback text", ->
-        @user.save()
-        .then (@user)=> App.route message()
-        .then (reply)=> App.route message()
-        .then (reply)=>
-          type(reply).should.eq 'array'
-          reply.length.should.eq 2
-          reply[0].fallback.should.match /Contribute to projects and receive project coins/
-
-          reply[1].fallback.should.match /Choose a Project/
-          reply[1].fallback.should.match /Community A/
-
-          reply[1].fallback.should.match /Your Project Coins/
-          reply[1].fallback.should.match /FinTechHacks ❂ 456/
-          reply[1].fallback.should.match /bitcoin address: 3HNSiAq7wFDaPsYDcUxNSRMD78qVcYKicw/
-
-          reply[1].fallback.should.match /Actions/
-          reply[1].fallback.should.match /create your project/
-          reply[1].fallback.should.match /set your bitcoin address/
-
-      # TODO: loop over controller actions
-        # fallback text not empty
