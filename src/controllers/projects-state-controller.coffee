@@ -106,10 +106,9 @@ class ProjectsStateController extends ApplicationController
       @redirect()
 
   suggest: ->
-    @sendPm [{
+    @sendPm
       pretext: "You can suggest a swarmbot improvement and contribute to the betterment of all things swarmbot by submitting issues!"
       title: "Swarmbot Issues on Github"
       title_link: "https://github.com/citizencode/swarmbot/issues"
-    }]
     @redirect()
 module.exports = ProjectsStateController
