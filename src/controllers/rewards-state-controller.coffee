@@ -20,7 +20,10 @@ class RewardsStateController extends ApplicationController
     .then (project)=> project.fetch()
     .then (@project)=>
       if @project.get('project_owner') != @currentUser.get('name')
-        return Promise.reject(Promise.OperationalError("Only project administrators can award coins"))
+        throw Promise.OperationalError "Only project administrators can award coins"
+
+      if @project.rewardTypes().isEmpty()
+        throw Promise.OperationalError "There are no award types.  Please create one and then try sending an award."
 
       if not @input
         # fall through to render

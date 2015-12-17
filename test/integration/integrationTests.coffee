@@ -4,7 +4,7 @@ Promise = require 'bluebird'
 nock = require 'nock'
 sinon = require 'sinon'
 
-{ createUser, createProject, message, USER_ID } = require '../helpers/testHelper'
+{ createUser, createProject, createRewardType, message, USER_ID } = require '../helpers/testHelper'
 global.App = require '../../src/app'
 Project = require '../../src/models/project'
 User = require '../../src/models/user'
@@ -249,10 +249,6 @@ describe 'swarmbot', ->
     context 'rewards#create', ->
       rewardTypeId = 'a very special award'
       projectId = 'some project id'
-      rewardType = (project)=>
-        project.createRewardType
-          name: rewardTypeId
-          suggestedAmount: '888'
 
       it "allows an admin to award coins to a user", ->
         createUser
@@ -276,20 +272,9 @@ describe 'swarmbot', ->
           @project.set 'project_owner', @user.key()
           @project.save()
         .then (@project)=>
-          App.respondTo message('')
-        .then (reply)=>
-          json(reply).should.match /5: send an award/
-          App.respondTo message('5')
-        .then (reply)=>
-          json(reply).should.match /Which slack @user should I send the reward to/i
-          @message = message('@duke')
-          App.respondTo @message
-        .then (reply)=>
-          json(reply).should.match /What award type\?/
-          json(reply).should.match /No award types, please create one/
-          rewardType(@project)
+          createRewardType @project, name: rewardTypeId
         .then (@rewardType)=>
-          App.respondTo message('x')
+          App.respondTo message('')
         .then (reply)=>
           json(reply).should.match /5: send an award/
           App.respondTo message('5')
@@ -338,6 +323,8 @@ describe 'swarmbot', ->
             name: projectId
             project_owner: @user.key()
         .then (@project)=>
+          createRewardType @project
+        .then =>
           App.respondTo message('')
         .then (reply)=>
           json(reply).should.match /Which slack @user should I send the reward to?/
@@ -370,6 +357,8 @@ describe 'swarmbot', ->
             name: projectId
             project_owner: @user.key()
         .then (@project)=>
+          createRewardType @project
+        .then =>
           App.route message('')
         .then (reply)=>
           json(reply).should.match /Which slack @user should I send the reward to?/
@@ -391,11 +380,12 @@ describe 'swarmbot', ->
             name: projectId
             project_owner: @user.key()
         .then (@project)=>
-        createUser
-          slack_username: 'joebob'
-          btc_address: null
+          createRewardType @project
+        .then =>
+          createUser
+            slack_username: 'joebob'
+            btc_address: null
         .then (@awardee)=>
-
           App.respondTo message('')
         .then (reply)=>
           @message = message('@joebob')
@@ -403,6 +393,23 @@ describe 'swarmbot', ->
         .then (reply)=>
           @message.parts[0].should.match /Sending a message to have @joebob register a bitcoin address./
           json(reply).should.not.match /What award type\?/
+
+      it "exits out of rewarding with an error message if there are no reward types.", ->
+        createUser
+          name: USER_ID
+          state: 'rewards#create'
+          current_project: projectId
+          slack_username: 'duke'
+          btc_address: 'i am a bitcoin address'
+        .then (@user)=>
+          createProject
+            name: projectId
+            project_owner: @user.key()
+        .then (@project)=>
+          App.route (@message = message(''))
+        .then (reply)=>
+          @message.parts[0].should.match /There are no award types.  Please create one and then try sending an award./
+
 
   context 'error states', ->
     it "resets a user's state if they route with an invalid state", ->

@@ -90,6 +90,13 @@ class TestHelper
     }
     new Project(args).save()
 
+  @createRewardType: (project, args = {})=>
+    defaults args, {
+      name: 'random reward'
+      suggestedAmount: '888'
+    }
+    project.createRewardType args
+
   @message = (input, props={})->
     @parts = []
     message = {
@@ -105,5 +112,6 @@ class TestHelper
       robot: App.robot
     }
     defaults props, message
+
 
 module.exports = TestHelper
