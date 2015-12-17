@@ -70,6 +70,8 @@ after ->
   @firebaseServer.close()
 
 class TestHelper
+  @USER_ID = "slack:1234"
+
   @createUser: (args = {})=>
     defaults args, {
       name: "some user id"
@@ -87,5 +89,21 @@ class TestHelper
       tasksUrl: 'http://example.com'
     }
     new Project(args).save()
+
+  @message = (input, user)->
+    user ?=
+      name: 'frank'
+      id: @USER_ID
+      real_name: 'Frank Herbert'
+      email_address: 'frank@herbert.com'
+    @parts = []
+    {
+      parts: @parts
+      match: [null, input]
+      send: (reply)=> throw new Error "deprecated, use pmReply"
+      message:
+        user: user
+      robot: App.robot
+    }
 
 module.exports = TestHelper

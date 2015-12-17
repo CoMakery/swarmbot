@@ -4,14 +4,13 @@ Promise = require 'bluebird'
 nock = require 'nock'
 sinon = require 'sinon'
 
-{ createUser, createProject } = require '../helpers/testHelper'
+{ createUser, createProject, message, USER_ID } = require '../helpers/testHelper'
 global.App = require '../../src/app'
 Project = require '../../src/models/project'
 User = require '../../src/models/user'
 RewardType = require '../../src/models/reward-type'
 InitBot = require '../../src/bots/!init'
 
-USER_ID = "slack:1234"
 PROJECT_ID = 'Your Great Project'
 
 App.robot =
@@ -24,21 +23,6 @@ App.robot =
 App.pmReply = (msg, textOrAttachments)=>
   reply = textOrAttachments.text or textOrAttachments
   msg.parts.push reply
-
-message = (input, user)->
-  @parts = []
-  {
-    parts: @parts
-    match: [null, input]
-    send: (reply)=> throw new Error "deprecated, use pmReply"
-    message:
-      user:
-        name: 'frank'
-        id: USER_ID
-        real_name: 'Frank Herbert'
-        email_address: 'frank@herbert.com'
-    robot: App.robot
-  }
 
 App.sendMessage = (channel, textOrAttachments)=>
   msg = textOrAttachments.text or textOrAttachments
