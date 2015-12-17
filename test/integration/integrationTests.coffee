@@ -370,6 +370,30 @@ describe 'swarmbot', ->
           newUser.get('name').should.eq "slack:#{otherSlackId}"
           newUser.get('state').should.eq "users#setBtc"
 
+      it "shows good error message if user doesn't exist at all", ->
+        otherSlackId = "other slack user id"
+        App.robot.adapter.client.getUserByName = ->
+          undefined
+        createUser
+          name: USER_ID
+          state: 'rewards#create'
+          current_project: projectId
+          slack_username: 'duke'
+          btc_address: 'i am a bitcoin address'
+        .then (@user)=>
+          createProject
+            name: projectId
+            project_owner: @user.key()
+        .then (@project)=>
+          App.route message('')
+        .then (reply)=>
+          json(reply).should.match /Which slack @user should I send the reward to?/
+          @message = message('@not_a_slack_user')
+          App.route @message
+        .then (reply)=>
+          @message.parts[0].should.match /Sorry, @not_a_slack_user doesn't look like a user/
+          json(reply).should.match /Which slack @user should I send the reward to?/
+
       it "messages the possible awardee if they don't have a bitcoin address", ->
         createUser
           name: USER_ID
