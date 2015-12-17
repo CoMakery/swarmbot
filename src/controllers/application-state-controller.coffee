@@ -1,6 +1,7 @@
 request = require 'request-promise'
 validator = require 'validator'
 debug = require('debug')('app')
+errorLog = require('debug')('error')
 { json, log, p, pjson, type } = require 'lightsaber'
 { extend, isEmpty } = require 'lodash'
 Promise = require 'bluebird'
@@ -37,7 +38,8 @@ class ApplicationStateController
           debug 'redirecting...'
           @redirect(menuAction.flashMessage)
         else if type(transitionMethod) in ['null', 'undefined']
-          throw new Error "Requested state transition is undefined! Event '#{menuAction.transition}' from state '#{@currentUser.get('state')}'"
+          errorLog "Requested state transition is undefined! Event '#{menuAction.transition}' from state '#{@currentUser.get('state')}'"
+          @reset()
 
     if menuAction.teleport?
       promise = promise.then =>
@@ -69,8 +71,10 @@ class ApplicationStateController
 
   reset: ->
     debug "Resetting to #{User::initialState} from state: #{json @currentUser?.get 'state'}, stateData: #{json @currentUser?.get 'stateData'}"
-    @currentUser?.set('state', User::initialState)
-    @currentUser?.set('stateData', {})
+    @currentUser?.update
+      state: User::initialState
+      stateData: {}
+      menu: {}
     .then => @redirect()
 
   parseImageUrl: (ignore='n')->

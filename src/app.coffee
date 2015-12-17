@@ -2,6 +2,7 @@
 { defaults, isEmpty } = require 'lodash'
 Promise = require 'bluebird'
 debug = require('debug')('app')
+errorLog = require('debug')('error')
 inspectFallback = require('debug')('fallback')
 
 User = require './models/user'
@@ -57,7 +58,7 @@ class App
       unless controller and controller[action]
         errorMessage = "Unexpected @user state #{@user.get('state')} -- resetting to default state"
         msg.send("*#{errorMessage}*") if process.env.NODE_ENV is 'development'
-        console.error errorMessage
+        errorLog errorMessage
         return @user.set('state', User::initialState)
           .then => @route(msg)
 

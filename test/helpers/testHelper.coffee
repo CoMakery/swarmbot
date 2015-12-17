@@ -90,20 +90,20 @@ class TestHelper
     }
     new Project(args).save()
 
-  @message = (input, user)->
-    user ?=
-      name: 'frank'
-      id: @USER_ID
-      real_name: 'Frank Herbert'
-      email_address: 'frank@herbert.com'
+  @message = (input, props={})->
     @parts = []
-    {
+    message = {
       parts: @parts
       match: [null, input]
       send: (reply)=> throw new Error "deprecated, use pmReply"
       message:
-        user: user
+        user:
+          name: 'frank'
+          id: @USER_ID
+          real_name: 'Frank Herbert'
+          email_address: 'frank@herbert.com'
       robot: App.robot
     }
+    defaults props, message
 
 module.exports = TestHelper
