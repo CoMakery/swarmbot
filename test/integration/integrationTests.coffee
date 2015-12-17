@@ -56,19 +56,20 @@ describe 'swarmbot', ->
         createUser
           name: USER_ID
           state: 'projects#show'
+          current_project: "Micket Taster"
         .then (@user)=>
-          createProject()
+          createProject(name: "Micket Taster")
         .then (@project)=> @project.createRewardType name: 'Do Stuff'
         .then => @project.createRewardType name: 'Be Glorious'
         .then => App.respondTo message()
         .then (reply)=>
-          jreply = json reply
-          jreply.should.match /See Project Tasks/
-          jreply.should.match /example\.com/
-          jreply.should.match /Do stuff/i
-          jreply.should.match /Be glorious/i
-          jreply.should.match /\d: create an award/i
-          jreply.should.match /bitcoin address: 3HNSiAq7wFDaPsYDcUxNSRMD78qVcYKicw/i
+          json(reply[0]).should.match /Micket Taster/i
+          json(reply[1]).should.match /See Project Tasks/
+          json(reply[1]).should.match /example\.com/
+          json(reply[2]).should.match /Do stuff/i
+          json(reply[2]).should.match /Be glorious/i
+          json(reply[2]).should.match /\d: create an award/i
+          json(reply[2]).should.match /bitcoin address: 3HNSiAq7wFDaPsYDcUxNSRMD78qVcYKicw/i
 
     context 'projects#index', ->
       beforeEach ->
