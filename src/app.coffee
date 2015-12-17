@@ -111,7 +111,7 @@ class App
       inspectFallback "Fallback text:\n#{fallbackText}"
       attachment.fallback = fallbackText
     else
-      inspectFallback "Attachment with predefined fallback:\n#{pjson attachment}"
+      inspectFallback "Attachment arrived with fallback already set:\n#{pjson attachment}"
     attachment
 
   @extractTextLines: (element)->

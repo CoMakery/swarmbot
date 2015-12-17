@@ -1,4 +1,11 @@
+{ json, log, p, pjson, type } = require 'lightsaber'
+
 class ZorkHelper
+
+  # NOTE: WE USED TO USE COLORS, BUT NO LONGER DO.
+  # KEEP THEM AROUND UNTIL MARCH 2016;
+  # IF THEY ARE NOT IN USE BY THEN, DELETE.
+
   ACTION_COLOR: '#FBD48A'
   BODY_COLOR: '#3498DB'
   INFO_COLOR: '#56E6CE'
@@ -13,8 +20,12 @@ class ZorkHelper
   warning:  (text)-> @message @WARNING_COLOR, text
 
   message: (color, text)->
-    {
-      text: text
-    }
+    if type(text) is 'string'
+      {
+        # color
+        text
+      }
+    else
+      throw new Error "expected string, got: #{pjson text}"
 
 module.exports = ZorkHelper

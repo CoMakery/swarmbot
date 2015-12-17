@@ -13,7 +13,9 @@ class ApplicationStateController
   constructor: (@msg)->
     @currentUser = @msg.currentUser
 
-  sendPm: (attachment)=> App.pmReply @msg, attachment
+  sendPm: (textOrAttachments)=>
+    App.addFallbackTextIfNeeded textOrAttachments
+    App.pmReply @msg, textOrAttachments
 
   sendInfo:     (text)=> App.pmReply @msg, ZorkHelper::info text
   sendQuestion: (text)=> App.pmReply @msg, ZorkHelper::question text
