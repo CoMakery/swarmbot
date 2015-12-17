@@ -23,7 +23,7 @@ class CapTableView extends ZorkView
         roundedAmount = Math.round amounts[i]
         names[i] = encodeURIComponent "#{names[i]} #{roundedAmount}%"
 
-      chartUrl = "https://chart.googleapis.com/chart?chs=450x200&chd=t:#{amounts.join(',')}&cht=p3&chl=#{names.join('|')}"
+      chartUrl = "https://chart.googleapis.com/chart?chs=450x200&chd=t:#{amounts.join(',')}&chma=30,30,30,30&cht=p3&chl=#{names.join('|')}"
       debug chartUrl
       [
         {
