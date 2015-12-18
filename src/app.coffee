@@ -85,10 +85,7 @@ class App
   @sendMessage: (channel, textOrAttachments)=>
     if type(textOrAttachments) is 'string'
       @robot.messageRoom(channel, textOrAttachments)
-    else if type(textOrAttachments) is 'array'
-      for attachment in textOrAttachments
-        @sendAttachmentMessage(channel, attachment)
-    else if type(textOrAttachments) is 'object'
+    else if type(textOrAttachments) in ['array', 'object']
       @sendAttachmentMessage(channel, textOrAttachments)
     else
       throw new Error "Unexpected type(textOrAttachments) -> #{type(textOrAttachments)}"
