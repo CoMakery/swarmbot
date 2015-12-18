@@ -1,4 +1,5 @@
 debug = require('debug')('app')
+errorLog = require('debug')('error')
 {log, p, pjson} = require 'lightsaber'
 request = require 'request-promise'
 StateMachine = require 'javascript-state-machine'
@@ -38,11 +39,17 @@ class User extends FirebaseModel
     @set('state', to)
     # TODO: stat: user entering what state
 
+  reset: ->
+    @update
+      state: User::initialState
+      stateData: {}
+      menu: {}
 
   StateMachine.create
     target: @prototype
     error: (event, from, to, args, errorCode, errorMessage)->
-      throw new Error "State Machine Error! Event: #{event} // #{from} -> #{to} // args: #{pjson args} // error: #{errorCode}  #{errorMessage}"
+      debug "State Machine Error! Event: #{event} // #{from} -> #{to} // args: #{pjson args} // error: #{errorCode}  #{errorMessage}"
+      @reset()
 
     events: [
       { name: 'exit', from: User::initialState, to: User::initialState }

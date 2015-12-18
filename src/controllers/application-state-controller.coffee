@@ -70,11 +70,8 @@ class ApplicationStateController
         @reset()
 
   reset: ->
-    debug "Resetting to #{User::initialState} from state: #{json @currentUser?.get 'state'}, stateData: #{json @currentUser?.get 'stateData'}"
-    @currentUser?.update
-      state: User::initialState
-      stateData: {}
-      menu: {}
+    errorLog "Resetting to #{User::initialState} from state: #{json @currentUser?.get 'state'}, stateData: #{json @currentUser?.get 'stateData'}"
+    @currentUser?.reset()
     .then => @redirect()
 
   parseImageUrl: (ignore='n')->
