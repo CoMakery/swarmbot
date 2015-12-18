@@ -1,8 +1,5 @@
 # Commands:
-#  hubot space kitty say
-
-# Propz:
-#   raysrashmi for https://github.com/raysrashmi/hubot-instagram
+# 
 
 {log, p, pjson} = require 'lightsaber'
 Instagram = require('instagram-node-lib')
