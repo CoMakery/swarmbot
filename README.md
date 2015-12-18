@@ -21,7 +21,7 @@ To learn more when we release it, sign up for our mailing list over at [www.swar
 
 ## Here's What Swarmbot Can Do
 
-![Swarmbot UX](https://cloud.githubusercontent.com/assets/7764167/11573372/c8362dc0-99ba-11e5-87c7-b698a3d07a3d.png)
+![Swarmbot UX](https://cdn.rawgit.com/citizencode/swarmbot/101569b44d0decd29fdbb05efe55501522262330/doc/examples-2015-12/flow.png)
 
 ## Development
 
