@@ -150,4 +150,15 @@ class App
 
     user.update attributes
 
+  @greet = (res)->
+    currentUser = new User name: App.robot.whose(res)
+    currentUser.fetch()
+    .then (@user)=> @user.set('state', 'users#welcome')   # goes away if this is new home page
+    .then => App.route res
+    .then (welcome)=>
+      App.pmReply res, welcome
+      @user.set 'state', User::initialState
+    .then => App.route res
+    .then (projects)=> App.pmReply res, projects
+
 module.exports = App

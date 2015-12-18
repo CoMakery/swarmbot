@@ -57,19 +57,8 @@ InitBot = (robot)->
     p pjson msg
     msg.send 'check the logs'
 
-  robot.enter (res)-> greet res
+  robot.enter (res)-> App.greet res
 
-  greet = (res)->
-    currentUser = new User name: robot.whose(res)
-    currentUser.fetch()
-    .then (@user)=> @user.set('state', 'users#welcome')   # goes away if this is new home page
-    .then => App.route res
-    .then (welcome)=>
-      App.pmReply res, welcome
-      @user.set 'state', 'users#setProject'    # goes away if this becomes the new home page
-    .then => App.route res
-    .then (projects)=> App.pmReply res, projects
-
-  App.respond /welcome me WxmhxTuxKfjnVQ3mLgGZaG2KPn$/i, (msg)-> greet msg
+  App.respond /welcome me WxmhxTuxKfjnVQ3mLgGZaG2KPn$/i, (msg)-> App.greet msg
 
 module.exports = InitBot

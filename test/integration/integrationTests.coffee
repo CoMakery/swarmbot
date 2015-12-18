@@ -13,26 +13,27 @@ InitBot = require '../../src/bots/!init'
 
 PROJECT_ID = 'Your Great Project'
 
-App.robot =
-  whose: (msg)-> USER_ID
-  messageRoom: ->
-  adapter:
-    customMessage: ->
-    client: {}
-
-App.pmReply = (msg, textOrAttachments)=>
-  reply = textOrAttachments.text or textOrAttachments
-  msg.parts.push reply
-
-App.sendMessage = (channel, textOrAttachments)=>
-  msg = textOrAttachments.text or textOrAttachments
-  App.sendMessage.deliveries[channel] ?= []
-  App.sendMessage.deliveries[channel].push msg
-
 describe 'swarmbot', ->
   beforeEach ->
     App.sendMessage.deliveries = {}
     @message = null
+
+    App.robot =
+      whose: (msg)-> USER_ID
+      messageRoom: ->
+      adapter:
+        customMessage: ->
+        client: {}
+
+    App.pmReply = (msg, textOrAttachments)=>
+      reply = textOrAttachments.text or textOrAttachments
+      msg.parts.push reply
+
+    App.sendMessage = (channel, textOrAttachments)=>
+      App.sendMessage.deliveries ?= {}
+      msg = textOrAttachments.text or textOrAttachments
+      App.sendMessage.deliveries[channel] ?= []
+      App.sendMessage.deliveries[channel].push msg
 
   context 'projects', ->
     context 'projects#show', ->
