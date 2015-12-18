@@ -11,6 +11,7 @@ if process.env.AIRBRAKE_API_KEY
   airbrake.handleExceptions()
 
 debug = require('debug')('app')
+debugReply = require('debug')('reply')
 { json, log, p, pjson, type } = require 'lightsaber'
 { merge } = require 'lodash'
 Promise = require 'bluebird'
@@ -50,8 +51,9 @@ InitBot = (robot)->
   robot.respond /(.*)/, (msg)->
     if robot.isPublic msg
       msg.reply "Let's take this offline.  I PM'd you :smile:"
-    App.respondTo(msg).then (response)->
-      App.pmReply msg, response
+    App.respondTo(msg).then (reply)->
+      debugReply pjson reply
+      App.pmReply msg, reply
 
   App.respond /what data\? WxmhxTuxKfjnVQ3mLgGZaG2KPn$/i, (msg)->
     p pjson msg
