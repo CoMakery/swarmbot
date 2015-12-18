@@ -18,11 +18,10 @@ class ListRewardsView extends ZorkView
         rewardType.get('name')
         "_#{reward.get('description')}_"
       ].join("   ")
-    .join("\n")
 
     """
       *AWARDS FOR #{@project.get('name')}*
-      #{rewards}
+      #{rewards.join("\n")}
     """
 
 module.exports = ListRewardsView
