@@ -8,7 +8,7 @@
     "Duke Dorje (https://github.com/dukedorje)",
     "Glenn Jahnke (https://github.com/gleenn)"
   ],
-  "description": "Bot for bounties",
+  "description": "A bot for Dynamic Equity Organizations running in Slack",
   "scripts": {
     "start": "bin/hubot --adapter slack",
     "dev": "bin/hubot --name s",
