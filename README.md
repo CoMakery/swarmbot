@@ -6,7 +6,9 @@ Issue board: [![Waffle](https://badge.waffle.io/citizencode/swarmbot.svg?label=o
 
 ## Project Vision
 
-Swarmbot hangs out in Slack and creates Project Coins on a trusty blockchain. It helps you to distribute profit and tracks your fair share of projects you work on. Swarmbot helps you run a [Dynamic Equity Organization](https://github.com/citizencode/dynamic-equity-organization).
+Swarmbot hangs out in Slack and creates Project Coins on a trusty blockchain.
+It helps you to distribute profit and tracks your fair share of projects you work on.
+Swarmbot helps you run a [Dynamic Equity Organization](https://github.com/citizencode/dynamic-equity-organization).
 
 
 ## Current Implementation Status
@@ -15,7 +17,8 @@ This project is alpha and not ready for production use.
 It is being actively developed by [Citizen Code](http://citizencode.io/).
 We welcome [feature requests and pull requests](https://github.com/citizencode/swarmbot/issues).
 
-We are planning to license it as a Dynamic Equity Organization. The structure is being legally reviewed for use in Swarmbot and on your projects.
+We are planning to license it as a Dynamic Equity Organization.
+The structure is being legally reviewed for use in Swarmbot and on your projects.
 
 To learn more when we release it, sign up for our mailing list over at [www.swarmbot.io](http://www.swarmbot.io/)
 
@@ -25,19 +28,16 @@ To learn more when we release it, sign up for our mailing list over at [www.swar
 
 ## Development
 
-The Swarmbot is based on [Hubot](http://hubot.github.com).
-It is configured by default to run with the Hubot Slack adaptor,
-but is easily configured to work anywhere Hubot works.
+The Swarmbot is based on [Hubot](http://hubot.github.com),
+and is configured specifically for Slack.
 
     npm install
 
 You can start the bot locally by running:
 
-    npm run dev
+    npm run devbot
 
-If you wish to load environment variables from a local `.env` file:
-
-    env `cat .env` npm run dev
+This will also load environment variables from your local `.env` file.
 
 ## Deploying
 
@@ -46,7 +46,7 @@ If you wish to load environment variables from a local `.env` file:
 ```sh
 heroku create
 heroku ps:type hobby  # will be available 24/7, but costs $
-heroku addons:create redistogo:nano
+heroku addons:create redistogo:nano  # Optional. Colu caches to Redis if available.
 heroku addons:create airbrake:free_heroku  # error reporting, recommended
 git push heroku master
 ```
@@ -57,7 +57,7 @@ git push heroku master
 HUBOT_SLACK_TOKEN  #your slack token, from Slack -> Integrations -> Hubot
 
 COLU_PRIVATE_SEED
-COLU_NETWORK (testnet|mainnet)
+COLU_NETWORK         # testnet or mainnet
 COLU_MAINNET_APIKEY  # if on mainnet
 
 FIREBASE_URL
@@ -70,15 +70,7 @@ HUBOT_INSTAGRAM_ACCESS_KEY
 HUBOT_INSTAGRAM_CLIENT_KEY
 ```
 
-### Code Notes
-
-|Naming            |                  |                         |                         |
-|------------------|:----------------:|:-----------------------:|:-----------------------:|
-|Current interface |project           |award                    |reward                   |
-|Desired code & DB |project           |rewardType               |reward                   |
-|Current DB        |project           |award                    |solution                 |
-|Cruft in code     |~                 |~                        |~                        |
-
 ## License
 
-Swarmbot is being developed under the experimental [Peer Production Royalty Token License](https://github.com/citizencode/swarmbot/blob/master/LICENSE.md).
+Swarmbot is being developed under the experimental
+[Peer Production Royalty Token License](https://github.com/citizencode/swarmbot/blob/master/LICENSE.md).
