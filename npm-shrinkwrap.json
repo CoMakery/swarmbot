@@ -1,6 +1,6 @@
 {
   "name": "swarmbot",
-  "version": "0.5.5",
+  "version": "0.5.6",
   "dependencies": {
     "accepts": {
       "version": "1.2.13",
