@@ -1,0 +1,32 @@
+#!/usr/bin/env coffee
+
+{ p } = require 'lightsaber'
+{ camelCase, isEmpty } = require 'lodash'
+glob = require "glob"
+fs = require 'fs'
+
+main = ->
+  glob "src/**/*.coffee", (error, files)->
+    throw error if error
+    badKeys = findBadKeys(files)
+    reportBadKeys(badKeys)
+
+findBadKeys = (files)->
+  badKeys = []
+  for file in files
+    coffee = fs.readFileSync file, 'utf8'
+    pattern = /\.[gs]et[( ]['"]([\w-]+)['"]/g
+    while match = pattern.exec coffee
+      keyName = match[1]
+      if keyName isnt camelCase(keyName)
+        badKeys.push [keyName, file]
+  badKeys
+
+reportBadKeys = (badKeys)->
+  unless isEmpty badKeys
+    for [badKey, file] in badKeys
+      console.error "Expected all DB keys to be camel case, but got '#{badKey}'
+        source: #{file}"
+    process.exit 1
+
+main()

@@ -1,7 +1,7 @@
 debug = require('debug')('app')
-{log, p, json, pjson} = require 'lightsaber'
+{log, p, json, pjson, type} = require 'lightsaber'
 Promise = require 'bluebird'
-{ assign, last } = require 'lodash'
+{ assign, last, camelCase } = require 'lodash'
 swarmbot = require './swarmbot'
 
 class FirebaseModel
@@ -11,6 +11,7 @@ class FirebaseModel
       .fetchIfNeeded()
 
   @findBy: Promise.promisify (attrName, attrValue, cb)->
+    @assertCase attrName
     swarmbot.firebase().child(@::urlRoot)
       .orderByChild(attrName)
       .equalTo(attrValue)
@@ -24,6 +25,7 @@ class FirebaseModel
     , cb # error
 
   constructor: (@attributes={}, options={})->
+    @assertKeysCase @attributes
     @hasParent = @hasParent || false
     @parent = options.parent
 
@@ -56,6 +58,7 @@ class FirebaseModel
     [ parentPath, @urlRoot, @key() ].join '/'
 
   get: (attr)->
+    @assertCase attr
     @attributes[attr]
 
   set: (attr, val)->
@@ -80,6 +83,7 @@ class FirebaseModel
       @fetch()
 
   save: Promise.promisify (cb)->
+    @assertKeysCase @attributes
     @firebase().update @attributes, (error)=> cb error, @
 
   exists: ->
@@ -88,5 +92,17 @@ class FirebaseModel
   parseSnapshot: ->
     assign @attributes, @snapshot.val()
     @
+
+  assertKeysCase: (attributes)->
+    for own key, value of attributes
+      @assertCase key
+      if type(value) is 'object'
+        @assertKeysCase value
+
+  assertCase: (key, attributes=null)->
+    if key isnt camelCase(key)
+      message = "Expected all DB keys to be camel case, but got '#{key}'"
+      message += " within #{pjson attributes}" if attributes
+      throw new Error message
 
 module.exports = FirebaseModel
