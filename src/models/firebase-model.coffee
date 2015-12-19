@@ -93,11 +93,12 @@ class FirebaseModel
     assign @attributes, @snapshot.val()
     @
 
-  assertKeysCase: (attributes)->
+  assertKeysCase: (attributes, fullAttributes)->
+    fullAttributes ?= attributes
     for own key, value of attributes
-      @assertCase key
+      @assertCase key, fullAttributes
       if type(value) is 'object'
-        @assertKeysCase value
+        @assertKeysCase value, fullAttributes
 
   assertCase: (key, attributes=null)->
     if key isnt camelCase(key)
