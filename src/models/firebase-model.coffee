@@ -2,7 +2,7 @@ debug = require('debug')('app')
 {log, p, json, pjson, type} = require 'lightsaber'
 validator = require 'validator'
 Promise = require 'bluebird'
-{ assign, last, camelCase } = require 'lodash'
+{ assign, camelCase, last } = require 'lodash'
 swarmbot = require './swarmbot'
 
 class FirebaseModel
@@ -103,7 +103,7 @@ class FirebaseModel
 
   assertValidKey: (key, attributes=null)->
     if not @validKey key
-      message = "Expected all DB keys to be camel case, but got '#{key}'"
+      message = "Expected all DB keys to be camel case or dates, but got '#{key}'"
       message += " within #{pjson attributes}" if attributes
       throw new Error message
 
