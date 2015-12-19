@@ -1,6 +1,5 @@
 debug = require('debug')('app')
 {log, p, json, pjson, type} = require 'lightsaber'
-validator = require 'validator'
 Promise = require 'bluebird'
 { assign, camelCase, last } = require 'lodash'
 swarmbot = require './swarmbot'
@@ -108,6 +107,6 @@ class FirebaseModel
       throw new Error message
 
   validKey: (key)->
-    key is camelCase(key) or validator.isISO8601(key)
+    key is camelCase(key) or key.match /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/  # we need a custom date pattern, because to make a valid firebase key, we've made an invalid date string
 
 module.exports = FirebaseModel
