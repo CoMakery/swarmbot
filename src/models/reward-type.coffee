@@ -7,7 +7,7 @@ RatingCollection = require '../collections/rating-collection'
 
 class RewardType extends FirebaseModel
   hasParent: true
-  urlRoot: "reward-types"
+  urlRoot: "rewardTypes"
 
   upvote: (user)->
     @attributes.votes ?= {}

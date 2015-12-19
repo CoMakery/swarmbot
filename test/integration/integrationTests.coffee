@@ -241,8 +241,8 @@ describe 'swarmbot', ->
           json(@message.parts).should.match /Award created/
         .then => @firebaseServer.getValue()
         .then (db)=>
-          size(db.projects[PROJECT_ID]['reward-types']).should.eq 1
-          db.projects[PROJECT_ID]['reward-types']['Kitais'].should.deep.eq
+          size(db.projects[PROJECT_ID]['rewardTypes']).should.eq 1
+          db.projects[PROJECT_ID]['rewardTypes']['Kitais'].should.deep.eq
             name: 'Kitais'
             suggestedAmount: '4000'
 
