@@ -1,5 +1,6 @@
 debug = require('debug')('app')
 {log, p, json, pjson, type} = require 'lightsaber'
+validator = require 'validator'
 Promise = require 'bluebird'
 { assign, last, camelCase } = require 'lodash'
 swarmbot = require './swarmbot'
@@ -11,7 +12,7 @@ class FirebaseModel
       .fetchIfNeeded()
 
   @findBy: Promise.promisify (attrName, attrValue, cb)->
-    @assertCase attrName
+    @assertValidKey attrName
     swarmbot.firebase().child(@::urlRoot)
       .orderByChild(attrName)
       .equalTo(attrValue)
@@ -25,7 +26,7 @@ class FirebaseModel
     , cb # error
 
   constructor: (@attributes={}, options={})->
-    @assertKeysCase @attributes
+    @assertValidKeysWithin @attributes
     @hasParent = @hasParent || false
     @parent = options.parent
 
@@ -58,7 +59,7 @@ class FirebaseModel
     [ parentPath, @urlRoot, @key() ].join '/'
 
   get: (attr)->
-    @assertCase attr
+    @assertValidKey attr
     @attributes[attr]
 
   set: (attr, val)->
@@ -83,7 +84,7 @@ class FirebaseModel
       @fetch()
 
   save: Promise.promisify (cb)->
-    @assertKeysCase @attributes
+    @assertValidKeysWithin @attributes
     @firebase().update @attributes, (error)=> cb error, @
 
   exists: ->
@@ -93,17 +94,20 @@ class FirebaseModel
     assign @attributes, @snapshot.val()
     @
 
-  assertKeysCase: (attributes, fullAttributes)->
+  assertValidKeysWithin: (attributes, fullAttributes)->
     fullAttributes ?= attributes
     for own key, value of attributes
-      @assertCase key, fullAttributes
+      @assertValidKey key, fullAttributes
       if type(value) is 'object'
-        @assertKeysCase value, fullAttributes
+        @assertValidKeysWithin value, fullAttributes
 
-  assertCase: (key, attributes=null)->
-    if key isnt camelCase(key)
+  assertValidKey: (key, attributes=null)->
+    if not @validKey key
       message = "Expected all DB keys to be camel case, but got '#{key}'"
       message += " within #{pjson attributes}" if attributes
       throw new Error message
+
+  validKey: (key)->
+    key is camelCase(key) or validator.isISO8601(key)
 
 module.exports = FirebaseModel
