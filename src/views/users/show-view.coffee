@@ -19,10 +19,10 @@ class ShowView extends ZorkView
   userText: (user)->
     if user?
       @body """
-      Real name: #{(user.get('real_name') ? '[not set]')}
-      Username: #{user.get('slack_username')}
-      Current project: #{user.get('current_project')}
-      Bitcoin address: #{(user.get('btc_address') ? '[not set]')}
+      Real name: #{(user.get('realName') ? '[not set]')}
+      Username: #{user.get('slackUsername')}
+      Current project: #{user.get('currentProject')}
+      Bitcoin address: #{(user.get('btcAddress') ? '[not set]')}
       """
     else
       @warning "User not found"

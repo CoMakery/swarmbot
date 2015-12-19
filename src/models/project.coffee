@@ -108,7 +108,7 @@ class Project extends FirebaseModel
 
   sendAsset: ({amount, recipient}, cb)->
     recipient.fetch().then (user)->
-      recipientAddress = user.get('btc_address')
+      recipientAddress = user.get('btcAddress')
       if recipientAddress?
         debug "creating project; address: #{recipientAddress}",
       else

@@ -23,7 +23,7 @@ class ZorkView
 
   bold: (text)-> "*#{text}*"
 
-  bitcoinAddress: -> @currentUser.get('btc_address') or "None"
+  bitcoinAddress: -> @currentUser.get('btcAddress') or "None"
 
 extend ZorkView::, ZorkHelper::
 

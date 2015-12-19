@@ -33,7 +33,7 @@ class UsersStateController extends ApplicationController
     if btcAddress?
       try
         address.fromBase58Check(btcAddress)
-        @currentUser.set "btc_address", btcAddress
+        @currentUser.set "btcAddress", btcAddress
         @sendInfo "BTC address #{btcAddress} registered."
         return @execute { transition: 'exit' }
       catch error

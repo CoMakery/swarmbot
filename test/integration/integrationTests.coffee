@@ -41,7 +41,7 @@ describe 'swarmbot', ->
         createUser
           name: USER_ID
           state: 'projects#show'
-          current_project: "Micket Taster"
+          currentProject: "Micket Taster"
         .then (@user)=>
           createProject(name: "Micket Taster")
         .then (@project)=> @project.createRewardType name: 'Do Stuff'
@@ -61,8 +61,8 @@ describe 'swarmbot', ->
         createUser
           name: USER_ID
           state: 'projects#index'
-          has_interacted: true
-          btc_address: '3HNSiAq7wFDaPsYDcUxNSRMD78qVcYKicw'
+          hasInteracted: true
+          btcAddress: '3HNSiAq7wFDaPsYDcUxNSRMD78qVcYKicw'
         .then (@user)=>
 
       it "shows a welcome screen if there are no projects", ->
@@ -77,7 +77,7 @@ describe 'swarmbot', ->
           json(reply).should.match /What is the name of this project/
 
       it "shows a welcome screen if the user has never made contact", ->
-        @user.set 'has_interacted', false
+        @user.set 'hasInteracted', false
         .then (@user)=> createProject(name: "Community A")
         .then (@project)=> App.respondTo message()
         .then (reply)=>
@@ -111,11 +111,11 @@ describe 'swarmbot', ->
       it "shows the list of rewards types", ->
         createUser
           name: USER_ID
-          slack_username: "joe"
-          real_name: 'Joe User'
+          slackUsername: "joe"
+          realName: 'Joe User'
           state: 'projects#show'
-          current_project: "Community A"
-          has_interacted: true
+          currentProject: "Community A"
+          hasInteracted: true
         .then (@user)=>
           createProject(name: "Community A")
         .then (@project)=>
@@ -214,8 +214,8 @@ describe 'swarmbot', ->
           .then (db)=>
             db.projects.Supafly.should.deep.eq
               name: 'Supafly'
-              project_statement: 'Shaft'
-              project_owner: USER_ID
+              projectStatement: 'Shaft'
+              projectOwner: USER_ID
               imageUrl: 'http://example.com/very-small.png'
               tasksUrl: 'http://jira.com'
 
@@ -224,7 +224,7 @@ describe 'swarmbot', ->
       it "allows the user to create a rewardType within the current project", ->
         createUser
           name: USER_ID
-          current_project: PROJECT_ID
+          currentProject: PROJECT_ID
           state: 'projects#show'
         .then (@user)=>
           createProject(name: PROJECT_ID)
@@ -255,22 +255,22 @@ describe 'swarmbot', ->
         createUser
           name: USER_ID
           state: 'rewards#create'
-          current_project: projectId
-          slack_username: 'duke'
-          btc_address: 'a123bitcoin'
+          currentProject: projectId
+          slackUsername: 'duke'
+          btcAddress: 'a123bitcoin'
         .then (@user)=>
           createProject
             name: projectId
-            project_owner: 'nobody'
+            projectOwner: 'nobody'
         .then (@project)=>
           @project.fetch()
         .then (@project)=>
           @message = message('')
           App.respondTo @message
         .then (reply)=>
-          @project.get('project_owner').should.not.eq @user.get('name')
+          @project.get('projectOwner').should.not.eq @user.get('name')
           json(@message.parts[0]).should.match /Only project administrators can award coins/i
-          @project.set 'project_owner', @user.key()
+          @project.set 'projectOwner', @user.key()
           @project.save()
         .then (@project)=>
           createRewardType @project, name: rewardTypeId
@@ -316,13 +316,13 @@ describe 'swarmbot', ->
         createUser
           name: USER_ID
           state: 'rewards#create'
-          current_project: projectId
-          slack_username: 'duke'
-          btc_address: 'i am a bitcoin address'
+          currentProject: projectId
+          slackUsername: 'duke'
+          btcAddress: 'i am a bitcoin address'
         .then (@user)=>
           createProject
             name: projectId
-            project_owner: @user.key()
+            projectOwner: @user.key()
         .then (@project)=>
           createRewardType @project
         .then =>
@@ -339,7 +339,7 @@ describe 'swarmbot', ->
           User.find("slack:other slack user id")
         .then (newUser)=>
           newUser.exists().should.eq true
-          newUser.get('slack_username').should.eq 'not_a_slack_user'
+          newUser.get('slackUsername').should.eq 'not_a_slack_user'
           newUser.get('name').should.eq "slack:#{otherSlackId}"
           newUser.get('state').should.eq "users#setBtc"
 
@@ -350,13 +350,13 @@ describe 'swarmbot', ->
         createUser
           name: USER_ID
           state: 'rewards#create'
-          current_project: projectId
-          slack_username: 'duke'
-          btc_address: 'i am a bitcoin address'
+          currentProject: projectId
+          slackUsername: 'duke'
+          btcAddress: 'i am a bitcoin address'
         .then (@user)=>
           createProject
             name: projectId
-            project_owner: @user.key()
+            projectOwner: @user.key()
         .then (@project)=>
           createRewardType @project
         .then =>
@@ -373,19 +373,19 @@ describe 'swarmbot', ->
         createUser
           name: USER_ID
           state: 'rewards#create'
-          current_project: projectId
-          slack_username: 'duke'
-          btc_address: 'i am a bitcoin address'
+          currentProject: projectId
+          slackUsername: 'duke'
+          btcAddress: 'i am a bitcoin address'
         .then (@user)=>
           createProject
             name: projectId
-            project_owner: @user.key()
+            projectOwner: @user.key()
         .then (@project)=>
           createRewardType @project
         .then =>
           createUser
-            slack_username: 'joebob'
-            btc_address: null
+            slackUsername: 'joebob'
+            btcAddress: null
         .then (@awardee)=>
           App.respondTo message('')
         .then (reply)=>
@@ -399,13 +399,13 @@ describe 'swarmbot', ->
         createUser
           name: USER_ID
           state: 'rewards#create'
-          current_project: projectId
-          slack_username: 'duke'
-          btc_address: 'i am a bitcoin address'
+          currentProject: projectId
+          slackUsername: 'duke'
+          btcAddress: 'i am a bitcoin address'
         .then (@user)=>
           createProject
             name: projectId
-            project_owner: @user.key()
+            projectOwner: @user.key()
         .then (@project)=>
           App.route (@message = message(''))
         .then (reply)=>

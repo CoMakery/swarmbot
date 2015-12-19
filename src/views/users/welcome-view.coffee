@@ -7,7 +7,7 @@ class WelcomeView extends ZorkView
   render: ->
     [
       @body "
-        Hi @#{@currentUser.get('slack_username')}!  My name is Swarmbot, and I'm here to help you
+        Hi @#{@currentUser.get('slackUsername')}!  My name is Swarmbot, and I'm here to help you
         create projects for things that you want to collaborate on,
         and assign rewards to people who do them!
         "

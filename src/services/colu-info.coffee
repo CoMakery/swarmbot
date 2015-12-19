@@ -14,7 +14,7 @@ class ColuInfo
 
   allBalances: (user)->
     new Promise (resolve, reject)=>
-      uri = "#{swarmbot.coluExplorerUrl()}/api/getaddressinfo?address=#{user.get('btc_address')}"
+      uri = "#{swarmbot.coluExplorerUrl()}/api/getaddressinfo?address=#{user.get('btcAddress')}"
       debug uri
       request
         uri: uri
@@ -57,9 +57,9 @@ class ColuInfo
     @allHolders(project)
     .then (holders)=>
       Promise.map holders, (holder)=>
-        User.findBy 'btc_address', holder.address
+        User.findBy 'btcAddress', holder.address
         .then (user)=>
-          holder.name = user.get('slack_username')
+          holder.name = user.get('slackUsername')
           holder
         .catch =>
           holder

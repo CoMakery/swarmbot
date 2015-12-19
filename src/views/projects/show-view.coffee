@@ -36,7 +36,7 @@ class ShowView extends ZorkView
     compact [
       {
         title: @project.get('name').toUpperCase()
-        text: @project.get 'project_statement'
+        text: @project.get 'projectStatement'
         thumb_url: @project.get 'imageUrl'
       }
       (

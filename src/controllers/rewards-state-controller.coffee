@@ -19,7 +19,7 @@ class RewardsStateController extends ApplicationController
     @getProject()
     .then (project)=> project.fetch()
     .then (@project)=>
-      if @project.get('project_owner') != @currentUser.get('name')
+      if @project.get('projectOwner') != @currentUser.get('name')
         throw Promise.OperationalError "Only project administrators can award coins"
 
       if @project.rewardTypes().isEmpty()
@@ -35,7 +35,7 @@ class RewardsStateController extends ApplicationController
           if user
             new User
               name: "slack:#{user.id}"
-              slack_username: @userName
+              slackUsername: @userName
               state: 'users#setBtc'
             .save()
             .then =>
@@ -47,10 +47,10 @@ class RewardsStateController extends ApplicationController
         .then (recipient)=>
           return unless recipient?
           data.recipient = recipient.key()
-          unless recipient.get('btc_address')?
+          unless recipient.get('btcAddress')?
             throw Promise.OperationalError("Sending a message to have @#{@userName} register a bitcoin address.")
         .error (error)=>
-          App.sendMessage(@userName, "Hi! @#{@currentUser.get("slack_username")} is trying to send you project coins for '#{@currentUser.get('current_project')}'. In order to receive project coin awards please tell me your bitcoin address.")
+          App.sendMessage(@userName, "Hi! @#{@currentUser.get("slackUsername")} is trying to send you project coins for '#{@currentUser.get('currentProject')}'. In order to receive project coin awards please tell me your bitcoin address.")
           throw error
       else if not data.rewardTypeId?
         # Note : set by the menu item when selecting rewardType
@@ -76,7 +76,7 @@ class RewardsStateController extends ApplicationController
       if @reward
         @execute transition: 'exit', flashMessage: "Initiating transaction.
                                                     This will take some time to confirm in the blockchain.
-                                                    We will private message both you and @#{@recipient.get('slack_username')}
+                                                    We will private message both you and @#{@recipient.get('slackUsername')}
                                                     when the transaction is complete."
       else
         @currentUser.set 'stateData', data
@@ -95,24 +95,24 @@ class RewardsStateController extends ApplicationController
 # only admin:
       # @getProject()
       # .then (@project)=>
-      #   if @project.get('project_owner') is @currentUser.key()
+      #   if @project.get('projectOwner') is @currentUser.key()
       #     RewardType.find(data.rewardTypeId, parent: @project)
       #   else
       #     Promise.reject(Promise.OperationalError "Only the creator of this project can send rewards")
 
   sendReward: (rewardType, rewardAmount)->
-    rewardType.awardTo(@recipient.get('btc_address'), rewardAmount)
+    rewardType.awardTo(@recipient.get('btcAddress'), rewardAmount)
     .then (body)=>
       @sendInfo 'Reward sent!'
-      debug "Reward #{rewardType.key()} to #{@recipient.get('slack_username')} :", body
+      debug "Reward #{rewardType.key()} to #{@recipient.get('slackUsername')} :", body
       txUrl = @_coloredCoinTxUrl(body.txid)
-      @sendInfo "Awarded award to #{@recipient.get('slack_username')}.\n#{txUrl}"
-      @msg.robot.messageRoom @recipient.get('slack_username'),
+      @sendInfo "Awarded award to #{@recipient.get('slackUsername')}.\n#{txUrl}"
+      @msg.robot.messageRoom @recipient.get('slackUsername'),
         "Congratulations! You have received #{rewardAmount} project coins\n#{@_coloredCoinTxUrl(body.txid)}"
     .error (error)=>
       @sendWarning error.message
     .catch (error)=>
-      @sendWarning "Error awarding '#{rewardType?.key()}' to #{@recipient?.get('slack_username')}. Unable to complete the transaction.\n #{error.message}"
+      @sendWarning "Error awarding '#{rewardType?.key()}' to #{@recipient?.get('slackUsername')}. Unable to complete the transaction.\n #{error.message}"
       throw error
 
 module.exports = RewardsStateController

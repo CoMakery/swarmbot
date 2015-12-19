@@ -40,12 +40,12 @@ class IndexView extends ZorkView
 
   render: ->
     message = []
-    if isEmpty(@projectItems) or not @currentUser.get('has_interacted')
+    if isEmpty(@projectItems) or not @currentUser.get('hasInteracted')
       message.push {
         pretext: "Welcome friend! I am here to help you contribute to projects and receive project coins. Project coins track your share of a project using a trusty blockchain."
         title: "Let's get started!  Type 1, hit enter, and create your first project."
       }
-      @currentUser.set 'has_interacted', true
+      @currentUser.set 'hasInteracted', true
 
     if isEmpty @projectItems
       projectsItems = "There are currently no projects."
@@ -60,7 +60,7 @@ class IndexView extends ZorkView
 
     balances = balances.join("\n") or "No Coins yet"
 
-    balances += "\nbitcoin address: " + @bitcoinAddress @currentUser.get 'btc_address'
+    balances += "\nbitcoin address: " + @bitcoinAddress @currentUser.get 'btcAddress'
 
     message.push {
       fields: [

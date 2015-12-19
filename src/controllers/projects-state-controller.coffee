@@ -31,7 +31,7 @@ class ProjectsStateController extends ApplicationController
       (new ColuInfo).allHolders(@project)
     .then (holders)=>
       @userBalance =
-        balance: (findWhere holders, { address: @currentUser.get 'btc_address' })?.amount
+        balance: (findWhere holders, { address: @currentUser.get 'btcAddress' })?.amount
         totalCoins: sum pluck holders, 'amount'
       @render new ShowView {@project, @currentUser, @userBalance}
     .error(@_showError)
@@ -69,14 +69,14 @@ class ProjectsStateController extends ApplicationController
   saveProject: (data)->
     new Project
       name: data.name
-      project_statement: data.description
+      projectStatement: data.description
       imageUrl: data.imageUrl ? ''
-      project_owner: @currentUser.key()
+      projectOwner: @currentUser.key()
       tasksUrl: data.tasksUrl
     .save()
     .then (project)=>
       project.issueAsset amount: Project::INITIAL_PROJECT_COINS
-      @currentUser.set 'current_project', project.key()
+      @currentUser.set 'currentProject', project.key()
 
   capTable: ->
     @getProject().then (project)=>
@@ -93,7 +93,7 @@ class ProjectsStateController extends ApplicationController
       Promise.map rewards, (reward)=>
         User.find reward.get('recipient')
         .then (recipient)=>
-          reward.recipientRealName = recipient.get('real_name')
+          reward.recipientRealName = recipient.get('realName')
           reward
     .then (rewards)=>
       view  = new ListRewardsView

@@ -75,16 +75,16 @@ class TestHelper
   @createUser: (args = {})=>
     defaults args, {
       name: "some user id"
-      current_project: "some project id"
+      currentProject: "some project id"
       state: 'projects#show'
       stateData: {}
-      btc_address: '3HNSiAq7wFDaPsYDcUxNSRMD78qVcYKicw'
+      btcAddress: '3HNSiAq7wFDaPsYDcUxNSRMD78qVcYKicw'
     }
     new User(args).save()
 
   @createProject: (args = {})=>
     defaults args, {
-      project_owner: "some user id"
+      projectOwner: "some user id"
       name: "some project id"
       tasksUrl: 'http://example.com'
     }

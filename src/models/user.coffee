@@ -14,7 +14,7 @@ class User extends FirebaseModel
 
   @findBySlackUsername: Promise.promisify (slackUsername, cb)->
     swarmbot.firebase().child('users') # TODO: use urlRoot here
-      .orderByChild('slack_username')
+      .orderByChild('slackUsername')
       .equalTo(slackUsername)
       .limitToFirst(1)
       .once 'value', (snapshot)->
@@ -24,10 +24,10 @@ class User extends FirebaseModel
     , cb # error
 
   setProjectTo: (projectKey)->
-    @set "current_project", projectKey
+    @set "currentProject", projectKey
 
   canUpdate: (project)->
-    project.get('project_owner') == @key()
+    project.get('projectOwner') == @key()
 
   fetch: ->
     super().then =>

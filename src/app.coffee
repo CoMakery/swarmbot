@@ -131,18 +131,18 @@ class App
 
   @registerUser: (user, msg)->
     attributes = {}
-    unless user.get "slack_username"
+    unless user.get "slackUsername"
       slackUsername = msg.message.user.name
       slackId = msg.message.user.id
       realName = msg.message.user.real_name
       emailAddress = msg.message.user.email_address
 
-      attributes.slack_username = slackUsername if slackUsername
-      attributes.first_seen = Date.now() if slackUsername
-      attributes.real_name = realName if realName
-      attributes.email_address = emailAddress if emailAddress
-      attributes.slack_id = slackId if slackId
-    attributes.last_active_on_slack = Date.now()
+      attributes.slackUsername = slackUsername if slackUsername
+      attributes.firstSeen = Date.now() if slackUsername
+      attributes.realName = realName if realName
+      attributes.emailAddress = emailAddress if emailAddress
+      attributes.slackId = slackId if slackId
+    attributes.lastActiveOnSlack = Date.now()
     attributes.state = User::initialState unless user.get 'state'
 
     user.update attributes

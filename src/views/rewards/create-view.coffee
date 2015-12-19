@@ -25,9 +25,9 @@ class CreateView extends ZorkView
         }
       ]
     else if not @data.rewardAmount?
-      @question "How much do you want to reward @#{@recipient.get 'slack_username'} for \"#{@data.rewardTypeId}\""
+      @question "How much do you want to reward @#{@recipient.get 'slackUsername'} for \"#{@data.rewardTypeId}\""
     else if not @data.description?
-      @question "What was the contribution @#{@recipient.get 'slack_username'} made for the award?"
+      @question "What was the contribution @#{@recipient.get 'slackUsername'} made for the award?"
 
 
   rewardTypesMenu: ->

@@ -63,7 +63,7 @@ class ApplicationStateController
 
   getProject: ->
     @currentUser.fetchIfNeeded().bind(@).then (user)->
-      projectId = user.get('current_project')
+      projectId = user.get('currentProject')
       if projectId?
         Project.find projectId
       else
