@@ -99,19 +99,14 @@ class TestHelper
 
   @message = (input, props={})->
     @parts = []
-    message = {
+    defaults props, {
       parts: @parts
       match: [null, input]
       send: (reply)=> throw new Error "deprecated, use pmReply"
       message:
-        user:
-          name: 'frank'
-          id: @USER_ID
-          real_name: 'Frank Herbert'
-          email_address: 'frank@herbert.com'
+        user: {}
       robot: App.robot
     }
-    defaults props, message
 
 
 module.exports = TestHelper
