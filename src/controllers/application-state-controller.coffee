@@ -64,10 +64,16 @@ class ApplicationStateController
   getProject: ->
     @currentUser.fetchIfNeeded().bind(@).then (user)->
       projectId = user.get('currentProject')
-      if projectId?
-        Project.find projectId
-      else
-        @reset()
+
+      unless projectId?
+        return Promise.reject(Promise.OperationalError("Couldn't find current project"))
+
+      Project.find(projectId)
+      .then (@project)=>
+        if @project.exists()
+          @project
+        else
+          Promise.reject(Promise.OperationalError("Couldn't find current project with name \"#{projectId}\""))
 
   reset: ->
     errorLog "Resetting to #{User::initialState} from state: #{json @currentUser?.get 'state'}, stateData: #{json @currentUser?.get 'stateData'}"

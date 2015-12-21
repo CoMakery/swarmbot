@@ -1,5 +1,7 @@
 { keys } = require 'lodash'
+sinon = require 'sinon'
 {log, p, pjson} = require 'lightsaber'
+Promise = require 'bluebird'
 { createUser, createProject, message } = require '../helpers/testHelper'
 ApplicationStateController = require '../../src/controllers/application-state-controller'
 User = require '../../src/models/user'
@@ -34,3 +36,37 @@ describe 'ApplicationStateController', ->
       it "should reset user's state data", =>
         @setup().then (@currentUser)=>
           @currentUser.get('stateData').should.deep.eq {}
+
+  describe '#getProject', ->
+    it "should tell users if the project can't be found and reset the user", ->
+      createUser
+        currentProject: "a project that doesn't exist"
+      .then (@currentUser)=>
+        msg = message('', {@currentUser})
+        @controller = new ApplicationStateController(msg)
+        @controller.getProject()
+        .then ((project)=> project.should.not.exist()),
+          (error)=> error.message.should.match /Couldn\'t find current project with name "a project that doesn\'t exist"/
+
+    it "should tell users if there is no current project and reset the user", ->
+      createUser
+        currentProject: null
+      .then (@currentUser)=>
+        msg = message('', {@currentUser})
+        @controller = new ApplicationStateController(msg)
+        @controller.getProject()
+        .then ((project)=> project.should.not.exist()),
+          (error)=> error.message.should.match /Couldn\'t find current project/
+
+    it "returns the project", ->
+      createUser
+        currentProject: "project"
+      .then (@currentUser)=>
+        createProject
+          name: "project"
+      .then =>
+        msg = message('', {@currentUser})
+        @controller = new ApplicationStateController(msg)
+        @controller.getProject()
+        .then (returnedProject)=>
+          returnedProject.key().should.eq "project"
