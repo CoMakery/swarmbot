@@ -36,19 +36,20 @@ sinon.stub(swarmbot, 'colu').returns Promise.resolve
   sendAsset: (x, cb)-> cb(null, {txid: 1234})
   issueAsset: ->
 
-sinon.stub(ColuInfo.prototype, 'getAssetInfo').returns Promise.resolve []
-sinon.stub(ColuInfo.prototype, 'balances').returns Promise.resolve [
-  {
-    name: 'FinTechHacks'
-    assetId: 'xyz123'
-    balance: 456
-  }
-]
-
 before ->
   @firebaseServer = new FirebaseServer 5000, MOCK_FIREBASE_ADDRESS,
 
 beforeEach (done)->
+  sinon.stub(ColuInfo.prototype, 'getAssetInfo').returns Promise.resolve []
+  sinon.stub(ColuInfo.prototype, 'balances').returns Promise.resolve
+    balances: [
+      {
+        name: 'FinTechHacks'
+        assetId: 'xyz123'
+        balance: 456
+      }
+  ]
+
   @mitm = Mitm()
   @mitm.on "connect", (socket, opts)->
     allowed = any ALLOWED_HOSTS, (allowedHost)->
@@ -62,9 +63,13 @@ beforeEach (done)->
   swarmbot.firebase().remove done
 
 afterEach ->
+  ColuInfo.prototype.getAssetInfo.restore()
+  ColuInfo.prototype.balances.restore()
+
   @mitm.disable()
   @firebaseServer.getValue()
   .then (data)=>  debug "Firebase data: #{pjson data}"
+
 
 after ->
   @firebaseServer.close()

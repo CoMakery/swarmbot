@@ -1,4 +1,5 @@
 debug = require('debug')('app')
+{ p } = require 'lightsaber'
 {filter} = require 'lodash'
 request = require 'request-promise'
 Promise = require 'bluebird'
@@ -8,17 +9,24 @@ User = require '../models/user'
 
 
 class ColuInfo
+  makeRequest: (uri)->
+    request
+      uri: uri
+      json: true
+
   balances: (user)->
-    @allBalances(user).then (balances)->
-      filter balances, (balance)-> balance.name?
+    @allBalances(user).then (result)->
+      balances = filter result.balances, (balance)-> balance.name?
+      {balances: balances, error: result.error}
 
   allBalances: (user)->
     new Promise (resolve, reject)=>
       uri = "#{swarmbot.coluExplorerUrl()}/api/getaddressinfo?address=#{user.get('btcAddress')}"
       debug uri
-      request
-        uri: uri
-        json: true
+      ColuInfo::makeRequest(uri)
+      .timeout(500)
+      .error(Promise.TimeoutError, (error)->
+        return resolve({balances: [], error: "Balance information is temporarily unavailable"}))
       .then (data)=>
         Promise.map data.assets, (asset)->
           Project.findBy 'coluAssetId', asset.assetId
@@ -28,7 +36,7 @@ class ColuInfo
           .catch =>
             asset
         .then (assets)=>
-          resolve assets
+          resolve {balances: assets}
           # each asset has a .balance, .name, .assetId
       .error (error)=>
         debug error.message
@@ -39,9 +47,7 @@ class ColuInfo
     new Promise (resolve, reject)=>
       uri = "#{swarmbot.coluExplorerUrl()}/api/getassetinfowithtransactions?assetId=#{project.get('coluAssetId')}"
       debug uri
-      request
-        uri: uri
-        json: true
+      ColuInfo::makeRequest(uri)
       .then (data)=>
         resolve data
       .error (error)=>

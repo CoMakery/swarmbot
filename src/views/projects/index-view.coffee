@@ -8,7 +8,7 @@ class IndexView extends ZorkView
   constructor: ({@projects, @currentUser, @userBalances})->
     i = 0
     @projectItems = []
-    for project in @projects.all()
+    for project in @projects
       @projectItems.push [@letters[i++], @projectMenuItem project]
 
     i = 1
@@ -55,7 +55,7 @@ class IndexView extends ZorkView
       }
       projectsItems = @renderOrderedMenuItems @projectItems
 
-    balances = for userBalance in @userBalances
+    balances = for userBalance in @userBalances.balances
       "#{userBalance.name} #{App.COIN} #{userBalance.balance}"
 
     balances = balances.join("\n") or "No Coins yet"

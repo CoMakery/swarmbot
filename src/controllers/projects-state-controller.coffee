@@ -22,7 +22,7 @@ class ProjectsStateController extends ApplicationController
       (new ColuInfo).balances(@currentUser)
     .then (@userBalances)=>
       debug @userBalances
-      @render new IndexView {@projects, @currentUser, @userBalances}
+      @render new IndexView {projects: @projects.all(), currentUser: @currentUser, userBalances: @userBalances}
 
   show: ->
     @getProject()
