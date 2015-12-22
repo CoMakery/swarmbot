@@ -5,7 +5,6 @@ Promise = require 'bluebird'
 { createUser, createProject, message } = require '../helpers/testHelper'
 ApplicationStateController = require '../../src/controllers/application-state-controller'
 User = require '../../src/models/user'
-require '../helpers/testHelper'
 
 describe 'ApplicationStateController', ->
 

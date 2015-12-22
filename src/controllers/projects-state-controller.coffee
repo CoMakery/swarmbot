@@ -34,7 +34,7 @@ class ProjectsStateController extends ApplicationController
         balance: (findWhere holders, { address: @currentUser.get 'btcAddress' })?.amount
         totalCoins: sum pluck holders, 'amount'
       @render new ShowView {@project, @currentUser, @userBalance}
-    .error(@_showError)
+    .error(@handleError)
 
   # set Project
   setProjectTo: (data)->
@@ -79,12 +79,13 @@ class ProjectsStateController extends ApplicationController
       @currentUser.set 'currentProject', project.key()
 
   capTable: ->
-    @getProject().then (project)=>
+    @getProject()
+    .then (project)=>
       (new ColuInfo).allHoldersWithNames(project).then (holders)=>
         debug holders
         @sendPm @render new CapTableView { project: project, capTable: holders }
         @redirect()
-
+    .error(@handleError)
 
   rewardsList: (data)->
     @getProject()
@@ -104,6 +105,7 @@ class ProjectsStateController extends ApplicationController
       @currentUser.exit()
     .then =>
       @redirect()
+    .error(@handleError)
 
   suggest: ->
     @sendPm

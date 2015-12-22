@@ -83,7 +83,8 @@ class ApplicationStateController
   reset: ->
     errorLog "Resetting to #{User::initialState} from state: #{json @currentUser?.get 'state'}, stateData: #{json @currentUser?.get 'stateData'}"
     @currentUser?.reset()
-    .then => @redirect()
+    .then =>
+      @redirect()
 
   parseImageUrl: (ignore='n')->
     if @input.trim().toLowerCase() is ignore
@@ -116,6 +117,10 @@ class ApplicationStateController
     url.join('/')
 
   _showError: (error)=>
-    @sendWarning error.message
+    @sendWarning(error.message)
+
+  handleError: (error)=>
+    @sendWarning(error.message)
+    @reset()
 
 module.exports = ApplicationStateController
