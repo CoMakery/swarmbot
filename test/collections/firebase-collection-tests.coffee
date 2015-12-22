@@ -1,6 +1,6 @@
 {log, p, pjson} = require 'lightsaber'
 FirebaseCollection = require '../../src/collections/firebase-collection'
-require '../helpers/testHelper'
+require '../helpers/test-helper'
 
 class Model
   constructor: (@id)->

@@ -1,4 +1,4 @@
-{ createProject } = require '../../helpers/testHelper'
+{ createProject } = require '../../helpers/test-helper'
 Project = require '../../../src/models/project.coffee'
 CapTableView = require '../../../src/views/projects/cap-table-view.coffee'
 

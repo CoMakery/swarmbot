@@ -2,7 +2,7 @@
 sinon = require 'sinon'
 {log, p, pjson} = require 'lightsaber'
 Promise = require 'bluebird'
-{ createUser, createProject, message } = require '../helpers/testHelper'
+{ createUser, createProject, message } = require '../helpers/test-helper'
 ApplicationStateController = require '../../src/controllers/application-state-controller'
 User = require '../../src/models/user'
 

@@ -1,4 +1,4 @@
-{ createUser } = require '../helpers/testHelper'
+{ createUser } = require '../helpers/test-helper'
 User = require '../../src/models/user'
 
 describe 'User', ->

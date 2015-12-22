@@ -1,4 +1,4 @@
-{ createProject } = require '../../helpers/testHelper'
+{ createProject } = require '../../helpers/test-helper'
 {log, p, json} = require 'lightsaber'
 Project = require '../../../src/models/project.coffee'
 CreateView = require '../../../src/views/rewards/create-view.coffee'

@@ -1,4 +1,4 @@
-{ createUser } = require '../helpers/testHelper.coffee'
+{ createUser } = require '../helpers/test-helper'
 require '../../src/app.coffee'
 User = require '../../src/models/user.coffee'
 Init = require '../../src/bots/!init'

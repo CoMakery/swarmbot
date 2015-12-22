@@ -4,7 +4,7 @@ Promise = require 'bluebird'
 nock = require 'nock'
 sinon = require 'sinon'
 
-{ createUser, createProject, createRewardType, message, USER_ID } = require '../helpers/testHelper'
+{ createUser, createProject, createRewardType, message, USER_ID } = require '../helpers/test-helper'
 global.App = require '../../src/app'
 Project = require '../../src/models/project'
 User = require '../../src/models/user'
