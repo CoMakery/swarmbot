@@ -62,18 +62,23 @@ class ApplicationStateController
     view.render()                                    # don't wait for it, just render
 
   getProject: ->
-    @currentUser.fetchIfNeeded().bind(@).then (user)->
+    @currentUser.fetchIfNeeded().then (user)->
       projectId = user.get('currentProject')
 
       unless projectId?
-        return Promise.reject(Promise.OperationalError("Couldn't find current project"))
+        user.reset()
+        .then =>
+          Promise.reject(new Promise.OperationalError("Couldn't find current project"))
 
-      Project.find(projectId)
-      .then (@project)=>
-        if @project.exists()
-          @project
-        else
-          Promise.reject(Promise.OperationalError("Couldn't find current project with name \"#{projectId}\""))
+      else
+        Project.find(projectId)
+        .then (@project)=>
+          if @project.exists()
+            @project
+          else
+            user.reset()
+            .then =>
+              Promise.reject(new Promise.OperationalError("Couldn't find current project with name \"#{projectId}\""))
 
   reset: ->
     errorLog "Resetting to #{User::initialState} from state: #{json @currentUser?.get 'state'}, stateData: #{json @currentUser?.get 'stateData'}"
@@ -110,7 +115,7 @@ class ApplicationStateController
     url.push 'tx', txId
     url.join('/')
 
-  _showError: (error)->
+  _showError: (error)=>
     @sendWarning error.message
 
 module.exports = ApplicationStateController

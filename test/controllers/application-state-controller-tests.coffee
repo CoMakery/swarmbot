@@ -18,7 +18,7 @@ describe 'ApplicationStateController', ->
             stateData: {foo: 'bar'}
             menu: {foo: 'bar'}
           .then (@currentUser)=>
-            msg = message '', {@currentUser}
+            msg = message '', { @currentUser }
             @controller = new ApplicationStateController msg
             @controller.execute {transition: 'does-not-exist'}
           .then =>
@@ -42,29 +42,30 @@ describe 'ApplicationStateController', ->
       createUser
         currentProject: "a project that doesn't exist"
       .then (@currentUser)=>
-        msg = message('', {@currentUser})
+        msg = message('', { @currentUser })
         @controller = new ApplicationStateController(msg)
         @controller.getProject()
-        .then ((project)=> project.should.not.exist()),
-          (error)=> error.message.should.match /Couldn\'t find current project with name "a project that doesn\'t exist"/
+        .catch (error)=>
+          error.message.should.match /Couldn\'t find current project with name "a project that doesn\'t exist"/
+          @currentUser.get("state").should.eq User::initialState
 
     it "should tell users if there is no current project and reset the user", ->
       createUser
         currentProject: null
       .then (@currentUser)=>
-        msg = message('', {@currentUser})
+        msg = message('', { @currentUser })
         @controller = new ApplicationStateController(msg)
         @controller.getProject()
-        .then ((project)=> project.should.not.exist()),
-          (error)=> error.message.should.match /Couldn\'t find current project/
+        .catch (error)=>
+          @currentUser.get("state").should.eq User::initialState
 
     it "returns the project", ->
+      createProject
+        name: "project"
+      .then =>
       createUser
         currentProject: "project"
       .then (@currentUser)=>
-        createProject
-          name: "project"
-      .then =>
         msg = message('', {@currentUser})
         @controller = new ApplicationStateController(msg)
         @controller.getProject()
