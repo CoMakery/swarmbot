@@ -28,5 +28,3 @@ describe 'User', ->
           @user.get('state').should.eq User::initialState
           @user.get('stateData').should.deep.eq {}
           @user.get('menu').should.deep.eq {}
-
-

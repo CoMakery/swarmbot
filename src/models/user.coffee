@@ -23,6 +23,31 @@ class User extends FirebaseModel
         cb(null, new User({}, snapshot: snapshot.child(userId)))
     , cb # error
 
+  @setupToReceiveBitcoin: (sender, receiverSlackUserName, data, sendPm)->
+    User.findBySlackUsername receiverSlackUserName
+    .error (error)=>
+      user = App.robot.adapter.client.getUserByName(receiverSlackUserName)
+      if user
+        new User
+          name: "slack:#{user.id}"
+          slackUsername: receiverSlackUserName
+          state: 'users#setBtc'
+        .save()
+        .then =>
+          throw Promise.OperationalError("The user @#{receiverSlackUserName} is not recognized. Sending them a message now.")
+      else
+        sendPm "Sorry, @#{receiverSlackUserName} doesn't look like a user."
+        null
+
+    .then (recipient)=>
+      return unless recipient?
+      data.recipient = recipient.key()
+      unless recipient.get('btcAddress')?
+        throw Promise.OperationalError("Sending a message to have @#{receiverSlackUserName} register a bitcoin address.")
+    .error (error)=>
+      App.sendMessage(receiverSlackUserName, "Hi! @#{sender.get("slackUsername")} is trying to send you project coins for '#{sender.get('currentProject')}'. In order to receive project coin awards please tell me your bitcoin address.")
+      throw error
+
   setProjectTo: (projectKey)->
     @set "currentProject", projectKey
 
