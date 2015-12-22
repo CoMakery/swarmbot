@@ -35,7 +35,7 @@ describe 'ProjectsStateController', ->
         .then ->
           msg.parts[0].should.eq 'Couldn\'t find current project'
           msg.currentUser.get('state').should.eq 'projects#index'
-#          spy.should.have.been.calledWith("Couldn't find current project");
+#          spy.should.have.been.calledWith("Couldn't find current project")
 
   describe '#capTable', ->
     it "shows an error if project doesn't exist", ->
@@ -44,7 +44,7 @@ describe 'ProjectsStateController', ->
         .then ->
           msg.parts[0].should.eq 'Couldn\'t find current project'
           msg.currentUser.get('state').should.eq 'projects#index'
-#          spy.should.have.been.calledWith("Couldn't find current project");
+#          spy.should.have.been.calledWith("Couldn't find current project")
 
   describe '#rewardsList', ->
     it "shows an error if project doesn't exist", ->
@@ -53,4 +53,4 @@ describe 'ProjectsStateController', ->
         .then ->
           msg.parts[0].should.eq 'Couldn\'t find current project'
           msg.currentUser.get('state').should.eq 'projects#index'
-#          spy.should.have.been.calledWith("Couldn't find current project");
+#          spy.should.have.been.calledWith("Couldn't find current project")
