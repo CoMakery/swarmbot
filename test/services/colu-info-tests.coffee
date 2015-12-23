@@ -8,15 +8,11 @@ ColuInfo = require '../../src/services/colu-info'
 describe 'ColuInfo', ->
   beforeEach ->
     @coluInfo = new ColuInfo()
-
-    if ColuInfo.prototype.getAssetInfo.restore?
-      ColuInfo.prototype.getAssetInfo.restore()
-    if ColuInfo.prototype.balances.restore?
-      ColuInfo.prototype.balances.restore()
+    ColuInfo.prototype.getAssetInfo.restore?()
+    ColuInfo.prototype.balances.restore?()
 
   afterEach ->
-    if ColuInfo.prototype.makeRequest.restore?
-      ColuInfo.prototype.makeRequest.restore()
+    ColuInfo.prototype.makeRequest.restore?()
 
   describe '#balances', ->
     it 'calls out to colu and retrieves info for a bitcoin wallet, then filters to ones in our DB', ->

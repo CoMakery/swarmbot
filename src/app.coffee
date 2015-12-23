@@ -5,6 +5,7 @@ debug = require('debug')('app')
 errorLog = require('debug')('error')
 inspectFallback = require('debug')('fallback')
 
+KeenioInfo = require './services/keenio-info.coffee'
 User = require './models/user'
 controllers =
   projects:    require './controllers/projects-state-controller'
@@ -146,6 +147,9 @@ class App
     attributes.state = User::initialState unless user.get 'state'
 
     user.update attributes
+    .then (user)=>
+      (new KeenioInfo()).createUser(user)
+      user
 
   @greet = (res)->
     currentUser = new User name: App.robot.whose(res)

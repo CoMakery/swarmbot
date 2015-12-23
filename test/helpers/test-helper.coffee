@@ -6,8 +6,10 @@ global.debug = require('debug')('test')
 chai = require 'chai'
 chaiAsPromised = require("chai-as-promised")
 chai.should()
-chai.use(chaiAsPromised)
 sinon = require 'sinon'
+sinonChai = require 'sinon-chai'
+chai.use(sinonChai)
+chai.use(chaiAsPromised)
 FirebaseServer = require('firebase-server')
 Mitm = require("mitm")
 
