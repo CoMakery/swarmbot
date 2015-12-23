@@ -65,11 +65,6 @@ FIREBASE_SECRET
 
 DEBUG=app  # for verbose debugging info in logs
 
-# optional:
-HUBOT_INSTAGRAM_ACCESS_KEY
-HUBOT_INSTAGRAM_CLIENT_KEY
-```
-
 ## License
 
 Swarmbot is being developed under the experimental

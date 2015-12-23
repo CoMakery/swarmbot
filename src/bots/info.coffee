@@ -2,7 +2,6 @@
 #
 
 {log, p, pjson} = require 'lightsaber'
-Instagram = require('instagram-node-lib')
 swarmbot = require '../models/swarmbot'
 
 module.exports = (robot)->
