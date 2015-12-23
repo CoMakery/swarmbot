@@ -66,4 +66,4 @@ describe 'ColuInfo', ->
       .then (@user)=>
         @coluInfo.balances(@user)
       .error (e)->
-        e.should.eq 'Balance information is temporarily unavailable'
+        e.message.should.eq '(Balance information is temporarily unavailable)'

@@ -21,10 +21,9 @@ class ProjectsStateController extends ApplicationController
     .then (@projects)=>
       (new ColuInfo).balances(@currentUser)
     .then (@userBalances)=>
-      debug @userBalances
       @render new IndexView {projects: @projects.all(), currentUser: @currentUser, userBalances: @userBalances}
     .error (e)=>
-      @render new IndexView {projects: @projects.all(), currentUser: @currentUser, userBalances: [], error: e}
+      @render new IndexView {projects: @projects.all(), currentUser: @currentUser, userBalances: [], coluError: e.message}
 
   show: ->
     @getProject()

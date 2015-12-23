@@ -9,12 +9,14 @@ User = require '../models/user'
 
 
 class ColuInfo
+  COLU_TIMEOUT: 1500
+
   makeRequest: (uri)->
     request
       uri: uri
       json: true
     .promise()
-    .timeout(500)
+    .timeout(@COLU_TIMEOUT)
 
   balances: (user)->
     @allBalances(user).then (result)->
@@ -23,10 +25,7 @@ class ColuInfo
   allBalances: (user)->
     new Promise (resolve, reject)=>
       uri = "#{swarmbot.coluExplorerUrl()}/api/getaddressinfo?address=#{user.get('btcAddress')}"
-      debug uri
       ColuInfo::makeRequest(uri)
-      .catch(Promise.TimeoutError, (error)->
-        throw Promise.OperationalError("Balance information is temporarily unavailable"))
       .then (data)=>
         Promise.map data.assets, (asset)=>
           Project.findBy 'coluAssetId', asset.assetId
@@ -38,9 +37,8 @@ class ColuInfo
       .then (assets)=>
         resolve {balances: assets}
         # each asset has a .balance, .name, .assetId
-      .error (error)=>
-        debug error.message
-        resolve Promise.OperationalError("(Currently not available)")
+      .catch ->
+        reject(new Promise.OperationalError("(Balance information is temporarily unavailable)"))
 
   getAssetInfo: (project)->
     new Promise (resolve, reject)=>
@@ -50,7 +48,6 @@ class ColuInfo
       .then (data)=>
         resolve data
       .error (error)=>
-        debug error.message
         reject Promise.OperationalError("(Currently not available)")
 
   allHolders: (project)->

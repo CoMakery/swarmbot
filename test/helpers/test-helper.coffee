@@ -40,21 +40,17 @@ before ->
   @firebaseServer = new FirebaseServer 5000, MOCK_FIREBASE_ADDRESS,
 
 beforeEach (done)->
-  if ColuInfo.prototype.makeRequest.restore?
-      ColuInfo.prototype.makeRequest.restore()
-  if ColuInfo.prototype.getAssetInfo.restore?
-      ColuInfo.prototype.getAssetInfo.restore()
+  ColuInfo.prototype.makeRequest.restore?()
+  ColuInfo.prototype.getAssetInfo.restore?()
   sinon.stub(ColuInfo.prototype, 'getAssetInfo').returns Promise.resolve []
 
-  if ColuInfo.prototype.balances.restore?
-    ColuInfo.prototype.balances.restore()
-  sinon.stub(ColuInfo.prototype, 'balances').returns Promise.resolve
-    balances: [
-      {
-        name: 'FinTechHacks'
-        assetId: 'xyz123'
-        balance: 456
-      }
+  ColuInfo.prototype.balances.restore?()
+  sinon.stub(ColuInfo.prototype, 'balances').returns Promise.resolve [
+    {
+      name: 'FinTechHacks'
+      assetId: 'xyz123'
+      balance: 456
+    }
   ]
 
   @mitm = Mitm()
