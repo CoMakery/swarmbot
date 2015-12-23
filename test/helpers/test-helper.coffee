@@ -40,7 +40,14 @@ before ->
   @firebaseServer = new FirebaseServer 5000, MOCK_FIREBASE_ADDRESS,
 
 beforeEach (done)->
+  if ColuInfo.prototype.makeRequest.restore?
+      ColuInfo.prototype.makeRequest.restore()
+  if ColuInfo.prototype.getAssetInfo.restore?
+      ColuInfo.prototype.getAssetInfo.restore()
   sinon.stub(ColuInfo.prototype, 'getAssetInfo').returns Promise.resolve []
+
+  if ColuInfo.prototype.balances.restore?
+    ColuInfo.prototype.balances.restore()
   sinon.stub(ColuInfo.prototype, 'balances').returns Promise.resolve
     balances: [
       {
@@ -63,9 +70,6 @@ beforeEach (done)->
   swarmbot.firebase().remove done
 
 afterEach ->
-  ColuInfo.prototype.getAssetInfo.restore()
-  ColuInfo.prototype.balances.restore()
-
   @mitm.disable()
   @firebaseServer.getValue()
   .then (data)=>  debug "Firebase data: #{pjson data}"

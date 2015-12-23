@@ -11,7 +11,7 @@ class FirebaseModel
       .fetchIfNeeded()
 
   @findBy: Promise.promisify (attrName, attrValue, cb)->
-    @assertValidKey attrName
+#    @assertValidKey attrName
     swarmbot.firebase().child(@::urlRoot)
       .orderByChild(attrName)
       .equalTo(attrValue)

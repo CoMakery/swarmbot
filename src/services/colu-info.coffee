@@ -13,6 +13,7 @@ class ColuInfo
     request
       uri: uri
       json: true
+    .timeout(500)
 
   balances: (user)->
     @allBalances(user).then (result)->
@@ -24,20 +25,19 @@ class ColuInfo
       uri = "#{swarmbot.coluExplorerUrl()}/api/getaddressinfo?address=#{user.get('btcAddress')}"
       debug uri
       ColuInfo::makeRequest(uri)
-      .timeout(500)
-      .error(Promise.TimeoutError, (error)->
-        return resolve({balances: [], error: "Balance information is temporarily unavailable"}))
+      .catch(Promise.TimeoutError, (error)->
+        return resolve({balances: null, error: "Balance information is temporarily unavailable"}))
       .then (data)=>
         Promise.map data.assets, (asset)->
           Project.findBy 'coluAssetId', asset.assetId
           .then (project)=>
             asset.name = project.get('name')
             asset
-          .catch =>
+          .catch (e)=>
             asset
-        .then (assets)=>
-          resolve {balances: assets}
-          # each asset has a .balance, .name, .assetId
+      .then (assets)=>
+        resolve {balances: assets}
+        # each asset has a .balance, .name, .assetId
       .error (error)=>
         debug error.message
         reject Promise.OperationalError("(Currently not available)")
