@@ -264,7 +264,14 @@
     "browserify": {
       "version": "12.0.1",
       "from": "browserify@>=12.0.0 <13.0.0",
-      "resolved": "https://registry.npmjs.org/browserify/-/browserify-12.0.1.tgz"
+      "resolved": "https://registry.npmjs.org/browserify/-/browserify-12.0.1.tgz",
+      "dependencies": {
+        "glob": {
+          "version": "5.0.15",
+          "from": "glob@>=5.0.15 <6.0.0",
+          "resolved": "https://registry.npmjs.org/glob/-/glob-5.0.15.tgz"
+        }
+      }
     },
     "browserify-aes": {
       "version": "1.0.5",
@@ -1422,11 +1429,6 @@
       "from": "generate-object-property@>=1.1.0 <2.0.0",
       "resolved": "https://registry.npmjs.org/generate-object-property/-/generate-object-property-1.2.0.tgz"
     },
-    "glob": {
-      "version": "5.0.15",
-      "from": "glob@>=5.0.15 <6.0.0",
-      "resolved": "https://registry.npmjs.org/glob/-/glob-5.0.15.tgz"
-    },
     "global": {
       "version": "2.0.1",
       "from": "https://github.com/component/global/archive/v2.0.1.tar.gz",
@@ -1718,30 +1720,6 @@
         }
       }
     },
-    "hubot-redis-brain": {
-      "version": "0.0.3",
-      "from": "hubot-redis-brain@0.0.3",
-      "resolved": "https://registry.npmjs.org/hubot-redis-brain/-/hubot-redis-brain-0.0.3.tgz",
-      "dependencies": {
-        "redis": {
-          "version": "0.8.4",
-          "from": "redis@0.8.4",
-          "resolved": "https://registry.npmjs.org/redis/-/redis-0.8.4.tgz"
-        }
-      }
-    },
-    "hubot-scripts": {
-      "version": "2.16.2",
-      "from": "hubot-scripts@>=2.16.1 <3.0.0",
-      "resolved": "https://registry.npmjs.org/hubot-scripts/-/hubot-scripts-2.16.2.tgz",
-      "dependencies": {
-        "redis": {
-          "version": "0.8.4",
-          "from": "redis@0.8.4",
-          "resolved": "https://registry.npmjs.org/redis/-/redis-0.8.4.tgz"
-        }
-      }
-    },
     "hubot-slack": {
       "version": "3.4.2",
       "from": "hubot-slack@>=3.3.0 <4.0.0",
@@ -1786,11 +1764,6 @@
       "version": "7.0.1",
       "from": "insert-module-globals@>=7.0.0 <8.0.0",
       "resolved": "https://registry.npmjs.org/insert-module-globals/-/insert-module-globals-7.0.1.tgz"
-    },
-    "instagram-node-lib": {
-      "version": "0.1.1",
-      "from": "instagram-node-lib@0.1.1",
-      "resolved": "https://registry.npmjs.org/instagram-node-lib/-/instagram-node-lib-0.1.1.tgz"
     },
     "ipaddr.js": {
       "version": "1.0.5",
@@ -1946,7 +1919,7 @@
     },
     "lightsaber": {
       "version": "0.5.1",
-      "from": "lightsaber@>=0.5.1 <0.6.0"
+      "from": "lightsaber@0.5.1"
     },
     "lodash": {
       "version": "3.10.1",
@@ -2954,6 +2927,11 @@
       "version": "3.0.1",
       "from": "umd@>=3.0.0 <4.0.0",
       "resolved": "https://registry.npmjs.org/umd/-/umd-3.0.1.tgz"
+    },
+    "underscore": {
+      "version": "1.5.2",
+      "from": "underscore@>=1.1.6 <1.6.0",
+      "resolved": "https://registry.npmjs.org/underscore/-/underscore-1.5.2.tgz"
     },
     "unpipe": {
       "version": "1.0.0",
