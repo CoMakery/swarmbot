@@ -45,7 +45,7 @@ describe 'ColuInfo', ->
           ]
         @coluInfo.balances(@user)
       .then (result)=>
-        result.balances.should.deep.eq [
+        result.should.deep.eq [
           {
             address: 'mkvqtc25vKXp7Xf5SqqHVZYU5BAgwTas8B'
             amount: 2
@@ -65,5 +65,5 @@ describe 'ColuInfo', ->
       createUser()
       .then (@user)=>
         @coluInfo.balances(@user)
-      .then (result)->
-        result.error.should.eq 'Balance information is temporarily unavailable'
+      .error (e)->
+        e.should.eq 'Balance information is temporarily unavailable'

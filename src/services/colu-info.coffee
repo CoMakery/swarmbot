@@ -13,12 +13,12 @@ class ColuInfo
     request
       uri: uri
       json: true
+    .promise()
     .timeout(500)
 
   balances: (user)->
     @allBalances(user).then (result)->
-      balances = filter result.balances, (balance)-> balance.name?
-      {balances: balances, error: result.error}
+      filter result.balances, (balance)-> balance.name?
 
   allBalances: (user)->
     new Promise (resolve, reject)=>
@@ -26,9 +26,9 @@ class ColuInfo
       debug uri
       ColuInfo::makeRequest(uri)
       .catch(Promise.TimeoutError, (error)->
-        return resolve({balances: null, error: "Balance information is temporarily unavailable"}))
+        throw Promise.OperationalError("Balance information is temporarily unavailable"))
       .then (data)=>
-        Promise.map data.assets, (asset)->
+        Promise.map data.assets, (asset)=>
           Project.findBy 'coluAssetId', asset.assetId
           .then (project)=>
             asset.name = project.get('name')
@@ -40,8 +40,7 @@ class ColuInfo
         # each asset has a .balance, .name, .assetId
       .error (error)=>
         debug error.message
-        reject Promise.OperationalError("(Currently not available)")
-
+        resolve Promise.OperationalError("(Currently not available)")
 
   getAssetInfo: (project)->
     new Promise (resolve, reject)=>
