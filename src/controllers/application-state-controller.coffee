@@ -103,7 +103,7 @@ class ApplicationStateController
     .then (response)=> response # needed to make promise a bluebird promise...
     .error (error)=>
       debug error.message
-      Promise.reject(Promise.OperationalError("Sorry, that address doesn't seem to exist."))
+      Promise.reject(Promise.OperationalError("Sorry, we can't seem to download that image, please try a different image..."))
     .then (response)=>
       if not response.headers['content-type']?.startsWith 'image/'
         Promise.reject(Promise.OperationalError("Sorry, we can't download that, please try a different image..."))

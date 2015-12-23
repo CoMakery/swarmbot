@@ -201,7 +201,7 @@ describe 'swarmbot', ->
             @message = message('http://example.com/does-not-exist.png')
             App.respondTo @message
           .then (reply)=>
-            json(reply).should.match /that address doesn't seem to exist.+Please enter an image URL/
+            json(reply).should.match /we can't seem to download that image.+Please enter an image URL/
             @message = message('http://example.com/too-large.png')
             App.respondTo @message
           .then (reply)=>
