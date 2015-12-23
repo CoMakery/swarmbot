@@ -36,6 +36,14 @@ describe 'swarmbot', ->
       App.sendMessage.deliveries[channel].push msg
 
   context 'projects', ->
+    beforeEach ->
+      createUser
+        name: USER_ID
+        state: 'projects#index'
+        hasInteracted: true
+        btcAddress: '3HNSiAq7wFDaPsYDcUxNSRMD78qVcYKicw'
+      .then (@user)=>
+
     context 'projects#show', ->
       it "shows the user's current project", ->
         createUser
@@ -57,17 +65,8 @@ describe 'swarmbot', ->
           json(reply[2]).should.match /bitcoin address: 3HNSiAq7wFDaPsYDcUxNSRMD78qVcYKicw/i
 
     context 'projects#index', ->
-      beforeEach ->
-        createUser
-          name: USER_ID
-          state: 'projects#index'
-          hasInteracted: true
-          btcAddress: '3HNSiAq7wFDaPsYDcUxNSRMD78qVcYKicw'
-        .then (@user)=>
-
       it "shows a welcome screen if there are no projects", ->
-        @user.save()
-        .then (@user)=> App.respondTo message()
+        App.respondTo message()
         .then (reply)=>
           jreply = json(reply)
           jreply.should.match /Welcome friend!/
@@ -77,8 +76,11 @@ describe 'swarmbot', ->
           json(reply).should.match /What is the name of this project/
 
       it "shows a welcome screen if the user has never made contact", ->
-        @user.set 'hasInteracted', false
-        .then (@user)=> createProject(name: "Community A")
+        createUser
+          name: USER_ID
+          hasInteracted: false
+        .then (@user)=>
+          createProject(name: "Community A")
         .then (@project)=> App.respondTo message()
         .then (reply)=>
           jreply = json(reply)
@@ -145,15 +147,12 @@ describe 'swarmbot', ->
       context 'fallback text', ->
         beforeEach ->
           createProject(name: "Community A")
-          .then (@project)=>
 
         it "contains fallback text", ->
-          @user.save()
-          .then (@user)=> App.respondTo message()
-          .then (reply)=> App.respondTo message()
+          App.respondTo message()
           .then (reply)=>
             type(reply).should.eq 'array'
-            reply.length.should.eq 2
+            reply.length.should.eq 2, pjson(reply)
             reply[0].fallback.should.match /Contribute to projects and receive project coins/
 
             reply[1].fallback.should.match /Choose a Project/
@@ -167,57 +166,56 @@ describe 'swarmbot', ->
             reply[1].fallback.should.match /create your project/
             reply[1].fallback.should.match /set your bitcoin address/
 
-      context 'projects#create', ->
-        beforeEach ->
-          nock 'http://example.com'
-            .head '/too-large.png'
-            .reply 200, '', { 'content-length': App.MAX_SLACK_IMAGE_SIZE + 1, 'content-type': 'image/jpg' }
-            .head '/very-small.png'
-            .reply 200, '', { 'content-length': App.MAX_SLACK_IMAGE_SIZE - 1, 'content-type': 'image/jpg' }
-            .head '/does-not-exist.png'
-            .reply 404, ''
+    context 'projects#create', ->
+      beforeEach ->
+        nock 'http://example.com'
+          .head '/too-large.png'
+          .reply 200, '', { 'content-length': App.MAX_SLACK_IMAGE_SIZE + 1, 'content-type': 'image/jpg' }
+          .head '/very-small.png'
+          .reply 200, '', { 'content-length': App.MAX_SLACK_IMAGE_SIZE - 1, 'content-type': 'image/jpg' }
+          .head '/does-not-exist.png'
+          .reply 404, ''
 
-        it "asks questions and creates a project", ->
-          @user.save()
-          .then (@user)=> App.respondTo message()
-          .then (reply)=> App.respondTo message('1')
-          .then (reply)=>
-            json(reply).should.match /What is the name of this project/
-            App.respondTo message('Supafly')
-          .then (reply)=>
-            json(reply).should.match /Please enter a short description/
-            @message = message('Shaft')
-            App.respondTo @message
-          .then (reply)=>
-            json(reply).should.match /Please enter a link to your project tasks./
-            @message = message('http://jira.com')
-            App.respondTo @message
-          .then (reply)=>
-            json(reply).should.match /Please enter an image URL/
-            @message = message('this is not a valid URL...')
-            App.respondTo @message
-          .then (reply)=>
-            json(reply).should.match /that is not a valid URL.+Please enter an image URL/i
-            @message = message('http://example.com/does-not-exist.png')
-            App.respondTo @message
-          .then (reply)=>
-            json(reply).should.match /we can't seem to download that image.+Please enter an image URL/
-            @message = message('http://example.com/too-large.png')
-            App.respondTo @message
-          .then (reply)=>
-            json(reply).should.match /Sorry, that image is too large.+Please enter an image URL/
-            @message = message('http://example.com/very-small.png')
-            App.respondTo @message
-          .then (reply)=>
-            @message.parts[1].should.match /Project created/
-          .then => @firebaseServer.getValue()
-          .then (db)=>
-            db.projects.Supafly.should.deep.eq
-              name: 'Supafly'
-              projectStatement: 'Shaft'
-              projectOwner: USER_ID
-              imageUrl: 'http://example.com/very-small.png'
-              tasksUrl: 'http://jira.com'
+      it "asks questions and creates a project", ->
+        App.respondTo message()
+        .then (reply)=> App.respondTo message('1')
+        .then (reply)=>
+          json(reply).should.match /What is the name of this project/
+          App.respondTo message('Supafly')
+        .then (reply)=>
+          json(reply).should.match /Please enter a short description/
+          @message = message('Shaft')
+          App.respondTo @message
+        .then (reply)=>
+          json(reply).should.match /Please enter a link to your project tasks./
+          @message = message('http://jira.com')
+          App.respondTo @message
+        .then (reply)=>
+          json(reply).should.match /Please enter an image URL/
+          @message = message('this is not a valid URL...')
+          App.respondTo @message
+        .then (reply)=>
+          json(reply).should.match /that is not a valid URL.+Please enter an image URL/i
+          @message = message('http://example.com/does-not-exist.png')
+          App.respondTo @message
+        .then (reply)=>
+          json(reply).should.match /we can't seem to download that image.+Please enter an image URL/
+          @message = message('http://example.com/too-large.png')
+          App.respondTo @message
+        .then (reply)=>
+          json(reply).should.match /Sorry, that image is too large.+Please enter an image URL/
+          @message = message('http://example.com/very-small.png')
+          App.respondTo @message
+        .then (reply)=>
+          @message.parts[1].should.match /Project created/
+        .then => @firebaseServer.getValue()
+        .then (db)=>
+          db.projects.Supafly.should.deep.eq
+            name: 'Supafly'
+            projectStatement: 'Shaft'
+            projectOwner: USER_ID
+            imageUrl: 'http://example.com/very-small.png'
+            tasksUrl: 'http://jira.com'
 
   context 'rewardTypes', ->
     context 'rewardTypes#create', ->
