@@ -12,6 +12,9 @@ class User extends FirebaseModel
   urlRoot: 'users'
   initialState: 'projects#index'
 
+  newRecord: ->
+    @get("slackUsername")?
+
   @findBySlackUsername: Promise.promisify (slackUsername, cb)->
     swarmbot.firebase().child('users') # TODO: use urlRoot here
       .orderByChild('slackUsername')

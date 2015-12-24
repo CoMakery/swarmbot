@@ -2,6 +2,14 @@
 User = require '../../src/models/user'
 
 describe 'User', ->
+  describe 'newRecord', ->
+    it "returns true if slackUsername is set", ->
+      createUser
+        slackUsername: 'bob'
+      .then (@user)=>
+        @user.newRecord().should.eq true
+      (new User(name: 'foo')).newRecord().should.eq false
+
   describe 'events', ->
     context 'when executing an invalid state', ->
     it 'resets user state', ->

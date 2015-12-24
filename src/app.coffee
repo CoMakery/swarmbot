@@ -132,7 +132,7 @@ class App
 
   @registerUser: (user, msg)->
     attributes = {}
-    unless user.get "slackUsername"
+    unless user.newRecord()
       slackUsername = msg.message.user.name
       slackId = msg.message.user.id
       realName = msg.message.user.real_name
@@ -148,6 +148,7 @@ class App
 
     user.update attributes
     .then (user)=>
+#      if user.newRecord()
       (new KeenioInfo()).createUser(user)
       user
 
