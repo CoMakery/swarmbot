@@ -37,7 +37,7 @@ describe "App", ->
 
     afterEach ->
       KeenioInfo::createUser.restore?()
-      
+
     it 'does NOT call out to keen if it is an existing user', ->
       createUser(name: 'bob', slackUsername: null)
       .then (@bob)=>
@@ -47,7 +47,7 @@ describe "App", ->
               name: 'bob'
               email_address: 'bob@example.com'
         })
-      .then => @spy.should.not.have.been.called()
+      .then => @spy.should.have.not.been.called
 
     it 'calls keen.io api to increment user count', ->
       createUser(name: 'bob', slackUsername: 'bob_yeah')
