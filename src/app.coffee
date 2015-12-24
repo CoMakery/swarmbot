@@ -131,8 +131,12 @@ class App
     lines
 
   @registerUser: (user, msg)->
-    attributes = {}
-    unless user.get "slackUsername"
+    attributes =
+      lastActiveOnSlack: Date.now()
+      state: user.get('state') or User::initialState
+
+    newRecord = user.newRecord()
+    if newRecord
       slackUsername = msg.message.user.name
       slackId = msg.message.user.id
       realName = msg.message.user.real_name
@@ -143,12 +147,11 @@ class App
       attributes.realName = realName if realName
       attributes.emailAddress = emailAddress if emailAddress
       attributes.slackId = slackId if slackId
-    attributes.lastActiveOnSlack = Date.now()
-    attributes.state = User::initialState unless user.get 'state'
 
-    user.update attributes
-    .then (user)=>
-      (new KeenioInfo()).createUser(user)
+    user.update(attributes).then (user)=>
+      if newRecord
+        debug {newRecord}
+        (new KeenioInfo).createUser(user)
       user
 
   @greet = (res)->

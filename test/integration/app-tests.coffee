@@ -32,10 +32,14 @@ describe "App", ->
         @createdUser.get('state').should.eq "projects#index"
 
   describe '.registerUser', ->
-    it 'calls keen.io api to increment user count', ->
-      spy = sinon.spy(KeenioInfo::, 'createUser')
+    beforeEach ->
+      @spy = sinon.spy(KeenioInfo::, 'createUser')
 
-      createUser(name: 'bob')
+    afterEach ->
+      KeenioInfo::createUser.restore?()
+
+    it 'does NOT call out to keen if it is an existing user', ->
+      createUser(name: 'bob', slackUsername: 'bob_yeah')
       .then (@bob)=>
         App.registerUser(@bob, {
           message:
@@ -43,4 +47,15 @@ describe "App", ->
               name: 'bob'
               email_address: 'bob@example.com'
         })
-      .then => spy.should.have.been.calledWith @bob
+      .then => @spy.should.have.not.been.called
+
+    it 'calls keen for a NEW user to increment user count', ->
+      createUser(name: 'bob', slackUsername: null)
+      .then (@bob)=>
+        App.registerUser(@bob, {
+          message:
+            user:
+              name: 'bob'
+              email_address: 'bob@example.com'
+        })
+      .then => @spy.should.have.been.calledWith @bob

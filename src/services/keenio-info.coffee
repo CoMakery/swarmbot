@@ -1,16 +1,21 @@
+debug = require('debug')('app')
 Keenio = require 'keen-js'
 
 class KeenioInfo
-  projectId = process.env.KEENIO_PROJECT_ID
-  writeKey = process.env.KEENIO_API_TOKEN
 
   constructor: (@keenioClient)->
-    @keenioClient ?= new Keenio({projectId, writeKey})
+    projectId = process.env.KEENIO_PROJECT_ID
+    writeKey = process.env.KEENIO_API_TOKEN
+    if projectId and writeKey
+      @keenioClient ?= new Keenio {projectId, writeKey}
 
   createUser: (user)->
-    @keenioClient.addEvent("createUser", {
+    return unless @keenioClient?
+    keenProps =
       slackUsername: user.get('slackUsername')
       emailAddress: user.get('emailAddress')
-    })
+    keenProps.server = process.env.APP_NAME if process.env.APP_NAME
+    debug {keenProps}
+    @keenioClient.addEvent "createUser", keenProps
 
 module.exports = KeenioInfo
