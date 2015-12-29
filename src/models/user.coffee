@@ -28,15 +28,17 @@ class User extends FirebaseModel
   @setupToReceiveBitcoin: (sender, receiverSlackUserName, data, sendPm)->
     User.findBySlackUsername receiverSlackUserName
     .error (error)=>
-      user = App.robot.adapter.client.getUserByName(receiverSlackUserName)
-      if user
-        new User
-          name: "slack:#{user.id}"
-          slackUsername: receiverSlackUserName
+      slackUser = App.robot.adapter.client.getUserByName(receiverSlackUserName)
+      if slackUser
+        slackUser['name'] = receiverSlackUserName
+        user = new User
+          name: "slack:#{slackUser.id}"
           state: 'users#setBtc'
-        .save()
+        user.set('slackUsername', null)
         .then =>
-          throw Promise.OperationalError("The user @#{receiverSlackUserName} is not recognized. Sending them a message now.")
+          App.registerUser(user, slackUser)
+        .then =>
+          Promise.reject(Promise.OperationalError("The user @#{receiverSlackUserName} is not recognized. Sending them a message now."))
       else
         sendPm "Sorry, @#{receiverSlackUserName} doesn't look like a user."
         null

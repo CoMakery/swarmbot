@@ -53,9 +53,7 @@ describe "App", ->
       createUser(name: 'bob', slackUsername: null)
       .then (@bob)=>
         App.registerUser(@bob, {
-          message:
-            user:
-              name: 'bob'
-              email_address: 'bob@example.com'
+          name: 'bob'
+          email_address: 'bob@example.com'
         })
       .then => @spy.should.have.been.calledWith @bob
