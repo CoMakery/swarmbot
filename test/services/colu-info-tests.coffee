@@ -57,9 +57,13 @@ describe 'ColuInfo', ->
         ]
 
     it 'returns an error message in the result if the app times out', ->
+      @timeoutCaught = false
       sinon.stub(ColuInfo.prototype, 'makeRequest').returns(Promise.reject(new Promise.TimeoutError("Zomg timed out")))
       createUser()
       .then (@user)=>
         @coluInfo.balances(@user)
       .catch (e)->
         e.message.should.eq '(Balance information is temporarily unavailable)'
+        @timeoutCaught = true
+      .then ->
+        @timeoutCaught.should.eq true
