@@ -42,20 +42,16 @@ describe "App", ->
       createUser(name: 'bob', slackUsername: null)
       .then (@bob)=>
         App.registerUser(@bob, {
-          message:
-            user:
               name: 'bob'
               email_address: 'bob@example.com'
         })
-      .then => @spy.should.have.not.been.called
+      .then => @spy.should.have.been.called
 
     it 'calls keen.io api to increment user count', ->
       createUser(name: 'bob', slackUsername: 'bob_yeah')
       .then (@bob)=>
         App.registerUser(@bob, {
-          message:
-            user:
               name: 'bob'
               email_address: 'bob@example.com'
         })
-      .then => @spy.should.have.been.calledWith @bob
+      .then => @spy.should.have.not.been.calledWith @bob

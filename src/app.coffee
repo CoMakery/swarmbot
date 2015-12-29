@@ -4,7 +4,6 @@ Promise = require 'bluebird'
 debug = require('debug')('app')
 errorLog = require('debug')('error')
 inspectFallback = require('debug')('fallback')
-
 KeenioInfo = require './services/keenio-info.coffee'
 User = require './models/user'
 controllers =
@@ -49,7 +48,7 @@ class App
     msg.currentUser ?= new User name: msg.robot.whose(msg)
     msg.currentUser.fetch()
     .then (@user)=>
-      @registerUser @user, msg
+      @registerUser @user, msg.message.user
     .then (@user)=>
       debug "state: #{@user.get 'state'}"
       [controllerName, action] = @user.get('state').split('#')
@@ -130,14 +129,14 @@ class App
       throw new Error "Unexpected attachment chunk type: '#{type(element)}' for #{pjson element}"
     lines
 
-  @registerUser: (user, msg)->
+  @registerUser: (user, slackUser)->
     attributes = {}
     newRecord = user.newRecord()
-    unless user.newRecord()
-      slackUsername = msg.message.user.name
-      slackId = msg.message.user.id
-      realName = msg.message.user.real_name
-      emailAddress = msg.message.user.email_address
+    if user.newRecord()
+      slackUsername = slackUser.name
+      slackId = slackUser.id
+      realName = slackUser.real_name
+      emailAddress = slackUser.email_address
 
       attributes.slackUsername = slackUsername if slackUsername
       attributes.firstSeen = Date.now() if slackUsername
