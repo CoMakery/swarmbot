@@ -21,24 +21,6 @@ class RewardTypesStateController extends ApplicationController
     .then =>
       @redirect "Your vote has been recorded."
 
-  isValidSlackImage: (uri)->
-    if not validator.isURL(uri, require_protocol: true)
-      return Promise.reject(Promise.OperationalError("Sorry, that is not a valid URL."))
-
-    @sendInfo "Fetching image..."
-    request.head
-      uri: uri
-      resolveWithFullResponse: true
-    .then (response)=> response # needed to make promise a bluebird promise...
-    .error (error)=>
-      debug error.message
-      Promise.reject(Promise.OperationalError("Sorry, we can't seem to download that image, please try a different image..."))
-    .then (response)=>
-      if not response.headers['content-type']?.startsWith 'image/'
-        Promise.reject(Promise.OperationalError("Sorry, we can't download that, please try a different image..."))
-      else if response.headers['content-length'] >= App.MAX_SLACK_IMAGE_SIZE
-        Promise.reject(Promise.OperationalError("Sorry, that image is too large. Try one of less than half a megabyte..."))
-
   create: (data)->
     data ?= {}
     promise = if not @input?
