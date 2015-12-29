@@ -39,7 +39,7 @@ describe "App", ->
       KeenioInfo::createUser.restore?()
 
     it 'does NOT call out to keen if it is an existing user', ->
-      createUser(name: 'bob', slackUsername: 'bob_yeah')
+      createUser(name: 'bob', slackUsername: 'bob_yeah', false)
       .then (@bob)=>
         App.registerUser(@bob, {
           message:
@@ -55,5 +55,5 @@ describe "App", ->
         App.registerUser(@bob, {
           name: 'bob'
           email_address: 'bob@example.com'
-        })
+        }, true)
       .then => @spy.should.have.been.calledWith @bob

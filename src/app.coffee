@@ -48,7 +48,7 @@ class App
     msg.currentUser ?= new User name: msg.robot.whose(msg)
     msg.currentUser.fetch()
     .then (@user)=>
-      @registerUser @user, msg
+      @registerUser @user, msg, !@user.get("slackUsername")?
     .then (@user)=>
       debug "state: #{@user.get 'state'}"
       [controllerName, action] = @user.get('state').split('#')
@@ -129,11 +129,11 @@ class App
       throw new Error "Unexpected attachment chunk type: '#{type(element)}' for #{pjson element}"
     lines
 
-  @registerUser: (user, slackUser)->
+  @registerUser: (user, slackUser, newRecord)->
     attributes =
       lastActiveOnSlack: Date.now()
       state: user.get('state') or User::initialState
-    newRecord = user.newRecord()
+
     if newRecord
       slackUsername = slackUser.name
       slackId = slackUser.id

@@ -30,13 +30,13 @@ class User extends FirebaseModel
     .error (error)=>
       slackUser = App.robot.adapter.client.getUserByName(receiverSlackUserName)
       if slackUser
-        slackUser['name'] = receiverSlackUserName
         user = new User
           name: "slack:#{slackUser.id}"
           state: 'users#setBtc'
-        user.set('slackUsername', null)
+        user.save()
         .then =>
-          App.registerUser(user, slackUser)
+          slackUser['name'] = receiverSlackUserName
+          App.registerUser(user, slackUser, true)
         .then =>
           Promise.reject(Promise.OperationalError("The user @#{receiverSlackUserName} is not recognized. Sending them a message now."))
       else
