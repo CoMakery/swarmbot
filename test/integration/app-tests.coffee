@@ -42,8 +42,8 @@ describe "App", ->
       createUser(name: 'bob', slackUsername: null)
       .then (@bob)=>
         App.registerUser(@bob, {
-              name: 'bob'
-              email_address: 'bob@example.com'
+          name: 'bob'
+          email_address: 'bob@example.com'
         })
       .then => @spy.should.have.been.called
 
@@ -51,7 +51,7 @@ describe "App", ->
       createUser(name: 'bob', slackUsername: 'bob_yeah')
       .then (@bob)=>
         App.registerUser(@bob, {
-              name: 'bob'
-              email_address: 'bob@example.com'
+          name: 'bob'
+          email_address: 'bob@example.com'
         })
       .then => @spy.should.have.not.been.calledWith @bob

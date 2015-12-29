@@ -43,9 +43,11 @@ describe 'User', ->
   describe '#setupToReceiveBitcoin', ->
     beforeEach ->
       @spy = sinon.spy(KeenioInfo::, 'createUser')
+      sinon.stub(Date, 'now').returns(123456)
 
     afterEach ->
       KeenioInfo::createUser.restore?()
+      Date.now.restore?()
 
     it 'should mark the user in Keen.io', ->
       sendPm = sinon.spy()
@@ -53,9 +55,22 @@ describe 'User', ->
         messageRoom: -> {}
         adapter:
           client:
-            getUserByName: (userName)-> {}
+            getUserByName: (userName)->
+              id: "someId"
+              real_name: 'some real name'
       }
       createUser(name: 'admin', slackUsername: 'adminUserName')
       .then (@admin)=>
         User.setupToReceiveBitcoin(@admin, 'someGuy', {}, sendPm)
-      .error => @spy.should.have.been.called
+      .error =>
+        @spy.should.have.been.called
+        User.findBySlackUsername('someGuy')
+      .then (someGuy)=>
+        someGuy.get('state').should.eq 'users#setBtc'
+        someGuy.get('lastActiveOnSlack').should.eq 123456
+        someGuy.get('firstSeen').should.eq 123456
+        someGuy.get('hasInteracted')?.should.eq false
+        someGuy.get('name').should.eq "slack:someId"
+        someGuy.get('realName').should.eq 'some real name'
+        someGuy.get('slackUsername').should.eq "someGuy"
+        someGuy.get('slackId').should.eq "someId"
