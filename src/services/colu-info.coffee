@@ -36,8 +36,7 @@ class ColuInfo
             asset
       .then (assets)=>
         resolve {balances: assets}
-        # each asset has a .balance, .name, .assetId
-      .catch ->
+      .catch Promise.TimeoutError, =>
         reject(new Promise.OperationalError("(Balance information is temporarily unavailable)"))
 
   getAssetInfo: (project)->
