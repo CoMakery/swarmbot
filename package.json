@@ -51,7 +51,7 @@
     "keen-js": "^3.3.0",
     "lightsaber": "^0.5.1",
     "lodash": "^3.10.0",
-    "moment": "^2.10.6",
+    "moment": "^2.11.0",
     "request-promise": "0.4.3",
     "sinon-chai": "^2.8.0",
     "validator": "^4.3.0"
