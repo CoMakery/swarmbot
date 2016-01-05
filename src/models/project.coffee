@@ -28,9 +28,7 @@ class Project extends FirebaseModel
   makeRewardType: (attributes)->
     @fetchIfNeeded().then (project)->
       if project.exists()
-        rewardType = new RewardType attributes,
-          parent: project
-          # snapshot: project.snapshot.child(RewardType::urlRoot).child(attributes.id)
+        rewardType = new RewardType attributes, parent: project
         if rewardType.exists()
           Promise.reject(Promise.OperationalError("Award '#{attributes.name}' already exists within #{project.key()}."))
         else
