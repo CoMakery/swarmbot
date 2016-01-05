@@ -48,7 +48,7 @@ class App
     msg.currentUser ?= new User name: msg.robot.whose(msg)
     msg.currentUser.fetch()
     .then (@user)=>
-      @registerUser @user, msg, !@user.get("slackUsername")?
+      @registerUser @user, msg, @user.newRecord()
     .then (@user)=>
       debug "state: #{@user.get 'state'}"
       [controllerName, action] = @user.get('state').split('#')
