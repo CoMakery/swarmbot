@@ -97,8 +97,6 @@ class FirebaseModel
     fullAttributes ?= attributes
     for own key, value of attributes
       @assertValidKey key, fullAttributes
-      if type(value) is 'object'
-        @assertValidKeysWithin value, fullAttributes
 
   assertValidKey: (key, attributes=null)->
     if not @validKey key
