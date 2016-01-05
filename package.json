@@ -13,7 +13,7 @@
     "start": "bin/hubot --adapter slack",
     "dev": "bin/hubot --name s",
     "devbot": "bin/devbot",
-    "fulltest": "npm testv && npm run lint && bin/code-checks",
+    "fulltest": "npm run testv && npm run lint && bin/code-checks",
     "testv": "mocha --full-trace",
     "test": "mocha",
     "lint": "coffeelint --quiet src test",
