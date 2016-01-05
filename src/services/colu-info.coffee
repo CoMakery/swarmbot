@@ -33,6 +33,7 @@ class ColuInfo
             asset.name = project.get('name')
             asset
           .catch (e)=>
+            console.error e
             asset
       .then (assets)=>
         resolve {balances: assets}
