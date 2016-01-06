@@ -1,4 +1,4 @@
-{ json, log, p, pjson, type } = require 'lightsaber'
+{ d, json, log, p, pjson, type } = require 'lightsaber'
 { defaults, isEmpty } = require 'lodash'
 Promise = require 'bluebird'
 debug = require('debug')('app')
@@ -48,7 +48,7 @@ class App
     msg.currentUser ?= new User name: msg.robot.whose(msg)
     msg.currentUser.fetch()
     .then (@user)=>
-      @registerUser @user, msg, @user.newRecord()
+      @registerUser @user, msg.message.user, @user.newRecord()
     .then (@user)=>
       debug "state: #{@user.get 'state'}"
       [controllerName, action] = @user.get('state').split('#')
@@ -141,7 +141,7 @@ class App
       emailAddress = slackUser.email_address
 
       attributes.slackUsername = slackUsername if slackUsername
-      attributes.firstSeen = Date.now() if slackUsername
+      attributes.firstSeen = Date.now()
       attributes.realName = realName if realName
       attributes.emailAddress = emailAddress if emailAddress
       attributes.slackId = slackId if slackId
