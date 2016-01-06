@@ -6,10 +6,10 @@ swarmbot = require '../models/swarmbot'
 
 module.exports = (robot)->
 
-  App.respond /airbrake exception! WxmhxTuxKfjnVQ3mLgGZaG2KPn$/i, (msg)->
+  App.addResponder /airbrake exception! WxmhxTuxKfjnVQ3mLgGZaG2KPn$/i, (msg)->
     throw new Error('I am a test exception')
 
-  App.respond /airbrake notify! WxmhxTuxKfjnVQ3mLgGZaG2KPn$/i, (msg)->
+  App.addResponder /airbrake notify! WxmhxTuxKfjnVQ3mLgGZaG2KPn$/i, (msg)->
     if App.airbrake
       err = new Error('Hi through Airbrake')
       App.airbrake.notify err, (err, url)->
@@ -20,7 +20,7 @@ module.exports = (robot)->
     else
       msg.send "No airbrake configured"
 
-  App.respond /colu WxmhxTuxKfjnVQ3mLgGZaG2KPn/i, (msg)->
+  App.addResponder /colu WxmhxTuxKfjnVQ3mLgGZaG2KPn/i, (msg)->
     swarmbot.colu()
 
   App.respond /stats WxmhxTuxKfjnVQ3mLgGZaG2KPn/i, (msg)->

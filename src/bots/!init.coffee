@@ -55,12 +55,12 @@ InitBot = (robot)->
       debugReply pjson reply
       App.pmReply msg, reply
 
-  App.respond /what data\? WxmhxTuxKfjnVQ3mLgGZaG2KPn$/i, (msg)->
+  App.addResponder /what data\? WxmhxTuxKfjnVQ3mLgGZaG2KPn$/i, (msg)->
     p pjson msg
     msg.send 'check the logs'
 
   robot.enter (res)-> App.greet res
 
-  App.respond /welcome me WxmhxTuxKfjnVQ3mLgGZaG2KPn$/i, (msg)-> App.greet msg
+  App.addResponder /welcome me WxmhxTuxKfjnVQ3mLgGZaG2KPn$/i, (msg)-> App.greet msg
 
 module.exports = InitBot

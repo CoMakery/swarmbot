@@ -21,7 +21,7 @@ class App
     'short'
   ]
 
-  @respond: (pattern, cb)->
+  @addResponder: (pattern, cb)->
     @responses ?= []
     @responses.push [pattern, cb]
 
@@ -32,7 +32,7 @@ class App
   @route: (msg)->
     debug "in @route: msg.match?[1] => #{msg.match?[1]}"
 
-    # commands that were added with App.respond:
+    # commands that were added with App.addResponder:
 
     if @responses? and input = msg.match[1]
       for [pattern, cb] in @responses
