@@ -64,6 +64,7 @@ FIREBASE_URL
 FIREBASE_SECRET
 
 DEBUG=app  # for verbose debugging info in logs
+```
 
 ## License
 
