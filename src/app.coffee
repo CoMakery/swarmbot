@@ -32,7 +32,7 @@ class App
   @route: (msg)->
     debug "in @route: msg.match?[1] => #{msg.match?[1]}"
 
-    # old commands:
+    # commands that were added with App.respond:
 
     if @responses? and input = msg.match[1]
       for [pattern, cb] in @responses
@@ -43,7 +43,7 @@ class App
             cb(msg)
             resolve('')
 
-    # otherwise do Zork MVC routing:
+    # custom routing, using controllers, menus, etc:
 
     msg.currentUser ?= new User name: msg.robot.whose(msg)
     msg.currentUser.fetch()
