@@ -45,10 +45,10 @@ This will also load environment variables from your local `.env` file.
 
 ```sh
 heroku create
-heroku ps:type hobby  # will be available 24/7, but costs $
 heroku addons:create redistogo:nano  # Optional. Colu caches to Redis if available.
 heroku addons:create airbrake:free_heroku  # error reporting, recommended
 git push heroku master
+heroku ps:type hobby  # will be available 24/7, but costs $
 ```
 
 ### Set environment variables
