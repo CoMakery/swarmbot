@@ -50,7 +50,7 @@
     "javascript-state-machine": "^2.3.5",
     "keen-js": "^3.3.0",
     "lightsaber": "^0.5.1",
-    "lodash": "^3.10.0",
+    "lodash": "^4.0.0",
     "moment": "^2.10.6",
     "request-promise": "0.4.3",
     "sinon-chai": "^2.8.0",
