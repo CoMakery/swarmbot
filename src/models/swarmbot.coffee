@@ -24,13 +24,11 @@ class Swarmbot
 
     @_colu = new Colu coluParams
     return new Promise (resolve)=>
-      @_colu.on 'connect', =>
-        (require('debug')('privatekey'))( @_colu.hdwallet.getPrivateSeed() ) unless process.env.COLU_PRIVATE_SEED
-        resolve @_colu
+      @_colu.on 'connect', => resolve @_colu
       @_colu.init()
 
   coluExplorerUrl: ->
-    testnet = if process.env.COLU_NETWORK == 'testnet' then "testnet." else ""
+    testnet = if process.env.COLU_NETWORK is 'testnet' then "testnet." else ""
     "https://#{testnet}explorer.coloredcoins.org"
 
 module.exports = new Swarmbot
