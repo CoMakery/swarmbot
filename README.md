@@ -46,7 +46,7 @@ This will also load environment variables from your local `.env` file.
 ```sh
 heroku create
 heroku addons:create redistogo:nano  # Optional. Colu caches to Redis if available.
-heroku addons:create airbrake:free_heroku  # error reporting, recommended
+heroku addons:create airbrake:free_heroku  # error reporting, optional
 git push heroku master
 heroku ps:type hobby  # will be available 24/7, but costs $
 ```
@@ -54,16 +54,24 @@ heroku ps:type hobby  # will be available 24/7, but costs $
 ### Set environment variables
 
 ```sh
-HUBOT_SLACK_TOKEN  #your slack token, from Slack -> Integrations -> Hubot
+HUBOT_SLACK_TOKEN  # your slack token, from Slack -> Integrations -> Hubot
 
-COLU_PRIVATE_SEED
+COLU_PRIVATE_SEED    # register at https://dashboard.colu.co/register
 COLU_NETWORK         # testnet or mainnet
 COLU_MAINNET_APIKEY  # if on mainnet
 
-FIREBASE_URL
+FIREBASE_URL       # visit https://www.firebase.com/ to create DB
 FIREBASE_SECRET
 
-DEBUG=app  # for verbose debugging info in logs
+DEBUG=app          # for verbose debugging info in logs
+
+KEENIO_PROJECT_ID  # keen.io analytics, optional
+KEENIO_API_TOKEN   #
+APP_NAME           # friendly app name for keen.io
+
+NODE_ENV=production         # recommended settings for Node on Heroku
+NODE_MODULES_CACHE=false    #
+NPM_CONFIG_PRODUCTION=true  #
 ```
 
 ## License
