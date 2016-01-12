@@ -52,7 +52,7 @@
     "lightsaber": "^0.5.1",
     "lodash": "^3.10.0",
     "moment": "^2.10.6",
-    "request-promise": "0.4.3",
+    "request-promise": "2.0.0",
     "sinon-chai": "^2.8.0",
     "validator": "^4.3.0"
   },
