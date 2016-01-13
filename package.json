@@ -11,7 +11,7 @@
   "description": "A bot for Dynamic Equity Organizations running in Slack",
   "scripts": {
     "start": "bin/hubot --adapter slack",
-    "dev": "bin/hubot --name s",
+    "dev": "bin/devbot",
     "devbot": "bin/devbot",
     "fulltest": "npm run testv && npm run lint && bin/code-checks",
     "testv": "mocha --full-trace",
@@ -34,7 +34,7 @@
     "mitm": "^1.2.0",
     "mocha": "^2.2.5",
     "nock": "^3.3.2",
-    "shelljs": "^0.5.3",
+    "sinon-chai": "^2.8.0",
     "sinon": "^1.17.2"
   },
   "dependencies": {
@@ -50,10 +50,9 @@
     "javascript-state-machine": "^2.3.5",
     "keen-js": "^3.3.0",
     "lightsaber": "^0.5.1",
-    "lodash": "^3.10.0",
+    "lodash": "~3.10.0",
     "moment": "^2.10.6",
     "request-promise": "0.4.3",
-    "sinon-chai": "^2.8.0",
     "validator": "^4.3.0"
   },
   "engines": {
