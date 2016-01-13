@@ -38,7 +38,7 @@ class App
   @authFirebase: ->
     if process.env.FIREBASE_SECRET?
       swarmbot.firebase().authWithCustomToken process.env.FIREBASE_SECRET, (error)->
-        throw error
+        throw error if error
 
   @whose: (msg)-> "slack:#{msg.message.user.id}"
 
