@@ -1,5 +1,4 @@
 { log, p, pjson } = require 'lightsaber'
-debug = require('debug')('app')
 request = require 'request-promise'
 Promise = require 'bluebird'
 ApplicationController = require './application-state-controller'

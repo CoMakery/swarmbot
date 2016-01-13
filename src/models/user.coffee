@@ -1,5 +1,3 @@
-debug = require('debug')('app')
-errorLog = require('debug')('error')
 {log, p, pjson} = require 'lightsaber'
 request = require 'request-promise'
 StateMachine = require 'javascript-state-machine'

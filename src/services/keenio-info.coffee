@@ -1,4 +1,3 @@
-debug = require('debug')('app')
 Keenio = require 'keen-js'
 
 class KeenioInfo

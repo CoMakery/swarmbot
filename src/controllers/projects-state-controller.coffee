@@ -1,4 +1,3 @@
-debug = require('debug')('app')
 { log, p, pjson } = require 'lightsaber'
 { map, findWhere, sum, pluck } = require 'lodash'
 Promise = require 'bluebird'

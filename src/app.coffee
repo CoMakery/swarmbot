@@ -1,10 +1,6 @@
 { d, json, log, p, pjson, type } = require 'lightsaber'
 { defaults, isEmpty, merge } = require 'lodash'
 Promise = require 'bluebird'
-debug = require('debug')('app')
-debugReply = require('debug')('reply')
-errorLog = require('debug')('error')
-inspectFallback = require('debug')('fallback')
 
 swarmbot = require './models/swarmbot'
 KeenioInfo = require './services/keenio-info.coffee'

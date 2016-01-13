@@ -1,4 +1,3 @@
-debug = require('debug')('app')
 { p } = require 'lightsaber'
 {filter} = require 'lodash'
 request = require 'request-promise'

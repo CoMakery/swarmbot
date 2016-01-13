@@ -1,5 +1,10 @@
 Promise = require 'bluebird'
-debug = require('debug')('app')
+
+Debug = require 'debug'
+global.debug = Debug 'app'
+global.debugReply = Debug 'reply'
+global.errorLog = Debug 'error'
+global.inspectFallback = Debug 'fallback'
 
 Promise.longStackTraces() if process.env.NODE_ENV is 'development' # decreases performance 5x
 

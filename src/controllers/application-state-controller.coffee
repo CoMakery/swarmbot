@@ -1,7 +1,5 @@
 request = require 'request-promise'
 validator = require 'validator'
-debug = require('debug')('app')
-errorLog = require('debug')('error')
 { json, log, p, pjson, type } = require 'lightsaber'
 { extend, isEmpty } = require 'lodash'
 Promise = require 'bluebird'

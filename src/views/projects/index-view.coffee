@@ -1,4 +1,3 @@
-debug = require('debug')('app')
 { log, p, pjson } = require 'lightsaber'
 { clone, isEmpty, map } = require 'lodash'
 ZorkView = require '../zork-view'

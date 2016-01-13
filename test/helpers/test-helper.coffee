@@ -1,7 +1,6 @@
 { defaults, any } = require 'lodash'
 {json, log, p, pjson} = require 'lightsaber'
 Promise = require 'bluebird'
-global.debug = require('debug')('test')
 
 chai = require 'chai'
 chaiAsPromised = require("chai-as-promised")
