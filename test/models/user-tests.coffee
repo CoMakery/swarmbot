@@ -1,6 +1,7 @@
 { createUser } = require '../helpers/test-helper'
 sinon = require 'sinon'
 { p } = require 'lightsaber'
+
 User = require '../../src/models/user'
 KeenioInfo = require '../../src/services/keenio-info.coffee'
 
@@ -56,14 +57,13 @@ describe 'User', ->
 
     it 'should mark the user in Keen.io', ->
       sendPm = sinon.spy()
-      App.robot = {
+      App.robot =
         messageRoom: -> {}
-        adapter:
-          client:
-            getUserByName: (userName)->
-              id: "someId"
-              real_name: 'some real name'
-      }
+      App.slack =
+        getUserByName: (userName)->
+          id: "someId"
+          real_name: 'some real name'
+
       createUser(name: 'admin', slackUsername: 'adminUserName')
       .then (@admin)=>
         User.setupToReceiveBitcoin(@admin, 'someGuy', {}, sendPm)

@@ -48,6 +48,7 @@ class ColuInfo
       .then (data)=>
         resolve data
       .error (error)=>
+        console.error error.stack
         reject Promise.OperationalError("(Currently not available)")
 
   allHolders: (project)->

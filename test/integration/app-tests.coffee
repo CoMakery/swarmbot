@@ -1,6 +1,5 @@
 { createUser } = require '../helpers/test-helper'
 sinon = require 'sinon'
-require '../../src/app.coffee'
 User = require '../../src/models/user.coffee'
 KeenioInfo = require '../../src/services/keenio-info.coffee'
 Init = require '../../src/bots/!init'
@@ -10,11 +9,11 @@ describe "App", ->
     @robot =
       enter: ->
       respond: ->
-      adapter: {client: {}}
+      adapter:
+        customMessage: ->
 
-    @robot.whose = (msg)-> "slack:#{msg.message.user.id}"
-    @robot.adapter.customMessage = ->
     App.robot = @robot
+    App.whose = (msg)-> "slack:#{msg.message.user.id}"
 
   describe ".greet", ->
     it "sets the user's state to the initial state", ->

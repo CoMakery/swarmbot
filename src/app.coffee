@@ -1,9 +1,12 @@
 { d, json, log, p, pjson, type } = require 'lightsaber'
-{ defaults, isEmpty } = require 'lodash'
+{ defaults, isEmpty, merge } = require 'lodash'
 Promise = require 'bluebird'
 debug = require('debug')('app')
+debugReply = require('debug')('reply')
 errorLog = require('debug')('error')
 inspectFallback = require('debug')('fallback')
+
+swarmbot = require './models/swarmbot'
 KeenioInfo = require './services/keenio-info.coffee'
 User = require './models/user'
 controllers =
@@ -21,6 +24,28 @@ class App
     'short'
   ]
 
+  @init: (@robot)->
+    @slack = @robot.adapter.client
+    @authFirebase()
+    @robot.respond /(.*)/, (msg)=> @respondAndReply msg   # custom catch-all routing
+    @robot.enter (res)=> @greet res  # greet new users
+
+  @respondAndReply: (msg)->
+    @respondTo(msg).then (reply)=>
+      debugReply pjson reply
+      @pmReply msg, reply
+    if @isPublic msg
+      msg.reply "Let's take this offline.  I PM'd you :smile:"
+
+  @authFirebase: ->
+    if process.env.FIREBASE_SECRET?
+      swarmbot.firebase().authWithCustomToken process.env.FIREBASE_SECRET, (error)->
+        throw error
+
+  @whose: (msg)-> "slack:#{msg.message.user.id}"
+
+  @isPublic: (msg)-> msg.message.room isnt msg.message.user?.name
+
   @addResponder: (pattern, cb)->
     @responses ?= []
     @responses.push [pattern, cb]
@@ -32,7 +57,7 @@ class App
   @route: (msg)->
     debug "in @route: msg.match?[1] => #{msg.match?[1]}"
 
-    # commands that were added with App.addResponder:
+    # commands that were added with @addResponder:
 
     if @responses? and input = msg.match[1]
       for [pattern, cb] in @responses
@@ -45,7 +70,7 @@ class App
 
     # custom routing, using controllers, menus, etc:
 
-    msg.currentUser ?= new User name: msg.robot.whose(msg)
+    msg.currentUser ?= new User name: @whose(msg)
     msg.currentUser.fetch()
     .then (@user)=>
       @registerUser @user, msg.message.user, @user.newRecord()
@@ -153,14 +178,14 @@ class App
       user
 
   @greet = (res)->
-    currentUser = new User name: App.robot.whose(res)
+    currentUser = new User name: @whose(res)
     currentUser.fetch()
     .then (@user)=> @user.set('state', 'users#welcome')   # goes away if this is new home page
-    .then => App.route res
+    .then => @route res
     .then (welcome)=>
-      App.pmReply res, welcome
+      @pmReply res, welcome
       @user.set 'state', User::initialState
-    .then => App.route res
-    .then (projects)=> App.pmReply res, projects
+    .then => @route res
+    .then (projects)=> @pmReply res, projects
 
 module.exports = App

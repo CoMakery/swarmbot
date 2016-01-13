@@ -22,3 +22,9 @@ module.exports = (robot)->
 
   App.addResponder /colu WxmhxTuxKfjnVQ3mLgGZaG2KPn/i, (msg)->
     swarmbot.colu()
+
+  App.addResponder /welcome me WxmhxTuxKfjnVQ3mLgGZaG2KPn$/i, (msg)-> App.greet msg
+
+  App.addResponder /what data\? WxmhxTuxKfjnVQ3mLgGZaG2KPn$/i, (msg)->
+    p pjson msg
+    msg.send 'check the logs'

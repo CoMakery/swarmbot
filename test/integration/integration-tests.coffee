@@ -5,7 +5,6 @@ nock = require 'nock'
 sinon = require 'sinon'
 
 { createUser, createProject, createRewardType, message, USER_ID } = require '../helpers/test-helper'
-global.App = require '../../src/app'
 Project = require '../../src/models/project'
 User = require '../../src/models/user'
 RewardType = require '../../src/models/reward-type'
@@ -19,11 +18,11 @@ describe 'swarmbot', ->
     @message = null
 
     App.robot =
-      whose: (msg)-> USER_ID
       messageRoom: ->
       adapter:
         customMessage: ->
-        client: {}
+
+    App.whose = (msg)-> USER_ID
 
     App.pmReply = (msg, textOrAttachments)=>
       reply = textOrAttachments.text or textOrAttachments
@@ -309,8 +308,7 @@ describe 'swarmbot', ->
 
       it "shows good error message if user isn't in the db, and pms the user", ->
         otherSlackId = "other slack user id"
-        App.robot.adapter.client.getUserByName = ->
-          {id: otherSlackId}
+        App.slack = {getUserByName: -> {id: otherSlackId}}
         createUser
           name: USER_ID
           state: 'rewards#create'
@@ -343,8 +341,7 @@ describe 'swarmbot', ->
 
       it "shows good error message if user doesn't exist at all", ->
         otherSlackId = "other slack user id"
-        App.robot.adapter.client.getUserByName = ->
-          undefined
+        App.slack = getUserByName: -> undefined
         createUser
           name: USER_ID
           state: 'rewards#create'

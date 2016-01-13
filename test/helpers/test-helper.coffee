@@ -13,6 +13,7 @@ chai.use(chaiAsPromised)
 FirebaseServer = require('firebase-server')
 Mitm = require("mitm")
 
+global.App = require '../../src/app'
 ColuInfo = require '../../src/services/colu-info'
 Project = require '../../src/models/project'
 User = require '../../src/models/user'

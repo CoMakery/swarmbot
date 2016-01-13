@@ -28,7 +28,7 @@ class User extends FirebaseModel
   @setupToReceiveBitcoin: (sender, receiverSlackUserName, data, sendPm)->
     User.findBySlackUsername receiverSlackUserName
     .error (error)=>
-      slackUser = App.robot.adapter.client.getUserByName(receiverSlackUserName)
+      slackUser = App.slack.getUserByName(receiverSlackUserName)
       if slackUser
         user = new User
           name: "slack:#{slackUser.id}"
