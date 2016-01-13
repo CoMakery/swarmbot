@@ -12,7 +12,7 @@ class User extends FirebaseModel
   newRecord: -> not @get("slackUsername")?
 
   @findBySlackUsername: Promise.promisify (slackUsername, cb)->
-    swarmbot.firebase().child('users') # TODO: use urlRoot here
+    swarmbot.firebase().child(@::urlRoot)
       .orderByChild('slackUsername')
       .equalTo(slackUsername)
       .limitToFirst(1)
