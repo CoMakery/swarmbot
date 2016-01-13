@@ -1,8 +1,7 @@
-{ keys } = require 'lodash'
-sinon = require 'sinon'
-{log, p, pjson} = require 'lightsaber'
-Promise = require 'bluebird'
 { createUser, createProject, message } = require '../helpers/test-helper'
+{ keys } = require 'lodash'
+{log, p, pjson} = require 'lightsaber'
+
 ApplicationStateController = require '../../src/controllers/application-state-controller'
 User = require '../../src/models/user'
 

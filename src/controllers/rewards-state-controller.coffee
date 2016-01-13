@@ -1,6 +1,5 @@
 { log, p, pjson } = require 'lightsaber'
 { isEmpty, last } = require 'lodash'
-Promise = require 'bluebird'
 ApplicationController = require './application-state-controller'
 RewardType = require '../models/reward-type'
 Reward = require '../models/reward'

@@ -1,6 +1,5 @@
 { log, p, pjson } = require 'lightsaber'
 request = require 'request-promise'
-Promise = require 'bluebird'
 ApplicationController = require './application-state-controller'
 RewardTypeCollection = require '../collections/reward-type-collection'
 RewardType = require '../models/reward-type'

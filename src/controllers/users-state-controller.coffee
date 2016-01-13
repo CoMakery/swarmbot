@@ -1,7 +1,6 @@
 
 { log, p, pjson } = require 'lightsaber'
 { address } = require 'bitcoinjs-lib'
-Promise = require 'bluebird'
 ApplicationController = require './application-state-controller'
 swarmbot = require '../models/swarmbot'
 Project = require '../models/project'

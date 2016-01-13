@@ -1,5 +1,4 @@
 {log, p, json, pjson, type} = require 'lightsaber'
-Promise = require 'bluebird'
 { assign, camelCase, last } = require 'lodash'
 swarmbot = require './swarmbot'
 

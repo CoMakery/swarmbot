@@ -1,7 +1,6 @@
 { p } = require 'lightsaber'
 {filter} = require 'lodash'
 request = require 'request-promise'
-Promise = require 'bluebird'
 swarmbot = require '../models/swarmbot'
 Project = require '../models/project.coffee'
 User = require '../models/user'

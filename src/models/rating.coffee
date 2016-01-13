@@ -1,5 +1,4 @@
 {log, p, pjson} = require 'lightsaber'
-Promise = require 'bluebird'
 FirebaseModel = require './firebase-model'
 RatingCollection = require '../collections/rating-collection'
 

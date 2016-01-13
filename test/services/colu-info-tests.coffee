@@ -1,7 +1,6 @@
+{ createUser, createProject } = require '../helpers/test-helper'
 { p } = require 'lightsaber'
 sinon = require 'sinon'
-Promise = require 'bluebird'
-{ createUser, createProject } = require '../helpers/test-helper'
 ColuInfo = require '../../src/services/colu-info'
 
 

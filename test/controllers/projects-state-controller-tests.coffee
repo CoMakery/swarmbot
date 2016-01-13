@@ -1,6 +1,6 @@
+{ createUser, createProject, message } = require '../helpers/test-helper'
 { p } = require 'lightsaber'
 sinon = require 'sinon'
-{ createUser, createProject, message } = require '../helpers/test-helper'
 ProjectsStateController = require '../../src/controllers/projects-state-controller'
 User = require '../../src/models/user'
 

@@ -1,6 +1,7 @@
+global.Promise = require 'bluebird'
+
 { defaults, any } = require 'lodash'
 {json, log, p, pjson} = require 'lightsaber'
-Promise = require 'bluebird'
 
 chai = require 'chai'
 chaiAsPromised = require("chai-as-promised")

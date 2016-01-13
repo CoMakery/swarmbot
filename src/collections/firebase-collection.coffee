@@ -1,4 +1,3 @@
-Promise = require 'bluebird'
 {log, p, pjson} = require 'lightsaber'
 { partition, sortByOrder, find, forEach, map, filter } = require 'lodash'
 swarmbot = require '../models/swarmbot'

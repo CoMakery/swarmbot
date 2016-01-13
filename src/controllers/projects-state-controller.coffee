@@ -1,6 +1,5 @@
 { log, p, pjson } = require 'lightsaber'
 { map, findWhere, sum, pluck } = require 'lodash'
-Promise = require 'bluebird'
 swarmbot = require '../models/swarmbot'
 ApplicationController = require './application-state-controller'
 ColuInfo = require '../services/colu-info'

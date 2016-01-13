@@ -1,5 +1,6 @@
-Promise = require 'bluebird'
+global.Promise = require 'bluebird'  # ensure bluebird is always used instead of built-in Promise
 
+# global debuggers, so that we have a single color for each
 Debug = require 'debug'
 global.debug = Debug 'app'
 global.debugReply = Debug 'reply'

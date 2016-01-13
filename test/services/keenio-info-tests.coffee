@@ -1,8 +1,7 @@
+{ createUser, createProject } = require '../helpers/test-helper'
 { p } = require 'lightsaber'
 sinon = require 'sinon'
-Promise = require 'bluebird'
 Keen = require 'keen-js'
-{ createUser, createProject } = require '../helpers/test-helper'
 KeenioInfo = require '../../src/services/keenio-info.coffee'
 
 describe 'Keenio', ->

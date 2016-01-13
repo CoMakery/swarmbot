@@ -1,7 +1,6 @@
 {log, p, pjson} = require 'lightsaber'
 request = require 'request-promise'
 StateMachine = require 'javascript-state-machine'
-Promise = require 'bluebird'
 FirebaseModel = require './firebase-model'
 swarmbot = require './swarmbot'
 Project = require '../models/project.coffee'

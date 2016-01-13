@@ -1,10 +1,10 @@
+{ createUser, createProject, createRewardType, message, USER_ID } = require '../helpers/test-helper'
+
 {json, log, p, pjson, type} = require 'lightsaber'
 {size, values} = require 'lodash'
-Promise = require 'bluebird'
 nock = require 'nock'
 sinon = require 'sinon'
 
-{ createUser, createProject, createRewardType, message, USER_ID } = require '../helpers/test-helper'
 Project = require '../../src/models/project'
 User = require '../../src/models/user'
 RewardType = require '../../src/models/reward-type'

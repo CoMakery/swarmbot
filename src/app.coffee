@@ -1,6 +1,5 @@
 { d, json, log, p, pjson, type } = require 'lightsaber'
 { defaults, isEmpty, merge } = require 'lodash'
-Promise = require 'bluebird'
 
 swarmbot = require './models/swarmbot'
 KeenioInfo = require './services/keenio-info.coffee'

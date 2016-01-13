@@ -1,5 +1,5 @@
-{ json, p } = require 'lightsaber'
 { createProject, createUser } = require '../../helpers/test-helper'
+{ json, p } = require 'lightsaber'
 Project = require '../../../src/models/project.coffee'
 IndexView = require '../../../src/views/projects/index-view.coffee'
 
