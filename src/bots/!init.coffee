@@ -6,9 +6,7 @@
 # Commands:
 #
 
-{airbrake} = require '../util/setup'  # do this first
 global.App = require '../app'  # global to avoid cyclic dependencies
-App.airbrake = airbrake
 
 InitBot = (robot)-> App.init robot
 

@@ -1,3 +1,5 @@
+{airbrake} = require './util/setup'  # do this first
+
 { d, json, log, p, pjson, type } = require 'lightsaber'
 { defaults, isEmpty, merge } = require 'lodash'
 
@@ -18,6 +20,7 @@ class App
     'color'
     'short'
   ]
+  @airbrake = airbrake
 
   @init: (@robot)->
     @slack = @robot.adapter.client
