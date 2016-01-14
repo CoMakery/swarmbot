@@ -61,17 +61,20 @@ COLU_NETWORK         # testnet or mainnet
 COLU_MAINNET_APIKEY  # if on mainnet
 
 FIREBASE_URL       # visit https://www.firebase.com/ to create DB
-FIREBASE_SECRET
-
-DEBUG=app          # for verbose debugging info in logs
+FIREBASE_SECRET    # found in the "Secrets" tab of your Firebase instance
 
 KEENIO_PROJECT_ID  # keen.io analytics, optional
 KEENIO_API_TOKEN   #
-APP_NAME           # friendly app name for keen.io
+
+AIRBRAKE_API_KEY   # Airbrake error reporting, optional
+
+APP_NAME           # friendly app name for keen.io, airbrake, etc
 
 NODE_ENV=production         # recommended settings for Node on Heroku
 NODE_MODULES_CACHE=false    #
 NPM_CONFIG_PRODUCTION=true  #
+
+DEBUG=app          # for verbose debugging info in logs
 ```
 
 ## License
