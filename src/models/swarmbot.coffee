@@ -13,6 +13,7 @@ class Swarmbot
     coluParams =
       network: process.env.COLU_NETWORK
       privateSeed: process.env.COLU_PRIVATE_SEED
+      privateSeedWif: process.env.COLU_PRIVATE_SEED_WIF
       apiKey: process.env.COLU_MAINNET_APIKEY
     if process.env.REDISTOGO_URL
       coluParams.redisUrl = process.env.REDISTOGO_URL
