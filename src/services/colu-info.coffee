@@ -47,7 +47,10 @@ class ColuInfo
         resolve data
       .error (error)=>
         console.error error.stack
-        reject Promise.OperationalError("(Currently not available)")
+        App.notify error
+        message = "Sorry, one of our technical partners (Colored Coin provider)
+          is currently not available, so functionality may be very limited :("
+        reject Promise.OperationalError message
 
   allHolders: (project)->
     @getAssetInfo(project)
@@ -64,6 +67,5 @@ class ColuInfo
           holder
         .catch =>
           holder
-
 
 module.exports = ColuInfo

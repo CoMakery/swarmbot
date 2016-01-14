@@ -175,7 +175,7 @@ class App
         (new KeenioInfo()).createUser(user)
       user
 
-  @greet = (res)->
+  @greet: (res)->
     currentUser = new User name: @whose(res)
     currentUser.fetch()
     .then (@user)=> @user.set('state', 'users#welcome')   # goes away if this is new home page
@@ -185,5 +185,20 @@ class App
       @user.set 'state', User::initialState
     .then => @route res
     .then (projects)=> @pmReply res, projects
+
+  @notify: (message)->
+    if not App.airbrake
+      debug """No airbrake configured; message NOT delivered: "#{message}" """
+      return
+    envelope = if message instanceof Error
+      message
+    else
+      new Error message
+    App.airbrake.notify envelope, (errorNotifying, url)->
+      if errorNotifying
+        debug errorNotifying
+      else
+        debug """Delivered to #{url} --
+          #{envelope.message}"""
 
 module.exports = App
