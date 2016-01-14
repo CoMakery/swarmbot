@@ -7,7 +7,7 @@ User = require '../models/user'
 
 
 class ColuInfo
-  COLU_TIMEOUT: 5000
+  COLU_TIMEOUT: 20*1000
 
   makeRequest: (uri)->
     request
