@@ -7,10 +7,12 @@ global.debugReply = Debug 'reply'
 global.errorLog = Debug 'error'
 global.inspectFallback = Debug 'fallback'
 
+Airbrake = require('airbrake')
+
 Promise.longStackTraces() if process.env.NODE_ENV is 'development' # decreases performance 5x
 
 if process.env.AIRBRAKE_API_KEY
-  airbrake = require('airbrake').createClient(process.env.AIRBRAKE_API_KEY)
+  airbrake = Airbrake.createClient process.env.AIRBRAKE_API_KEY, process.env.APP_NAME
   airbrake.handleExceptions()
 
   # catch unhandled promise rejections with Airbrake:
