@@ -15,3 +15,7 @@ deployment:
     branch: staging
     commands:
       - bin/deploy swarmbot-staging
+  production:
+    branch: production
+    commands:
+      - bin/deploy $HEROKU_INSTANCES_PRODUCTION
