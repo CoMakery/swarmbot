@@ -1,12 +1,16 @@
 #!/usr/bin/env coffee
-#
-# Usage: deploy herokuEnv herokuApp
-#
 
 { json, log, p, pjson, run } = require 'lightsaber'
 { compact, last } = require 'lodash'
 
-herokuAppList = last process.argv
+{argv} = process
+
+if argv.length isnt 3
+  console.error """Usage: deploy herokuApp1[,herokuApp2][,herokuAppN]
+    Got: #{json argv}"""
+  process.exit 1
+
+herokuAppList = last argv
 herokuApps = compact herokuAppList.split /[,\s]+/
 deployResults = 0
 
@@ -24,4 +28,5 @@ for herokuApp in herokuApps
     ref = process.env.CIRCLE_SHA1 or run('git rev-parse head').output.trim()
     run "heroku config:set GIT_REF=#{ref} --app #{herokuApp}"
   deployResults += deployResult
+
 process.exit deployResult

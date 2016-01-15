@@ -10,11 +10,11 @@ deployment:
   edge:
     branch: master
     commands:
-      - bin/deploy swarmbot-edge
+      - bin/deploy $HEROKU_INSTANCES_EDGE
   staging:
     branch: staging
     commands:
-      - bin/deploy swarmbot-staging
+      - bin/deploy $HEROKU_INSTANCES_STAGING
   production:
     branch: production
     commands:
