@@ -27,6 +27,7 @@ for herokuApp in herokuApps
   if deployResult is 0
     ref = process.env.CIRCLE_SHA1 or run('git rev-parse head').output.trim()
     run "heroku config:set GIT_REF=#{ref} --app #{herokuApp}"
+  run "heroku restart --app #{herokuApp}"  # sometimes deploys and config changes do not trigger restart!
   deployResults += deployResult
 
 process.exit deployResult
