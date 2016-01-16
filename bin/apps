@@ -1,0 +1,24 @@
+#!/usr/bin/env coffee
+
+require('dotenv').load()
+{ json, log, p, pjson, run } = require 'lightsaber'
+{ compact } = require 'lodash'
+
+{argv} = process
+
+if argv.length < 3
+  console.error """Usage: apps <commands passed to heroku apps>
+    Got: #{json argv}"""
+  process.exit 1
+
+unless process.env.HEROKU_INSTANCES_PRODUCTION
+  console.error "Please set env var HEROKU_INSTANCES_PRODUCTION to comma separated app name list"
+  process.exit 1
+
+herokuAppList = process.env.HEROKU_INSTANCES_PRODUCTION
+herokuApps = compact herokuAppList.split /[,\s]+/
+
+command = argv.slice(2).join(' ')
+
+for herokuApp in herokuApps
+  run "heroku #{command} --app #{herokuApp}"
