@@ -56,9 +56,10 @@ heroku ps:type hobby  # will be available 24/7, but costs $
 ```sh
 HUBOT_SLACK_TOKEN  # your slack token, from Slack -> Integrations -> Hubot
 
-COLU_PRIVATE_SEED    # register at https://dashboard.colu.co/register
-COLU_NETWORK         # testnet or mainnet
-COLU_MAINNET_APIKEY  # if on mainnet
+# register for a Colu account at https://dashboard.colu.co/register
+COLU_PRIVATE_SEED_WIF    # WIF = Wallet Info Format
+COLU_NETWORK             # testnet or mainnet
+COLU_MAINNET_APIKEY      # if on mainnet
 
 FIREBASE_URL       # visit https://www.firebase.com/ to create DB
 FIREBASE_SECRET    # found in the "Secrets" tab of your Firebase instance
