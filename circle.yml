@@ -13,7 +13,3 @@ deployment:
     branch: staging
     commands:
       - bin/deploy $HEROKU_INSTANCES_STAGING
-  production:
-    branch: production
-    commands:
-      - bin/deploy $HEROKU_INSTANCES_PRODUCTION
