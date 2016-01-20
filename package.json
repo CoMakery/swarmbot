@@ -41,10 +41,10 @@
   },
   "dependencies": {
     "airbrake": "^0.3.8",
-    "bitcoinjs-lib": "^2.1.1",
+    "bitcoinjs-lib": "^2.1.4",
     "bluebird": "^3.0.5",
     "coffee-script": "^1.10.0",
-    "colu": "^0.9.7",
+    "colu": "github:citizencode/colu-nodejs#better",
     "debug": "^2.2.0",
     "firebase": "^2.2.9",
     "hubot": "^2.16.0",
@@ -52,7 +52,7 @@
     "javascript-state-machine": "^2.3.5",
     "keen-js": "^3.3.0",
     "lightsaber": "^0.5.1",
-    "lodash": "~3.10.0",
+    "lodash": "~3.10",
     "moment": "^2.10.6",
     "request-promise": "0.4.3",
     "validator": "^4.3.0"
