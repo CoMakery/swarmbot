@@ -2,31 +2,57 @@
 
 { json, log, p, pjson, run } = require 'lightsaber'
 { compact, last } = require 'lodash'
+fs = require 'fs'
+path = require 'path'
+CSON = require 'cson-parser'
+args = require 'commander'
 
-{argv} = process
+die = (reason) -> console.error(reason) ; process.exit(1)
 
-if argv.length isnt 3
-  console.error """Usage: deploy herokuApp1[,herokuApp2][,herokuAppN]
-    Got: #{json argv}"""
-  process.exit 1
+args
+  .option '-t, --target [target]', 'The environment to target'
+  .option '-a, --app <app>', 'The heroku application to deploy'
+  .option '-r, --ref [ref]', 'The git ref; defaults to origin/<target>, or HEAD if no <target> present'
+  .parse process.argv
 
-herokuAppList = last argv
-herokuApps = compact herokuAppList.split /[,\s]+/
+{target, app, ref} = args
+
+run "git fetch --unshallow", relaxed: true  # Circle CI fetches git shallowly, which can cause failures pushing to heroku
+unless ref
+  ref = if target then "origin/#{target}" else "HEAD"
+sha = run("git rev-parse #{ref}").output.trim()
+
+if not target and not app
+  die "Please specify either --target or --app"
+
+if target and app
+  die "Please specify either --target or --app, but not both"
+
+if app
+  herokuApps = [app]
+else if target
+  configPath = path.resolve "#{__dirname}/../config/deploy.cson"
+  config = CSON.parse fs.readFileSync configPath
+  herokuApps = config[target]
+  unless herokuApps
+    die "Target: #{target} not found in #{configPath}"
+
+  log "\n#{target} apps found:"
+  for herokuApp in herokuApps
+    log "  - #{herokuApp}"
+
 deployResults = 0
-
 for herokuApp in herokuApps
   log """
 
     ************************************************************************
-    Deploying to #{herokuApp}
+    Deploying #{ref} to app #{herokuApp}
     ************************************************************************
   """
   herokuRemote = "git@heroku.com:#{herokuApp}.git"
-  run "git fetch --unshallow", relaxed: true  # Circle CI fetches git shallowly, which can cause failures pushing to heroku
-  deployResult = run("git push --force #{herokuRemote} HEAD:refs/heads/master", relaxed: true).code
+  deployResult = run("git push --force #{herokuRemote} #{sha}:refs/heads/master", relaxed: true).code
   if deployResult is 0
-    ref = process.env.CIRCLE_SHA1 or run('git rev-parse head').output.trim()
-    run "heroku config:set GIT_REF=#{ref} --app #{herokuApp}"
+    run "heroku config:set GIT_REF=#{sha} --app #{herokuApp}"
   else
     deployResults++
 

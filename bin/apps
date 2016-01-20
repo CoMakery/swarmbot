@@ -1,6 +1,6 @@
 #!/usr/bin/env coffee
 
-require('dotenv').load()
+require('dotenv').config()
 { json, log, p, pjson, run } = require 'lightsaber'
 { compact } = require 'lodash'
 

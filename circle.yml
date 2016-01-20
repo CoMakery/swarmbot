@@ -8,8 +8,4 @@ deployment:
   edge:
     branch: master
     commands:
-      - bin/deploy $HEROKU_INSTANCES_EDGE
-  staging:
-    branch: staging
-    commands:
-      - bin/deploy $HEROKU_INSTANCES_STAGING
+      - bin/deploy --app swarmbot-edge
