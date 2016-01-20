@@ -29,6 +29,8 @@ for herokuApp in herokuApps
     run "heroku config:set GIT_REF=#{ref} --app #{herokuApp}"
   else
     deployResults++
-  run "heroku restart --app #{herokuApp}"  # sometimes deploys and config changes do not trigger restart!
+
+  restart = "heroku restart --app #{herokuApp}"  # sometimes deploys and config changes do not trigger restart!
+  run [restart, restart, restart, restart, restart].join(' || ')   # sometimes restarts fail : (
 
 process.exit deployResults
