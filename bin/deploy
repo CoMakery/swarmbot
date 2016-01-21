@@ -46,7 +46,7 @@ for herokuApp in herokuApps
   log """
 
     ************************************************************************
-    Deploying #{ref} to app #{herokuApp}
+    Deploying #{ref} [#{sha.slice(0,7)}] to app #{herokuApp}
     ************************************************************************
   """
   herokuRemote = "git@heroku.com:#{herokuApp}.git"
