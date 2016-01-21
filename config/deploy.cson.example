@@ -1,0 +1,8 @@
+staging: [
+  'my-staging-heroku-app-name'
+]
+production: [
+  'my-production-heroku-app-name-1'
+  'my-production-heroku-app-name-2'
+  'my-production-heroku-app-name-3'
+]
