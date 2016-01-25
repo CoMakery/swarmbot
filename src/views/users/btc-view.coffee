@@ -1,17 +1,20 @@
 { log, p, pjson } = require 'lightsaber'
 ZorkView = require '../zork-view'
+Verbiage = require '../verbiage'
 
 class BtcView extends ZorkView
   constructor: (@data, @error)->
-    i = 1
-    @menu = {}
-    @menu.x = { text: "exit", transition: 'exit' }
+    @menu =
+      x:
+        text: 'exit'
+        transition: 'exit'
 
   render: ->
     response = []
-    p @error
+    debug {@error} if @error
     response.push @warning "'#{@data.address}' is an invalid bitcoin address." if @error?
-    response.push @question "Please enter the bitcoin address you wish to use. (#{@renderMenu()})"
+    response.push @question "Please enter the bitcoin address you wish to use.
+      #{Verbiage.NEW_BTC} (#{@renderMenu()})"
     response
 
 module.exports = BtcView

@@ -1,6 +1,7 @@
 { log, p, pjson } = require 'lightsaber'
 { clone, isEmpty, map } = require 'lodash'
 ZorkView = require '../zork-view'
+Verbiage = require '../verbiage'
 
 class IndexView extends ZorkView
 
@@ -39,9 +40,17 @@ class IndexView extends ZorkView
 
   render: ->
     message = []
+    if not @currentUser.get('hasInteracted')
+      message.push {
+        pretext: "Welcome friend!
+          I am here to help you contribute to projects and receive project coins.
+          Project coins track your share of a project using a trusty blockchain."
+      }
+      message.push {
+        pretext: Verbiage.NEW_BTC_AND_WHY
+      }
     if isEmpty(@projectItems) or not @currentUser.get('hasInteracted')
       message.push {
-        pretext: "Welcome friend! I am here to help you contribute to projects and receive project coins. Project coins track your share of a project using a trusty blockchain."
         title: "Let's get started!  Type 1, hit enter, and create your first project."
       }
       @currentUser.set 'hasInteracted', true

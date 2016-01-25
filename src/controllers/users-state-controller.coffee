@@ -18,7 +18,6 @@ class UsersStateController extends ApplicationController
   # edit  # read the state and render setBtc or setProject template
   # update # read the state and update the right field from the input
 
-
   welcome: ->
     view = new WelcomeView {@currentUser}
     view.render()

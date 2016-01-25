@@ -68,7 +68,6 @@ describe 'swarmbot', ->
         App.respondTo message()
         .then (reply)=>
           jreply = json(reply)
-          jreply.should.match /Welcome friend!/
           jreply.should.match /Let's get started.*Type 1/
           App.respondTo message('1')
         .then (reply)=>
