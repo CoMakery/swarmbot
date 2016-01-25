@@ -57,6 +57,6 @@ for herokuApp in herokuApps
     deployResults++
 
   restart = "heroku restart --app #{herokuApp}"  # sometimes deploys and config changes do not trigger restart!
-  run [restart, restart, restart, restart, restart].join(' || ')   # sometimes restarts fail : (
+  run [1..10].map( -> restart ).join(' || ')   # sometimes restarts fail : (
 
 process.exit deployResults
