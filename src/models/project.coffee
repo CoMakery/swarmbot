@@ -12,7 +12,7 @@ RewardTypeCollection = require '../collections/reward-type-collection'
 
 class Project extends FirebaseModel
   urlRoot: 'projects'
-  INITIAL_PROJECT_COINS: 100000000
+  INITIAL_PROJECT_COINS: 1e8
 
   bounties: Promise.promisify (cb)->
     @firebase().child('bounties').once 'value', (snapshot)=>

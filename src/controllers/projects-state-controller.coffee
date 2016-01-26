@@ -48,6 +48,8 @@ class ProjectsStateController extends ApplicationController
       data.name = @input
     else if not data.description
       data.description = @input
+    else if not data.totalCoins
+      data.totalCoins = parseInt(@input, 10) or Project::INITIAL_PROJECT_COINS
     else if not data.tasksUrl
       data.tasksUrl = @input
     else #if not data.imageUrl
@@ -72,9 +74,10 @@ class ProjectsStateController extends ApplicationController
       imageUrl: data.imageUrl ? ''
       projectOwner: @currentUser.key()
       tasksUrl: data.tasksUrl
+      totalCoins: data.totalCoins
     .save()
     .then (project)=>
-      project.issueAsset amount: Project::INITIAL_PROJECT_COINS
+      project.issueAsset amount: data.totalCoins
       @currentUser.set 'currentProject', project.key()
 
   capTable: ->

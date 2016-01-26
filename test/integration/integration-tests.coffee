@@ -166,7 +166,7 @@ describe 'swarmbot', ->
 
     context 'projects#create', ->
       beforeEach ->
-        nock 'http://example.com'
+           'http://example.com'
           .head '/too-large.png'
           .reply 200, '', { 'content-length': App.MAX_SLACK_IMAGE_SIZE + 1, 'content-type': 'image/jpg' }
           .head '/very-small.png'
@@ -183,6 +183,10 @@ describe 'swarmbot', ->
         .then (reply)=>
           json(reply).should.match /Please enter a short description/
           @message = message('Shaft')
+          App.respondTo @message
+        .then (reply)=>
+          json(reply).should.match /How many project coins.+default.+100 million.+Type.+ok.+OR the.+number of project coins/i
+          @message = message('100')
           App.respondTo @message
         .then (reply)=>
           json(reply).should.match /Please enter a link to your project tasks./
@@ -214,6 +218,7 @@ describe 'swarmbot', ->
             projectOwner: USER_ID
             imageUrl: 'http://example.com/very-small.png'
             tasksUrl: 'http://jira.com'
+            totalCoins: 100
 
   context 'rewardTypes', ->
     context 'rewardTypes#create', ->
