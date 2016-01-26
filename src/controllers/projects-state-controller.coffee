@@ -48,8 +48,15 @@ class ProjectsStateController extends ApplicationController
       data.name = @input
     else if not data.description
       data.description = @input
-    else if not data.totalCoins
-      data.totalCoins = parseInt(@input, 10) or Project::INITIAL_PROJECT_COINS
+    else if not data.initialCoins
+      coins = parseInt(@input)
+      if isNaN coins
+        if @input.toLowerCase() is 'ok'
+          data.initialCoins = Project::INITIAL_PROJECT_COINS
+        else
+          @errorMessage = "Please enter either a number or 'ok'"
+      else
+        data.initialCoins = coins
     else if not data.tasksUrl
       data.tasksUrl = @input
     else #if not data.imageUrl
@@ -74,10 +81,10 @@ class ProjectsStateController extends ApplicationController
       imageUrl: data.imageUrl ? ''
       projectOwner: @currentUser.key()
       tasksUrl: data.tasksUrl
-      totalCoins: data.totalCoins
+      initialCoins: data.initialCoins
     .save()
     .then (project)=>
-      project.issueAsset amount: data.totalCoins
+      project.issueAsset amount: data.initialCoins
       @currentUser.set 'currentProject', project.key()
 
   capTable: ->

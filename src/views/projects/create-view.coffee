@@ -16,11 +16,10 @@ class CreateView extends ZorkView
         @question "What is the name of this project? ('x' to exit)"
       else if not @data.description?
         @question "Please enter a short description of this project."
-      else if not @data.totalCoins?
+      else if not @data.initialCoins?
         @question "How many project coins should we create for this project?
           This cannot be changed.
-          The default maximum number of project coins is 100 million.
-          Type \"ok\" OR the maximum number of project coins that you want for this project.
+          (Enter 'ok' for the default of 100 million project coins)
         "
       else if not @data.tasksUrl?
         @question "Please enter a link to your project tasks."
