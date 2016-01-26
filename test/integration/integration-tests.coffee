@@ -185,6 +185,10 @@ describe 'swarmbot', ->
           @message = message('Shaft')
           App.respondTo @message
         .then (reply)=>
+          json(reply).should.match /How many initial project coins shall we mint?/
+          @message = message('1000')
+          App.respondTo @message
+        .then (reply)=>
           json(reply).should.match /Please enter a link to your project tasks./
           @message = message('http://jira.com')
           App.respondTo @message
