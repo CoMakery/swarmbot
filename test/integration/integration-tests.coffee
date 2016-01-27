@@ -9,6 +9,7 @@ Project = require '../../src/models/project'
 User = require '../../src/models/user'
 RewardType = require '../../src/models/reward-type'
 InitBot = require '../../src/bots/!init'
+swarmbot = require '../../src/models/swarmbot'
 
 PROJECT_ID = 'Your Great Project'
 

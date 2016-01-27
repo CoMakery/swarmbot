@@ -102,12 +102,4 @@ class Project extends FirebaseModel
           debug "Full response: #{pjson body}"
           projects.child(projectKey).update { coluAssetId: body.assetId, coluAssetAddress: body.issueAddress }
 
-  sendAsset: ({amount, recipient}, cb)->
-    recipient.fetch().then (user)->
-      recipientAddress = user.get('btcAddress')
-      if recipientAddress?
-        debug "creating project; address: #{recipientAddress}",
-      else
-        cb "user must register before receiving assets"
-
 module.exports = Project

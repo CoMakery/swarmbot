@@ -47,8 +47,9 @@ describe 'User', ->
           @user.get('menu').should.deep.eq {}
 
   describe '#setupToReceiveBitcoin', ->
+    spy = null
     beforeEach ->
-      @spy = sinon.spy(KeenioInfo::, 'createUser')
+      spy = sinon.spy(KeenioInfo::, 'createUser')
       sinon.stub(Date, 'now').returns(123456)
 
     afterEach ->
@@ -67,8 +68,11 @@ describe 'User', ->
       createUser(name: 'admin', slackUsername: 'adminUserName')
       .then (@admin)=>
         User.setupToReceiveBitcoin(@admin, 'someGuy', {}, sendPm)
+      .then =>
+        assert.fail()
       .error =>
-        @spy.should.have.been.called
+        spy.should.have.been.called
+      .then =>
         User.findBySlackUsername('someGuy')
       .then (someGuy)=>
         someGuy.get('state').should.eq 'users#setBtc'

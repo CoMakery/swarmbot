@@ -12,6 +12,7 @@ chai.use(sinonChai)
 chai.use(chaiAsPromised)
 FirebaseServer = require('firebase-server')
 Mitm = require("mitm")
+nock = require 'nock'
 
 global.App = require '../../src/app'
 ColuInfo = require '../../src/services/colu-info'
@@ -55,6 +56,8 @@ beforeEach (done)->
       balance: 456
     }
   ]
+
+  nock.cleanAll()
 
   @mitm = Mitm()
   @mitm.on "connect", (socket, opts)->

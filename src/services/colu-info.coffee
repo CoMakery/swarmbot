@@ -17,7 +17,8 @@ class ColuInfo
     .timeout(@COLU_TIMEOUT)
 
   balances: (user)->
-    @allBalances(user).then (result)->
+    @allBalances(user)
+    .then (result)->
       filter result.balances, (balance)-> balance.name?
 
   allBalances: (user)->
@@ -36,7 +37,9 @@ class ColuInfo
       .then (assets)=>
         resolve {balances: assets}
       .catch Promise.TimeoutError, =>
-        reject(new Promise.OperationalError("(Balance information is temporarily unavailable)"))
+        @handleColuProblem(reject)
+      .catch =>
+        @handleColuProblem(reject)
 
   getAssetInfo: (project)->
     new Promise (resolve, reject)=>
@@ -67,5 +70,8 @@ class ColuInfo
           holder
         .catch =>
           holder
+
+  handleColuProblem: (reject)->
+    reject(new Promise.OperationalError("(Coin information is temporarily unavailable)"))
 
 module.exports = ColuInfo

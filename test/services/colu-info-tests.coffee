@@ -1,6 +1,8 @@
-{ createUser, createProject } = require '../helpers/test-helper'
 { p } = require 'lightsaber'
 sinon = require 'sinon'
+nock = require 'nock'
+Promise = require 'bluebird'
+{ createUser, createProject } = require '../helpers/test-helper'
 ColuInfo = require '../../src/services/colu-info'
 
 
@@ -25,6 +27,7 @@ describe 'ColuInfo', ->
           name: 'project2'
           coluAssetId: 'project2AssetId'
       .then (@project2)=>
+        ColuInfo.prototype.makeRequest.restore?()
         sinon.stub(ColuInfo.prototype, 'makeRequest').returns Promise.resolve
           assets: [
             {
@@ -57,13 +60,26 @@ describe 'ColuInfo', ->
 
     xdescribe 'timeout test fails regularly on CI : (', ->
       it 'returns an error message in the result if the app times out', ->
-        @timeoutCaught = false
         sinon.stub(ColuInfo.prototype, 'makeRequest').returns(Promise.reject(new Promise.TimeoutError("Zomg timed out")))
         createUser()
         .then (@user)=>
           @coluInfo.balances(@user)
+        .then ->
+          assert.fail()
         .error (e)=>
-          e.message.should.eq '(Balance information is temporarily unavailable)'
-          @timeoutCaught = true
-        .then =>
-          @timeoutCaught.should.eq true
+          e.message.should.eq '(Coin information is temporarily unavailable)'
+
+  describe "#allBalances", ->
+    beforeEach ->
+      nock 'https://explorer.coloredcoins.org'
+        .get '/api/getaddressinfo?address=3HNSiAq7wFDaPsYDcUxNSRMD78qVcYKicw'
+        .replyWithError('Colu is down')
+
+    it 'returns an error message if Colu is down', ->
+      createUser()
+      .then (@user)=>
+        @coluInfo.allBalances(@user)
+      .then ->
+        assert.fail()
+      .error (e)=>
+        e.message.should.eq '(Coin information is temporarily unavailable)'
