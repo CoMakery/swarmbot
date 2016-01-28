@@ -25,15 +25,21 @@ class ProjectsStateController extends ApplicationController
 
   show: ->
     @getProject()
-    .then (project)=> project.fetch()
+    .then (@project)=>
+      @project.fetch()
+    .error (error)=>
+      @sendWarning(error.message)
+      Promise.reject(new Promise.OperationalError("Couldn't find current project with name \"#{@project.key()}\""))
     .then (@project)=>
       (new ColuInfo).allHolders(@project)
+    .error (e)=>
+      []
     .then (holders)=>
       @userBalance =
         balance: (findWhere holders, { address: @currentUser.get 'btcAddress' })?.amount
         totalCoins: sum pluck holders, 'amount'
       @render new ShowView {@project, @currentUser, @userBalance}
-    .error(@handleError)
+    .catch(@handleError)
 
   # set Project
   setProjectTo: (data)->

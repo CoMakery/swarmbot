@@ -65,7 +65,7 @@ class ApplicationStateController
       unless projectId?
         user.reset()
         .then =>
-          Promise.reject(new Promise.OperationalError("Couldn't find current project"))
+          Promise.reject(new Promise.OperationalError("Couldn't find current project with name \"#{projectId}\""))
 
       else
         Project.find(projectId)
@@ -73,7 +73,7 @@ class ApplicationStateController
           if @project.exists()
             @project
           else
-            user.reset()
+            user.reset() # this is untestable, we shouldn't be doing this in a callback or we should promiseify this whole method
             .then =>
               Promise.reject(new Promise.OperationalError("Couldn't find current project with name \"#{projectId}\""))
 
