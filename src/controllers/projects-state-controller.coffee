@@ -33,12 +33,13 @@ class ProjectsStateController extends ApplicationController
     .then (@project)=>
       (new ColuInfo).allHolders(@project)
     .error (e)=>
+      @coluError = e.message
       []
     .then (holders)=>
       @userBalance =
         balance: (findWhere holders, { address: @currentUser.get 'btcAddress' })?.amount
         totalCoins: sum pluck holders, 'amount'
-      @render new ShowView {@project, @currentUser, @userBalance}
+      @render ShowView.create({@project, @currentUser, @userBalance, @coluError})
     .catch(@handleError)
 
   # set Project

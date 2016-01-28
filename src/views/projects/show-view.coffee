@@ -3,7 +3,7 @@
 ZorkView = require '../zork-view'
 
 class ShowView extends ZorkView
-  create: ({@project, @currentUser, @userBalance, @coluError})->
+  @create: ({@project, @currentUser, @userBalance, @coluError})->
     new ShowView({@project, @currentUser, @userBalance, @coluError})
 
   constructor: ({@project, @currentUser, @userBalance, @coluError})->
