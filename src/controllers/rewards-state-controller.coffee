@@ -89,6 +89,8 @@ class RewardsStateController extends ApplicationController
       @sendWarning error.message
     .catch (error)=>
       @sendWarning "Error awarding '#{rewardType?.key()}' to #{@recipient?.get('slackUsername')}. Unable to complete the transaction.\n #{error.message}"
-      throw error
+
+      throw error # this should probably be a reject call like the comment below
+#      reject(new Promise.OperationalError(error.message))
 
 module.exports = RewardsStateController
