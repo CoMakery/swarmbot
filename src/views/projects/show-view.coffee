@@ -3,7 +3,10 @@
 ZorkView = require '../zork-view'
 
 class ShowView extends ZorkView
-  constructor: ({@project, @currentUser, @userBalance})->
+  create: ({@project, @currentUser, @userBalance, @coluError})->
+    new ShowView({@project, @currentUser, @userBalance, @coluError})
+
+  constructor: ({@project, @currentUser, @userBalance, @coluError})->
     @orderedMenu = []
     @menu = {}
 
@@ -27,10 +30,13 @@ class ShowView extends ZorkView
     To take an action, simply enter the number or letter at the beginning of the line.
     """
 
-    if @userBalance.balance
-      balance = "#{App.COIN} #{@userBalance.balance}/#{@userBalance.totalCoins}"
+    if @coluError
+      balance = @coluError
     else
-      balance = "No Coins yet"
+      if @userBalance.balance
+        balance = "#{App.COIN} #{@userBalance.balance}/#{@userBalance.totalCoins}"
+      else
+        balance = "No Coins yet"
 
     balance += "\nbitcoin address: " + @bitcoinAddress()
     compact [
