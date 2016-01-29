@@ -18,9 +18,10 @@ describe 'RewardsStateController', ->
   beforeEach ->
     sinon.spy(App, 'pmReply')
     App.robot =
-          adapter: {
-            customMessage: ->
-          }
+      messageRoom: sinon.spy()
+      adapter: {
+        customMessage: sinon.spy()
+      }
 
   afterEach ->
     App.pmReply.restore?()
@@ -43,6 +44,16 @@ describe 'RewardsStateController', ->
       rewardType = @rewardType
 
   describe "#sendReward", ->
+    describe "when colu is up", ->
+      it "sends a message to the user and to the room about the transaction", ->
+        setup()
+        .then =>
+          controller.sendReward(recipient, rewardType, 111)
+        .then =>
+          App.pmReply.getCall(0).args[1].text.should.eq "Reward sent!"
+          App.robot.messageRoom.should.have.been.called
+          App.robot.messageRoom.getCall(0).args[1].should.eq "Congratulations! You have received 111 project coins\nhttp://coloredcoins.org/explorer/tx/1234"
+
     describe "when colu is down", ->
       beforeEach ->
         swarmbot.colu.restore?()
