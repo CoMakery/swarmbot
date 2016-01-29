@@ -51,8 +51,10 @@ describe 'RewardsStateController', ->
           controller.sendReward(recipient, rewardType, 111)
         .then =>
           App.pmReply.getCall(0).args[1].text.should.eq "Reward sent!"
-          App.robot.messageRoom.should.have.been.called
-          App.robot.messageRoom.getCall(0).args[1].should.eq "Congratulations! You have received 111 project coins\nhttp://coloredcoins.org/explorer/tx/1234"
+          App.robot.messageRoom.should.have.been.calledWith(
+            "Bob",
+            "Congratulations! You have received 111 project coins\nhttp://coloredcoins.org/explorer/tx/1234"
+          )
 
     describe "when colu is down", ->
       beforeEach ->
