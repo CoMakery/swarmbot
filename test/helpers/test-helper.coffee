@@ -34,12 +34,6 @@ ALLOWED_HOSTS = [
   }
 ]
 
-sinon.stub(swarmbot, 'colu').returns Promise.resolve
-  on: ->
-  init: ->
-  sendAsset: (x, cb)-> cb(null, {txid: 1234})
-  issueAsset: ->
-
 before ->
   @firebaseServer = new FirebaseServer 5000, MOCK_FIREBASE_ADDRESS,
 
@@ -56,6 +50,12 @@ beforeEach (done)->
       balance: 456
     }
   ]
+
+  sinon.stub(swarmbot, 'colu').returns Promise.resolve
+    on: ->
+    init: ->
+    sendAsset: (x, cb)-> cb(null, {txid: 1234})
+    issueAsset: ->
 
   nock.cleanAll()
 
@@ -76,6 +76,7 @@ afterEach ->
   @firebaseServer.getValue()
   .then (data)=>  debug "Firebase data: #{pjson data}"
 
+  swarmbot.colu.restore?()
 
 after ->
   @firebaseServer.close()
@@ -98,6 +99,7 @@ class TestHelper
       projectOwner: "some user id"
       name: "some project id"
       tasksUrl: 'http://example.com'
+      coluAssetAddress: "0c082d4d225f1e36306c867053c11499a1f64490f92a4af1da702f015723d4c1"
     }
     new Project(args).save()
 

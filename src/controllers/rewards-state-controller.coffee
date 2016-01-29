@@ -1,12 +1,12 @@
 { log, p, pjson } = require 'lightsaber'
 { isEmpty, last } = require 'lodash'
-ApplicationController = require './application-state-controller'
+ApplicationStateController = require './application-state-controller'
 RewardType = require '../models/reward-type'
 Reward = require '../models/reward'
 User = require '../models/user'
 CreateView = require '../views/rewards/create-view'
 
-class RewardsStateController extends ApplicationController
+class RewardsStateController extends ApplicationStateController
   cleanUsername: (username)->
     username = username.trim()
     username = username.slice(1) if username[0] is '@'
@@ -40,7 +40,7 @@ class RewardsStateController extends ApplicationController
         .then (@recipient)=>
           RewardType.find(data.rewardTypeId, parent: @project)
         .then (rewardType)=>
-          @sendReward(rewardType, data.rewardAmount)
+          @sendReward(@recipient, rewardType, data.rewardAmount)
           Promise.resolve() # don't wait on sendReward's promise, which waits for the blockchain
 
     .then =>
@@ -76,21 +76,16 @@ class RewardsStateController extends ApplicationController
       #   else
       #     Promise.reject(Promise.OperationalError "Only the creator of this project can send rewards")
 
-  sendReward: (rewardType, rewardAmount)->
-    rewardType.awardTo(@recipient.get('btcAddress'), rewardAmount)
+  sendReward: (recipient, rewardType, rewardAmount)->
+    rewardType.awardTo(recipient.get('btcAddress'), rewardAmount)
     .then (body)=>
       @sendInfo 'Reward sent!'
-      debug "Reward #{rewardType.key()} to #{@recipient.get('slackUsername')} :", body
+      debug "Reward #{rewardType.key()} to #{recipient.get('slackUsername')} :", body
       txUrl = @_coloredCoinTxUrl(body.txid)
-      @sendInfo "Awarded award to #{@recipient.get('slackUsername')}.\n#{txUrl}"
-      @msg.robot.messageRoom @recipient.get('slackUsername'),
+      @sendInfo "Awarded award to #{recipient.get('slackUsername')}.\n#{txUrl}"
+      @msg.robot.messageRoom recipient.get('slackUsername'),
         "Congratulations! You have received #{rewardAmount} project coins\n#{@_coloredCoinTxUrl(body.txid)}"
-    .error (error)=>
-      @sendWarning error.message
     .catch (error)=>
-      @sendWarning "Error awarding '#{rewardType?.key()}' to #{@recipient?.get('slackUsername')}. Unable to complete the transaction.\n #{error.message}"
-
-      throw error # this should probably be a reject call like the comment below
-#      reject(new Promise.OperationalError(error.message))
+      @sendWarning "Error awarding '#{rewardType?.key()}' to #{recipient?.get('slackUsername')}. Unable to complete the transaction.\n#{error.message}"
 
 module.exports = RewardsStateController

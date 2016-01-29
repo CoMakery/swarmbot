@@ -20,23 +20,24 @@ class RewardType extends FirebaseModel
   ratings: ->
     @_ratings ?= new RatingCollection @snapshot.child('ratings'), parent: @
 
-  awardTo: Promise.promisify (btcAddress, amount, cb)->
-    swarmbot.colu().then (colu)=>
-      project = @parent
-      args =
-        from: [ project.get('coluAssetAddress') ]
-        to: [{
-          address: btcAddress
-          assetId: project.get('coluAssetId')
-          amount: amount
-        }]
-        metadata:
-          project: project.get 'name'
-          rewardType: @get 'name'
+  awardTo: (btcAddress, amount)=>
+    new Promise (resolve, reject)=>
+      swarmbot.colu().then (colu)=>
+        project = @parent
+        args =
+          from: [ project.get('coluAssetAddress') ]
+          to: [{
+            address: btcAddress
+            assetId: project.get('coluAssetId')
+            amount: amount
+          }]
+          metadata:
+            project: project.get 'name'
+            rewardType: @get 'name'
 
-      try
-        colu.sendAsset args, cb
-      catch error
-        cb(error)
+        try
+          resolve(colu.sendAsset args)
+        catch error
+          reject(new Promise.OperationalError(error.message))
 
 module.exports = RewardType
