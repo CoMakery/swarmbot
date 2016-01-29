@@ -39,6 +39,10 @@ You can start the bot locally by running:
 
 This will also load environment variables from your local `.env` file.
 
+You can run tests with:
+
+    npm test
+
 ## Deploying
 
 ### Heroku Deploy
