@@ -70,4 +70,4 @@ describe 'RewardsStateController', ->
         .then =>
           controller.sendReward(recipient, rewardType, 111)
         .then =>
-          App.pmReply.getCall(0).args[1].text.should.eq "Error awarding 'random reward' to Bob. Unable to complete the transaction.\nbang"
+          App.pmReply.getCall(0).args[1].text.should.eq "Error awarding 'random reward' to Bob. Unable to complete the transaction."
