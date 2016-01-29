@@ -64,17 +64,8 @@ class RewardsStateController extends ApplicationStateController
     @currentUser.set 'stateData', data
     .then => @redirect()
 
-  # is there a better way to use the global exit controller action?
   exitRewardTypeSelection: ->
     @reset()
-
-# only admin:
-      # @getProject()
-      # .then (@project)=>
-      #   if @project.get('projectOwner') is @currentUser.key()
-      #     RewardType.find(data.rewardTypeId, parent: @project)
-      #   else
-      #     Promise.reject(Promise.OperationalError "Only the creator of this project can send rewards")
 
   sendReward: (recipient, rewardType, rewardAmount)->
     rewardType.awardTo(recipient.get('btcAddress'), rewardAmount)
