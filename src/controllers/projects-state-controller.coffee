@@ -99,8 +99,11 @@ class ProjectsStateController extends ApplicationController
     .then (project)=>
       (new ColuInfo).allHoldersWithNames(project).then (holders)=>
         debug holders
-        @sendPm @render new CapTableView { project: project, capTable: holders }
-        @redirect()
+      view = new CapTableView {project: project, capTable: holders}
+      @render(view)
+    .then (renderedView)=>
+      @sendPm(renderedView)
+      @redirect()
     .error(@handleError)
 
   rewardsList: (data)->
@@ -113,11 +116,13 @@ class ProjectsStateController extends ApplicationController
           reward.recipientRealName = recipient.get('realName')
           reward
     .then (rewards)=>
-      view  = new ListRewardsView
+      view = new ListRewardsView
         project: @project
         rewards: rewards
         rewardTypes: @project.rewardTypes()
-      @sendPm(@render(view))
+      @render(view)
+    .then (renderView)=>
+      @sendPm(renderView)
       @currentUser.exit()
     .then =>
       @redirect()

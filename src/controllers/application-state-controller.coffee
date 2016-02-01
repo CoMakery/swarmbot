@@ -55,8 +55,12 @@ class ApplicationStateController
     App.route @msg
 
   render: (view)->
-    @currentUser.set 'menu', view.menu if view.menu  # asyncronously saves to DB
-    view.render()                                    # don't wait for it, just render
+    if view.menu
+      @currentUser.set('menu', view.menu)
+      .then ->
+        view.render()
+    else
+      Promise.resolve(view.render())
 
   getProject: ->
     @currentUser.fetchIfNeeded().then (user)->

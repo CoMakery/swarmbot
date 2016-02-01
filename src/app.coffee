@@ -146,8 +146,8 @@ class App
       for key, value of element
         if (key not in @SLACK_NON_TEXT_FIELDS) and value
           lines.push @extractTextLines(value)...
-    else if type(element) is 'string'
-      lines.push element
+    else if type(element) is 'string' or type(element) is 'number'
+      lines.push element.toString()
     else
       throw new Error "Unexpected attachment chunk type: '#{type(element)}' for #{pjson element}"
     lines

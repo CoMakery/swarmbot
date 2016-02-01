@@ -56,3 +56,9 @@ describe "App", ->
           email_address: 'bob@example.com'
         }, true)
       .then => @spy.should.have.been.calledWith @bob
+
+  describe '.extractTextLines', ->
+    it "makes text out of elements of different types", ->
+      App.extractTextLines("foo").should.deep.eq ["foo"]
+      (-> App.extractTextLines(->)).should.throw("")
+      App.extractTextLines(3).should.deep.eq ["3"]
