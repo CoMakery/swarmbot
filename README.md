@@ -28,6 +28,13 @@ To learn more when we release it, sign up for our mailing list over at [www.swar
 
 ## Development
 
+Project setup is pretty easy, make sure you have something close to these versions from Homebrew (make sure to run `brew update` first
+
+`node -v` => v5.3.0
+`npm -v` => 3.3.12
+`redis-server -v` => Redis server v=3.0.7 ...
+
+
 The Swarmbot is based on [Hubot](http://hubot.github.com),
 and is configured specifically for Slack.
 
@@ -36,6 +43,10 @@ and is configured specifically for Slack.
 You can start the bot locally by running:
 
     npm run devbot
+    
+Start a redis server
+
+    redis-server
 
 This will also load environment variables from your local `.env` file.
 
