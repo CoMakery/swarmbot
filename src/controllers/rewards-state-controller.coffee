@@ -77,6 +77,7 @@ class RewardsStateController extends ApplicationStateController
       @msg.robot.messageRoom recipient.get('slackUsername'),
         "Congratulations! You have received #{rewardAmount} project coins\n#{@_coloredCoinTxUrl(body.txid)}"
     .catch (error)=>
+      debug error
       @sendWarning "Error awarding '#{rewardType?.key()}' to #{recipient?.get('slackUsername')}. Unable to complete the transaction."
 
 module.exports = RewardsStateController
