@@ -40,7 +40,7 @@ before ->
 beforeEach (done)->
   ColuInfo.prototype.makeRequest.restore?()
   ColuInfo.prototype.getAssetInfo.restore?()
-  sinon.stub(ColuInfo.prototype, 'getAssetInfo').returns Promise.resolve []
+  sinon.stub(ColuInfo.prototype, 'getAssetInfo').returns Promise.resolve [{address: "some bitcoin address"}]
 
   ColuInfo.prototype.balances.restore?()
   sinon.stub(ColuInfo.prototype, 'balances').returns Promise.resolve [
@@ -90,7 +90,7 @@ class TestHelper
       currentProject: "some project id"
       state: 'projects#show'
       stateData: {}
-      btcAddress: '3HNSiAq7wFDaPsYDcUxNSRMD78qVcYKicw'
+      btcAddress: 'some bitcoin address'
     }
     new User(args).save()
 

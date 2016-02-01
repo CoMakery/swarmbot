@@ -72,7 +72,7 @@ describe 'ColuInfo', ->
   describe "#allBalances", ->
     beforeEach ->
       nock 'https://explorer.coloredcoins.org'
-        .get '/api/getaddressinfo?address=3HNSiAq7wFDaPsYDcUxNSRMD78qVcYKicw'
+        .get '/api/getaddressinfo?address=some bitcoin address'
         .replyWithError('Colu is down')
 
     it 'returns an error message if Colu is down', ->

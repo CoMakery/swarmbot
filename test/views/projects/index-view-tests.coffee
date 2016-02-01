@@ -41,7 +41,7 @@ describe 'IndexView', ->
         jreply.should.not.match /undefined/
         jreply.should.match /No Coins yet/
 
-        jreply.should.match /bitcoin address: 3HNSiAq7wFDaPsYDcUxNSRMD78qVcYKicw/
+        jreply.should.match /bitcoin address: some bitcoin address/
         jreply.should.match /Actions/
         jreply.should.match /1: create your project/
         jreply.should.match /2: set your bitcoin address/

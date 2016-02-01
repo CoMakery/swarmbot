@@ -41,7 +41,7 @@ describe 'swarmbot', ->
         name: USER_ID
         state: 'projects#index'
         hasInteracted: true
-        btcAddress: '3HNSiAq7wFDaPsYDcUxNSRMD78qVcYKicw'
+        btcAddress: 'some bitcoin address'
       .then (@user)=>
 
     context 'projects#show', ->
@@ -62,7 +62,7 @@ describe 'swarmbot', ->
           json(reply[2]).should.match /Do stuff/i
           json(reply[2]).should.match /Be glorious/i
           json(reply[2]).should.match /\d: create an award/i
-          json(reply[2]).should.match /bitcoin address: 3HNSiAq7wFDaPsYDcUxNSRMD78qVcYKicw/i
+          json(reply[2]).should.match /bitcoin address: some bitcoin address/i
 
     context 'projects#index', ->
       it "shows a welcome screen if there are no projects", ->
@@ -159,7 +159,7 @@ describe 'swarmbot', ->
 
             reply[1].fallback.should.match /Your Project Coins/
             reply[1].fallback.should.match /FinTechHacks ❂ 456/
-            reply[1].fallback.should.match /bitcoin address: 3HNSiAq7wFDaPsYDcUxNSRMD78qVcYKicw/
+            reply[1].fallback.should.match /bitcoin address: some bitcoin address/
 
             reply[1].fallback.should.match /Actions/
             reply[1].fallback.should.match /create your project/
