@@ -13,7 +13,7 @@ describe 'CapTableView', ->
           {name: 'Harlan', address: 'addy3', amount: 500},
         ]
 
-        view = new CapTableView(@project, @capTable)
+        view = new CapTableView({@project, @capTable})
         result = view.render()
         result[0].title.should.eq 'some project id'
         result[0].image_url.should.match ///https://chart.googleapis.com/chart\?///

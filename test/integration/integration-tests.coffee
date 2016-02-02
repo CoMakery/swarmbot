@@ -176,10 +176,15 @@ describe 'swarmbot', ->
           .reply 404, ''
 
       it "asks questions and creates a project", ->
-        App.respondTo message()
+        createProject name: "existing project name"
+        .then =>
+          App.respondTo message()
         .then (reply)=> App.respondTo message('1')
         .then (reply)=>
           json(reply).should.match /What is the name of this project/
+          App.respondTo message('existing project name')
+        .then (reply)=>
+          json(reply).should.match /That name is already taken, please enter a new name for this project/
           App.respondTo message('Supafly')
         .then (reply)=>
           json(reply).should.match /Please enter a short description/

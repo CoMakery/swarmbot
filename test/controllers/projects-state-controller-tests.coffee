@@ -8,6 +8,7 @@ ShowView = require '../../src/views/projects/show-view'
 
 describe 'ProjectsStateController', ->
   msg = null
+  input = null
   controller = null
 #  spy = null
   currentUser = null
@@ -21,12 +22,27 @@ describe 'ProjectsStateController', ->
       msg.parts.push reply
 
     createUser
-      state: "projects#show"
+      state: 'projects#show'
     .then (@currentUser)=>
       currentUser = @currentUser
-      msg = message('', {@currentUser})
+      input = ''
+      msg = message(input, {@currentUser})
       controller = new ProjectsStateController(msg)
       done()
+
+  describe '#create', ->
+    describe 'when trying to create a project with the same name as an existing project', ->
+      it 'keeps the user in the same state and prompts for a new project name', ->
+        @currentUser.set('state', 'projects#create')
+        .then (@currentUser)=>
+          createProject name: "existing project name"
+        .then =>
+          controller.input = "existing project name"
+          controller.create({})
+        .then (foo)->
+          msg.currentUser.get('state').should.eq 'projects#create'
+          json(foo).should.match /That name is already taken, please enter a new name/
+          msg.currentUser.get('stateData').should.deep.eq {}
 
   describe '#show', ->
     describe "when colu is up", ->

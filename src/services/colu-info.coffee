@@ -1,5 +1,5 @@
 { p } = require 'lightsaber'
-{filter} = require 'lodash'
+_ = require 'lodash'
 request = require 'request-promise'
 swarmbot = require '../models/swarmbot'
 Project = require '../models/project.coffee'
@@ -19,7 +19,7 @@ class ColuInfo
   balances: (user)->
     @allBalances(user)
     .then (result)->
-      filter result.balances, (balance)-> balance.name?
+      _.filter result.balances, (balance)-> balance.name?
 
   allBalances: (user)->
     new Promise (resolve, reject)=>
@@ -56,7 +56,7 @@ class ColuInfo
   allHolders: (project)->
     @getAssetInfo(project)
     .then (data)=>
-      filter data.holders, (holder)=> holder.address != project.get('coluAssetAddress')
+      _.reject data.holders, (holder)=> holder.address == project.get('coluAssetAddress')
 
   allHoldersWithNames: (project)->
     @allHolders(project)

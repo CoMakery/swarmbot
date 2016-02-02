@@ -48,38 +48,45 @@ class ProjectsStateController extends ApplicationController
       @currentUser.exit()
       @redirect()
 
-  create: (data={})->
+  create: (@data={})->
     if not @input
       # fall through to render template
-    else if not data.name
-      data.name = @input
-    else if not data.description
-      data.description = @input
-    else if not data.initialCoins
+    else if not @data.name
+      name = @input
+      promise = Project.find name
+      .then (preexistingProject)=>
+        if preexistingProject.exists()
+          @errorMessage = "That name is already taken, please enter a new name for this project"
+        else
+          @data.name = @input
+    else if not @data.description
+      @data.description = @input
+    else if not @data.initialCoins
       coins = parseInt(@input)
       if isNaN coins
         if @input.toLowerCase() is 'ok'
-          data.initialCoins = Project::INITIAL_PROJECT_COINS
+          @data.initialCoins = Project::INITIAL_PROJECT_COINS
         else
           @errorMessage = "Please enter either a number or 'ok'"
       else
-        data.initialCoins = coins
-    else if not data.tasksUrl
-      data.tasksUrl = @input
-    else #if not data.imageUrl
-      promise = @parseImageUrl().then (imageUrl)=>
-        if imageUrl then data.imageUrl = imageUrl else data.ignoreImage = true
-        @saveProject data
-        .then (project)=> @project = project
+        @data.initialCoins = coins
+    else if not @data.tasksUrl
+      @data.tasksUrl = @input
+    else #if not @data.imageUrl
+      promise = @parseImageUrl()
+      .then (imageUrl)=>
+        if imageUrl then @data.imageUrl = imageUrl else @data.ignoreImage = true
+        @saveProject @data
+      .then (project)=> @project = project
 
     ( promise ? Promise.resolve() )
     .error (opError)=> @errorMessage = opError.message
-    .then => @currentUser.set 'stateData', data
+    .then => @currentUser.set 'stateData', @data
     .then =>
       if @project?
         @execute transition: 'showProject', flashMessage: 'Project created!'
       else
-        @render new CreateView data, {@errorMessage}
+        @render new CreateView @data, {@errorMessage}
 
   saveProject: (data)->
     new Project
@@ -96,12 +103,11 @@ class ProjectsStateController extends ApplicationController
 
   capTable: ->
     @getProject()
-    .then (@project)=>
+    .then (project)=>
       (new ColuInfo).allHoldersWithNames(project)
-    .then (@holders)=>
-      debug @holders
-      view = new CapTableView(@project, @holders)
-      @render(view)
+    .then (holders)=>
+      debug holders
+      @render new CapTableView { project: project, capTable: holders }
     .then (renderedView)=>
       @sendPm(renderedView)
       @redirect()
@@ -122,8 +128,8 @@ class ProjectsStateController extends ApplicationController
         rewards: rewards
         rewardTypes: @project.rewardTypes()
       @render(view)
-    .then (renderView)=>
-      @sendPm(renderView)
+    .then (renderedView)=>
+      @sendPm(renderedView)
       @currentUser.exit()
     .then =>
       @redirect()
