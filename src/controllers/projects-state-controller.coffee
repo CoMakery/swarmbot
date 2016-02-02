@@ -96,10 +96,11 @@ class ProjectsStateController extends ApplicationController
 
   capTable: ->
     @getProject()
-    .then (project)=>
-      (new ColuInfo).allHoldersWithNames(project).then (holders)=>
-        debug holders
-      view = new CapTableView {project: project, capTable: holders}
+    .then (@project)=>
+      (new ColuInfo).allHoldersWithNames(project)
+    .then (@holders)=>
+      debug @holders
+      view = new CapTableView(@project, @holders)
       @render(view)
     .then (renderedView)=>
       @sendPm(renderedView)

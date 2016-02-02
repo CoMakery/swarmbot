@@ -12,7 +12,7 @@ describe 'ProjectsStateController', ->
 #  spy = null
   currentUser = null
 
-  setup = =>
+  beforeEach (done)->
     App.robot =
       adapter: {}
 
@@ -26,19 +26,19 @@ describe 'ProjectsStateController', ->
       currentUser = @currentUser
       msg = message('', {@currentUser})
       controller = new ProjectsStateController(msg)
+      done()
 
   describe '#show', ->
     describe "when colu is up", ->
       it "shows an error if project doesn't exist", ->
-        setup()
-        .then =>
-          controller.show()
+        controller.show()
         .then ->
           msg.parts[0].should.eq 'Couldn\'t find current project with name "some project id"'
           msg.currentUser.get('state').should.eq 'projects#index'
 
     describe "when colu is down", ->
       beforeEach ->
+        ColuInfo::allHolders.restore?()
         sinon.stub(ColuInfo::, "allHolders").throws(new Promise.OperationalError("bang"))
         sinon.spy(ShowView, 'create')
 
@@ -47,9 +47,7 @@ describe 'ProjectsStateController', ->
         ShowView.create.restore?()
 
       it "shows an error if colu is down", ->
-        setup()
-        .then =>
-          createProject()
+        createProject()
         .then (@project)=>
           controller.show()
         .then (response)->
@@ -58,20 +56,25 @@ describe 'ProjectsStateController', ->
           ShowView.create.should.have.been.called
           ShowView.create.getCall(0).args[0]['coluError'].should.eq 'bang'
 
-  describe '#capTable', ->
+  describe '#capTable', =>
+    it 'sends a message containing the cap table url', ->
+      createProject()
+      .then (@project)=>
+        controller.capTable()
+      .then ->
+        msg.parts[0][0]["image_url"].should.match ///https://chart.googleapis.com/chart///
+
     it "shows an error if project doesn't exist", ->
-      setup().then =>
-        controller.show()
-        .then ->
-          msg.parts[0].should.eq 'Couldn\'t find current project with name "some project id"'
-          msg.currentUser.get('state').should.eq 'projects#index'
-#          spy.should.have.been.calledWith("Couldn't find current project")
+      controller.capTable()
+      .then ->
+        msg.parts[0].should.eq 'Couldn\'t find current project with name "some project id"'
+        msg.currentUser.get('state').should.eq 'projects#index'
+#       spy.should.have.been.calledWith("Couldn't find current project")
 
   describe '#rewardsList', ->
     it "shows an error if project doesn't exist", ->
-      setup().then =>
-        controller.show()
-        .then ->
-          msg.parts[0].should.eq 'Couldn\'t find current project with name "some project id"'
-          msg.currentUser.get('state').should.eq 'projects#index'
-#          spy.should.have.been.calledWith("Couldn't find current project")
+      controller.show()
+      .then ->
+        msg.parts[0].should.eq 'Couldn\'t find current project with name "some project id"'
+        msg.currentUser.get('state').should.eq 'projects#index'
+#       spy.should.have.been.calledWith("Couldn't find current project")

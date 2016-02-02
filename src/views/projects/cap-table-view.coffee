@@ -3,7 +3,7 @@
 ZorkView = require '../zork-view'
 
 class CapTableView extends ZorkView
-  constructor: ({@project, @capTable})->
+  constructor: (@project, @capTable)->
     @menu = {}
 
   render: ->
