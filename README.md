@@ -43,14 +43,14 @@ and is configured specifically for Slack.
 You can start the bot locally by running:
 
     npm run devbot
-    
+
 Start a redis server
 
     redis-server
-    
+
 OR if you have foreman installed `gem install foreman`, you can start everything in one terminal
 
-    foreman start
+    foreman start -f Procfile.dev
 
 This will also load environment variables from your local `.env` file.
 
