@@ -63,6 +63,10 @@ class IndexView extends ZorkView
       }
       projectsItems = @renderOrderedMenuItems @projectItems
 
+    hostPercentageMessage = if process.env.HOST_PERCENTAGE and process.env.HOST_NAME
+      "\n#{process.env.HOST_PERCENTAGE}% of project coins
+        will be distributed to #{process.env.HOST_NAME}"
+
     message.push {
       fields: [
         {
@@ -72,7 +76,7 @@ class IndexView extends ZorkView
         }
         {
           title: "Your Project Coins"
-          value: @balances()
+          value: "#{@balances()}#{hostPercentageMessage}"
           short: true
         }
         { short: true }
