@@ -46,8 +46,10 @@ class ColuInfo
       uri = "#{swarmbot.coluExplorerUrl()}/api/getassetinfowithtransactions?assetId=#{project.get('coluAssetId')}"
       debug uri
       ColuInfo::makeRequest(uri)
+      .then (data)=>
+        resolve(data)
       .error (error)=>
-        console.error error.stack
+        debug error.stack
         App.notify error
         message = "Sorry, one of our technical partners (Colored Coin provider)
           is currently not available, so functionality may be very limited :("

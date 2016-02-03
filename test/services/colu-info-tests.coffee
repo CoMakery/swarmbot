@@ -83,3 +83,36 @@ describe 'ColuInfo', ->
         assert.fail()
       .error (e)=>
         e.message.should.eq '(Coin information is temporarily unavailable)'
+
+  describe "#getAssetInfo", ->
+    beforeEach (done)->
+      createProject()
+      .then (@project)=>
+        done()
+
+    describe 'when there are no errors', ->
+      beforeEach ->
+        ColuInfo.prototype.getAssetInfo.restore?()
+        sinon.stub(ColuInfo::, 'makeRequest').returns(Promise.resolve("this is a response"))
+
+      it 'calls out to colu with the correct url and returns a response', ->
+        (new ColuInfo).getAssetInfo(@project)
+        .then (data)->
+          data.should.eq "this is a response"
+
+    describe 'when there are errors', ->
+      beforeEach ->
+        sinon.stub(App, 'notify')
+        ColuInfo.prototype.getAssetInfo.restore?()
+        sinon.stub(ColuInfo::, 'makeRequest').returns(new Promise (resolve, reject)-> reject(new Promise.OperationalError('bang')))
+
+      afterEach ->
+        App.notify.restore?()
+
+      it 'calls App.notify and returns an Operational error', ->
+        (new ColuInfo).getAssetInfo(@project)
+        .then (data)->
+          assert.fail()
+        .catch (e)->
+          App.notify.getCall(0).args[0].message.should.eq "bang"
+          e.message.should.eq "Sorry, one of our technical partners (Colored Coin provider) is currently not available, so functionality may be very limited :("
