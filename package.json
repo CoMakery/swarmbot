@@ -54,7 +54,7 @@
     "javascript-state-machine": "^2.3.5",
     "keen-js": "^3.3.0",
     "lightsaber": "^0.5.1",
-    "lodash": "~3.10",
+    "lodash": "~4.2.1",
     "moment": "^2.10.6",
     "request-promise": "0.4.3",
     "validator": "^4.3.0"
