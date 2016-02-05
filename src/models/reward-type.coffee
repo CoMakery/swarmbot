@@ -53,6 +53,6 @@ class RewardType extends FirebaseModel
           project: project.get('name')
           rewardType: @get('name')
 
-      Promise.promisify(colu.sendAsset)(args)
+      Promise.promisify(=> colu.sendAsset(arguments...))(args)
 
 module.exports = RewardType
