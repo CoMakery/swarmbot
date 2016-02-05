@@ -417,6 +417,18 @@
       "from": "cipher-base@>=1.0.1 <2.0.0",
       "resolved": "https://registry.npmjs.org/cipher-base/-/cipher-base-1.0.2.tgz"
     },
+    "cli": {
+      "version": "0.11.1",
+      "from": "cli@>=0.11.1 <0.12.0",
+      "resolved": "https://registry.npmjs.org/cli/-/cli-0.11.1.tgz",
+      "dependencies": {
+        "glob": {
+          "version": "5.0.15",
+          "from": "glob@>=5.0.10 <6.0.0",
+          "resolved": "https://registry.npmjs.org/glob/-/glob-5.0.15.tgz"
+        }
+      }
+    },
     "cli-table": {
       "version": "0.3.1",
       "from": "cli-table@>=0.3.1 <0.4.0",
@@ -1316,6 +1328,11 @@
       "version": "1.0.0",
       "from": "evp_bytestokey@>=1.0.0 <2.0.0",
       "resolved": "https://registry.npmjs.org/evp_bytestokey/-/evp_bytestokey-1.0.0.tgz"
+    },
+    "exit": {
+      "version": "0.1.2",
+      "from": "exit@0.1.2",
+      "resolved": "https://registry.npmjs.org/exit/-/exit-0.1.2.tgz"
     },
     "express": {
       "version": "4.13.3",

@@ -53,6 +53,7 @@ OR if you have foreman installed `gem install foreman`, you can start everything
     foreman start -f Procfile.dev
 
 This will also load environment variables from your local `.env` file.
+(Don't do this if you have a redis server running already!)
 
 You can run tests with:
 
