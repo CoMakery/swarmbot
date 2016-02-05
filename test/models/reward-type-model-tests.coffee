@@ -30,9 +30,9 @@ describe 'RewardType', ->
         process.env.HOST_PERCENTAGE = 1.5
 
       afterEach ->
-        process.env.HOST_BTC_ADDRESS = null
-        process.env.HOST_NAME = null
-        process.env.HOST_PERCENTAGE = null
+        delete process.env.HOST_BTC_ADDRESS
+        delete process.env.HOST_NAME
+        delete process.env.HOST_PERCENTAGE
 
       it "sends a percentage of the reward to HOST_BTC_ADDRESS and the rest to the recipient", ->
         @rewardType.awardTo("address", 1000)
@@ -44,15 +44,15 @@ describe 'RewardType', ->
           ]
 
     context "when HOST_PERCENTAGE is not set", ->
-      it "sends the entire reward to the recipient", ->
-        process.env.HOST_BTC_ADDRESS = null
-        process.env.HOST_NAME = null
-        process.env.HOST_PERCENTAGE = null
+      beforeEach ->
+        delete process.env.HOST_BTC_ADDRESS
+        delete process.env.HOST_NAME
+        delete process.env.HOST_PERCENTAGE
 
+      it "sends the entire reward to the recipient", ->
         @rewardType.awardTo("address", 1000)
         swarmbot.colu().then (colu)->
           recipients = colu.sendAsset.getCall(0).args[0].to
           recipients.should.deep.eq [
             {address: "address", amount: 1000, assetId: undefined}
           ]
-
