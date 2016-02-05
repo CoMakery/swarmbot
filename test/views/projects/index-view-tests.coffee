@@ -25,6 +25,9 @@ describe 'IndexView', ->
       beforeEach ->
         process.env.HOST_PERCENTAGE = 1.5
         process.env.HOST_NAME = 'Big Brother and the Holding Co'
+      afterEach ->
+        delete process.env.HOST_PERCENTAGE
+        delete process.env.HOST_NAME
 
       it 'returns a bunch of project info for all the projects', ->
         Promise.all [
