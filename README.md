@@ -98,6 +98,11 @@ NODE_MODULES_CACHE=false    #
 NPM_CONFIG_PRODUCTION=true  #
 
 DEBUG=app                   # for verbose debugging info in logs
+
+# Optionally, you may send a percentage of all awards back to your organization:
+HOST_NAME                   # Friendly name
+HOST_PERCENTAGE             # Percentage of awards to send to host (eg 3.5)
+HOST_BTC_ADDRESS            # Bitcoin address of host
 ```
 
 ## License
