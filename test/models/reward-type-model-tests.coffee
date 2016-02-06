@@ -39,8 +39,11 @@ describe 'RewardType', ->
         swarmbot.colu().then (colu)->
           recipients = colu.sendAsset.getCall(0).args[0].to
           recipients.should.deep.eq [
-            {address: "address", amount: 985, assetId: undefined}
             {address: "host_btc", amount: 15, assetId: undefined}
+          ]
+          recipients = colu.sendAsset.getCall(1).args[0].to
+          recipients.should.deep.eq [
+            {address: "address", amount: 985, assetId: undefined}
           ]
 
     context "when HOST_PERCENTAGE is not set", ->
