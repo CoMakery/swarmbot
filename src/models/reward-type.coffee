@@ -27,28 +27,25 @@ class RewardType extends FirebaseModel
       hostAmount = 0
       if process.env.HOST_BTC_ADDRESS && process.env.HOST_PERCENTAGE
         hostAmount = amount * process.env.HOST_PERCENTAGE * .01
-        recipient =
+        args = @sendAssetArgs
           address: process.env.HOST_BTC_ADDRESS
-          assetId: project.get('coluAssetId')
           amount: hostAmount
-        args =
-          from: [ project.get('coluAssetAddress') ]
-          to: [ recipient ]
-          metadata:
-            project: project.get('name')
-            rewardType: @get('name')
         colu.sendAsset(args)
 
-      recipient =
+      args = @sendAssetArgs
         address: btcAddress
-        assetId: project.get('coluAssetId')
         amount: amount - hostAmount
-      args =
-        from: [ project.get('coluAssetAddress') ]
-        to: [ recipient ]
-        metadata:
-          project: project.get('name')
-          rewardType: @get('name')
       Promise.promisify(=> colu.sendAsset(arguments...))(args)
+
+  sendAssetArgs: ({address, amount})->
+    from: [ project.get('coluAssetAddress') ]
+    to: [{
+      assetId: project.get('coluAssetId')
+      address
+      amount
+    }]
+    metadata:
+      project: project.get('name')
+      rewardType: @get('name')
 
 module.exports = RewardType
