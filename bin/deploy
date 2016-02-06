@@ -6,8 +6,12 @@ fs = require 'fs'
 path = require 'path'
 CSON = require 'cson-parser'
 args = require 'commander'
+chalk = require 'chalk'
 
-die = (reason) -> console.error(reason) ; process.exit(1)
+die = (reason) ->
+  console.error chalk.bold.red reason
+  args?.outputHelp?()
+  process.exit(1)
 
 args
   .option '-t, --target [target]', 'The environment to target'
@@ -17,16 +21,16 @@ args
 
 {target, app, ref} = args
 
-run "git fetch --unshallow", relaxed: true  # Circle CI fetches git shallowly, which can cause failures pushing to heroku
-unless ref
-  ref = if target then "origin/#{target}" else "HEAD"
-sha = run("git rev-parse #{ref}").output.trim()
-
 if not target and not app
   die "Please specify either --target or --app"
 
 if target and app
   die "Please specify either --target or --app, but not both"
+
+run "git fetch --unshallow", relaxed: true  # Circle CI fetches git shallowly, which can cause failures pushing to heroku
+unless ref
+  ref = if target then "origin/#{target}" else "HEAD"
+sha = run("git rev-parse #{ref}").output.trim()
 
 if app
   herokuApps = [app]
