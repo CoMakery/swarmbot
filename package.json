@@ -1,7 +1,8 @@
 {
   "name": "swarmbot",
   "version": "0.5.25",
-  "authors": [
+  "author": "Citizen Code (http://www.citizencode.io)",
+  "contributors": [
     "Joel Dietz (https://github.com/fractastical)",
     "Harlan T Wood (https://github.com/harlantwood)",
     "Noah Thorp (https://github.com/aquabu)",
