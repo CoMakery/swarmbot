@@ -15,9 +15,9 @@ class ApplicationStateController
     App.addFallbackTextIfNeeded textOrAttachments
     App.pmReply @msg, textOrAttachments
 
-  sendInfo:     (text)=> App.pmReply @msg, ZorkHelper::info text
-  sendQuestion: (text)=> App.pmReply @msg, ZorkHelper::question text
-  sendWarning:  (text)=> App.pmReply @msg, ZorkHelper::warning text
+  sendInfo:     (text)=> @sendPm ZorkHelper::info text
+  sendQuestion: (text)=> @sendPm ZorkHelper::question text
+  sendWarning:  (text)=> @sendPm ZorkHelper::warning text
 
   execute: (menuAction)->
     promise = Promise.resolve()
