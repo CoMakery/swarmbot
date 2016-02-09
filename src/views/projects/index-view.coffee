@@ -94,7 +94,7 @@ class IndexView extends ZorkView
     balances = for userBalance in @userBalances
       "#{userBalance.name} #{App.COIN} #{userBalance.balance}"
     balances = balances.join("\n") or "No Coins yet"
-    balances += "\nbitcoin address: " + @bitcoinAddress @currentUser.get 'btcAddress'
+    balances += "\nbitcoin address: #{@bitcoinAddress @currentUser.get 'btcAddress'}"
 
     if @coluError?
       balances += "\n#{@coluError}"
