@@ -47,7 +47,7 @@
     "bitcoinjs-lib": "^2.1.4",
     "bluebird": "^3.0.5",
     "coffee-script": "^1.10.0",
-    "colu": "0.10.5",
+    "colu": "github:harlantwood/colu-nodejs#patch-3",
     "debug": "^2.2.0",
     "firebase": "^2.2.9",
     "hubot": "^2.16.0",
