@@ -9,15 +9,18 @@ User = require '../../src/models/user'
 Project = require '../../src/models/project'
 KeenioInfo = require '../../src/services/keenio-info.coffee'
 
+recipients = null  # globalize
+
 describe 'RewardType', ->
   describe 'awardTo', ->
     beforeEach ->
+      recipients = []
       swarmbot.colu.restore?()
 
       sinon.stub(swarmbot, 'colu').returns Promise.resolve
         on: ->
         init: ->
-        sendAsset: sinon.spy()
+        sendAsset: (args, callback )-> recipients.push(args.to) ; callback(null, null)
         issueAsset: ->
 
       @project = new Project(name: "project")
@@ -36,14 +39,10 @@ describe 'RewardType', ->
 
       it "sends a percentage of the reward to HOST_BTC_ADDRESS and the rest to the recipient", ->
         @rewardType.awardTo("address", 1000)
-        swarmbot.colu().then (colu)->
-          recipients = colu.sendAsset.getCall(0).args[0].to
+        .then ->
           recipients.should.deep.eq [
-            {address: "host_btc", amount: 15, assetId: undefined}
-          ]
-          recipients = colu.sendAsset.getCall(1).args[0].to
-          recipients.should.deep.eq [
-            {address: "address", amount: 985, assetId: undefined}
+            [{address: "host_btc", amount: 15, assetId: undefined}]
+            [{address: "address", amount: 985, assetId: undefined}]
           ]
 
     context "when HOST_PERCENTAGE is not set", ->
@@ -54,8 +53,7 @@ describe 'RewardType', ->
 
       it "sends the entire reward to the recipient", ->
         @rewardType.awardTo("address", 1000)
-        swarmbot.colu().then (colu)->
-          recipients = colu.sendAsset.getCall(0).args[0].to
+        .then ->
           recipients.should.deep.eq [
-            {address: "address", amount: 1000, assetId: undefined}
+            [{address: "address", amount: 1000, assetId: undefined}]
           ]

@@ -23,29 +23,33 @@ class RewardType extends FirebaseModel
   awardTo: (btcAddress, amount)=>
     swarmbot.colu()
     .then (colu)=>
-      project = @parent
-      hostAmount = 0
-      if process.env.HOST_BTC_ADDRESS && process.env.HOST_PERCENTAGE
-        hostAmount = amount * process.env.HOST_PERCENTAGE * .01
-        args = @sendAssetArgs
+      @sendAsset = Promise.promisify(=> colu.sendAsset(arguments...))
+      @project = @parent
+      @hostAmount = 0
+      hostAwardPromise = if process.env.HOST_BTC_ADDRESS && process.env.HOST_PERCENTAGE? && process.env.HOST_PERCENTAGE > 0
+        @hostAmount = amount * process.env.HOST_PERCENTAGE * .01
+        @sendAsset @sendAssetArgs
           address: process.env.HOST_BTC_ADDRESS
-          amount: hostAmount
-        colu.sendAsset(args)
-
-      args = @sendAssetArgs
+          amount: @hostAmount
+      else
+        Promise.resolve()
+    .then =>
+      @sendAsset @sendAssetArgs
         address: btcAddress
-        amount: amount - hostAmount
-      Promise.promisify(=> colu.sendAsset(arguments...))(args)
+        amount: amount - @hostAmount
 
   sendAssetArgs: ({address, amount})->
-    from: [ project.get('coluAssetAddress') ]
-    to: [{
-      assetId: project.get('coluAssetId')
-      address
-      amount
-    }]
-    metadata:
-      project: project.get('name')
-      rewardType: @get('name')
+    args =
+      from: [ @project.get('coluAssetAddress') ]
+      to: [{
+        assetId: @project.get('coluAssetId')
+        address
+        amount
+      }]
+      metadata:
+        project: @project.get('name')
+        rewardType: @get('name')
+    debug pjson sendAssetArgs: args
+    args
 
 module.exports = RewardType
