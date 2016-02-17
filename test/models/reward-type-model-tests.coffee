@@ -20,7 +20,7 @@ describe 'RewardType', ->
       sinon.stub(swarmbot, 'colu').returns Promise.resolve
         on: ->
         init: ->
-        sendAsset: (args, callback )-> recipients.push(args.to) ; callback(null, null)
+        sendAsset: (args, callback)-> recipients.push(args.to) ; callback()
         issueAsset: ->
 
       @project = new Project(name: "project")
