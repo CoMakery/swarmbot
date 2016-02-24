@@ -12,6 +12,7 @@
   "description": "A bot for Dynamic Equity Organizations running in Slack",
   "scripts": {
     "start": "bin/hubot --adapter slack",
+    "apps": "bin/apps",
     "dev": "bin/devbot",
     "devbot": "bin/devbot",
     "fulltest": "npm run testv && npm run lint && bin/code-checks",
@@ -30,7 +31,7 @@
   "devDependencies": {
     "chai": "^3.2.0",
     "chai-as-promised": "^5.1.0",
-    "coffeelint": "github:harlantwood/coffeelint#arrow_hugging",
+    "coffeelint": "^1.14.2",
     "commander": "^2.9.0",
     "cson-parser": "^1.3.2",
     "dotenv": "^1.2.0",
@@ -47,7 +48,7 @@
     "bitcoinjs-lib": "^2.1.4",
     "bluebird": "^3.0.5",
     "coffee-script": "^1.10.0",
-    "colu": "0.10.5",
+    "colu": "^0.10.6",
     "debug": "^2.2.0",
     "firebase": "^2.2.9",
     "hubot": "^2.16.0",
