@@ -6,6 +6,7 @@ global.debug = Debug 'app'
 global.debugReply = Debug 'reply'
 global.errorLog = Debug 'error'
 global.inspectFallback = Debug 'fallback'
+{ p } = require 'lightsaber'
 
 Airbrake = require('airbrake')
 
@@ -14,6 +15,13 @@ Promise.longStackTraces() if process.env.NODE_ENV is 'development' # decreases p
 if process.env.AIRBRAKE_API_KEY
   airbrake = Airbrake.createClient process.env.AIRBRAKE_API_KEY, process.env.APP_NAME
   airbrake.handleExceptions()
+
+  # remove all environment variables, including sensitive keys
+  airbrake.on 'vars', (type, vars)->
+    if type is 'cgi-data'
+      for key, value of vars
+        if key.match /^[A-Z_]+$/
+          delete vars[key]
 
   # catch unhandled promise rejections with Airbrake:
   process.on 'unhandledRejection', (error, promise)->
