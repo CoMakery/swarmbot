@@ -2,8 +2,6 @@
 
 Latest build: [![Travis CI](https://travis-ci.org/citizencode/swarmbot.svg?branch=master)](https://travis-ci.org/citizencode/swarmbot)
 
-Issue board: [![Waffle](https://badge.waffle.io/citizencode/swarmbot.svg?label=on%20deck&title=On%20Deck)](http://waffle.io/citizencode/swarmbot)
-
 ## Project Vision
 
 Swarmbot hangs out in Slack and creates Project Coins on a trusty blockchain.
