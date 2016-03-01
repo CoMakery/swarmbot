@@ -31,7 +31,9 @@ To learn more when we release it, sign up for our mailing list over at [www.swar
 Project setup is pretty easy, make sure you have something close to these versions from Homebrew (make sure to run `brew update` first
 
 `node -v` => v5.3.0
+
 `npm -v` => 3.3.12
+
 `redis-server -v` => Redis server v=3.0.7 ...
 
 
