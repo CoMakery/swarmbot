@@ -1,6 +1,6 @@
 # Swarmbot
 
-CI](https://travis-ci.org/CoMakery/swarmbot.svg?branch=master)](https://travis-ci.org/CoMakery/swarmbot)
+Latest build: [![Travis CI](https://travis-ci.org/CoMakery/swarmbot.svg?branch=master)](https://travis-ci.org/CoMakery/swarmbot)
 
 ## Project Vision
 
