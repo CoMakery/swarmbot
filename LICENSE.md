@@ -1,4 +1,4 @@
-(c) 2015 Citizen Code LLC
+(c) 2015 CoMakery
 
 ## NOTE
 

@@ -1,7 +1,7 @@
 {
   "name": "swarmbot",
   "version": "0.5.28",
-  "author": "Citizen Code (http://www.citizencode.io)",
+  "author": "CoMakery",
   "contributors": [
     "Joel Dietz (https://github.com/fractastical)",
     "Harlan T Wood (https://github.com/harlantwood)",
@@ -66,9 +66,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:citizencode/swarmbot.git"
+    "url": "git@github.com:CoMakery/swarmbot.git"
   },
   "bugs": {
-    "url": "https://github.com/citizencode/swarmbot/issues"
+    "url": "https://github.com/CoMakery/swarmbot/issues"
   }
 }

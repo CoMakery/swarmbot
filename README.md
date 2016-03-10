@@ -1,6 +1,6 @@
 # Swarmbot
 
-Latest build: [![Travis CI](https://travis-ci.org/citizencode/swarmbot.svg?branch=master)](https://travis-ci.org/citizencode/swarmbot)
+CI](https://travis-ci.org/CoMakery/swarmbot.svg?branch=master)](https://travis-ci.org/CoMakery/swarmbot)
 
 ## Project Vision
 
@@ -11,9 +11,8 @@ Swarmbot helps you run a [Dynamic Equity Organization](https://github.com/citize
 
 ## Current Implementation Status
 
-This project is alpha and not ready for production use.
-It is being actively developed by [Citizen Code](http://citizencode.io/).
-We welcome [feature requests and pull requests](https://github.com/citizencode/swarmbot/issues).
+This project is an initial prototype and not currently in development or actively supported.  We are currently rewriting from the ground up in
+a different technology stack here: <https://github.com/CoMakery/comakery-app>.
 
 We are planning to license it as a Dynamic Equity Organization.
 The structure is being legally reviewed for use in Swarmbot and on your projects.
@@ -22,7 +21,7 @@ To learn more when we release it, sign up for our mailing list over at [www.swar
 
 ## Here's What Swarmbot Can Do
 
-![Swarmbot UX](https://cdn.rawgit.com/citizencode/swarmbot/101569b44d0decd29fdbb05efe55501522262330/doc/examples-2015-12/flow.png)
+![Swarmbot UX](https://cdn.rawgit.com/CoMakery/swarmbot/101569b44d0decd29fdbb05efe55501522262330/doc/examples-2015-12/flow.png)
 
 ## Development
 

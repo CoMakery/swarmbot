@@ -139,6 +139,6 @@ class ProjectsStateController extends ApplicationController
     @sendPm
       pretext: "You can suggest a swarmbot improvement and contribute to the betterment of all things swarmbot by submitting issues!"
       title: "Swarmbot Issues on Github"
-      title_link: "https://github.com/citizencode/swarmbot/issues"
+      title_link: "https://github.com/CoMakery/swarmbot/issues"
     @redirect()
 module.exports = ProjectsStateController
