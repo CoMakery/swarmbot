@@ -8,16 +8,11 @@ Swarmbot hangs out in Slack and creates Project Coins on a trusty blockchain.
 It helps you to distribute profit and tracks your fair share of projects you work on.
 Swarmbot helps you run a [Dynamic Equity Organization](https://github.com/citizencode/dynamic-equity-organization).
 
-
 ## Current Implementation Status
 
-This project is an initial prototype and not currently in development or actively supported.  We are currently rewriting from the ground up in
-a different technology stack here: <https://github.com/CoMakery/comakery-app>.
+Not currently under active development by the original authors. Feel free to fork and extend.
 
-We are planning to license it as a Dynamic Equity Organization.
-The structure is being legally reviewed for use in Swarmbot and on your projects.
-
-To learn more when we release it, sign up for our mailing list over at [www.swarmbot.io](http://www.swarmbot.io/)
+Check out our new ethereum based cryptoequity collaboration system at [comakery.com](http://www.comakery.com).
 
 ## Here's What Swarmbot Can Do
 
@@ -106,5 +101,4 @@ HOST_BTC_ADDRESS            # Bitcoin address of host
 
 ## License
 
-Swarmbot is being developed under the experimental
-[Peer Production Royalty Token License](https://github.com/citizencode/swarmbot/blob/master/LICENSE.md).
+MIT licensed.
