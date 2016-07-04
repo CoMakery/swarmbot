@@ -51,7 +51,7 @@
     "colu": "^0.10.6",
     "debug": "^2.2.0",
     "firebase": "^2.2.9",
-    "hubot": "^2.16.0",
+    "hubot": "^2.18.0",
     "hubot-slack": "^3.3.0",
     "javascript-state-machine": "^2.3.5",
     "keen-js": "^3.3.0",
