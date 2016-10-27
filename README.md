@@ -60,7 +60,7 @@ You can run tests with:
 ```sh
 heroku create
 heroku addons:create redistogo:nano  # Optional. Colu caches to Redis if available.
-heroku addons:create airbrake:free_heroku  # error reporting, optional
+heroku addons:create airbrake:free-hrku  # error reporting, optional
 git push heroku master
 heroku ps:type hobby  # will be available 24/7, but costs $
 ```
